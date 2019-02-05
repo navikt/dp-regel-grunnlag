@@ -6,7 +6,7 @@ data class SubsumsjonsBehov(val jsonObject: JSONObject) {
 
     fun needsHentInntektsTask(): Boolean = !hasInntekt() && !hasHentInntektTask()
 
-    fun needsPeriodeSubsumsjon(): Boolean = hasInntekt() && !hasPeriodeSubsumsjon()
+    fun needsGrunnlagSubsumsjon(): Boolean = hasInntekt() && !hasGrunnlagSubsumsjon()
 
     private fun hasInntekt() = jsonObject.has("inntekt")
 
@@ -22,9 +22,7 @@ data class SubsumsjonsBehov(val jsonObject: JSONObject) {
         return false
     }
 
-    private fun hasPeriodeSubsumsjon() = jsonObject.has("periodeSubsumsjon")
+    private fun hasGrunnlagSubsumsjon() = jsonObject.has("grunnlagSubsumsjon")
 
     fun hasTasks(): Boolean = jsonObject.has("tasks")
-
-    fun getAvtjentVerneplikt(): Boolean = if (jsonObject.has("avtjentVerneplikt")) jsonObject.getBoolean("avtjentVerneplikt") else false
 }

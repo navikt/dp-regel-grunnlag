@@ -5,12 +5,14 @@ import no.nav.dagpenger.streams.KafkaCredential
 import no.nav.dagpenger.streams.Service
 import no.nav.dagpenger.streams.Topic
 import no.nav.dagpenger.streams.Topics
+import no.nav.dagpenger.streams.kbranch
 import no.nav.dagpenger.streams.streamConfig
 import org.apache.kafka.common.serialization.Serdes
 import org.apache.kafka.streams.KafkaStreams
 import org.apache.kafka.streams.StreamsBuilder
 import org.apache.kafka.streams.Topology
 import org.apache.kafka.streams.kstream.Consumed
+import org.apache.kafka.streams.kstream.Produced
 import org.json.JSONObject
 import java.util.Properties
 
@@ -47,21 +49,21 @@ class Grunnlag(val env: Environment): Service() {
                 Consumed.with(dagpengerBehovTopic.keySerde, dagpengerBehovTopic.valueSerde)
         )
 
-//        val (needsInntekt, needsSubsumsjon) = stream
-//                .peek { key, value -> LOGGER.info("Processing ${value.javaClass} with key $key") }
-//                .mapValues { value: JSONObject -> SubsumsjonsBehov(value) }
-//                .filter { _, behov -> shouldBeProcessed(behov) }
-//                .kbranch(
-//                        { _, behov: SubsumsjonsBehov -> behov.needsHentInntektsTask() },
-//                        { _, behov: SubsumsjonsBehov -> behov.needsPeriodeSubsumsjon() })
-//
-//        needsInntekt.mapValues(this::addInntektTask)
-//        needsSubsumsjon.mapValues(this::addRegelresultat)
-//
-//        needsInntekt.merge(needsSubsumsjon)
-//                .peek { key, value -> LOGGER.info("Producing ${value.javaClass} with key $key") }
-//                .mapValues { _, behov -> behov.jsonObject }
-//                .to(dagpengerBehovTopic.name, Produced.with(dagpengerBehovTopic.keySerde, dagpengerBehovTopic.valueSerde))
+        val (needsInntekt, needsSubsumsjon) = stream
+                .peek { key, value -> LOGGER.info("Processing ${value.javaClass} with key $key") }
+                .mapValues { value: JSONObject -> SubsumsjonsBehov(value) }
+                .filter { _, behov -> shouldBeProcessed(behov) }
+                .kbranch(
+                        { _, behov: SubsumsjonsBehov -> behov.needsHentInntektsTask() },
+                        { _, behov: SubsumsjonsBehov -> behov.needsGrunnlagSubsumsjon() })
+
+        needsInntekt.mapValues(this::addInntektTask)
+        needsSubsumsjon.mapValues(this::addRegelresultat)
+
+        needsInntekt.merge(needsSubsumsjon)
+                .peek { key, value -> LOGGER.info("Producing ${value.javaClass} with key $key") }
+                .mapValues { _, behov -> behov.jsonObject }
+                .to(dagpengerBehovTopic.name, Produced.with(dagpengerBehovTopic.keySerde, dagpengerBehovTopic.valueSerde))
 
         return builder.build()
     }
@@ -87,17 +89,17 @@ class Grunnlag(val env: Environment): Service() {
         return SubsumsjonsBehov(jsonObject)
     }
 
-//    private fun addRegelresultat(behov: SubsumsjonsBehov): SubsumsjonsBehov {
-//        val jsonObject = behov.jsonObject
-//
-//        return SubsumsjonsBehov(jsonObject
-//                .put("periodeSubsumsjon", JSONObject()
-//                        .put("sporingsId", "123")
-//                        .put("subsumsjonsId", "456")
-//                        .put("regelIdentifikator", "Periode.v1")
-//                        .put("antallUker", if (behov.getAvtjentVerneplikt()) 26 else 0))
-//        )
-//    }
+    private fun addRegelresultat(behov: SubsumsjonsBehov): SubsumsjonsBehov {
+        val jsonObject = behov.jsonObject
+
+        return SubsumsjonsBehov(jsonObject
+                .put("grunnlagSubsumsjon", JSONObject()
+                        .put("sporingsId", "123")
+                        .put("subsumsjonsId", "456")
+                        .put("regelIdentifikator", "Grunnlag.v1")
+                        .put("grunnlag", 0))
+        )
+    }
 }
 
-fun shouldBeProcessed(behov: SubsumsjonsBehov): Boolean = behov.needsHentInntektsTask() || behov.needsPeriodeSubsumsjon()
+fun shouldBeProcessed(behov: SubsumsjonsBehov): Boolean = behov.needsHentInntektsTask() || behov.needsGrunnlagSubsumsjon()
