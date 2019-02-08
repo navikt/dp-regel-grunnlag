@@ -55,7 +55,7 @@ class Grunnlag(val env: Environment): Service() {
                 .filter { _, behov -> shouldBeProcessed(behov) }
                 .kbranch(
                         { _, behov: SubsumsjonsBehov -> behov.needsHentInntektsTask() },
-                        { _, behov: SubsumsjonsBehov -> behov.needsGrunnlagSubsumsjon() })
+                        { _, behov: SubsumsjonsBehov -> behov.needsGrunnlagResultat() })
 
         needsInntekt.mapValues(this::addInntektTask)
         needsSubsumsjon.mapValues(this::addRegelresultat)
@@ -78,28 +78,23 @@ class Grunnlag(val env: Environment): Service() {
     }
 
     private fun addInntektTask(behov: SubsumsjonsBehov): SubsumsjonsBehov {
-        val jsonObject = behov.jsonObject
+        behov.addTask("hentInntekt")
 
-        if (behov.hasTasks()) {
-            jsonObject.append("tasks", "hentInntekt")
-        } else {
-            jsonObject.put("tasks", listOf("hentInntekt"))
-        }
-
-        return SubsumsjonsBehov(jsonObject)
+        return behov
     }
 
     private fun addRegelresultat(behov: SubsumsjonsBehov): SubsumsjonsBehov {
-        val jsonObject = behov.jsonObject
+        behov.addGrunnlagResultat(
+            SubsumsjonsBehov.GrunnlagResultat(
+            "123",
+            "456",
+            "Grunnlag.v1",
+            2000
 
-        return SubsumsjonsBehov(jsonObject
-                .put("grunnlagSubsumsjon", JSONObject()
-                        .put("sporingsId", "123")
-                        .put("subsumsjonsId", "456")
-                        .put("regelIdentifikator", "Grunnlag.v1")
-                        .put("grunnlag", 0))
-        )
+        ))
+
+        return behov
     }
 }
 
-fun shouldBeProcessed(behov: SubsumsjonsBehov): Boolean = behov.needsHentInntektsTask() || behov.needsGrunnlagSubsumsjon()
+fun shouldBeProcessed(behov: SubsumsjonsBehov): Boolean = behov.needsHentInntektsTask() || behov.needsGrunnlagResultat()

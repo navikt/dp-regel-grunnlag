@@ -1,78 +1,49 @@
 package no.nav.dagpenger.regel.grunnlag
 
-import org.json.JSONObject
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Test
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
 
 class GrunnlagInputTest {
 
     @Test
-    fun `Process behov without inntekt and no tasks`() {
-        val behov = SubsumsjonsBehov(
-                JSONObject()
-                        .put("vedtaksId", "123456")
-                        .put("aktorId", 123)
-                        .put("beregningsDato", LocalDate.now().format(DateTimeFormatter.ISO_LOCAL_DATE))
-        )
+    fun `Process behov without inntekt and no inntekt tasks`() {
+        val behov = SubsumsjonsBehov.Builder().build()
 
         assert(shouldBeProcessed(behov))
     }
 
     @Test
-    fun `Process behov without inntekt and no hentinntekt task`() {
-        val behov = SubsumsjonsBehov(
-                JSONObject()
-                        .put("vedtaksId", "123456")
-                        .put("aktorId", 123)
-                        .put("beregningsDato", LocalDate.now().format(DateTimeFormatter.ISO_LOCAL_DATE))
-                        .put("tasks", listOf("noe annet"))
-        )
+    fun `Process behov without inntekt and no hentInntekt task`() {
+        val behov = SubsumsjonsBehov.Builder()
+            .task(listOf("noe annet"))
+            .build()
 
         assert(shouldBeProcessed(behov))
     }
 
     @Test
-    fun `Do not process behov without inntekt but with hentinntekt task`() {
-        val behov = SubsumsjonsBehov(
-                JSONObject()
-                        .put("vedtaksId", "123456")
-                        .put("aktorId", 123)
-                        .put("beregningsDato", LocalDate.now().format(DateTimeFormatter.ISO_LOCAL_DATE))
-                        .put("tasks", listOf("hentInntekt"))
-        )
-
+    fun `Do not process behov without inntekt but with hentInntekt task`() {
+        val behov = SubsumsjonsBehov.Builder()
+            .task(listOf("hentInntekt"))
+            .build()
         assertFalse(shouldBeProcessed(behov))
     }
 
     @Test
     fun `Process behov with inntekt`() {
-        val behov = SubsumsjonsBehov(
-                JSONObject()
-                        .put("vedtaksId", "123456")
-                        .put("aktorId", 123)
-                        .put("beregningsDato", LocalDate.now().format(DateTimeFormatter.ISO_LOCAL_DATE))
-                        .put("inntekt", 15)
-        )
+
+        val behov = SubsumsjonsBehov.Builder()
+            .inntekt(0)
+            .build()
 
         assert(shouldBeProcessed(behov))
     }
 
     @Test
-    fun `Do not reprocess behov with periodeSubsumsjon`() {
-        val behov = SubsumsjonsBehov(
-                JSONObject()
-                        .put("vedtaksId", "123456")
-                        .put("aktorId", 123)
-                        .put("beregningsDato", LocalDate.now().format(DateTimeFormatter.ISO_LOCAL_DATE))
-                        .put("inntekt", 0)
-                        .put("grunnlagSubsumsjon", JSONObject()
-                                .put("sporingsId", "123")
-                                .put("subsumsjonsId", "456")
-                                .put("regelIdentifikator", "Grunnlag.v1")
-                                .put("grunnlag", 0)
-                        ))
+    fun `Do not reprocess behov with grunnlagResultat`() {
+        val behov = SubsumsjonsBehov.Builder()
+            .grunnlagResultat(SubsumsjonsBehov.GrunnlagResultat("123", "987", "555", 2000))
+            .build()
 
         assertFalse(shouldBeProcessed(behov))
     }

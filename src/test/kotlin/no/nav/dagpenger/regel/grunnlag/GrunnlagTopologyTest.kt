@@ -26,7 +26,7 @@ class GrunnlagTopologyTest {
     }
 
     @Test
-    fun ` Should add inntekt task to subsumsjonsBehov without inntekt `() {
+    fun ` Should add inntekt task to subsumsjonsBehov without inntekt`() {
         val datalaster = Grunnlag(
             Environment(
                 username = "bogus",
@@ -34,14 +34,10 @@ class GrunnlagTopologyTest {
             )
         )
 
-        val behov = JSONObject()
-            .put("vedtaksId", "123456")
-            .put("aktorId", 123)
-            .put("beregningsDato", LocalDate.now().format(DateTimeFormatter.ISO_LOCAL_DATE))
-            .put("tasks", listOf("othertask"))
+        val behov = SubsumsjonsBehov.Builder().task(listOf("otherTask")).build()
 
         TopologyTestDriver(datalaster.buildTopology(), config).use { topologyTestDriver ->
-            val inputRecord = factory.create(behov)
+            val inputRecord = factory.create(behov.jsonObject)
             topologyTestDriver.pipeInput(inputRecord)
 
             val ut = topologyTestDriver.readOutput(
@@ -50,7 +46,7 @@ class GrunnlagTopologyTest {
                 dagpengerBehovTopic.valueSerde.deserializer()
             )
 
-            assertTrue("Inntekt task should have been added") { "hentInntekt" in ut.value().getJSONArray("tasks") }
+            assertTrue("Inntekt task should have been added") { SubsumsjonsBehov(ut.value()).hasHentInntektTask() }
             assertTrue("Other task should be preserved") { "othertask" in ut.value().getJSONArray("tasks") }
         }
     }
@@ -64,14 +60,10 @@ class GrunnlagTopologyTest {
             )
         )
 
-        val behov = JSONObject()
-            .put("vedtaksId", "123456")
-            .put("aktorId", 123)
-            .put("beregningsDato", LocalDate.now().format(DateTimeFormatter.ISO_LOCAL_DATE))
-            .put("inntekt", 0)
+        val behov = SubsumsjonsBehov.Builder().inntekt(0).build()
 
         TopologyTestDriver(datalaster.buildTopology(), config).use { topologyTestDriver ->
-            val inputRecord = factory.create(behov)
+            val inputRecord = factory.create(behov.jsonObject)
             topologyTestDriver.pipeInput(inputRecord)
 
             val ut = topologyTestDriver.readOutput(
@@ -80,9 +72,7 @@ class GrunnlagTopologyTest {
                 dagpengerBehovTopic.valueSerde.deserializer()
             )
 
-            assertTrue("GrunnlagSubsumsjon should have been added") {
-                ut.value().get("grunnlagSubsumsjon") != null
-            }
+            assertTrue(SubsumsjonsBehov(ut.value()).hasGrunnlagResultat())
         }
     }
 }
