@@ -43,7 +43,7 @@ class GrunnlagInputTest {
     fun `Do not reprocess behov with grunnlagResultat`() {
         val behov = SubsumsjonsBehov.Builder()
             .inntekt(1515)
-            .grunnlagResultat(SubsumsjonsBehov.GrunnlagResultat("123", "987", "555", 2000))
+            .grunnlagResultat(SubsumsjonsBehov.GrunnlagResultat("123", "987", "555", 2000, 2000))
             .build()
 
         assertFalse(shouldBeProcessed(behov))

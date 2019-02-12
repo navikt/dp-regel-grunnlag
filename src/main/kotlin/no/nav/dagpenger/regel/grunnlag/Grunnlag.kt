@@ -19,9 +19,9 @@ import java.util.Properties
 private val LOGGER = KotlinLogging.logger {}
 
 val dagpengerBehovTopic = Topic(
-        Topics.DAGPENGER_BEHOV_EVENT.name,
-        Serdes.StringSerde(),
-        Serdes.serdeFrom(JsonSerializer(), JsonDeserializer())
+    Topics.DAGPENGER_BEHOV_EVENT.name,
+    Serdes.StringSerde(),
+    Serdes.serdeFrom(JsonSerializer(), JsonDeserializer())
 )
 
 class Grunnlag(val env: Environment) : Service() {
@@ -45,34 +45,34 @@ class Grunnlag(val env: Environment) : Service() {
         val builder = StreamsBuilder()
 
         val stream = builder.stream(
-                dagpengerBehovTopic.name,
-                Consumed.with(dagpengerBehovTopic.keySerde, dagpengerBehovTopic.valueSerde)
+            dagpengerBehovTopic.name,
+            Consumed.with(dagpengerBehovTopic.keySerde, dagpengerBehovTopic.valueSerde)
         )
 
         val (needsInntekt, needsSubsumsjon) = stream
-                .peek { key, value -> LOGGER.info("Processing ${value.javaClass} with key $key") }
-                .mapValues { value: JSONObject -> SubsumsjonsBehov(value) }
-                .filter { _, behov -> shouldBeProcessed(behov) }
-                .kbranch(
-                        { _, behov: SubsumsjonsBehov -> behov.needsHentInntektsTask() },
-                        { _, behov: SubsumsjonsBehov -> behov.needsGrunnlagResultat() })
+            .peek { key, value -> LOGGER.info("Processing ${value.javaClass} with key $key") }
+            .mapValues { value: JSONObject -> SubsumsjonsBehov(value) }
+            .filter { _, behov -> shouldBeProcessed(behov) }
+            .kbranch(
+                { _, behov: SubsumsjonsBehov -> behov.needsHentInntektsTask() },
+                { _, behov: SubsumsjonsBehov -> behov.needsGrunnlagResultat() })
 
         needsInntekt.mapValues(this::addInntektTask)
         needsSubsumsjon.mapValues(this::addRegelresultat)
 
         needsInntekt.merge(needsSubsumsjon)
-                .peek { key, value -> LOGGER.info("Producing ${value.javaClass} with key $key") }
-                .mapValues { _, behov -> behov.jsonObject }
-                .to(dagpengerBehovTopic.name, Produced.with(dagpengerBehovTopic.keySerde, dagpengerBehovTopic.valueSerde))
+            .peek { key, value -> LOGGER.info("Producing ${value.javaClass} with key $key") }
+            .mapValues { _, behov -> behov.jsonObject }
+            .to(dagpengerBehovTopic.name, Produced.with(dagpengerBehovTopic.keySerde, dagpengerBehovTopic.valueSerde))
 
         return builder.build()
     }
 
     override fun getConfig(): Properties {
         val props = streamConfig(
-                appId = SERVICE_APP_ID,
-                bootStapServerUrl = env.bootstrapServersUrl,
-                credential = KafkaCredential(env.username, env.password)
+            appId = SERVICE_APP_ID,
+            bootStapServerUrl = env.bootstrapServersUrl,
+            credential = KafkaCredential(env.username, env.password)
         )
         return props
     }
@@ -86,11 +86,13 @@ class Grunnlag(val env: Environment) : Service() {
     private fun addRegelresultat(behov: SubsumsjonsBehov): SubsumsjonsBehov {
         behov.addGrunnlagResultat(
             SubsumsjonsBehov.GrunnlagResultat(
-            "123",
-            "456",
-            "Grunnlag.v1",
-            2000
-        ))
+                "123",
+                "456",
+                "Grunnlag.v1",
+                2000,
+                2000
+            )
+        )
 
         return behov
     }

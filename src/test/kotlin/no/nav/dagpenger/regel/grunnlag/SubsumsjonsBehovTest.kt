@@ -223,7 +223,8 @@ class SubsumsjonsBehovTest {
                 "aaa",
                 "bbb",
                 "Grunnlag.v1",
-                500
+                500,
+                600
             )
         )
 
@@ -231,6 +232,7 @@ class SubsumsjonsBehovTest {
         assertEquals("aaa", behov.jsonObject.getJSONObject("grunnlagResultat").getString("sporingsId"))
         assertEquals("bbb", behov.jsonObject.getJSONObject("grunnlagResultat").getString("subsumsjonsId"))
         assertEquals("Grunnlag.v1", behov.jsonObject.getJSONObject("grunnlagResultat").getString("regelIdentifikator"))
-        assertEquals(500, behov.jsonObject.getJSONObject("grunnlagResultat").getInt("dagpengeGrunnlag"))
+        assertEquals(500, behov.jsonObject.getJSONObject("grunnlagResultat").getInt("avkortet"))
+        assertEquals(600, behov.jsonObject.getJSONObject("grunnlagResultat").getInt("uavkortet"))
     }
 }

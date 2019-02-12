@@ -13,7 +13,8 @@ data class SubsumsjonsBehov(val jsonObject: JSONObject) {
         val SPORINGSID = "sporingsId"
         val SUBSUMSJONSID = "subsumsjonsId"
         val REGELIDENTIFIKATOR = "regelIdentifikator"
-        val DAGPENGEGRUNNLAG = "dagpengeGrunnlag"
+        val AVKORTET_GRUNNLAG = "avkortet"
+        val UAVKORTET_GRUNNLAG = "uavkortet"
     }
 
     fun needsHentInntektsTask(): Boolean = !hasInntekt() && !hasHentInntektTask()
@@ -54,7 +55,8 @@ data class SubsumsjonsBehov(val jsonObject: JSONObject) {
         val sporingsId: String,
         val subsumsjonsId: String,
         val regelidentifikator: String,
-        val dagpengeGrunnlag: Int
+        val avkortet: Int,
+        val uavkortet: Int
     ) {
 
         fun build(): JSONObject {
@@ -62,7 +64,8 @@ data class SubsumsjonsBehov(val jsonObject: JSONObject) {
                 .put(SPORINGSID, sporingsId)
                 .put(SUBSUMSJONSID, subsumsjonsId)
                 .put(REGELIDENTIFIKATOR, regelidentifikator)
-                .put(DAGPENGEGRUNNLAG, dagpengeGrunnlag)
+                .put(AVKORTET_GRUNNLAG, avkortet)
+                .put(UAVKORTET_GRUNNLAG, uavkortet)
         }
     }
 
