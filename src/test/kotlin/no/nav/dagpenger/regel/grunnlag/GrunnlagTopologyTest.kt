@@ -5,8 +5,6 @@ import org.apache.kafka.streams.TopologyTestDriver
 import org.apache.kafka.streams.test.ConsumerRecordFactory
 import org.json.JSONObject
 import org.junit.jupiter.api.Test
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
 import java.util.Properties
 import kotlin.test.assertTrue
 
@@ -47,7 +45,7 @@ class GrunnlagTopologyTest {
             )
 
             assertTrue("Inntekt task should have been added") { SubsumsjonsBehov(ut.value()).hasHentInntektTask() }
-            assertTrue("Other task should be preserved") { "othertask" in ut.value().getJSONArray("tasks") }
+            assertTrue("Other task should be preserved") { "otherTask" in ut.value().getJSONArray("tasks") }
         }
     }
 

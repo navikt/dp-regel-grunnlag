@@ -24,7 +24,7 @@ val dagpengerBehovTopic = Topic(
         Serdes.serdeFrom(JsonSerializer(), JsonDeserializer())
 )
 
-class Grunnlag(val env: Environment): Service() {
+class Grunnlag(val env: Environment) : Service() {
     override val SERVICE_APP_ID: String = "dagpenger-regel-grunnlag"
     override val HTTP_PORT: Int = env.httpPort ?: super.HTTP_PORT
 
@@ -90,7 +90,6 @@ class Grunnlag(val env: Environment): Service() {
             "456",
             "Grunnlag.v1",
             2000
-
         ))
 
         return behov
