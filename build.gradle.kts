@@ -56,6 +56,8 @@ dependencies {
     implementation("com.squareup.moshi:moshi:$moshiVersion")
     implementation("com.ryanharter.ktor:ktor-moshi:$ktorMoshiVersion")
 
+    implementation("de.huxhorn.sulky:de.huxhorn.sulky.ulid:8.2.0")
+
     compile("io.prometheus:simpleclient_common:$prometheusVersion")
     compile("io.prometheus:simpleclient_hotspot:$prometheusVersion")
     compile("io.ktor:ktor-server-netty:$ktorVersion")

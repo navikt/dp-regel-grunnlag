@@ -1,5 +1,6 @@
 package no.nav.dagpenger.regel.grunnlag
 
+import de.huxhorn.sulky.ulid.ULID
 import mu.KotlinLogging
 import no.nav.dagpenger.streams.KafkaCredential
 import no.nav.dagpenger.streams.Service
@@ -27,6 +28,8 @@ val dagpengerBehovTopic = Topic(
 class Grunnlag(val env: Environment) : Service() {
     override val SERVICE_APP_ID: String = "dagpenger-regel-grunnlag"
     override val HTTP_PORT: Int = env.httpPort ?: super.HTTP_PORT
+    val ulidGenerator = ULID()
+    val REGELIDENTIFIKATOR = "Grunnlag.v1"
 
     companion object {
         @JvmStatic
@@ -84,17 +87,31 @@ class Grunnlag(val env: Environment) : Service() {
     }
 
     private fun addRegelresultat(behov: SubsumsjonsBehov): SubsumsjonsBehov {
+        val uavkortet = finnUavkortetGrunnlag(behov.harAvtjentVerneplikt(), behov.getInntekt())
+        val avkortet = finnAvkortetGrunnlag(uavkortet)
         behov.addGrunnlagResultat(
-            SubsumsjonsBehov.GrunnlagResultat(
-                "123",
-                "456",
-                "Grunnlag.v1",
-                2000,
-                2000
+            GrunnlagResultat(
+                ulidGenerator.nextULID(),
+                ulidGenerator.nextULID(),
+                REGELIDENTIFIKATOR,
+                avkortet,
+                uavkortet
             )
         )
-
         return behov
+    }
+
+    private fun finnUavkortetGrunnlag(harAvtjentVerneplikt: Boolean, inntekt: Inntekt): Int {
+
+        return when {
+            harAvtjentVerneplikt -> (96883 * 3)
+            else -> 0
+        }
+    }
+
+    private fun finnAvkortetGrunnlag(uavkortetGrunnlag: Int): Int {
+
+        return (uavkortetGrunnlag / 100 * 62)
     }
 }
 

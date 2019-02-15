@@ -1,9 +1,12 @@
 package no.nav.dagpenger.regel.grunnlag
 
+import no.nav.dagpenger.streams.Topics
+import org.apache.kafka.common.serialization.Serdes
 import org.apache.kafka.streams.StreamsConfig
 import org.apache.kafka.streams.TopologyTestDriver
 import org.apache.kafka.streams.test.ConsumerRecordFactory
 import org.json.JSONObject
+import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 import java.util.Properties
 import kotlin.test.assertTrue
@@ -11,10 +14,10 @@ import kotlin.test.assertTrue
 class GrunnlagTopologyTest {
 
     companion object {
-        val factory = ConsumerRecordFactory<String, JSONObject>(
-            dagpengerBehovTopic.name,
-            dagpengerBehovTopic.keySerde.serializer(),
-            dagpengerBehovTopic.valueSerde.serializer()
+        val factory = ConsumerRecordFactory<String, String>(
+            Topics.DAGPENGER_BEHOV_EVENT.name,
+            Serdes.String().serializer(),
+            Serdes.String().serializer()
         )
 
         val config = Properties().apply {
@@ -25,52 +28,58 @@ class GrunnlagTopologyTest {
 
     @Test
     fun ` Should add inntekt task to subsumsjonsBehov without inntekt`() {
-        val datalaster = Grunnlag(
+        val grunnlag = Grunnlag(
             Environment(
                 username = "bogus",
                 password = "bogus"
             )
         )
 
-        val behov = SubsumsjonsBehov.Builder().task(listOf("otherTask")).build()
+        val behov = SubsumsjonsBehov.Builder()
+            .build()
 
-        TopologyTestDriver(datalaster.buildTopology(), config).use { topologyTestDriver ->
-            val inputRecord = factory.create(behov.jsonObject)
+        TopologyTestDriver(grunnlag.buildTopology(), config).use { topologyTestDriver ->
+            val inputRecord = factory.create(behov.jsonObject.toString())
             topologyTestDriver.pipeInput(inputRecord)
 
             val ut = topologyTestDriver.readOutput(
-                dagpengerBehovTopic.name,
-                dagpengerBehovTopic.keySerde.deserializer(),
-                dagpengerBehovTopic.valueSerde.deserializer()
+                Topics.DAGPENGER_BEHOV_EVENT.name,
+            Serdes.String().deserializer(),
+            Serdes.String().deserializer()
             )
 
-            assertTrue("Inntekt task should have been added") { SubsumsjonsBehov(ut.value()).hasHentInntektTask() }
-            assertTrue("Other task should be preserved") { "otherTask" in ut.value().getJSONArray("tasks") }
+            val utBehov = SubsumsjonsBehov(JSONObject(ut.value()))
+
+            Assertions.assertTrue { utBehov.hasTasks() }
         }
     }
 
     @Test
-    fun ` Should add PeriodeSubsumsjon to subsumsjonsBehov with inntekt `() {
-        val datalaster = Grunnlag(
+    fun ` Should add GrunnlagSubsumsjon to subsumsjonsBehov with inntekt `() {
+        val grunnlag = Grunnlag(
             Environment(
                 username = "bogus",
                 password = "bogus"
             )
         )
 
-        val behov = SubsumsjonsBehov.Builder().inntekt(0).build()
+        val behov = SubsumsjonsBehov.Builder()
+            .inntekt(Inntekt("id", 0))
+            .build()
 
-        TopologyTestDriver(datalaster.buildTopology(), config).use { topologyTestDriver ->
-            val inputRecord = factory.create(behov.jsonObject)
+        TopologyTestDriver(grunnlag.buildTopology(), config).use { topologyTestDriver ->
+            val inputRecord = factory.create(behov.jsonObject.toString())
             topologyTestDriver.pipeInput(inputRecord)
 
             val ut = topologyTestDriver.readOutput(
-                dagpengerBehovTopic.name,
-                dagpengerBehovTopic.keySerde.deserializer(),
-                dagpengerBehovTopic.valueSerde.deserializer()
+                Topics.DAGPENGER_BEHOV_EVENT.name,
+                Serdes.String().deserializer(),
+                Serdes.String().deserializer()
             )
 
-            assertTrue(SubsumsjonsBehov(ut.value()).hasGrunnlagResultat())
+                val utBehov = SubsumsjonsBehov(JSONObject(ut.value()))
+
+            assertTrue { utBehov.hasGrunnlagResultat() }
         }
     }
 }

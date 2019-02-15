@@ -1,238 +1,185 @@
 package no.nav.dagpenger.regel.grunnlag
 
 import org.json.JSONException
-import org.json.JSONObject
+import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Assertions.assertFalse
-import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import kotlin.test.assertEquals
 
 class SubsumsjonsBehovTest {
-    fun jsonToBehov(json: String): SubsumsjonsBehov =
-        SubsumsjonsBehov(JsonDeserializer().deserialize("", json.toByteArray()) ?: JSONObject())
 
-    @Test
-    fun `needsHentInntektsTask returns false when behov already has a task for hentInntekt`() {
-        val jsonWithHentinntektTask = """
+    val emptyjsonBehov = """
+            {}
+            """.trimIndent()
+    val emptyjsonObject = JsonDeserializer().deserialize(null, emptyjsonBehov.toByteArray())!!
+    val emptysubsumsjonsBehov = SubsumsjonsBehov(emptyjsonObject)
+
+    val jsonBehovMedInntekt = """
             {
-                "otherField": "awe",
-                "tasks": ["hentInntekt"]
+                "inntekt": {"inntektsId": "", "inntekt": 0}
             }
-        """.trimIndent()
+            """.trimIndent()
+    val jsonObjectMedInntekt = JsonDeserializer().deserialize(null, jsonBehovMedInntekt.toByteArray())!!
+    val subsumsjonsBehovMedInntekt = SubsumsjonsBehov(jsonObjectMedInntekt)
 
-        assertFalse(jsonToBehov(jsonWithHentinntektTask).needsHentInntektsTask())
-    }
-
-    @Test
-    fun `needsHentInntektsTask returns false if behov has inntekt `() {
-
-        val jsonWithInntekt = """
+    val jsonBehovMedGrunnlagResultat = """
             {
-                "otherField": "awe",
-                "inntekt": 50151
-            }
-        """.trimIndent()
-
-        assertFalse(jsonToBehov(jsonWithInntekt).needsHentInntektsTask())
-    }
-
-    @Test
-    fun `needsHentInntektsTask returns true if behov is missing both inntekt and hentInntektTask`() {
-        val json = """
-            {
-                "otherField": "awe",
-            }
-        """.trimIndent()
-
-        assertTrue(jsonToBehov(json).needsHentInntektsTask())
-    }
-
-    @Test
-    fun `needsGrunnlagResult returns false if behov is missing inntekt`() {
-        val json = """
-            {
-                "otherField": "awe",
-            }
-        """.trimIndent()
-
-        assertFalse(jsonToBehov(json).needsGrunnlagResultat())
-    }
-
-    @Test
-    fun `needsGrunnlagResult returns false if behov already has grunnlagResultat`() {
-        val json = """
-            {
-                "otherField": "awe",
-                "grunnlagResultat": "qwe"
-            }
-        """.trimIndent()
-
-        assertFalse(jsonToBehov(json).needsGrunnlagResultat())
-    }
-
-    @Test
-    fun `needsGrunnlagResult returns true if behov has inntekt and no grunnlagResultat`() {
-        val json = """
-            {
-                "otherField": "awe",
-                "inntekt": 0
-            }
-        """.trimIndent()
-
-        assertTrue(jsonToBehov(json).needsGrunnlagResultat())
-    }
-
-    @Test
-    fun `hasInntektTask returns true when behov has task named hasInntekt`() {
-        val json = """
-            {
-                "otherField": "awe",
-                "tasks": ["othertask", "hentInntekt"]
-            }
-        """.trimIndent()
-
-        assertTrue(jsonToBehov(json).hasHentInntektTask())
-    }
-
-    @Test
-    fun `hasInntektTask returns false when behov has no task named hasInntekt`() {
-        val json = """
-            {
-                "otherField": "awe",
-                "tasks": ["otherTask"]
-            }
-        """.trimIndent()
-
-        assertFalse(jsonToBehov(json).hasHentInntektTask())
-    }
-
-    @Test
-    fun `hasGrunnlagResultat returns false when json has no field named grunnlagResultat`() {
-        val json = """
-            {
-                "otherField": "awe"
-            }
-        """.trimIndent()
-
-        assertFalse(jsonToBehov(json).hasGrunnlagResultat())
-    }
-
-    @Test
-    fun `hasGrunnlagResultat returns true when json has field named grunnlagResultat`() {
-        val json = """
-            {
-                "otherField": "awe",
                 "grunnlagResultat": {}
             }
-        """.trimIndent()
+            """.trimIndent()
+    val jsonObjectMedGrunnlagResultat = JsonDeserializer().deserialize(null, jsonBehovMedGrunnlagResultat.toByteArray())!!
+    val subsumsjonsBehovMedGrunnlagResultat = SubsumsjonsBehov(jsonObjectMedGrunnlagResultat)
 
-        assertTrue(jsonToBehov(json).hasGrunnlagResultat())
+    val jsonBehovMedHentInntektTask = """
+            {
+                "tasks": ["hentInntekt"]
+            }
+            """.trimIndent()
+    val jsonObjectMedHentInntektTask = JsonDeserializer().deserialize(null, jsonBehovMedHentInntektTask.toByteArray())!!
+    val subsumsjonsBehovMedHentInntektTask = SubsumsjonsBehov(jsonObjectMedHentInntektTask)
+
+    val jsonBehovMedAnnenTask = """
+            {
+                "tasks": ["annen task"]
+            }
+            """.trimIndent()
+    val jsonObjectMedAnnenTask = JsonDeserializer().deserialize(null, jsonBehovMedAnnenTask.toByteArray())!!
+    val subsumsjonsBehovAnnentTask = SubsumsjonsBehov(jsonObjectMedAnnenTask)
+
+    val jsonBehovMedFlereTasks = """
+            {
+                "tasks": ["annen task", "hentInntekt"]
+            }
+            """.trimIndent()
+    val jsonObjectMedFlereTasks = JsonDeserializer().deserialize(null, jsonBehovMedFlereTasks.toByteArray())!!
+    val subsumsjonsBehovFleretTasks = SubsumsjonsBehov(jsonObjectMedFlereTasks)
+
+    val jsonBehovMedInntektogGrunnlagResultat = """
+            {
+                "inntekt": 0,
+                "grunnlagResultat": {}
+            }
+            """.trimIndent()
+    val jsonObjectMedInntektogGrunnlagResultat = JsonDeserializer().deserialize(null, jsonBehovMedInntektogGrunnlagResultat.toByteArray())!!
+    val subsumsjonsBehovMedInntektogGrunnlagResultat = SubsumsjonsBehov(jsonObjectMedInntektogGrunnlagResultat)
+
+    val jsonBehovMedInntektogHentInntektTask = """
+            {
+                "inntekt": {"inntektsId": "", "inntekt": 0},
+                "tasks": ["hentInntekt"]
+            }
+            """.trimIndent()
+    val jsonObjectMedInntektogHentInntektTask = JsonDeserializer().deserialize(null, jsonBehovMedInntektogHentInntektTask.toByteArray())!!
+    val subsumsjonsBehovMedInntektogHentInntektTask = SubsumsjonsBehov(jsonObjectMedInntektogHentInntektTask)
+
+    val jsonBehovMedVernepliktTrue = """
+            {
+                "harAvtjentVerneplikt": true
+            }
+            """.trimIndent()
+    val jsonObjectMedVernepliktTrue = JsonDeserializer().deserialize(null, jsonBehovMedVernepliktTrue.toByteArray())!!
+    val subsumsjonsBehovmedVernepliktTrue = SubsumsjonsBehov(jsonObjectMedVernepliktTrue)
+
+    val jsonBehovMedVernepliktFalse = """
+            {
+                "harAvtjentVerneplikt": false
+            }
+            """.trimIndent()
+    val jsonObjectMedVernepliktFalse = JsonDeserializer().deserialize(null, jsonBehovMedVernepliktFalse.toByteArray())!!
+    val subsumsjonsBehovmedVernepliktFalse = SubsumsjonsBehov(jsonObjectMedVernepliktFalse)
+
+    @Test
+    fun ` Should need hentInntektsTask when there is no hentInntektsTask and no inntekt `() {
+
+        assert(emptysubsumsjonsBehov.needsHentInntektsTask())
+        Assertions.assertFalse(subsumsjonsBehovMedInntekt.needsHentInntektsTask())
+        Assertions.assertFalse(subsumsjonsBehovMedHentInntektTask.needsHentInntektsTask())
+        Assertions.assertFalse(subsumsjonsBehovMedInntektogHentInntektTask.needsHentInntektsTask())
     }
 
     @Test
-    fun `hasTasks returns true when json has field named tasks`() {
-        val json = """
-            {
-                "otherField": "awe",
-                tasks: []
-            }
-        """.trimIndent()
+    fun ` Should need grunnlagResultat when there is inntekt and no grunnlagResultat `() {
 
-        assertTrue(jsonToBehov(json).hasTasks())
+        assert(subsumsjonsBehovMedInntekt.needsGrunnlagResultat())
+        Assertions.assertFalse(emptysubsumsjonsBehov.needsGrunnlagResultat())
+        Assertions.assertFalse(subsumsjonsBehovMedInntektogGrunnlagResultat.needsGrunnlagResultat())
+        Assertions.assertFalse(subsumsjonsBehovMedGrunnlagResultat.needsGrunnlagResultat())
     }
 
     @Test
-    fun `hasTasks returns false when json is missing field named tasks`() {
-        val json = """
-            {
-                "otherField": "awe",
-            }
-        """.trimIndent()
+    fun ` Should have grunnlagResultat when it has grunnlagResultat `() {
 
-        assertFalse(jsonToBehov(json).hasTasks())
+        assert(subsumsjonsBehovMedGrunnlagResultat.hasGrunnlagResultat())
+        Assertions.assertFalse(emptysubsumsjonsBehov.hasGrunnlagResultat())
     }
 
     @Test
-    fun `addTask should add task`() {
-        val json = """
-            {
-                "otherField": "awe",
-            }
-        """.trimIndent()
+    fun ` Should have inntekt when it has inntekt `() {
 
-        val behov = jsonToBehov(json)
-        behov.addTask("some task")
-
-        assertTrue(behov.hasTasks())
-        assertTrue("some task" in behov.jsonObject.getJSONArray("tasks"))
+        assert(subsumsjonsBehovMedInntekt.hasInntekt())
+        Assertions.assertFalse(emptysubsumsjonsBehov.hasInntekt())
     }
 
     @Test
-    fun `addTask should not overwrite other tasks`() {
-        val json = """
-            {
-                "otherField": "awe",
-                "tasks": ["other task"]
-            }
-        """.trimIndent()
+    fun ` Should have hentInntektTask when it has hentInntektTask `() {
 
-        val behov = jsonToBehov(json)
-        behov.addTask("some task")
-
-        assertTrue(behov.hasTasks())
-        assertTrue("some task" in behov.jsonObject.getJSONArray("tasks"))
-        assertTrue("other task" in behov.jsonObject.getJSONArray("tasks"))
+        assert(subsumsjonsBehovMedHentInntektTask.hasHentInntektTask())
+        assert(subsumsjonsBehovFleretTasks.hasHentInntektTask())
+        Assertions.assertFalse(emptysubsumsjonsBehov.hasHentInntektTask())
+        Assertions.assertFalse(subsumsjonsBehovAnnentTask.hasHentInntektTask())
     }
 
     @Test
-    fun `getInntekt should return inntekt from json`() {
-        val json = """
-            {
-                "otherField": "awe",
-                "inntekt": 500
-            }
-        """.trimIndent()
+    fun ` Should have tasks when it has tasks `() {
 
-        assertEquals(500, jsonToBehov(json).getInntekt())
+        assert(subsumsjonsBehovMedHentInntektTask.hasTasks())
+        assert(subsumsjonsBehovAnnentTask.hasTasks())
+        assert(subsumsjonsBehovFleretTasks.hasTasks())
+        Assertions.assertFalse(emptysubsumsjonsBehov.hasTasks())
     }
 
     @Test
-    fun `getInntekt should throw JSONException if no inntekt in json`() {
-        val json = """
-            {
-                "otherField": "awe",
-            }
-        """.trimIndent()
+    fun ` Should be able to add tasks `() {
+        val subsumsjonsBehov = emptysubsumsjonsBehov
 
-        assertThrows<JSONException> { jsonToBehov(json).getInntekt() }
+        Assertions.assertFalse(subsumsjonsBehov.hasTasks())
+
+        subsumsjonsBehov.addTask("Annen Task")
+
+        assert(subsumsjonsBehov.hasTasks())
+        Assertions.assertFalse(subsumsjonsBehov.hasHentInntektTask())
+
+        subsumsjonsBehov.addTask("hentInntekt")
+
+        assert(subsumsjonsBehov.hasTasks())
+        assert(subsumsjonsBehov.hasHentInntektTask())
     }
 
     @Test
-    fun `addGrunnlagResultat should add grunnlagResultat to json`() {
-        val json = """
-            {
-                "otherField": "awe",
-            }
-        """.trimIndent()
+    fun ` Should be able to return verneplikt `() {
 
-        val behov = jsonToBehov(json)
+        assert(subsumsjonsBehovmedVernepliktTrue.harAvtjentVerneplikt())
+        Assertions.assertFalse(subsumsjonsBehovmedVernepliktFalse.harAvtjentVerneplikt())
+        Assertions.assertFalse(emptysubsumsjonsBehov.harAvtjentVerneplikt())
+    }
 
-        behov.addGrunnlagResultat(
-            SubsumsjonsBehov.GrunnlagResultat(
-                "aaa",
-                "bbb",
-                "Grunnlag.v1",
-                500,
-                600
-            )
-        )
+    @Test
+    fun ` Should be able to add grunnlagResultat `() {
+        val subsumsjonsBehov = emptysubsumsjonsBehov
 
-        assertTrue(behov.hasGrunnlagResultat())
-        assertEquals("aaa", behov.jsonObject.getJSONObject("grunnlagResultat").getString("sporingsId"))
-        assertEquals("bbb", behov.jsonObject.getJSONObject("grunnlagResultat").getString("subsumsjonsId"))
-        assertEquals("Grunnlag.v1", behov.jsonObject.getJSONObject("grunnlagResultat").getString("regelIdentifikator"))
-        assertEquals(500, behov.jsonObject.getJSONObject("grunnlagResultat").getInt("avkortet"))
-        assertEquals(600, behov.jsonObject.getJSONObject("grunnlagResultat").getInt("uavkortet"))
+        Assertions.assertFalse(subsumsjonsBehov.hasGrunnlagResultat())
+
+        val grunnlagSubsumsjon = GrunnlagResultat("123", "456", "REGEL", 500, 600)
+        subsumsjonsBehov.addGrunnlagResultat(grunnlagSubsumsjon)
+
+        assert(subsumsjonsBehov.hasGrunnlagResultat())
+    }
+
+    @Test
+    fun ` Should be able to return inntekt `() {
+
+        assertEquals(0, subsumsjonsBehovMedInntekt.getInntekt().inntektValue)
+        assertThrows<JSONException> { emptysubsumsjonsBehov.getInntekt() }
     }
 }
