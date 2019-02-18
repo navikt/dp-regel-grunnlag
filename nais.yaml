@@ -1,0 +1,24 @@
+name: dp-regel-grunnlag
+image: repo.adeo.no:5443/dp-regel-grunnlag
+team: teamdagpenger
+port: 8098
+replicas:
+  min: 2
+  max: 4
+resources:
+  limits:
+    cpu: 1000m
+    memory: 384Mi
+  requests:
+    cpu: 100m
+    memory: 256Mi
+prometheus:
+  enabled: true
+fasitResources:
+  used:
+    - alias: srvdp-regel-grunnlag
+      resourceType: credential
+    - alias: dp-regel-grunnlag-properties
+      resourceType: applicationproperties
+    - alias:  kafka-schema-registry
+      resourceType: baseUrl
