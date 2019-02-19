@@ -111,7 +111,9 @@ class Grunnlag(val env: Environment) : Service() {
 
     private fun finnAvkortetGrunnlag(uavkortetGrunnlag: Int): Int {
 
-        return (uavkortetGrunnlag / 100 * 62)
+        val dekningsgrad = 100 / 62.4
+
+        return (uavkortetGrunnlag / dekningsgrad) as Int
     }
 }
 
