@@ -113,7 +113,7 @@ class Grunnlag(val env: Environment) : Service() {
 
         val dekningsgrad = 100 / 62.4
 
-        return (uavkortetGrunnlag / dekningsgrad) as Int
+        return (uavkortetGrunnlag / dekningsgrad).toInt()
     }
 }
 
