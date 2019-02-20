@@ -88,7 +88,7 @@ class Grunnlag(val env: Environment) : Service() {
 
     private fun addRegelresultat(behov: SubsumsjonsBehov): SubsumsjonsBehov {
         val uavkortet = finnUavkortetGrunnlag(behov.harAvtjentVerneplikt(), behov.getInntekt())
-        val avkortet = finnAvkortetGrunnlag(uavkortet)
+        val avkortet = uavkortet
         behov.addGrunnlagResultat(
             GrunnlagResultat(
                 ulidGenerator.nextULID(),
@@ -100,20 +100,13 @@ class Grunnlag(val env: Environment) : Service() {
         )
         return behov
     }
+}
 
-    private fun finnUavkortetGrunnlag(harAvtjentVerneplikt: Boolean, inntekt: Inntekt): Int {
+fun finnUavkortetGrunnlag(harAvtjentVerneplikt: Boolean, inntekt: Inntekt): Int {
 
-        return when {
-            harAvtjentVerneplikt -> (96883 * 3)
-            else -> 0
-        }
-    }
-
-    private fun finnAvkortetGrunnlag(uavkortetGrunnlag: Int): Int {
-
-        val dekningsgrad = 100 / 62.4
-
-        return (uavkortetGrunnlag / dekningsgrad).toInt()
+    return when {
+        harAvtjentVerneplikt -> (96883 * 3)
+        else -> 0
     }
 }
 
