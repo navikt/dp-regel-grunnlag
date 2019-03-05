@@ -5,6 +5,7 @@ import org.json.JSONObject
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
+import java.math.BigDecimal
 import kotlin.test.assertEquals
 
 class SubsumsjonsBehovTest {
@@ -17,8 +18,21 @@ class SubsumsjonsBehovTest {
             """.trimIndent()
 
     val jsonBehovMedInntekt = """
-            {
-                "inntekt": {"inntektsId": "", "inntekt": 0}
+        {
+            "inntektV1": {
+                "inntektsId": "12345",
+                "inntektsListe": [
+                    {
+                        "årMåned": "2018-03",
+                        "klassifiserteInntekter": [
+                            {
+                                "beløp": "25000",
+                                "inntektKlasse": "ARBEIDSINNTEKT"
+                            }
+                        ]
+                    }
+                ]
+            }
             }
             """.trimIndent()
 
@@ -48,14 +62,14 @@ class SubsumsjonsBehovTest {
 
     val jsonBehovMedInntektogGrunnlagResultat = """
             {
-                "inntekt": 0,
+                "inntektV1": 0,
                 "grunnlagResultat": {}
             }
             """.trimIndent()
 
     val jsonBehovMedInntektogHentInntektTask = """
             {
-                "inntekt": {"inntektsId": "", "inntekt": 0},
+                "inntektV1": {"inntektsId": "", "inntekt": 0},
                 "tasks": ["hentInntekt"]
             }
             """.trimIndent()
@@ -153,7 +167,7 @@ class SubsumsjonsBehovTest {
 
         assertFalse(subsumsjonsBehov.hasGrunnlagResultat())
 
-        val grunnlagSubsumsjon = GrunnlagResultat("123", "456", "REGEL", 500, 600)
+        val grunnlagSubsumsjon = GrunnlagResultat("123", "456", "REGEL", BigDecimal(500), BigDecimal(600))
         subsumsjonsBehov.addGrunnlagResultat(grunnlagSubsumsjon)
 
         assert(subsumsjonsBehov.hasGrunnlagResultat())
@@ -162,7 +176,7 @@ class SubsumsjonsBehovTest {
     @Test
     fun ` Should be able to return inntekt `() {
 
-        assertEquals(0, jsonToBehov(jsonBehovMedInntekt).getInntekt().inntektValue)
+        assertEquals("12345", jsonToBehov(jsonBehovMedInntekt).getInntekt().inntektsId)
         assertThrows<JSONException> { jsonToBehov(emptyjsonBehov).getInntekt() }
     }
 }

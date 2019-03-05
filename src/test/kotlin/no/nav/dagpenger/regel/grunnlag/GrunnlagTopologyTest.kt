@@ -8,6 +8,7 @@ import org.apache.kafka.streams.test.ConsumerRecordFactory
 import org.json.JSONObject
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
+import java.time.YearMonth
 import java.util.Properties
 import kotlin.test.assertTrue
 
@@ -64,7 +65,8 @@ class GrunnlagTopologyTest {
         )
 
         val behov = SubsumsjonsBehov.Builder()
-            .inntekt(Inntekt("id", 0))
+            .inntekt(Inntekt("123", emptyList()))
+            .senesteInntektsMåned(YearMonth.now())
             .build()
 
         TopologyTestDriver(grunnlag.buildTopology(), config).use { topologyTestDriver ->
