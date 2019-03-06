@@ -1,15 +1,19 @@
 package no.nav.dagpenger.regel.grunnlag
 
 import org.json.JSONObject
+import java.math.BigDecimal
+import java.time.YearMonth
 
 data class SubsumsjonsBehov(val jsonObject: JSONObject) {
 
     companion object {
         val GRUNNLAG_RESULTAT = "grunnlagResultat"
-        val INNTEKT = "inntekt"
+        val INNTEKT = "inntektV1"
         val TASKS = "tasks"
         val TASKS_HENT_INNTEKT = "hentInntekt"
         val AVTJENT_VERNEPLIKT = "harAvtjentVerneplikt"
+        val SENESTE_INNTEKTSMÅNED = "senesteInntektsmåned"
+        val jsonAdapterInntekt = moshiInstance.adapter(Inntekt::class.java)
     }
 
     fun needsHentInntektsTask(): Boolean = !hasInntekt() && !hasHentInntektTask()
@@ -17,6 +21,8 @@ data class SubsumsjonsBehov(val jsonObject: JSONObject) {
     fun needsGrunnlagResultat(): Boolean = hasInntekt() && !hasGrunnlagResultat()
 
     fun hasInntekt() = jsonObject.has(INNTEKT)
+
+    fun getSenesteInntektsmåned(): YearMonth = YearMonth.parse(jsonObject.get(SENESTE_INNTEKTSMÅNED).toString())
 
     fun hasHentInntektTask(): Boolean {
         if (jsonObject.has(TASKS)) {
@@ -44,14 +50,22 @@ data class SubsumsjonsBehov(val jsonObject: JSONObject) {
 
     fun harAvtjentVerneplikt(): Boolean = if (jsonObject.has(AVTJENT_VERNEPLIKT)) jsonObject.getBoolean(AVTJENT_VERNEPLIKT) else false
 
-    fun getInntekt(): Inntekt = Inntekt(jsonObject.get(INNTEKT) as JSONObject)
+    fun getInntekt(): Inntekt = jsonAdapterInntekt.fromJson(jsonObject.get(INNTEKT).toString())!!
 
     class Builder {
 
         val jsonObject = JSONObject()
 
         fun inntekt(inntekt: Inntekt): Builder {
-            jsonObject.put(INNTEKT, inntekt.build())
+            val json = jsonAdapterInntekt.toJson(inntekt)
+            jsonObject.put(INNTEKT,
+                JSONObject(json)
+            )
+            return this
+        }
+
+        fun senesteInntektsMåned(senesteInntektsMåned: YearMonth): Builder {
+            jsonObject.put(SENESTE_INNTEKTSMÅNED, senesteInntektsMåned)
             return this
         }
 
@@ -72,7 +86,7 @@ data class SubsumsjonsBehov(val jsonObject: JSONObject) {
         jsonObject.put(GRUNNLAG_RESULTAT, grunnlagResultat.build())
 }
 
-data class GrunnlagResultat(val sporingsId: String, val subsumsjonsId: String, val regelidentifikator: String, val avkortetGrunnlag: Int, val uavkortetGrunnlag: Int) {
+data class GrunnlagResultat(val sporingsId: String, val subsumsjonsId: String, val regelidentifikator: String, val avkortetGrunnlag: BigDecimal, val uavkortetGrunnlag: BigDecimal) {
 
     companion object {
         val SPORINGSID = "sporingsId"
@@ -92,19 +106,27 @@ data class GrunnlagResultat(val sporingsId: String, val subsumsjonsId: String, v
         }
 }
 
-data class Inntekt(val inntektsId: String, val inntektValue: Int) {
+data class Inntekt(
+    val inntektsId: String,
+    val inntektsListe: List<KlassifisertInntektMåned>
+)
 
-    companion object {
-        val INNTEKTSID = "inntektsId"
-        val INNTEKT = "inntekt"
-    }
+data class KlassifisertInntektMåned(
+    val årMåned: YearMonth,
+    val klassifiserteInntekter: List<KlassifisertInntekt>
+)
 
-    constructor(jsonObject: JSONObject):
-        this(jsonObject.get(INNTEKTSID) as String, jsonObject.get(INNTEKT) as Int)
+data class KlassifisertInntekt(
+    val beløp: BigDecimal,
+    val inntektKlasse: InntektKlasse
+)
 
-    fun build(): JSONObject {
-        return JSONObject()
-            .put(INNTEKTSID, inntektsId)
-            .put(INNTEKT, inntektValue)
-    }
+enum class InntektKlasse {
+    ARBEIDSINNTEKT,
+    DAGPENGER,
+    DAGPENGER_FANGST_FISKE,
+    SYKEPENGER_FANGST_FISKE,
+    NÆRINGSINNTEKT,
+    SYKEPENGER,
+    TILTAKSLØNN
 }

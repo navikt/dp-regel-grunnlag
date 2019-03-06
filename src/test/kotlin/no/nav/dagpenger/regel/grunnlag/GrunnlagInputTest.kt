@@ -2,6 +2,7 @@ package no.nav.dagpenger.regel.grunnlag
 
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Test
+import java.math.BigDecimal
 
 class GrunnlagInputTest {
 
@@ -33,7 +34,7 @@ class GrunnlagInputTest {
     fun `Process behov with inntekt`() {
 
         val behov = SubsumsjonsBehov.Builder()
-            .inntekt(Inntekt("id", 123))
+            .inntekt(Inntekt("123", emptyList()))
             .build()
 
         assert(shouldBeProcessed(behov))
@@ -42,14 +43,14 @@ class GrunnlagInputTest {
     @Test
     fun `Do not reprocess behov with grunnlagResultat`() {
         val behov = SubsumsjonsBehov.Builder()
-            .inntekt(Inntekt("id", 123))
             .grunnlagResultat(
                 GrunnlagResultat(
                     "123",
                     "987",
                     "555",
-                    2000,
-                    2000))
+                    BigDecimal(2000),
+                    BigDecimal(2000)))
+            .inntekt(Inntekt("123", emptyList()))
             .build()
 
         assertFalse(shouldBeProcessed(behov))
