@@ -3,6 +3,7 @@ package no.nav.dagpenger.regel.grunnlag
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Test
 import java.math.BigDecimal
+import java.time.YearMonth
 
 class GrunnlagInputTest {
 
@@ -35,6 +36,7 @@ class GrunnlagInputTest {
 
         val behov = SubsumsjonsBehov.Builder()
             .inntekt(Inntekt("123", emptyList()))
+            .senesteInntektsMåned(YearMonth.of(2018, 1))
             .build()
 
         assert(shouldBeProcessed(behov))
@@ -51,6 +53,7 @@ class GrunnlagInputTest {
                     BigDecimal(2000),
                     BigDecimal(2000)))
             .inntekt(Inntekt("123", emptyList()))
+            .senesteInntektsMåned(YearMonth.of(2018, 1))
             .build()
 
         assertFalse(shouldBeProcessed(behov))
