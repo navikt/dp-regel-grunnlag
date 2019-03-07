@@ -12,7 +12,8 @@ class GrunnlagsResultatTest {
         val resultat = finnUavkortetGrunnlag(
             true,
             Inntekt("123", emptyList()),
-            YearMonth.of(2019, 4))
+            YearMonth.of(2019, 4),
+            false)
         assertEquals( BigDecimal(290649), resultat)
     }
 
@@ -21,12 +22,13 @@ class GrunnlagsResultatTest {
         val resultat = finnUavkortetGrunnlag(
             false,
             Inntekt("123", emptyList()),
-            YearMonth.of(2019, 4))
+            YearMonth.of(2019, 4),
+            false)
         assertEquals(BigDecimal(0), resultat)
     }
 
     @Test
-    fun `Skal få riktig runnlag med mellom 1,5 og 2G inntekt siste 12 mnd`() {
+    fun `Skal få riktig grunnlag med mellom 1,5 og 2G inntekt siste 12 mnd`() {
 
         val inntektsListe = (1..30).toList().map {
             KlassifisertInntektMåned(
@@ -40,7 +42,28 @@ class GrunnlagsResultatTest {
         val resultat = finnUavkortetGrunnlag(
             false,
             Inntekt("123", inntektsListe),
-            YearMonth.now().minusMonths(1))
+            YearMonth.now().minusMonths(1),
+            false)
+        assertEquals(BigDecimal(174000), resultat)
+    }
+
+    @Test
+    fun `Skal få riktig grunnlag med næringsinntekt siste 12 mnd`() {
+
+        val inntektsListe = (1..30).toList().map {
+            KlassifisertInntektMåned(
+                YearMonth.now().minusMonths(it.toLong()),
+                listOf(
+                    KlassifisertInntekt(
+                        BigDecimal(14500),
+                        InntektKlasse.NÆRINGSINNTEKT)))
+        }
+
+        val resultat = finnUavkortetGrunnlag(
+            false,
+            Inntekt("123", inntektsListe),
+            YearMonth.now().minusMonths(1),
+            true)
         assertEquals(BigDecimal(174000), resultat)
     }
 }

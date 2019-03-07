@@ -33,12 +33,13 @@ class SumInntekterTest {
 
         assertEquals(
             BigDecimal(12000),
-            sumArbeidsInntekt(
+            sumInntektIkkeFangstOgFisk(
                 Inntekt(
                     "123",
                     generateSiste36MånederArbeidsInntekt()),
                 YearMonth.now().minusMonths(1),
-                11))
+                11)
+        )
     }
 
     @Test
@@ -46,11 +47,12 @@ class SumInntekterTest {
 
         assertEquals(
             BigDecimal(0),
-            sumArbeidsInntekt(
+            sumInntektIkkeFangstOgFisk(
                 Inntekt(
                     "123",
                     generateSiste36MånederNæringsInntekt()),
                 YearMonth.now().minusMonths(1),
-                11))
+                11)
+        )
     }
 }
