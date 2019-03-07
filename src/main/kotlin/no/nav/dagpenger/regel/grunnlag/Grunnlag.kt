@@ -210,4 +210,5 @@ fun finnTidligsteMåned(fraMåned: YearMonth, lengde: Int): YearMonth {
     return fraMåned.minusMonths(lengde.toLong())
 }
 
-fun shouldBeProcessed(behov: SubsumsjonsBehov): Boolean = behov.needsHentInntektsTask() || behov.needsGrunnlagResultat()
+fun shouldBeProcessed(behov: SubsumsjonsBehov): Boolean =
+    (behov.needsHentInntektsTask() || behov.needsGrunnlagResultat())
