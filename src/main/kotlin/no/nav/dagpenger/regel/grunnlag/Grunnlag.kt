@@ -41,12 +41,8 @@ class Grunnlag(val env: Environment) : Service() {
         }
     }
 
-    override fun setupStreams(): KafkaStreams {
-        LOGGER.info { "Initiating start of $SERVICE_APP_ID" }
-        return KafkaStreams(buildTopology(), getConfig())
-    }
 
-    internal fun buildTopology(): Topology {
+    override fun buildTopology(): Topology {
         val builder = StreamsBuilder()
 
         val stream = builder.stream(
