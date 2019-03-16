@@ -9,7 +9,6 @@ import no.nav.dagpenger.streams.Topics
 import no.nav.dagpenger.streams.kbranch
 import no.nav.dagpenger.streams.streamConfig
 import org.apache.kafka.common.serialization.Serdes
-import org.apache.kafka.streams.KafkaStreams
 import org.apache.kafka.streams.StreamsBuilder
 import org.apache.kafka.streams.Topology
 import org.apache.kafka.streams.kstream.Consumed
@@ -40,7 +39,6 @@ class Grunnlag(val env: Environment) : Service() {
             service.start()
         }
     }
-
 
     override fun buildTopology(): Topology {
         val builder = StreamsBuilder()
@@ -89,7 +87,8 @@ class Grunnlag(val env: Environment) : Service() {
             behov.harAvtjentVerneplikt(),
             behov.getInntekt(),
             behov.getSenesteInntektsmåned(),
-            behov.hasFangstOgFisk())
+            behov.hasFangstOgFisk()
+        )
         val avkortet = uavkortet
         behov.addGrunnlagResultat(
             GrunnlagResultat(
@@ -139,7 +138,7 @@ fun finnUavkortetGrunnlag(
     }
 
     return when {
-        harAvtjentVerneplikt -> ( enG * BigDecimal(3))
+        harAvtjentVerneplikt -> (enG * BigDecimal(3))
         else -> BigDecimal(0)
     }
 }
@@ -150,9 +149,11 @@ fun sumArbeidInntekt(inntekt: Inntekt, fraMåned: YearMonth, lengde: Int): BigDe
     val gjeldendeMåneder = inntekt.inntektsListe.filter { it.årMåned <= fraMåned && it.årMåned >= tidligsteMåned }
 
     val sumGjeldendeMåneder = gjeldendeMåneder
-        .flatMap { it.klassifiserteInntekter
-            .filter { it.inntektKlasse == InntektKlasse.ARBEIDSINNTEKT }
-            .map { it.beløp } }.fold(BigDecimal.ZERO, BigDecimal::add)
+        .flatMap {
+            it.klassifiserteInntekter
+                .filter { it.inntektKlasse == InntektKlasse.ARBEIDSINNTEKT }
+                .map { it.beløp }
+        }.fold(BigDecimal.ZERO, BigDecimal::add)
 
     return sumGjeldendeMåneder
 }
@@ -163,9 +164,11 @@ fun sumNæringsInntekt(inntekt: Inntekt, senesteMåned: YearMonth, lengde: Int):
     val gjeldendeMåneder = inntekt.inntektsListe.filter { it.årMåned <= senesteMåned && it.årMåned >= tidligsteMåned }
 
     val sumGjeldendeMåneder = gjeldendeMåneder
-        .flatMap { it.klassifiserteInntekter
-            .filter { it.inntektKlasse == InntektKlasse.NÆRINGSINNTEKT }
-            .map { it.beløp } }.fold(BigDecimal.ZERO, BigDecimal::add)
+        .flatMap {
+            it.klassifiserteInntekter
+                .filter { it.inntektKlasse == InntektKlasse.NÆRINGSINNTEKT }
+                .map { it.beløp }
+        }.fold(BigDecimal.ZERO, BigDecimal::add)
 
     return sumGjeldendeMåneder
 }
@@ -176,12 +179,16 @@ fun sumInntektIkkeFangstOgFisk(inntekt: Inntekt, fraMåned: YearMonth, lengde: I
     val gjeldendeMåneder = inntekt.inntektsListe.filter { it.årMåned <= fraMåned && it.årMåned >= tidligsteMåned }
 
     val sumGjeldendeMåneder = gjeldendeMåneder
-        .flatMap { it.klassifiserteInntekter
-            .filter { it.inntektKlasse == InntektKlasse.ARBEIDSINNTEKT ||
-                it.inntektKlasse == InntektKlasse.DAGPENGER ||
-                it.inntektKlasse == InntektKlasse.SYKEPENGER ||
-                it.inntektKlasse == InntektKlasse.TILTAKSLØNN }
-            .map { it.beløp } }.fold(BigDecimal.ZERO, BigDecimal::add)
+        .flatMap {
+            it.klassifiserteInntekter
+                .filter {
+                    it.inntektKlasse == InntektKlasse.ARBEIDSINNTEKT ||
+                        it.inntektKlasse == InntektKlasse.DAGPENGER ||
+                        it.inntektKlasse == InntektKlasse.SYKEPENGER ||
+                        it.inntektKlasse == InntektKlasse.TILTAKSLØNN
+                }
+                .map { it.beløp }
+        }.fold(BigDecimal.ZERO, BigDecimal::add)
 
     return sumGjeldendeMåneder
 }
@@ -192,11 +199,15 @@ fun sumFangstOgFiskInntekt(inntekt: Inntekt, senesteMåned: YearMonth, lengde: I
     val gjeldendeMåneder = inntekt.inntektsListe.filter { it.årMåned <= senesteMåned && it.årMåned >= tidligsteMåned }
 
     val sumGjeldendeMåneder = gjeldendeMåneder
-        .flatMap { it.klassifiserteInntekter
-            .filter { it.inntektKlasse == InntektKlasse.NÆRINGSINNTEKT ||
-                it.inntektKlasse == InntektKlasse.DAGPENGER_FANGST_FISKE ||
-                it.inntektKlasse == InntektKlasse.SYKEPENGER_FANGST_FISKE }
-            .map { it.beløp } }.fold(BigDecimal.ZERO, BigDecimal::add)
+        .flatMap {
+            it.klassifiserteInntekter
+                .filter {
+                    it.inntektKlasse == InntektKlasse.NÆRINGSINNTEKT ||
+                        it.inntektKlasse == InntektKlasse.DAGPENGER_FANGST_FISKE ||
+                        it.inntektKlasse == InntektKlasse.SYKEPENGER_FANGST_FISKE
+                }
+                .map { it.beløp }
+        }.fold(BigDecimal.ZERO, BigDecimal::add)
 
     return sumGjeldendeMåneder
 }
