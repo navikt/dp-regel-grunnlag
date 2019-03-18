@@ -8,26 +8,9 @@ import java.time.YearMonth
 class GrunnlagInputTest {
 
     @Test
-    fun `Process behov without inntekt and no inntekt tasks`() {
+    fun `Should not process behov without inntekt`() {
         val behov = SubsumsjonsBehov.Builder().build()
 
-        assert(shouldBeProcessed(behov))
-    }
-
-    @Test
-    fun `Process behov without inntekt and no hentInntekt task`() {
-        val behov = SubsumsjonsBehov.Builder()
-            .task(listOf("noe annet"))
-            .build()
-
-        assert(shouldBeProcessed(behov))
-    }
-
-    @Test
-    fun `Do not process behov without inntekt but with hentInntekt task`() {
-        val behov = SubsumsjonsBehov.Builder()
-            .task(listOf("hentInntekt"))
-            .build()
         assertFalse(shouldBeProcessed(behov))
     }
 

@@ -17,8 +17,6 @@ data class SubsumsjonsBehov(val jsonObject: JSONObject) {
         val jsonAdapterInntekt = moshiInstance.adapter(Inntekt::class.java)
     }
 
-    fun needsHentInntektsTask(): Boolean = !hasInntekt() && !hasHentInntektTask()
-
     fun needsGrunnlagResultat(): Boolean = hasInntekt() && !hasGrunnlagResultat() && hasSenesteInntektsmåned()
 
     fun hasInntekt() = jsonObject.has(INNTEKT)
@@ -27,29 +25,7 @@ data class SubsumsjonsBehov(val jsonObject: JSONObject) {
 
     fun getSenesteInntektsmåned(): YearMonth = YearMonth.parse(jsonObject.get(SENESTE_INNTEKTSMÅNED).toString())
 
-    fun hasHentInntektTask(): Boolean {
-        if (jsonObject.has(TASKS)) {
-            val tasks = jsonObject.getJSONArray(TASKS)
-            for (task in tasks) {
-                if (task.toString() == TASKS_HENT_INNTEKT) {
-                    return true
-                }
-            }
-        }
-        return false
-    }
-
     fun hasGrunnlagResultat() = jsonObject.has(GRUNNLAG_RESULTAT)
-
-    fun hasTasks(): Boolean = jsonObject.has(TASKS)
-
-    fun addTask(task: String) {
-        if (hasTasks()) {
-            jsonObject.append(TASKS, task)
-        } else {
-            jsonObject.put(TASKS, listOf(task))
-        }
-    }
 
     fun hasFangstOgFisk(): Boolean = if (jsonObject.has(FANGST_OG_FISK)) jsonObject.getBoolean(FANGST_OG_FISK) else false
 
