@@ -1,5 +1,9 @@
 package no.nav.dagpenger.regel.grunnlag
 
+import no.nav.dagpenger.events.inntekt.v1.Inntekt
+import no.nav.dagpenger.events.inntekt.v1.InntektKlasse
+import no.nav.dagpenger.events.inntekt.v1.KlassifisertInntekt
+import no.nav.dagpenger.events.inntekt.v1.KlassifisertInntektMåned
 import org.junit.jupiter.api.Test
 import java.math.BigDecimal
 import java.time.YearMonth
@@ -36,7 +40,8 @@ class GrunnlagsResultatTest {
                 listOf(
                     KlassifisertInntekt(
                         BigDecimal(14500),
-                        InntektKlasse.ARBEIDSINNTEKT)))
+                        InntektKlasse.ARBEIDSINNTEKT)
+                ))
         }
 
         val resultat = finnUavkortetGrunnlag(

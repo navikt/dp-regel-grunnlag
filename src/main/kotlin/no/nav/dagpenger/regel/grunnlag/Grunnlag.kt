@@ -1,62 +1,68 @@
 package no.nav.dagpenger.regel.grunnlag
 
 import de.huxhorn.sulky.ulid.ULID
-import mu.KotlinLogging
+import no.nav.dagpenger.events.Packet
+import no.nav.dagpenger.events.inntekt.v1.Inntekt
+import no.nav.dagpenger.events.inntekt.v1.InntektKlasse
 import no.nav.dagpenger.streams.KafkaCredential
-import no.nav.dagpenger.streams.Service
-import no.nav.dagpenger.streams.Topic
-import no.nav.dagpenger.streams.Topics
+import no.nav.dagpenger.streams.River
 import no.nav.dagpenger.streams.streamConfig
-import org.apache.kafka.common.serialization.Serdes
-import org.apache.kafka.streams.StreamsBuilder
-import org.apache.kafka.streams.Topology
-import org.apache.kafka.streams.kstream.Consumed
-import org.apache.kafka.streams.kstream.Produced
-import org.json.JSONObject
+import org.apache.kafka.streams.kstream.Predicate
 import java.math.BigDecimal
 import java.time.YearMonth
 import java.util.Properties
 
-private val LOGGER = KotlinLogging.logger {}
-
-val dagpengerBehovTopic = Topic(
-    Topics.DAGPENGER_BEHOV_EVENT.name,
-    Serdes.StringSerde(),
-    Serdes.serdeFrom(JsonSerializer(), JsonDeserializer())
-)
-
-class Grunnlag(val env: Environment) : Service() {
+class Grunnlag(private val env: Environment) : River() {
     override val SERVICE_APP_ID: String = "dagpenger-regel-grunnlag"
     override val HTTP_PORT: Int = env.httpPort ?: super.HTTP_PORT
-    val ulidGenerator = ULID()
-    val REGELIDENTIFIKATOR = "Grunnlag.v1"
+    private val ulidGenerator = ULID()
+    private val REGELIDENTIFIKATOR = "Grunnlag.v1"
 
     companion object {
-        @JvmStatic
-        fun main(args: Array<String>) {
-            val service = Grunnlag(Environment())
-            service.start()
-        }
+        val GRUNNLAG_RESULTAT = "grunnlagResultat"
+        val INNTEKT = "inntektV1"
+        val AVTJENT_VERNEPLIKT = "harAvtjentVerneplikt"
+        val FANGST_OG_FISK = "fangstOgFisk"
+        val SENESTE_INNTEKTSMÅNED = "senesteInntektsmåned"
+        val inntektAdapter = moshiInstance.adapter(Inntekt::class.java)
     }
 
-    override fun buildTopology(): Topology {
-        val builder = StreamsBuilder()
+    override fun filterPredicates(): List<Predicate<String, Packet>> {
+        return listOf(
+            Predicate { _, packet -> packet.hasField(INNTEKT) },
+            Predicate { _, packet -> packet.hasField(SENESTE_INNTEKTSMÅNED) },
+            Predicate { _, packet -> !packet.hasField(GRUNNLAG_RESULTAT) }
+        )
+    }
 
-        val stream = builder.stream(
-            dagpengerBehovTopic.name,
-            Consumed.with(dagpengerBehovTopic.keySerde, dagpengerBehovTopic.valueSerde)
+    override fun onPacket(packet: Packet): Packet {
+
+        val verneplikt = packet.getNullableBoolean(AVTJENT_VERNEPLIKT) ?: false
+        val inntekt: no.nav.dagpenger.events.inntekt.v1.Inntekt =
+            packet.getObjectValue(INNTEKT) { requireNotNull(inntektAdapter.fromJson(it)) }
+        val senesteInntektsmåned = YearMonth.parse(packet.getStringValue(SENESTE_INNTEKTSMÅNED))
+        val fangstOgFisk = packet.getNullableBoolean(FANGST_OG_FISK) ?: false
+
+        val uavkortet = finnUavkortetGrunnlag(
+            verneplikt,
+            inntekt,
+            senesteInntektsmåned,
+            fangstOgFisk
         )
 
-        stream
-            .peek { key, value -> LOGGER.info("Processing ${value.javaClass} with key $key") }
-            .mapValues { value: JSONObject -> SubsumsjonsBehov(value) }
-            .filter { _, behov -> shouldBeProcessed(behov) }
-            .mapValues(this::addRegelresultat)
-            .peek { key, value -> LOGGER.info("Producing ${value.javaClass} with key $key") }
-            .mapValues { _, behov -> behov.jsonObject }
-            .to(dagpengerBehovTopic.name, Produced.with(dagpengerBehovTopic.keySerde, dagpengerBehovTopic.valueSerde))
+        val avkortet = uavkortet
 
-        return builder.build()
+        val resultat = GrunnlagResultat(
+            ulidGenerator.nextULID(),
+            ulidGenerator.nextULID(),
+            REGELIDENTIFIKATOR,
+            avkortet,
+            uavkortet
+
+        )
+
+        packet.putValue(GRUNNLAG_RESULTAT, resultat.toMap())
+        return packet
     }
 
     override fun getConfig(): Properties {
@@ -67,26 +73,11 @@ class Grunnlag(val env: Environment) : Service() {
         )
         return props
     }
+}
 
-    private fun addRegelresultat(behov: SubsumsjonsBehov): SubsumsjonsBehov {
-        val uavkortet = finnUavkortetGrunnlag(
-            behov.harAvtjentVerneplikt(),
-            behov.getInntekt(),
-            behov.getSenesteInntektsmåned(),
-            behov.hasFangstOgFisk()
-        )
-        val avkortet = uavkortet
-        behov.addGrunnlagResultat(
-            GrunnlagResultat(
-                ulidGenerator.nextULID(),
-                ulidGenerator.nextULID(),
-                REGELIDENTIFIKATOR,
-                avkortet,
-                uavkortet
-            )
-        )
-        return behov
-    }
+fun main(args: Array<String>) {
+    val service = Grunnlag(Environment())
+    service.start()
 }
 
 fun finnUavkortetGrunnlag(
@@ -202,5 +193,3 @@ fun finnTidligsteMåned(fraMåned: YearMonth, lengde: Int): YearMonth {
 
     return fraMåned.minusMonths(lengde.toLong())
 }
-
-fun shouldBeProcessed(behov: SubsumsjonsBehov): Boolean = behov.needsGrunnlagResultat()

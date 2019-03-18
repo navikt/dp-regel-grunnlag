@@ -1,5 +1,9 @@
 package no.nav.dagpenger.regel.grunnlag
 
+import no.nav.dagpenger.events.inntekt.v1.Inntekt
+import no.nav.dagpenger.events.inntekt.v1.InntektKlasse
+import no.nav.dagpenger.events.inntekt.v1.KlassifisertInntekt
+import no.nav.dagpenger.events.inntekt.v1.KlassifisertInntektMåned
 import org.junit.jupiter.api.Test
 import java.math.BigDecimal
 import java.time.YearMonth
@@ -12,9 +16,13 @@ class SumInntekterTest {
         return (1..36).toList().map {
             KlassifisertInntektMåned(
                 YearMonth.now().minusMonths(it.toLong()),
-                listOf(KlassifisertInntekt(
-                    BigDecimal(1000),
-                    InntektKlasse.ARBEIDSINNTEKT)))
+                listOf(
+                    KlassifisertInntekt(
+                        BigDecimal(1000),
+                        InntektKlasse.ARBEIDSINNTEKT
+                    )
+                )
+            )
         }
     }
 
@@ -23,8 +31,13 @@ class SumInntekterTest {
         return (1..36).toList().map {
             KlassifisertInntektMåned(
                 YearMonth.now().minusMonths(it.toLong()),
-                listOf(KlassifisertInntekt(BigDecimal(1000),
-                    InntektKlasse.FANGST_FISKE)))
+                listOf(
+                    KlassifisertInntekt(
+                        BigDecimal(1000),
+                        InntektKlasse.FANGST_FISKE
+                    )
+                )
+            )
         }
     }
 
@@ -36,9 +49,11 @@ class SumInntekterTest {
             sumInntektIkkeFangstOgFisk(
                 Inntekt(
                     "123",
-                    generateSiste36MånederArbeidsInntekt()),
+                    generateSiste36MånederArbeidsInntekt()
+                ),
                 YearMonth.now().minusMonths(1),
-                11)
+                11
+            )
         )
     }
 
@@ -50,9 +65,11 @@ class SumInntekterTest {
             sumInntektIkkeFangstOgFisk(
                 Inntekt(
                     "123",
-                    generateSiste36MånederNæringsInntekt()),
+                    generateSiste36MånederNæringsInntekt()
+                ),
                 YearMonth.now().minusMonths(1),
-                11)
+                11
+            )
         )
     }
 }
