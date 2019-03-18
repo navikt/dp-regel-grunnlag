@@ -24,7 +24,7 @@ class SumInntekterTest {
             KlassifisertInntektMåned(
                 YearMonth.now().minusMonths(it.toLong()),
                 listOf(KlassifisertInntekt(BigDecimal(1000),
-                    InntektKlasse.NÆRINGSINNTEKT)))
+                    InntektKlasse.FANGST_FISKE)))
         }
     }
 
