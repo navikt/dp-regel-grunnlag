@@ -28,7 +28,7 @@ class GrunnlagTopologyTest {
     }
 
     @Test
-    fun ` Should add inntekt task to subsumsjonsBehov without inntekt`() {
+    fun ` Should add not process behov without inntekt `() {
         val grunnlag = Grunnlag(
             Environment(
                 username = "bogus",
@@ -45,13 +45,11 @@ class GrunnlagTopologyTest {
 
             val ut = topologyTestDriver.readOutput(
                 Topics.DAGPENGER_BEHOV_EVENT.name,
-            Serdes.String().deserializer(),
-            Serdes.String().deserializer()
+                Serdes.String().deserializer(),
+                Serdes.String().deserializer()
             )
 
-            val utBehov = SubsumsjonsBehov(JSONObject(ut.value()))
-
-            Assertions.assertTrue { utBehov.hasTasks() }
+            Assertions.assertTrue { null == ut }
         }
     }
 
@@ -79,7 +77,7 @@ class GrunnlagTopologyTest {
                 Serdes.String().deserializer()
             )
 
-                val utBehov = SubsumsjonsBehov(JSONObject(ut.value()))
+            val utBehov = SubsumsjonsBehov(JSONObject(ut.value()))
 
             assertTrue { utBehov.hasGrunnlagResultat() }
         }

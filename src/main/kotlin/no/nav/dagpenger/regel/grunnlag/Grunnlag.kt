@@ -6,7 +6,6 @@ import no.nav.dagpenger.streams.KafkaCredential
 import no.nav.dagpenger.streams.Service
 import no.nav.dagpenger.streams.Topic
 import no.nav.dagpenger.streams.Topics
-import no.nav.dagpenger.streams.kbranch
 import no.nav.dagpenger.streams.streamConfig
 import org.apache.kafka.common.serialization.Serdes
 import org.apache.kafka.streams.StreamsBuilder
@@ -48,18 +47,11 @@ class Grunnlag(val env: Environment) : Service() {
             Consumed.with(dagpengerBehovTopic.keySerde, dagpengerBehovTopic.valueSerde)
         )
 
-        val (needsInntekt, needsSubsumsjon) = stream
+        stream
             .peek { key, value -> LOGGER.info("Processing ${value.javaClass} with key $key") }
             .mapValues { value: JSONObject -> SubsumsjonsBehov(value) }
             .filter { _, behov -> shouldBeProcessed(behov) }
-            .kbranch(
-                { _, behov: SubsumsjonsBehov -> behov.needsHentInntektsTask() },
-                { _, behov: SubsumsjonsBehov -> behov.needsGrunnlagResultat() })
-
-        needsInntekt.mapValues(this::addInntektTask)
-        needsSubsumsjon.mapValues(this::addRegelresultat)
-
-        needsInntekt.merge(needsSubsumsjon)
+            .mapValues(this::addRegelresultat)
             .peek { key, value -> LOGGER.info("Producing ${value.javaClass} with key $key") }
             .mapValues { _, behov -> behov.jsonObject }
             .to(dagpengerBehovTopic.name, Produced.with(dagpengerBehovTopic.keySerde, dagpengerBehovTopic.valueSerde))
@@ -74,12 +66,6 @@ class Grunnlag(val env: Environment) : Service() {
             credential = KafkaCredential(env.username, env.password)
         )
         return props
-    }
-
-    private fun addInntektTask(behov: SubsumsjonsBehov): SubsumsjonsBehov {
-        behov.addTask("hentInntekt")
-
-        return behov
     }
 
     private fun addRegelresultat(behov: SubsumsjonsBehov): SubsumsjonsBehov {
@@ -217,5 +203,4 @@ fun finnTidligsteMåned(fraMåned: YearMonth, lengde: Int): YearMonth {
     return fraMåned.minusMonths(lengde.toLong())
 }
 
-fun shouldBeProcessed(behov: SubsumsjonsBehov): Boolean =
-    (behov.needsHentInntektsTask() || behov.needsGrunnlagResultat())
+fun shouldBeProcessed(behov: SubsumsjonsBehov): Boolean = behov.needsGrunnlagResultat()
