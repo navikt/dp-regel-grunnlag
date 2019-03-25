@@ -1,6 +1,7 @@
 package no.nav.dagpenger.regel.grunnlag
 
 import java.math.BigDecimal
+import java.time.YearMonth
 
 data class GrunnlagResultat(
     val sporingsId: String,
@@ -28,3 +29,8 @@ data class GrunnlagResultat(
         )
     }
 }
+
+data class InntektsPeriode(
+    val førsteMåned: YearMonth,
+    val sisteMåned: YearMonth
+)

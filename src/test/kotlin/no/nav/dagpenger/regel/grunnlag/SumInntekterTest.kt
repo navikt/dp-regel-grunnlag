@@ -41,7 +41,7 @@ class SumInntekterTest {
         }
     }
 
-    @Test
+   /* @Test
     fun ` should add Arbeidsinntekt in sumSiste12 `() {
 
         assertEquals(
@@ -71,5 +71,5 @@ class SumInntekterTest {
                 11
             )
         )
-    }
+    }*/
 }
