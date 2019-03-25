@@ -38,6 +38,7 @@ pipeline {
     }
 
     stage('Publish') {
+      when { branch 'master' }
       steps {
         timeout(10) {
                 input 'Keep going?'
