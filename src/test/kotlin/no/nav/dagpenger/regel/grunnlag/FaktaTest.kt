@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test
 import java.math.BigDecimal
 import java.time.LocalDate
 import java.time.YearMonth
+import java.util.EnumSet
 import kotlin.test.assertEquals
 
 class FaktaTest {
@@ -18,15 +19,6 @@ class FaktaTest {
         val inntekt = Inntekt(
             "123",
             listOf (
-                KlassifisertInntektMåned(
-                    YearMonth.of(2018, 4),
-                    listOf(
-                        KlassifisertInntekt(
-                            BigDecimal(1000),
-                            InntektKlasse.ARBEIDSINNTEKT
-                        )
-                    )
-                ),
                 KlassifisertInntektMåned(
                     YearMonth.of(2018, 5),
                     listOf(
@@ -50,7 +42,7 @@ class FaktaTest {
 
         val fakta = Fakta(inntekt, YearMonth.of(2019, 3), false, false, LocalDate.of(2019, 4,1))
 
-        assertEquals(listOf(YearMonth.of(2018, 5) to 3000.toBigDecimal()), fakta.sumMåneder())
+        assertEquals(listOf(YearMonth.of(2018, 5) to 3000.toBigDecimal()), fakta.sumMåneder(EnumSet.of(InntektKlasse.ARBEIDSINNTEKT, InntektKlasse.DAGPENGER)))
     }
 
 }
