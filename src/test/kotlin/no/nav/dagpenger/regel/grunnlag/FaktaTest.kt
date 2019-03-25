@@ -14,35 +14,51 @@ import kotlin.test.assertEquals
 class FaktaTest {
 
     @Test
-    fun ` Skal returnere en liste over inntektene måned for måned `(){
+    fun ` Skal returnere en liste over inntektene måned for måned `() {
 
         val inntekt = Inntekt(
             "123",
-            listOf (
+            listOf(
                 KlassifisertInntektMåned(
                     YearMonth.of(2018, 5),
                     listOf(
                         KlassifisertInntekt(
                             BigDecimal(1000),
                             InntektKlasse.ARBEIDSINNTEKT
+                        ),
+                        KlassifisertInntekt(
+                            BigDecimal(2000),
+                            InntektKlasse.DAGPENGER
                         )
                     )
                 ),
                 KlassifisertInntektMåned(
-                    YearMonth.of(2018, 5),
+                    YearMonth.of(2018, 4),
                     listOf(
+                        KlassifisertInntekt(
+                            BigDecimal(500),
+                            InntektKlasse.ARBEIDSINNTEKT
+                        ),
                         KlassifisertInntekt(
                             BigDecimal(2000),
                             InntektKlasse.DAGPENGER
                         )
                     )
                 )
+
+
             )
         )
 
-        val fakta = Fakta(inntekt, YearMonth.of(2019, 3), false, false, LocalDate.of(2019, 4,1))
+        val fakta = Fakta(inntekt, YearMonth.of(2019, 3), false, false, LocalDate.of(2019, 4, 1))
 
-        assertEquals(listOf(YearMonth.of(2018, 5) to 3000.toBigDecimal()), fakta.sumMåneder(EnumSet.of(InntektKlasse.ARBEIDSINNTEKT, InntektKlasse.DAGPENGER)))
+        val expected =  listOf(
+            YearMonth.of(2018, 5) to 3000.toBigDecimal(),
+            YearMonth.of(2018, 4) to 2500.toBigDecimal()
+        )
+        assertEquals(
+            expected,
+            fakta.sumMåneder(EnumSet.of(InntektKlasse.ARBEIDSINNTEKT, InntektKlasse.DAGPENGER))
+        )
     }
-
 }
