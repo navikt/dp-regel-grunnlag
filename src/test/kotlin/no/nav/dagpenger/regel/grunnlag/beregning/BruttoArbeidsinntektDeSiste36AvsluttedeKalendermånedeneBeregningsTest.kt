@@ -63,6 +63,6 @@ class BruttoArbeidsinntektDeSiste36AvsluttedeKalendermånedeneBeregningsTest {
             beregningsdato = LocalDate.of(2019, 4, 1)
         )
 
-        assertEquals(BigDecimal("4115.922000"), BruttoArbeidsinntektDeSiste36AvsluttedeKalendermånedene().calculate(fakta))
+        assertEquals(BigDecimal("4115.922000"), BruttoArbeidsinntektDeSiste36AvsluttedeKalendermånedene().calculate(fakta).uavkortet)
     }
 }

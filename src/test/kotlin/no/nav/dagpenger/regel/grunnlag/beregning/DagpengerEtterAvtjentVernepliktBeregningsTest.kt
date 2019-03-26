@@ -20,7 +20,7 @@ class DagpengerEtterAvtjentVernepliktBeregningsTest {
             LocalDate.of(2019, 4, 1)
         )
 
-        assertEquals(290649.toBigDecimal(), DagpengerEtterAvtjentVerneplikt().calculate(fakta))
+        assertEquals(290649.toBigDecimal(), DagpengerEtterAvtjentVerneplikt().calculate(fakta).uavkortet)
     }
 
     @Test
@@ -34,6 +34,6 @@ class DagpengerEtterAvtjentVernepliktBeregningsTest {
             LocalDate.of(2019, 4, 1)
         )
 
-        assertEquals(0.toBigDecimal(), DagpengerEtterAvtjentVerneplikt().calculate(fakta))
+        assertEquals(0.toBigDecimal(), DagpengerEtterAvtjentVerneplikt().calculate(fakta).uavkortet)
     }
 }

@@ -10,5 +10,5 @@ class BruttoArbeidsinntektDeSiste36AvsluttedeKalendermånedene : MånedsGrunnlag
         InntektKlasse.SYKEPENGER,
         InntektKlasse.TILTAKSLØNN
     ),
-    35
+    35, "ArbeidsinntektSiste36"
 )

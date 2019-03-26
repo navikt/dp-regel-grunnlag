@@ -7,9 +7,10 @@ import java.math.BigDecimal
 import java.time.YearMonth
 import java.util.EnumSet
 
-abstract class MånedsGrunnlagBeregning(val inntektKlasser: EnumSet<InntektKlasse>, val måneder: Long) : GrunnlagBeregning() {
+abstract class MånedsGrunnlagBeregning(val inntektKlasser: EnumSet<InntektKlasse>, val måneder: Long, beregningsregel: String) :
+    GrunnlagBeregning(beregningsregel) {
 
-    override fun calculate(fakta: Fakta): BigDecimal {
+    override fun calculate(fakta: Fakta): BeregningsResultat {
         val månedsInntekt: List<Pair<YearMonth, BigDecimal>> = fakta.sumMåneder(
             inntektKlasser)
 
@@ -18,12 +19,14 @@ abstract class MånedsGrunnlagBeregning(val inntektKlasser: EnumSet<InntektKlass
         val gjeldendeGrunnbeløp =
             getGrunnbeløpForMåned(YearMonth.from(fakta.beregningsdato))
 
-        return månedsInntekt.filter { it.first >= tidligsteInntektsmåned && it.first <= senesteInntektsmåned }
+        val uavkortet = månedsInntekt.filter { it.first >= tidligsteInntektsmåned && it.first <= senesteInntektsmåned }
             .map { it.second.multiply(gjeldendeGrunnbeløp.faktorMellom(
                 getGrunnbeløpForMåned(
                     it.first
                 )
             ) ) }
             .fold(BigDecimal.ZERO, BigDecimal::add)
+
+        return BeregningsResultat(uavkortet, 0.toBigDecimal(), beregningsregel)
     }
 }

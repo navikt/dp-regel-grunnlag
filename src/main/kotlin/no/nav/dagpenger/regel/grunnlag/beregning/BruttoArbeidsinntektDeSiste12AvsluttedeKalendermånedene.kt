@@ -8,4 +8,4 @@ class BruttoArbeidsinntektDeSiste12AvsluttedeKalendermånedene : MånedsGrunnlag
     InntektKlasse.DAGPENGER,
     InntektKlasse.SYKEPENGER,
     InntektKlasse.TILTAKSLØNN),
-12)
+12, "ArbeidsinntektSiste12")

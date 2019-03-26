@@ -48,7 +48,7 @@ class Grunnlag(private val env: Environment) : River() {
 
         val fakta = Fakta(inntekt, senesteInntektsmåned, verneplikt, fangstOgFisk, beregningsDato)
 
-        val resultat = grunnlagsBeregninger.map { beregning -> beregning.calculate(fakta) }.max() ?: BigDecimal.ZERO
+        val resultat = grunnlagsBeregninger.map { beregning -> beregning.calculate(fakta).avkortet }.max() ?: BigDecimal.ZERO
 
         packet.putValue(GRUNNLAG_RESULTAT, resultat)
         return packet
