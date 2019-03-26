@@ -36,9 +36,15 @@ class BruttoArbeidsinntektDeSisteTolvAvsluttedeKalendermånedeneBeregningsTest {
             )
         )
 
-        val fakta = Fakta(Inntekt("123", inntektsListe), YearMonth.of(2019, 3), false, false, LocalDate.of(2019, 4,1))
+        val fakta = Fakta(
+            inntekt = Inntekt("123", inntektsListe),
+            senesteInntektsmåned = YearMonth.of(2019, 3),
+            fangstOgFisk = false,
+            verneplikt = false,
+            beregningsdato = LocalDate.of(2019, 4,1))
 
-        assertEquals(BigDecimal(2034.69), BruttoArbeidsinntektDeSisteTolvAvsluttedeKalendermånedene(fakta).resultat)
+
+        assertEquals(BigDecimal("2034.699000"), BruttoArbeidsinntektDeSisteTolvAvsluttedeKalendermånedene(fakta).resultat)
     }
 
 
