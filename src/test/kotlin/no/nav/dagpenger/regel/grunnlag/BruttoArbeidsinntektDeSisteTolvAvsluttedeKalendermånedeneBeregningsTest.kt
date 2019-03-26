@@ -13,7 +13,7 @@ import kotlin.test.assertEquals
 class BruttoArbeidsinntektDeSisteTolvAvsluttedeKalendermånedeneBeregningsTest {
 
     @Test
-    fun ` Skal gi grunnlag på 174000 siste 12 kalendermåned gitt mars 2019 inntekt`(){
+    fun ` Skal gi grunnlag på 2034,699 siste 12 kalendermåned gitt mars 2019 inntekt`() {
 
         val inntektsListe = listOf (
             KlassifisertInntektMåned(
@@ -41,11 +41,8 @@ class BruttoArbeidsinntektDeSisteTolvAvsluttedeKalendermånedeneBeregningsTest {
             senesteInntektsmåned = YearMonth.of(2019, 3),
             fangstOgFisk = false,
             verneplikt = false,
-            beregningsdato = LocalDate.of(2019, 4,1))
-
+            beregningsdato = LocalDate.of(2019, 4, 1))
 
         assertEquals(BigDecimal("2034.699000"), BruttoArbeidsinntektDeSisteTolvAvsluttedeKalendermånedene(fakta).resultat)
     }
-
-
 }

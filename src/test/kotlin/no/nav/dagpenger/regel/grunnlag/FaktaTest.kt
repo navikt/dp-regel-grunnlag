@@ -46,13 +46,12 @@ class FaktaTest {
                     )
                 )
 
-
             )
         )
 
         val fakta = Fakta(inntekt, YearMonth.of(2019, 3), false, false, LocalDate.of(2019, 4, 1))
 
-        val expected =  listOf(
+        val expected = listOf(
             YearMonth.of(2018, 5) to 3000.toBigDecimal(),
             YearMonth.of(2018, 4) to 2500.toBigDecimal()
         )

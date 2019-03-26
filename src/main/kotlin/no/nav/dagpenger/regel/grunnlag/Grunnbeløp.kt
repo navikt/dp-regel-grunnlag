@@ -1,7 +1,6 @@
 package no.nav.dagpenger.regel.grunnlag
 
 import java.math.BigDecimal
-import java.math.MathContext
 import java.math.RoundingMode
 import java.time.LocalDate
 import java.time.Month
@@ -31,12 +30,11 @@ fun getGrunnbeløpForMåned(måned: YearMonth): Grunnbeløp {
     return grunnbeløp.filter { it.fraMåned.year == sisteMåned.year && it.fraMåned.month == sisteMåned.month }.first()
 }
 
-private fun findLastChange(yearMonth: YearMonth): YearMonth{
+private fun findLastChange(yearMonth: YearMonth): YearMonth {
 
-    if(yearMonth.month >= Month.MAY){
+    if (yearMonth.month >= Month.MAY) {
         return YearMonth.of(yearMonth.year, Month.MAY)
-    }
-    else{
-        return YearMonth.of(yearMonth.year-1, Month.MAY)
+    } else {
+        return YearMonth.of(yearMonth.year - 1, Month.MAY)
     }
 }
