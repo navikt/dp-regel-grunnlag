@@ -10,10 +10,10 @@ import java.time.LocalDate
 import java.time.YearMonth
 import kotlin.test.assertEquals
 
-class BruttoArbeidsinntektDeSisteTolvAvsluttedeKalendermånedeneBeregningsTest {
+class BruttoArbeidsinntektDeSiste36AvsluttedeKalendermånedeneBeregningsTest {
 
     @Test
-    fun ` Skal gi grunnlag på 2034,699 siste 12 kalendermåned gitt mars 2019 inntekt`() {
+    fun ` Skal gi grunnlag på 4115 siste 36 kalendermåned gitt mars 2019 inntekt`() {
 
         val inntektsListe = listOf (
             KlassifisertInntektMåned(
@@ -33,6 +33,24 @@ class BruttoArbeidsinntektDeSisteTolvAvsluttedeKalendermånedeneBeregningsTest {
                         InntektKlasse.ARBEIDSINNTEKT
                     )
                 )
+            ),
+            KlassifisertInntektMåned(
+                YearMonth.of(2017, 5),
+                listOf(
+                    KlassifisertInntekt(
+                        BigDecimal(1000),
+                        InntektKlasse.ARBEIDSINNTEKT
+                    )
+                )
+            ),
+            KlassifisertInntektMåned(
+                YearMonth.of(2016, 5),
+                listOf(
+                    KlassifisertInntekt(
+                        BigDecimal(1000),
+                        InntektKlasse.ARBEIDSINNTEKT
+                    )
+                )
             )
         )
 
@@ -43,6 +61,6 @@ class BruttoArbeidsinntektDeSisteTolvAvsluttedeKalendermånedeneBeregningsTest {
             verneplikt = false,
             beregningsdato = LocalDate.of(2019, 4, 1))
 
-        assertEquals(BigDecimal("2034.699000"), BruttoArbeidsinntektDeSisteTolvAvsluttedeKalendermånedene().calculate(fakta))
+        assertEquals(BigDecimal("4115.922000"), BruttoArbeidsinntektDeSiste36AvsluttedeKalendermånedene().calculate(fakta))
     }
 }

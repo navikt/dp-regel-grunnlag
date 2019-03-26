@@ -48,7 +48,7 @@ class BruttoInntektMedFangstOgFiskDeSisteTolvKalendermånedeneBeregningsTest {
             beregningsdato = LocalDate.of(2019, 4, 1)
         )
 
-        assertEquals(BigDecimal("2034.699000"), BruttoInntektMedFangstOgFiskDeTolvSisteKlendermånedene(fakta).resultat)
+        assertEquals(BigDecimal("2034.699000"), BruttoInntektMedFangstOgFiskDeTolvSisteKlendermånedene().calculate(fakta))
     }
 
     @Test
@@ -87,6 +87,6 @@ class BruttoInntektMedFangstOgFiskDeSisteTolvKalendermånedeneBeregningsTest {
             beregningsdato = LocalDate.of(2019, 4, 1)
         )
 
-        assertEquals(BigDecimal(0), BruttoInntektMedFangstOgFiskDeTolvSisteKlendermånedene(fakta).resultat)
+        assertEquals(BigDecimal(0), BruttoInntektMedFangstOgFiskDeTolvSisteKlendermånedene().calculate(fakta))
     }
 }

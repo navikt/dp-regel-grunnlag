@@ -13,7 +13,7 @@ class DagpengerEtterAvtjentVernepliktBeregningsTest {
 
         val fakta = Fakta(Inntekt("123", emptyList()), YearMonth.of(2019, 3), true, false, LocalDate.of(2019, 4, 1))
 
-        assertEquals(290649.toBigDecimal(), DagpengerEtterAvtjentVerneplikt(fakta).resultat)
+        assertEquals(290649.toBigDecimal(), DagpengerEtterAvtjentVerneplikt().calculate(fakta))
     }
 
     @Test
@@ -21,6 +21,6 @@ class DagpengerEtterAvtjentVernepliktBeregningsTest {
 
         val fakta = Fakta(Inntekt("123", emptyList()), YearMonth.of(2019, 3), false, false, LocalDate.of(2019, 4, 1))
 
-        assertEquals(0.toBigDecimal(), DagpengerEtterAvtjentVerneplikt(fakta).resultat)
+        assertEquals(0.toBigDecimal(), DagpengerEtterAvtjentVerneplikt().calculate(fakta))
     }
 }

@@ -4,7 +4,7 @@ import no.nav.dagpenger.events.inntekt.v1.InntektKlasse
 import java.math.BigDecimal
 import java.util.EnumSet
 
-class BruttoInntektMedFangstOgFiskDeTolvSisteKlendermånedene : MånedsBeregning(EnumSet.of(
+class BruttoInntektMedFangstOgFiskDeSiste36AvsluttedeKalendermånedene : MånedsBeregning(EnumSet.of(
     InntektKlasse.ARBEIDSINNTEKT,
     InntektKlasse.DAGPENGER,
     InntektKlasse.SYKEPENGER,
@@ -12,7 +12,7 @@ class BruttoInntektMedFangstOgFiskDeTolvSisteKlendermånedene : MånedsBeregning
     InntektKlasse.FANGST_FISKE,
     InntektKlasse.DAGPENGER_FANGST_FISKE,
     InntektKlasse.SYKEPENGER_FANGST_FISKE),
-    12) {
+    36) {
 
     override fun calculate(fakta: Fakta): BigDecimal {
         return if (fakta.fangstOgFisk) super.calculate(fakta) else 0.toBigDecimal()

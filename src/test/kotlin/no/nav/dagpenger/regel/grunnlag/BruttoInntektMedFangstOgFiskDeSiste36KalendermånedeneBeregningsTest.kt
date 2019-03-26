@@ -10,14 +10,23 @@ import java.time.LocalDate
 import java.time.YearMonth
 import kotlin.test.assertEquals
 
-class BruttoArbeidsinntektDeSisteTolvAvsluttedeKalendermånedeneBeregningsTest {
+class BruttoInntektMedFangstOgFiskDeSiste36KalendermånedeneBeregningsTest {
 
     @Test
-    fun ` Skal gi grunnlag på 2034,699 siste 12 kalendermåned gitt mars 2019 inntekt`() {
+    fun ` Skal gi grunnlag på 4115 siste 36 kalendermåned gitt mars 2019 inntekt med fangstOgFisk inntekt når fangst og fisk er satt`() {
 
         val inntektsListe = listOf (
             KlassifisertInntektMåned(
                 YearMonth.of(2018, 4),
+                listOf(
+                    KlassifisertInntekt(
+                        BigDecimal(1000),
+                        InntektKlasse.FANGST_FISKE
+                    )
+                )
+            ),
+            KlassifisertInntektMåned(
+                YearMonth.of(2018, 5),
                 listOf(
                     KlassifisertInntekt(
                         BigDecimal(1000),
@@ -26,7 +35,16 @@ class BruttoArbeidsinntektDeSisteTolvAvsluttedeKalendermånedeneBeregningsTest {
                 )
             ),
             KlassifisertInntektMåned(
-                YearMonth.of(2018, 5),
+                YearMonth.of(2017, 5),
+                listOf(
+                    KlassifisertInntekt(
+                        BigDecimal(1000),
+                        InntektKlasse.FANGST_FISKE
+                    )
+                )
+            ),
+            KlassifisertInntektMåned(
+                YearMonth.of(2016, 5),
                 listOf(
                     KlassifisertInntekt(
                         BigDecimal(1000),
@@ -39,10 +57,10 @@ class BruttoArbeidsinntektDeSisteTolvAvsluttedeKalendermånedeneBeregningsTest {
         val fakta = Fakta(
             inntekt = Inntekt("123", inntektsListe),
             senesteInntektsmåned = YearMonth.of(2019, 3),
-            fangstOgFisk = false,
+            fangstOgFisk = true,
             verneplikt = false,
             beregningsdato = LocalDate.of(2019, 4, 1))
 
-        assertEquals(BigDecimal("2034.699000"), BruttoArbeidsinntektDeSisteTolvAvsluttedeKalendermånedene().calculate(fakta))
+        assertEquals(BigDecimal("4115.922000"), BruttoInntektMedFangstOgFiskDeSiste36AvsluttedeKalendermånedene().calculate(fakta))
     }
 }
