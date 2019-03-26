@@ -48,9 +48,11 @@ class Grunnlag(private val env: Environment) : River() {
 
         val fakta = Fakta(inntekt, senesteInntektsmåned, verneplikt, fangstOgFisk, beregningsDato)
 
-        val resultat = grunnlagsBeregninger.map { beregning -> beregning.calculate(fakta).avkortet }.max() ?: BigDecimal.ZERO
+        val resultat = grunnlagsBeregninger.map { beregning -> beregning.calculate(fakta) }.maxBy { it.avkortet }
 
-        packet.putValue(GRUNNLAG_RESULTAT, resultat)
+        val grunnlagResultat = GrunnlagResultat(ulidGenerator.nextULID(), ulidGenerator.nextULID(), REGELIDENTIFIKATOR, resultat?.avkortet ?: BigDecimal.ZERO, resultat?.uavkortet ?: BigDecimal.ZERO)
+
+        packet.putValue(GRUNNLAG_RESULTAT, grunnlagResultat.toMap())
         return packet
     }
 
