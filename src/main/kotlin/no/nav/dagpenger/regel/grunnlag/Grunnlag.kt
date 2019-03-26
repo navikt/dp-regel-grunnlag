@@ -3,10 +3,13 @@ package no.nav.dagpenger.regel.grunnlag
 import de.huxhorn.sulky.ulid.ULID
 import no.nav.dagpenger.events.Packet
 import no.nav.dagpenger.events.inntekt.v1.Inntekt
+import no.nav.dagpenger.events.moshiInstance
+import no.nav.dagpenger.regel.grunnlag.beregning.grunnlagsBeregninger
 import no.nav.dagpenger.streams.KafkaCredential
 import no.nav.dagpenger.streams.River
 import no.nav.dagpenger.streams.streamConfig
 import org.apache.kafka.streams.kstream.Predicate
+import java.math.BigDecimal
 import java.time.YearMonth
 import java.util.Properties
 
@@ -45,25 +48,9 @@ class Grunnlag(private val env: Environment) : River() {
 
         val fakta = Fakta(inntekt, senesteInntektsmåned, verneplikt, fangstOgFisk, beregningsDato)
 
-        /*val uavkortet = finnUavkortetGrunnlag(
-            verneplikt,
-            inntekt,
-            senesteInntektsmåned,
-            fangstOgFisk
-        )
+        val resultat = grunnlagsBeregninger.map { beregning -> beregning.calculate(fakta) }.max() ?: BigDecimal.ZERO
 
-        val avkortet = finnAvkortetGrunnlag(verneplikt, inntekt, senesteInntektsmåned, fangstOgFisk)
-
-        val resultat = GrunnlagResultat(
-            ulidGenerator.nextULID(),
-            ulidGenerator.nextULID(),
-            REGELIDENTIFIKATOR,
-            avkortet,
-            uavkortet
-
-        )*/
-
-        //packet.putValue(GRUNNLAG_RESULTAT, resultat.toMap())
+        packet.putValue(GRUNNLAG_RESULTAT, resultat)
         return packet
     }
 

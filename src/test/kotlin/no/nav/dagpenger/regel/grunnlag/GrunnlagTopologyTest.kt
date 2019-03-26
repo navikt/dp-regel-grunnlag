@@ -85,7 +85,8 @@ class GrunnlagTopologyTest {
         val json = """
         {
             "senesteInntektsmåned":"2018-03",
-            "beregningsDato":"2018-04-06"
+            "beregningsDato":"2018-04-06",
+            "harAvtjentVerneplikt": true
             }
             """.trimIndent()
 

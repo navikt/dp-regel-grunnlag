@@ -1,10 +1,11 @@
-package no.nav.dagpenger.regel.grunnlag
+package no.nav.dagpenger.regel.grunnlag.beregning
 
 import no.nav.dagpenger.events.inntekt.v1.InntektKlasse
+import no.nav.dagpenger.regel.grunnlag.Fakta
 import java.math.BigDecimal
 import java.util.EnumSet
 
-class BruttoInntektMedFangstOgFiskDeTolvSisteKlendermånedene : MånedsBeregning(EnumSet.of(
+class BruttoInntektMedFangstOgFiskDeSiste12AvsluttedeKalendermånedene : MånedsGrunnlagBeregning(EnumSet.of(
     InntektKlasse.ARBEIDSINNTEKT,
     InntektKlasse.DAGPENGER,
     InntektKlasse.SYKEPENGER,
@@ -15,6 +16,6 @@ class BruttoInntektMedFangstOgFiskDeTolvSisteKlendermånedene : MånedsBeregning
     12) {
 
     override fun calculate(fakta: Fakta): BigDecimal {
-        return if (fakta.fangstOgFisk) super.calculate(fakta) else 0.toBigDecimal()
+        return if (fakta.fangstOgFisk) super.calculate(fakta) else BigDecimal.ZERO
     }
 }

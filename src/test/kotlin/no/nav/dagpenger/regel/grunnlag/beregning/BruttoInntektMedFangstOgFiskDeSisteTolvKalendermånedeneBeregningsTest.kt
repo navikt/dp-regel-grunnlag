@@ -1,9 +1,10 @@
-package no.nav.dagpenger.regel.grunnlag
+package no.nav.dagpenger.regel.grunnlag.beregning
 
 import no.nav.dagpenger.events.inntekt.v1.Inntekt
 import no.nav.dagpenger.events.inntekt.v1.InntektKlasse
 import no.nav.dagpenger.events.inntekt.v1.KlassifisertInntekt
 import no.nav.dagpenger.events.inntekt.v1.KlassifisertInntektMåned
+import no.nav.dagpenger.regel.grunnlag.Fakta
 import org.junit.jupiter.api.Test
 import java.math.BigDecimal
 import java.time.LocalDate
@@ -48,7 +49,7 @@ class BruttoInntektMedFangstOgFiskDeSisteTolvKalendermånedeneBeregningsTest {
             beregningsdato = LocalDate.of(2019, 4, 1)
         )
 
-        assertEquals(BigDecimal("2034.699000"), BruttoInntektMedFangstOgFiskDeTolvSisteKlendermånedene().calculate(fakta))
+        assertEquals(BigDecimal("2034.699000"), BruttoInntektMedFangstOgFiskDeSiste12AvsluttedeKalendermånedene().calculate(fakta))
     }
 
     @Test
@@ -87,6 +88,6 @@ class BruttoInntektMedFangstOgFiskDeSisteTolvKalendermånedeneBeregningsTest {
             beregningsdato = LocalDate.of(2019, 4, 1)
         )
 
-        assertEquals(BigDecimal(0), BruttoInntektMedFangstOgFiskDeTolvSisteKlendermånedene().calculate(fakta))
+        assertEquals(BigDecimal(0), BruttoInntektMedFangstOgFiskDeSiste12AvsluttedeKalendermånedene().calculate(fakta))
     }
 }

@@ -1,19 +1,20 @@
-package no.nav.dagpenger.regel.grunnlag
+package no.nav.dagpenger.regel.grunnlag.beregning
 
 import no.nav.dagpenger.events.inntekt.v1.Inntekt
 import no.nav.dagpenger.events.inntekt.v1.InntektKlasse
 import no.nav.dagpenger.events.inntekt.v1.KlassifisertInntekt
 import no.nav.dagpenger.events.inntekt.v1.KlassifisertInntektMåned
+import no.nav.dagpenger.regel.grunnlag.Fakta
 import org.junit.jupiter.api.Test
 import java.math.BigDecimal
 import java.time.LocalDate
 import java.time.YearMonth
 import kotlin.test.assertEquals
 
-class BruttoInntektMedFangstOgFiskDeSiste36KalendermånedeneBeregningsTest {
+class BruttoArbeidsinntektDeSiste36AvsluttedeKalendermånedeneBeregningsTest {
 
     @Test
-    fun ` Skal gi grunnlag på 4115 siste 36 kalendermåned gitt mars 2019 inntekt med fangstOgFisk inntekt når fangst og fisk er satt`() {
+    fun ` Skal gi grunnlag på 4115 siste 36 kalendermåned gitt mars 2019 inntekt`() {
 
         val inntektsListe = listOf (
             KlassifisertInntektMåned(
@@ -21,7 +22,7 @@ class BruttoInntektMedFangstOgFiskDeSiste36KalendermånedeneBeregningsTest {
                 listOf(
                     KlassifisertInntekt(
                         BigDecimal(1000),
-                        InntektKlasse.FANGST_FISKE
+                        InntektKlasse.ARBEIDSINNTEKT
                     )
                 )
             ),
@@ -39,7 +40,7 @@ class BruttoInntektMedFangstOgFiskDeSiste36KalendermånedeneBeregningsTest {
                 listOf(
                     KlassifisertInntekt(
                         BigDecimal(1000),
-                        InntektKlasse.FANGST_FISKE
+                        InntektKlasse.ARBEIDSINNTEKT
                     )
                 )
             ),
@@ -57,10 +58,11 @@ class BruttoInntektMedFangstOgFiskDeSiste36KalendermånedeneBeregningsTest {
         val fakta = Fakta(
             inntekt = Inntekt("123", inntektsListe),
             senesteInntektsmåned = YearMonth.of(2019, 3),
-            fangstOgFisk = true,
+            fangstOgFisk = false,
             verneplikt = false,
-            beregningsdato = LocalDate.of(2019, 4, 1))
+            beregningsdato = LocalDate.of(2019, 4, 1)
+        )
 
-        assertEquals(BigDecimal("4115.922000"), BruttoInntektMedFangstOgFiskDeSiste36AvsluttedeKalendermånedene().calculate(fakta))
+        assertEquals(BigDecimal("4115.922000"), BruttoArbeidsinntektDeSiste36AvsluttedeKalendermånedene().calculate(fakta))
     }
 }

@@ -16,7 +16,7 @@ data class Grunnbeløp(
     }
 }
 
-val grunnbeløp = listOf<Grunnbeløp>(
+val grunnbeløp: Set<Grunnbeløp> = setOf(
     Grunnbeløp(LocalDate.of(2018, Month.MAY, 1), 96883.toBigDecimal()),
     Grunnbeløp(LocalDate.of(2017, Month.MAY, 1), 93634.toBigDecimal()),
     Grunnbeløp(LocalDate.of(2016, Month.MAY, 1), 92576.toBigDecimal()),
@@ -27,14 +27,13 @@ fun getGrunnbeløpForMåned(måned: YearMonth): Grunnbeløp {
 
     val sisteMåned = findLastChange(måned)
 
-    return grunnbeløp.filter { it.fraMåned.year == sisteMåned.year && it.fraMåned.month == sisteMåned.month }.first()
+    return grunnbeløp.first { it.fraMåned.year == sisteMåned.year && it.fraMåned.month == sisteMåned.month }
 }
 
 private fun findLastChange(yearMonth: YearMonth): YearMonth {
-
-    if (yearMonth.month >= Month.MAY) {
-        return YearMonth.of(yearMonth.year, Month.MAY)
+    return if (yearMonth.month >= Month.MAY) {
+        YearMonth.of(yearMonth.year, Month.MAY)
     } else {
-        return YearMonth.of(yearMonth.year - 1, Month.MAY)
+        YearMonth.of(yearMonth.year - 1, Month.MAY)
     }
 }

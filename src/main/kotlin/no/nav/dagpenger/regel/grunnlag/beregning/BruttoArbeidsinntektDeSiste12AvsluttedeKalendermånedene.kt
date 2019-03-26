@@ -1,9 +1,9 @@
-package no.nav.dagpenger.regel.grunnlag
+package no.nav.dagpenger.regel.grunnlag.beregning
 
 import no.nav.dagpenger.events.inntekt.v1.InntektKlasse
 import java.util.EnumSet
 
-class BruttoArbeidsinntektDeSisteTolvAvsluttedeKalendermånedene : MånedsBeregning(EnumSet.of(
+class BruttoArbeidsinntektDeSiste12AvsluttedeKalendermånedene : MånedsGrunnlagBeregning(EnumSet.of(
     InntektKlasse.ARBEIDSINNTEKT,
     InntektKlasse.DAGPENGER,
     InntektKlasse.SYKEPENGER,
