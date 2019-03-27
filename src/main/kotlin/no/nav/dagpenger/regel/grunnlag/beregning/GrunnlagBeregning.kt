@@ -13,3 +13,11 @@ val grunnlagsBeregninger = setOf(
     BruttoInntektMedFangstOgFiskDeSiste36AvsluttedeKalendermånedene(),
     DagpengerEtterAvtjentVerneplikt()
 )
+
+fun Collection<BeregningsResultat>.finnHøyeste() = this.maxWith(BeregningsResultatComparator())
+
+class BeregningsResultatComparator : Comparator<BeregningsResultat> {
+    override fun compare(resultat1: BeregningsResultat, resultat2: BeregningsResultat): Int {
+        return if (resultat1.beregningsregel != "Verneplikt") resultat1.avkortet.compareTo(resultat2.avkortet) else -1
+    }
+}
