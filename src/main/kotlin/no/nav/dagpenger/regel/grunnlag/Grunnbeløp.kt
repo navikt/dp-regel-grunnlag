@@ -12,9 +12,10 @@ data class Grunnbeløp(
 ) {
     fun faktorMellom(grunnbeløp: Grunnbeløp): BigDecimal {
 
-        return this.verdi.divide(grunnbeløp.verdi, 6, RoundingMode.HALF_UP)
+        return this.verdi.divide(grunnbeløp.verdi, antallDesimaler, RoundingMode.HALF_UP)
     }
 }
+val antallDesimaler: Int = 20
 
 val grunnbeløp: Set<Grunnbeløp> = setOf(
     Grunnbeløp(LocalDate.of(2018, Month.MAY, 1), 96883.toBigDecimal()),

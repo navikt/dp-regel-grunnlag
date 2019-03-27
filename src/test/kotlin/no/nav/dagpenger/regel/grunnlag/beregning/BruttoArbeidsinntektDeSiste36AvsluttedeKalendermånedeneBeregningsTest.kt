@@ -63,7 +63,7 @@ class BruttoArbeidsinntektDeSiste36AvsluttedeKalendermånedeneBeregningsTest {
             beregningsdato = LocalDate.of(2019, 4, 1)
         )
 
-        assertEquals(BigDecimal("4115.922000"), BruttoArbeidsinntektDeSiste36AvsluttedeKalendermånedene().calculate(fakta).uavkortet)
+        assertEquals(BigDecimal("4115.92180538523099490000"), BruttoArbeidsinntektDeSiste36AvsluttedeKalendermånedene().calculate(fakta).uavkortet)
     }
 
     @Test
@@ -115,7 +115,7 @@ class BruttoArbeidsinntektDeSiste36AvsluttedeKalendermånedeneBeregningsTest {
             beregningsdato = LocalDate.of(2019, 4, 1)
         )
 
-        assertEquals(BigDecimal("387876.899667"), BruttoArbeidsinntektDeSiste36AvsluttedeKalendermånedene().calculate(fakta).avkortet)
+        assertEquals(BigDecimal("387876.89964471595075862667"), BruttoArbeidsinntektDeSiste36AvsluttedeKalendermånedene().calculate(fakta).avkortet)
     }
 
     @Test
@@ -177,6 +177,6 @@ class BruttoArbeidsinntektDeSiste36AvsluttedeKalendermånedeneBeregningsTest {
             beregningsdato = LocalDate.of(2019, 4, 1)
         )
 
-        assertEquals(BigDecimal("4115.922000"), BruttoArbeidsinntektDeSiste36AvsluttedeKalendermånedene().calculate(fakta).uavkortet)
+        assertEquals(BigDecimal("4115.92180538523099490000"), BruttoArbeidsinntektDeSiste36AvsluttedeKalendermånedene().calculate(fakta).uavkortet)
     }
 }

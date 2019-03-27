@@ -27,20 +27,6 @@ data class Fakta(
 
     fun oppjusterteInntekterTredjePeriode(inntektsKlasser: EnumSet<InntektKlasse>): BigDecimal = inntektsPerioder.third.map(oppjusterTilGjeldendeGrunnbeløp(gjeldendeGrunnbeløp)).sumInntekt(inntektsKlasser.toList())
 
-    fun sumMåneder(inntektsKlasser: EnumSet<InntektKlasse>): Map<YearMonth, BigDecimal> {
-        return inntekt.inntektsListe.groupBy {
-            it.årMåned
-        }.mapValues { (key, inntekter) ->
-            inntekter.flatMap { klassifisertInntektMåned ->
-                klassifisertInntektMåned.klassifiserteInntekter.filter {
-                    inntektsKlasser.contains(
-                        it.inntektKlasse
-                    )
-                }.map { it.beløp }
-            }.fold(BigDecimal.ZERO, BigDecimal::add)
-        }
-    }
-
     private fun oppjusterTilGjeldendeGrunnbeløp(gjeldendeGrunnbeløp: Grunnbeløp): (KlassifisertInntektMåned) -> KlassifisertInntektMåned {
         return { inntekt ->
             val oppjusterteinntekter = inntekt.klassifiserteInntekter.map { klassifisertInntekt ->

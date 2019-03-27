@@ -2,6 +2,7 @@ package no.nav.dagpenger.regel.grunnlag.beregning
 
 import no.nav.dagpenger.events.inntekt.v1.InntektKlasse
 import no.nav.dagpenger.regel.grunnlag.Fakta
+import no.nav.dagpenger.regel.grunnlag.antallDesimaler
 import java.math.BigDecimal
 import java.math.RoundingMode
 import java.util.EnumSet
@@ -28,7 +29,7 @@ abstract class TrettiseksMånedersBeregning(
 
         val avkortetTredje = if (uavkortetTredjePeriode > seksGangerGrunnbeløp) seksGangerGrunnbeløp else uavkortetTredjePeriode
 
-        val avkortet = (avkortetFørste + avkortetAndre + avkortetTredje).divide(3.toBigDecimal(), 6, RoundingMode.HALF_UP)
+        val avkortet = (avkortetFørste + avkortetAndre + avkortetTredje).divide(3.toBigDecimal(), antallDesimaler, RoundingMode.HALF_UP)
 
         return BeregningsResultat(uavkortet, avkortet, beregningsregel)
     }

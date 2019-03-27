@@ -39,7 +39,7 @@ class FinnGrunnbeløpTest {
         val grunnbeløp = Grunnbeløp(LocalDate.now(), 1000.toBigDecimal())
         val gjeldendeGrunnbeløp = Grunnbeløp(LocalDate.now(), 2000.toBigDecimal())
 
-        assertEquals(BigDecimal("2.000000"), gjeldendeGrunnbeløp.faktorMellom(grunnbeløp))
+        assertEquals(BigDecimal("2.00000000000000000000"), gjeldendeGrunnbeløp.faktorMellom(grunnbeløp))
     }
 
     @Test
@@ -48,6 +48,6 @@ class FinnGrunnbeløpTest {
         val grunnbeløp = Grunnbeløp(LocalDate.now(), 93634.toBigDecimal())
         val gjeldendeGrunnbeløp = Grunnbeløp(LocalDate.now(), 96883.toBigDecimal())
 
-        assertEquals(1.034699.toBigDecimal(), gjeldendeGrunnbeløp.faktorMellom(grunnbeløp))
+        assertEquals(BigDecimal("1.03469893414785227588"), gjeldendeGrunnbeløp.faktorMellom(grunnbeløp))
     }
 }

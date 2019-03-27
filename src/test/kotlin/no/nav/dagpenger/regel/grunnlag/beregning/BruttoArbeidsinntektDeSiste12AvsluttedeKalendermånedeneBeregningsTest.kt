@@ -47,7 +47,7 @@ class BruttoArbeidsinntektDeSiste12AvsluttedeKalendermånedeneBeregningsTest {
         )
 
         assertEquals(
-            BigDecimal("2034.699000"),
+            BigDecimal("2034.69893414785227588000"),
             BruttoArbeidsinntektDeSiste12AvsluttedeKalendermånedene().calculate(fakta).uavkortet
         )
     }
@@ -134,7 +134,7 @@ class BruttoArbeidsinntektDeSiste12AvsluttedeKalendermånedeneBeregningsTest {
         )
 
         assertEquals(
-            BigDecimal("2034.699000"),
+            BigDecimal("2034.69893414785227588000"),
             BruttoArbeidsinntektDeSiste12AvsluttedeKalendermånedene().calculate(fakta).uavkortet
         )
     }

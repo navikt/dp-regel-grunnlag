@@ -51,14 +51,10 @@ internal class FaktaTest {
 
         val fakta = Fakta(inntekt, YearMonth.of(2019, 3), false, false, LocalDate.of(2019, 4, 1))
 
-        val expected = mapOf(
-            YearMonth.of(2018, 5) to 3000.toBigDecimal(),
-            YearMonth.of(2018, 4) to 2500.toBigDecimal()
-        )
-
+        val expected = BigDecimal("5586.74733536963068970000")
         assertEquals(
             expected,
-            fakta.sumMåneder(EnumSet.of(InntektKlasse.ARBEIDSINNTEKT, InntektKlasse.DAGPENGER))
+            fakta.oppjusterteInntekterFørstePeriode(EnumSet.of(InntektKlasse.ARBEIDSINNTEKT, InntektKlasse.DAGPENGER))
         )
     }
 
@@ -66,14 +62,10 @@ internal class FaktaTest {
     fun `Skal bruke kun inntekter som er i inntektsklasse parameteret ` () {
         val fakta = Fakta(inntekt, YearMonth.of(2019, 3), false, false, LocalDate.of(2019, 4, 1))
 
-        val expected = mapOf(
-            YearMonth.of(2018, 4) to BigDecimal.ZERO,
-            YearMonth.of(2018, 5) to BigDecimal.ZERO
-        )
-
+        val expected = 0.toBigDecimal()
         assertEquals(
             expected,
-            fakta.sumMåneder(EnumSet.noneOf(InntektKlasse::class.java))
+            fakta.oppjusterteInntekterFørstePeriode(EnumSet.noneOf(InntektKlasse::class.java))
         )
     }
 }
