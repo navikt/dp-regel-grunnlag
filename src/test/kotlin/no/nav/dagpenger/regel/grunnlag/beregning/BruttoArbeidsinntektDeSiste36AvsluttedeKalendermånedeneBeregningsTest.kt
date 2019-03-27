@@ -65,4 +65,67 @@ class BruttoArbeidsinntektDeSiste36AvsluttedeKalendermånedeneBeregningsTest {
 
         assertEquals(BigDecimal("4115.922000"), BruttoArbeidsinntektDeSiste36AvsluttedeKalendermånedene().calculate(fakta).uavkortet)
     }
+
+
+    @Test
+    fun `Skal ikke ta med måneder som ikke er innenfor ønsket periode`() {
+
+        val inntektsListe = listOf (
+            KlassifisertInntektMåned(
+                YearMonth.of(2018, 4),
+                listOf(
+                    KlassifisertInntekt(
+                        BigDecimal(1000),
+                        InntektKlasse.ARBEIDSINNTEKT
+                    )
+                )
+            ),
+            KlassifisertInntektMåned(
+                YearMonth.of(2018, 5),
+                listOf(
+                    KlassifisertInntekt(
+                        BigDecimal(1000),
+                        InntektKlasse.ARBEIDSINNTEKT
+                    )
+                )
+            ),
+            KlassifisertInntektMåned(
+                YearMonth.of(2017, 5),
+                listOf(
+                    KlassifisertInntekt(
+                        BigDecimal(1000),
+                        InntektKlasse.ARBEIDSINNTEKT
+                    )
+                )
+            ),
+            KlassifisertInntektMåned(
+                YearMonth.of(2016, 5),
+                listOf(
+                    KlassifisertInntekt(
+                        BigDecimal(1000),
+                        InntektKlasse.ARBEIDSINNTEKT
+                    )
+                )
+            ),
+            KlassifisertInntektMåned(
+                YearMonth.of(2015, 5),
+                listOf(
+                    KlassifisertInntekt(
+                        BigDecimal(1000),
+                        InntektKlasse.ARBEIDSINNTEKT
+                    )
+                )
+            )
+        )
+
+        val fakta = Fakta(
+            inntekt = Inntekt("123", inntektsListe),
+            senesteInntektsmåned = YearMonth.of(2019, 3),
+            fangstOgFisk = false,
+            verneplikt = false,
+            beregningsdato = LocalDate.of(2019, 4, 1)
+        )
+
+        assertEquals(BigDecimal("4115.922000"), BruttoArbeidsinntektDeSiste36AvsluttedeKalendermånedene().calculate(fakta).uavkortet)
+    }
 }

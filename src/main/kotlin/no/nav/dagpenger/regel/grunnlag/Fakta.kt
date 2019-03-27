@@ -14,13 +14,18 @@ data class Fakta(
     val fangstOgFisk: Boolean,
     val beregningsdato: LocalDate
 ) {
-    fun sumMåneder(inntektKlasser: EnumSet<InntektKlasse>): List<Pair<YearMonth, BigDecimal>> {
-        return inntekt.inntektsListe.map { klassifisertInntektMåned ->
-            klassifisertInntektMåned.årMåned to klassifisertInntektMåned.klassifiserteInntekter.filter {
-                inntektKlasser.contains(
-                    it.inntektKlasse
-                )
-            }.map { it.beløp }.fold(BigDecimal.ZERO, BigDecimal::add)
+
+    fun sumMåneder(inntektsKlasser: EnumSet<InntektKlasse>): Map<YearMonth, BigDecimal> {
+        return inntekt.inntektsListe.groupBy {
+            it.årMåned
+        }.mapValues { (key, inntekter) ->
+            inntekter.flatMap { klassifisertInntektMåned ->
+                klassifisertInntektMåned.klassifiserteInntekter.filter {
+                    inntektsKlasser.contains(
+                        it.inntektKlasse
+                    )
+                }.map { it.beløp }
+            }.fold(BigDecimal.ZERO, BigDecimal::add)
         }
     }
 }
