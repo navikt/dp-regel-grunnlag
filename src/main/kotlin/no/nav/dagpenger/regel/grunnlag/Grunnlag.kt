@@ -1,62 +1,59 @@
 package no.nav.dagpenger.regel.grunnlag
 
 import de.huxhorn.sulky.ulid.ULID
-import mu.KotlinLogging
+import no.nav.dagpenger.events.Packet
+import no.nav.dagpenger.events.inntekt.v1.Inntekt
+import no.nav.dagpenger.events.moshiInstance
+import no.nav.dagpenger.regel.grunnlag.beregning.grunnlagsBeregninger
 import no.nav.dagpenger.streams.KafkaCredential
-import no.nav.dagpenger.streams.Service
-import no.nav.dagpenger.streams.Topic
-import no.nav.dagpenger.streams.Topics
+import no.nav.dagpenger.streams.River
 import no.nav.dagpenger.streams.streamConfig
-import org.apache.kafka.common.serialization.Serdes
-import org.apache.kafka.streams.StreamsBuilder
-import org.apache.kafka.streams.Topology
-import org.apache.kafka.streams.kstream.Consumed
-import org.apache.kafka.streams.kstream.Produced
-import org.json.JSONObject
+import org.apache.kafka.streams.kstream.Predicate
 import java.math.BigDecimal
 import java.time.YearMonth
 import java.util.Properties
 
-private val LOGGER = KotlinLogging.logger {}
-
-val dagpengerBehovTopic = Topic(
-    Topics.DAGPENGER_BEHOV_EVENT.name,
-    Serdes.StringSerde(),
-    Serdes.serdeFrom(JsonSerializer(), JsonDeserializer())
-)
-
-class Grunnlag(val env: Environment) : Service() {
+class Grunnlag(private val env: Environment) : River() {
     override val SERVICE_APP_ID: String = "dagpenger-regel-grunnlag"
     override val HTTP_PORT: Int = env.httpPort ?: super.HTTP_PORT
-    val ulidGenerator = ULID()
-    val REGELIDENTIFIKATOR = "Grunnlag.v1"
+    private val ulidGenerator = ULID()
+    private val REGELIDENTIFIKATOR = "Grunnlag.v1"
 
     companion object {
-        @JvmStatic
-        fun main(args: Array<String>) {
-            val service = Grunnlag(Environment())
-            service.start()
-        }
+        val GRUNNLAG_RESULTAT = "grunnlagResultat"
+        val INNTEKT = "inntektV1"
+        val AVTJENT_VERNEPLIKT = "harAvtjentVerneplikt"
+        val FANGST_OG_FISK = "fangstOgFisk"
+        val SENESTE_INNTEKTSMÅNED = "senesteInntektsmåned"
+        val BEREGNINGSDAGTO = "beregningsDato"
+        val inntektAdapter = moshiInstance.adapter(Inntekt::class.java)
     }
 
-    override fun buildTopology(): Topology {
-        val builder = StreamsBuilder()
-
-        val stream = builder.stream(
-            dagpengerBehovTopic.name,
-            Consumed.with(dagpengerBehovTopic.keySerde, dagpengerBehovTopic.valueSerde)
+    override fun filterPredicates(): List<Predicate<String, Packet>> {
+        return listOf(
+            Predicate { _, packet -> packet.hasField(INNTEKT) },
+            Predicate { _, packet -> packet.hasField(SENESTE_INNTEKTSMÅNED) },
+            Predicate { _, packet -> !packet.hasField(GRUNNLAG_RESULTAT) }
         )
+    }
 
-        stream
-            .peek { key, value -> LOGGER.info("Processing ${value.javaClass} with key $key") }
-            .mapValues { value: JSONObject -> SubsumsjonsBehov(value) }
-            .filter { _, behov -> shouldBeProcessed(behov) }
-            .mapValues(this::addRegelresultat)
-            .peek { key, value -> LOGGER.info("Producing ${value.javaClass} with key $key") }
-            .mapValues { _, behov -> behov.jsonObject }
-            .to(dagpengerBehovTopic.name, Produced.with(dagpengerBehovTopic.keySerde, dagpengerBehovTopic.valueSerde))
+    override fun onPacket(packet: Packet): Packet {
 
-        return builder.build()
+        val verneplikt = packet.getNullableBoolean(AVTJENT_VERNEPLIKT) ?: false
+        val inntekt: no.nav.dagpenger.events.inntekt.v1.Inntekt =
+            packet.getObjectValue(INNTEKT) { requireNotNull(inntektAdapter.fromJson(it)) }
+        val senesteInntektsmåned = YearMonth.parse(packet.getStringValue(SENESTE_INNTEKTSMÅNED))
+        val fangstOgFisk = packet.getNullableBoolean(FANGST_OG_FISK) ?: false
+        val beregningsDato = packet.getLocalDate(BEREGNINGSDAGTO)
+
+        val fakta = Fakta(inntekt, senesteInntektsmåned, verneplikt, fangstOgFisk, beregningsDato)
+
+        val resultat = grunnlagsBeregninger.map { beregning -> beregning.calculate(fakta) }.maxBy { it.avkortet }
+
+        val grunnlagResultat = GrunnlagResultat(ulidGenerator.nextULID(), ulidGenerator.nextULID(), REGELIDENTIFIKATOR, resultat?.avkortet ?: BigDecimal.ZERO, resultat?.uavkortet ?: BigDecimal.ZERO)
+
+        packet.putValue(GRUNNLAG_RESULTAT, grunnlagResultat.toMap())
+        return packet
     }
 
     override fun getConfig(): Properties {
@@ -67,140 +64,14 @@ class Grunnlag(val env: Environment) : Service() {
         )
         return props
     }
-
-    private fun addRegelresultat(behov: SubsumsjonsBehov): SubsumsjonsBehov {
-        val uavkortet = finnUavkortetGrunnlag(
-            behov.harAvtjentVerneplikt(),
-            behov.getInntekt(),
-            behov.getSenesteInntektsmåned(),
-            behov.hasFangstOgFisk()
-        )
-        val avkortet = uavkortet
-        behov.addGrunnlagResultat(
-            GrunnlagResultat(
-                ulidGenerator.nextULID(),
-                ulidGenerator.nextULID(),
-                REGELIDENTIFIKATOR,
-                avkortet,
-                uavkortet
-            )
-        )
-        return behov
-    }
 }
 
-fun finnUavkortetGrunnlag(
-    harAvtjentVerneplikt: Boolean,
-    inntekt: Inntekt,
-    senesteInntektsMåned: YearMonth,
-    fangstOgFisk: Boolean
-): BigDecimal {
-
-    val enG = BigDecimal(96883)
-    var inntektSiste12 = sumInntektIkkeFangstOgFisk(inntekt, senesteInntektsMåned, 11)
-    var inntektSiste36 = sumInntektIkkeFangstOgFisk(inntekt, senesteInntektsMåned, 35)
-
-    var arbeidsInntektSiste12 = sumArbeidInntekt(inntekt, senesteInntektsMåned, 11)
-    var arbeidsInntektSiste36 = sumArbeidInntekt(inntekt, senesteInntektsMåned, 35)
-
-    if (fangstOgFisk) {
-        arbeidsInntektSiste12 += sumNæringsInntekt(inntekt, senesteInntektsMåned, 11)
-        arbeidsInntektSiste36 += sumNæringsInntekt(inntekt, senesteInntektsMåned, 35)
-        inntektSiste12 += sumFangstOgFiskInntekt(inntekt, senesteInntektsMåned, 11)
-        inntektSiste36 += sumFangstOgFiskInntekt(inntekt, senesteInntektsMåned, 35)
-    }
-    val årligSnittInntektSiste36 = inntektSiste36 / BigDecimal(3)
-
-    var harTjentNok = false
-    if (arbeidsInntektSiste12 > (enG.times(BigDecimal(1.5))) || arbeidsInntektSiste36 > (enG.times(BigDecimal(3)))) {
-        harTjentNok = true
-    }
-
-    if (harTjentNok) {
-        if (inntektSiste12 >= årligSnittInntektSiste36) {
-            return inntektSiste12
-        }
-        return årligSnittInntektSiste36
-    }
-
-    return when {
-        harAvtjentVerneplikt -> (enG * BigDecimal(3))
-        else -> BigDecimal(0)
-    }
-}
-
-fun sumArbeidInntekt(inntekt: Inntekt, fraMåned: YearMonth, lengde: Int): BigDecimal {
-    val tidligsteMåned = finnTidligsteMåned(fraMåned, lengde)
-
-    val gjeldendeMåneder = inntekt.inntektsListe.filter { it.årMåned <= fraMåned && it.årMåned >= tidligsteMåned }
-
-    val sumGjeldendeMåneder = gjeldendeMåneder
-        .flatMap {
-            it.klassifiserteInntekter
-                .filter { it.inntektKlasse == InntektKlasse.ARBEIDSINNTEKT }
-                .map { it.beløp }
-        }.fold(BigDecimal.ZERO, BigDecimal::add)
-
-    return sumGjeldendeMåneder
-}
-
-fun sumNæringsInntekt(inntekt: Inntekt, senesteMåned: YearMonth, lengde: Int): BigDecimal {
-    val tidligsteMåned = finnTidligsteMåned(senesteMåned, lengde)
-
-    val gjeldendeMåneder = inntekt.inntektsListe.filter { it.årMåned <= senesteMåned && it.årMåned >= tidligsteMåned }
-
-    val sumGjeldendeMåneder = gjeldendeMåneder
-        .flatMap {
-            it.klassifiserteInntekter
-                .filter { it.inntektKlasse == InntektKlasse.FANGST_FISKE }
-                .map { it.beløp }
-        }.fold(BigDecimal.ZERO, BigDecimal::add)
-
-    return sumGjeldendeMåneder
-}
-
-fun sumInntektIkkeFangstOgFisk(inntekt: Inntekt, fraMåned: YearMonth, lengde: Int): BigDecimal {
-    val tidligsteMåned = finnTidligsteMåned(fraMåned, lengde)
-
-    val gjeldendeMåneder = inntekt.inntektsListe.filter { it.årMåned <= fraMåned && it.årMåned >= tidligsteMåned }
-
-    val sumGjeldendeMåneder = gjeldendeMåneder
-        .flatMap {
-            it.klassifiserteInntekter
-                .filter {
-                    it.inntektKlasse == InntektKlasse.ARBEIDSINNTEKT ||
-                        it.inntektKlasse == InntektKlasse.DAGPENGER ||
-                        it.inntektKlasse == InntektKlasse.SYKEPENGER ||
-                        it.inntektKlasse == InntektKlasse.TILTAKSLØNN
-                }
-                .map { it.beløp }
-        }.fold(BigDecimal.ZERO, BigDecimal::add)
-
-    return sumGjeldendeMåneder
-}
-
-fun sumFangstOgFiskInntekt(inntekt: Inntekt, senesteMåned: YearMonth, lengde: Int): BigDecimal {
-    val tidligsteMåned = finnTidligsteMåned(senesteMåned, lengde)
-
-    val gjeldendeMåneder = inntekt.inntektsListe.filter { it.årMåned <= senesteMåned && it.årMåned >= tidligsteMåned }
-
-    val sumGjeldendeMåneder = gjeldendeMåneder
-        .flatMap {
-            it.klassifiserteInntekter
-                .filter {
-                    it.inntektKlasse == InntektKlasse.FANGST_FISKE ||
-                        it.inntektKlasse == InntektKlasse.DAGPENGER_FANGST_FISKE ||
-                        it.inntektKlasse == InntektKlasse.SYKEPENGER_FANGST_FISKE
-                }
-                .map { it.beløp }
-        }.fold(BigDecimal.ZERO, BigDecimal::add)
-
-    return sumGjeldendeMåneder
+fun main(args: Array<String>) {
+    val service = Grunnlag(Environment())
+    service.start()
 }
 
 fun finnTidligsteMåned(fraMåned: YearMonth, lengde: Int): YearMonth {
 
     return fraMåned.minusMonths(lengde.toLong())
 }
-
-fun shouldBeProcessed(behov: SubsumsjonsBehov): Boolean = behov.needsGrunnlagResultat()
