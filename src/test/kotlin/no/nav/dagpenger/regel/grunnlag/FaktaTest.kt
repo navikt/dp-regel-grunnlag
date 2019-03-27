@@ -13,7 +13,6 @@ import kotlin.test.assertEquals
 
 internal class FaktaTest {
 
-
     private val inntekt = Inntekt(
         "123",
         listOf(
@@ -47,7 +46,6 @@ internal class FaktaTest {
         )
     )
 
-
     @Test
     fun ` Skal returnere en liste over inntektene måned for måned `() {
 
@@ -65,7 +63,7 @@ internal class FaktaTest {
     }
 
     @Test
-    fun `Skal bruke kun inntekter som er i inntektsklasse parameteret ` (){
+    fun `Skal bruke kun inntekter som er i inntektsklasse parameteret ` () {
         val fakta = Fakta(inntekt, YearMonth.of(2019, 3), false, false, LocalDate.of(2019, 4, 1))
 
         val expected = mapOf(

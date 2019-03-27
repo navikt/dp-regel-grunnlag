@@ -53,7 +53,7 @@ class BruttoArbeidsinntektDeSiste12AvsluttedeKalendermånedeneBeregningsTest {
     }
 
     @Test
-    fun `Skal gi riktig avkortet grunnlag siste 12 kalendermåneder gitt mars 2019 inntekt ` (){
+    fun `Skal gi riktig avkortet grunnlag siste 12 kalendermåneder gitt mars 2019 inntekt ` () {
 
         val inntektsListe = listOf(
             KlassifisertInntektMåned(
@@ -76,7 +76,6 @@ class BruttoArbeidsinntektDeSiste12AvsluttedeKalendermånedeneBeregningsTest {
             )
         )
 
-
         val fakta = Fakta(
             inntekt = Inntekt("123", inntektsListe),
             senesteInntektsmåned = YearMonth.of(2019, 3),
@@ -85,7 +84,6 @@ class BruttoArbeidsinntektDeSiste12AvsluttedeKalendermånedeneBeregningsTest {
             beregningsdato = LocalDate.of(2019, 4, 1)
         )
 
-
         val resultat = BruttoArbeidsinntektDeSiste12AvsluttedeKalendermånedene().calculate(fakta)
         assertEquals(
             BigDecimal("581298"),
@@ -93,7 +91,6 @@ class BruttoArbeidsinntektDeSiste12AvsluttedeKalendermånedeneBeregningsTest {
         )
 
         assertTrue(resultat.harAvkortet)
-
     }
 
     @Test
