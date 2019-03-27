@@ -35,7 +35,9 @@ abstract class MånedsGrunnlagBeregning(
 
         val uavkortet = oppjustertInntektIforholdTilGjelendenGrunnbeløp.values.fold(BigDecimal.ZERO, BigDecimal::add)
 
-        val avkortet = if (uavkortet > seksGangerGrunnbeløp) seksGangerGrunnbeløp else uavkortet
+        val uavkortetPerPeriode = oppjustertInntektIforholdTilGjelendenGrunnbeløp.filterKeys { måned -> måned >= tidligsteInntektsmåned && måned <= senesteInntektsmåned }.values.fold(BigDecimal.ZERO, BigDecimal::add)
+
+        val avkortet = if (uavkortetPerPeriode > seksGangerGrunnbeløp) seksGangerGrunnbeløp else uavkortetPerPeriode
 
         return BeregningsResultat(uavkortet, avkortet, beregningsregel)
     }
