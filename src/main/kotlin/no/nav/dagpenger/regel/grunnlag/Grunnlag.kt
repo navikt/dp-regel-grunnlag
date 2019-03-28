@@ -1,8 +1,12 @@
 package no.nav.dagpenger.regel.grunnlag
 
+import com.squareup.moshi.JsonAdapter
+import com.squareup.moshi.Types
 import de.huxhorn.sulky.ulid.ULID
 import no.nav.dagpenger.events.Packet
 import no.nav.dagpenger.events.inntekt.v1.Inntekt
+import no.nav.dagpenger.events.inntekt.v1.InntektKlasse
+import no.nav.dagpenger.events.inntekt.v1.sumInntekt
 import no.nav.dagpenger.events.moshiInstance
 import no.nav.dagpenger.regel.grunnlag.beregning.finnHøyesteAvkortetVerdi
 import no.nav.dagpenger.regel.grunnlag.beregning.grunnlagsBeregninger
@@ -18,6 +22,8 @@ class Grunnlag(private val env: Environment) : River() {
     override val HTTP_PORT: Int = env.httpPort ?: super.HTTP_PORT
     private val ulidGenerator = ULID()
     private val REGELIDENTIFIKATOR = "Grunnlag.v1"
+    private val jsonAdapterInntektPeriodeInfo: JsonAdapter<List<InntektPeriodeInfo>> =
+        moshiInstance.adapter(Types.newParameterizedType(List::class.java, InntektPeriodeInfo::class.java))
 
     companion object {
         val GRUNNLAG_RESULTAT = "grunnlagResultat"
@@ -49,7 +55,9 @@ class Grunnlag(private val env: Environment) : River() {
 
         val fakta = Fakta(inntekt, senesteInntektsmåned, verneplikt, fangstOgFisk, beregningsDato)
 
-        val resultat = grunnlagsBeregninger.map { beregning -> beregning.calculate(fakta) }.toSet().finnHøyesteAvkortetVerdi() ?: throw NoResultException("Ingen resultat for grunnlagsberegning")
+        val resultat =
+            grunnlagsBeregninger.map { beregning -> beregning.calculate(fakta) }.toSet().finnHøyesteAvkortetVerdi()
+                ?: throw NoResultException("Ingen resultat for grunnlagsberegning")
 
         val grunnlagResultat = GrunnlagResultat(
             ulidGenerator.nextULID(),
@@ -60,17 +68,48 @@ class Grunnlag(private val env: Environment) : River() {
             resultat.beregningsregel
         )
 
+        packet.putValue(GRUNNLAG_INNTEKTSPERIODER, createInntektPerioder(fakta)) {
+            checkNotNull(
+                jsonAdapterInntektPeriodeInfo.toJson(it)
+            )
+        }
         packet.putValue(GRUNNLAG_RESULTAT, grunnlagResultat.toMap())
         return packet
     }
 
+    fun createInntektPerioder(fakta: Fakta): List<InntektPeriodeInfo> {
+        val arbeidsInntekt = listOf(
+            InntektKlasse.ARBEIDSINNTEKT,
+            InntektKlasse.DAGPENGER,
+            InntektKlasse.SYKEPENGER,
+            InntektKlasse.TILTAKSLØNN
+        )
+        val medFangstOgFisk = listOf(
+            InntektKlasse.FANGST_FISKE,
+            InntektKlasse.DAGPENGER_FANGST_FISKE,
+            InntektKlasse.SYKEPENGER_FANGST_FISKE
+        )
+
+        return fakta.inntektsPerioder.toList().mapIndexed { index, list ->
+            InntektPeriodeInfo(
+                inntektsPeriode = InntektsPeriode(
+                    list.first().årMåned,
+                    list.last().årMåned
+                ),
+                inntekt = list.sumInntekt(if (fakta.fangstOgFisk) medFangstOgFisk + arbeidsInntekt else arbeidsInntekt),
+                periode = index + 1,
+                inneholderFangstOgFisk = fakta.inntektsPerioder.toList()[index].any { klassifisertInntektMåned -> klassifisertInntektMåned.klassifiserteInntekter.any { medFangstOgFisk.contains(it.inntektKlasse) } },
+                andel = fakta.inntektsPerioder.toList()[index].sumInntekt(if (fakta.fangstOgFisk) medFangstOgFisk + arbeidsInntekt else arbeidsInntekt)
+            )
+        }
+    }
+
     override fun getConfig(): Properties {
-        val props = streamConfig(
+        return streamConfig(
             appId = SERVICE_APP_ID,
             bootStapServerUrl = env.bootstrapServersUrl,
             credential = KafkaCredential(env.username, env.password)
         )
-        return props
     }
 }
 
