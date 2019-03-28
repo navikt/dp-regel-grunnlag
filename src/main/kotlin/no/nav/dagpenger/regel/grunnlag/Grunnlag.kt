@@ -4,12 +4,12 @@ import de.huxhorn.sulky.ulid.ULID
 import no.nav.dagpenger.events.Packet
 import no.nav.dagpenger.events.inntekt.v1.Inntekt
 import no.nav.dagpenger.events.moshiInstance
+import no.nav.dagpenger.regel.grunnlag.beregning.finnHøyesteAvkortetVerdi
 import no.nav.dagpenger.regel.grunnlag.beregning.grunnlagsBeregninger
 import no.nav.dagpenger.streams.KafkaCredential
 import no.nav.dagpenger.streams.River
 import no.nav.dagpenger.streams.streamConfig
 import org.apache.kafka.streams.kstream.Predicate
-import java.math.BigDecimal
 import java.time.YearMonth
 import java.util.Properties
 
@@ -26,6 +26,7 @@ class Grunnlag(private val env: Environment) : River() {
         val FANGST_OG_FISK = "fangstOgFisk"
         val SENESTE_INNTEKTSMÅNED = "senesteInntektsmåned"
         val BEREGNINGSDAGTO = "beregningsDato"
+        val GRUNNLAG_INNTEKTSPERIODER = "grunnlagInntektsPerioder"
         val inntektAdapter = moshiInstance.adapter(Inntekt::class.java)
     }
 
@@ -48,9 +49,16 @@ class Grunnlag(private val env: Environment) : River() {
 
         val fakta = Fakta(inntekt, senesteInntektsmåned, verneplikt, fangstOgFisk, beregningsDato)
 
-        val resultat = grunnlagsBeregninger.map { beregning -> beregning.calculate(fakta) }.maxBy { it.avkortet }
+        val resultat = grunnlagsBeregninger.map { beregning -> beregning.calculate(fakta) }.toSet().finnHøyesteAvkortetVerdi() ?: throw NoResultException("Ingen resultat for grunnlagsberegning")
 
-        val grunnlagResultat = GrunnlagResultat(ulidGenerator.nextULID(), ulidGenerator.nextULID(), REGELIDENTIFIKATOR, resultat?.avkortet ?: BigDecimal.ZERO, resultat?.uavkortet ?: BigDecimal.ZERO)
+        val grunnlagResultat = GrunnlagResultat(
+            ulidGenerator.nextULID(),
+            ulidGenerator.nextULID(),
+            REGELIDENTIFIKATOR,
+            resultat.avkortet,
+            resultat.uavkortet,
+            resultat.beregningsregel
+        )
 
         packet.putValue(GRUNNLAG_RESULTAT, grunnlagResultat.toMap())
         return packet
@@ -71,7 +79,4 @@ fun main(args: Array<String>) {
     service.start()
 }
 
-fun finnTidligsteMåned(fraMåned: YearMonth, lengde: Int): YearMonth {
-
-    return fraMåned.minusMonths(lengde.toLong())
-}
+class NoResultException(message: String) : RuntimeException(message)

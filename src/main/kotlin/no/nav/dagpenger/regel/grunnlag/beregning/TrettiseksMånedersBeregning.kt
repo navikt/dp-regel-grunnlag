@@ -1,0 +1,36 @@
+package no.nav.dagpenger.regel.grunnlag.beregning
+
+import no.nav.dagpenger.events.inntekt.v1.InntektKlasse
+import no.nav.dagpenger.regel.grunnlag.Fakta
+import no.nav.dagpenger.regel.grunnlag.antallDesimaler
+import java.math.BigDecimal
+import java.math.RoundingMode
+import java.util.EnumSet
+
+abstract class TrettiseksMånedersBeregning(
+    val inntektKlasser: EnumSet<InntektKlasse>,
+    beregningsregel: String
+) :
+    GrunnlagBeregning(beregningsregel) {
+
+    override fun calculate(fakta: Fakta): BeregningsResultat {
+
+        val uavkortetFørstePeriode = fakta.oppjusterteInntekterFørstePeriode(inntektKlasser)
+        val uavkortetAndrePeriode = fakta.oppjusterteInntekterAndrePeriode(inntektKlasser)
+        val uavkortetTredjePeriode = fakta.oppjusterteInntekterTredjePeriode(inntektKlasser)
+
+        val uavkortet = uavkortetFørstePeriode + uavkortetAndrePeriode + uavkortetTredjePeriode
+
+        val seksGangerGrunnbeløp = fakta.gjeldendeGrunnbeløp.verdi.multiply(BigDecimal(6))
+
+        val avkortetFørste = if (uavkortetFørstePeriode > seksGangerGrunnbeløp) seksGangerGrunnbeløp else uavkortetFørstePeriode
+
+        val avkortetAndre = if (uavkortetAndrePeriode > seksGangerGrunnbeløp) seksGangerGrunnbeløp else uavkortetAndrePeriode
+
+        val avkortetTredje = if (uavkortetTredjePeriode > seksGangerGrunnbeløp) seksGangerGrunnbeløp else uavkortetTredjePeriode
+
+        val avkortet = (avkortetFørste + avkortetAndre + avkortetTredje).divide(3.toBigDecimal(), antallDesimaler, RoundingMode.HALF_UP)
+
+        return BeregningsResultat(uavkortet, avkortet, beregningsregel)
+    }
+}
