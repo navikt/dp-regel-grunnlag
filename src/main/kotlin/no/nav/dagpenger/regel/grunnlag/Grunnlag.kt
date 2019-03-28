@@ -4,7 +4,7 @@ import de.huxhorn.sulky.ulid.ULID
 import no.nav.dagpenger.events.Packet
 import no.nav.dagpenger.events.inntekt.v1.Inntekt
 import no.nav.dagpenger.events.moshiInstance
-import no.nav.dagpenger.regel.grunnlag.beregning.finnHøyeste
+import no.nav.dagpenger.regel.grunnlag.beregning.finnHøyesteAvkortetVerdi
 import no.nav.dagpenger.regel.grunnlag.beregning.grunnlagsBeregninger
 import no.nav.dagpenger.streams.KafkaCredential
 import no.nav.dagpenger.streams.River
@@ -49,7 +49,7 @@ class Grunnlag(private val env: Environment) : River() {
 
         val fakta = Fakta(inntekt, senesteInntektsmåned, verneplikt, fangstOgFisk, beregningsDato)
 
-        val resultat = grunnlagsBeregninger.map { beregning -> beregning.calculate(fakta) }.finnHøyeste()
+        val resultat = grunnlagsBeregninger.map { beregning -> beregning.calculate(fakta) }.toSet().finnHøyesteAvkortetVerdi()
 
         val grunnlagResultat = GrunnlagResultat(
             ulidGenerator.nextULID(),
@@ -76,9 +76,4 @@ class Grunnlag(private val env: Environment) : River() {
 fun main(args: Array<String>) {
     val service = Grunnlag(Environment())
     service.start()
-}
-
-fun finnTidligsteMåned(fraMåned: YearMonth, lengde: Int): YearMonth {
-
-    return fraMåned.minusMonths(lengde.toLong())
 }
