@@ -11,6 +11,7 @@ val grunnlagsBeregninger = setOf(
     BruttoArbeidsinntektDeSiste36AvsluttedeKalendermånedene(),
     BruttoInntektMedFangstOgFiskDeSiste12AvsluttedeKalendermånedene(),
     BruttoInntektMedFangstOgFiskDeSiste36AvsluttedeKalendermånedene(),
+    ManueltGrunnlagBeregning(),
     DagpengerEtterAvtjentVerneplikt()
 )
 

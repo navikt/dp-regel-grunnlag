@@ -14,7 +14,8 @@ data class Fakta(
     val senesteInntektsmåned: YearMonth,
     val verneplikt: Boolean,
     val fangstOgFisk: Boolean,
-    val beregningsdato: LocalDate
+    val beregningsdato: LocalDate,
+    val manueltGrunnlag: Int? = null
 ) {
     val gjeldendeGrunnbeløp =
         getGrunnbeløpForMåned(YearMonth.from(beregningsdato))
