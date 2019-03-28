@@ -18,7 +18,7 @@ fun Collection<BeregningsResultat>.finnHøyesteAvkortetVerdi() = this.maxWith(Pr
 
 private class PresedensOverVernepliktHvisAvkortertVerdiErLik : Comparator<BeregningsResultat> {
     override fun compare(resultat1: BeregningsResultat, resultat2: BeregningsResultat): Int {
-        return if(resultat1.avkortet == resultat2.avkortet){
+        return if (resultat1.avkortet == resultat2.avkortet) {
             if (resultat1.beregningsregel != "Verneplikt") resultat1.avkortet.compareTo(resultat2.avkortet) else -1
         } else {
             resultat1.avkortet.compareTo(resultat2.avkortet)

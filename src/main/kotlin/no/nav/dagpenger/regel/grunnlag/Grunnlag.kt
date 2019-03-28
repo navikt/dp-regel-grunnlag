@@ -10,7 +10,6 @@ import no.nav.dagpenger.streams.KafkaCredential
 import no.nav.dagpenger.streams.River
 import no.nav.dagpenger.streams.streamConfig
 import org.apache.kafka.streams.kstream.Predicate
-import java.math.BigDecimal
 import java.time.YearMonth
 import java.util.Properties
 
@@ -27,6 +26,7 @@ class Grunnlag(private val env: Environment) : River() {
         val FANGST_OG_FISK = "fangstOgFisk"
         val SENESTE_INNTEKTSMÅNED = "senesteInntektsmåned"
         val BEREGNINGSDAGTO = "beregningsDato"
+        val GRUNNLAG_INNTEKTSPERIODER = "grunnlagInntektsPerioder"
         val inntektAdapter = moshiInstance.adapter(Inntekt::class.java)
     }
 
@@ -49,14 +49,15 @@ class Grunnlag(private val env: Environment) : River() {
 
         val fakta = Fakta(inntekt, senesteInntektsmåned, verneplikt, fangstOgFisk, beregningsDato)
 
-        val resultat = grunnlagsBeregninger.map { beregning -> beregning.calculate(fakta) }.toSet().finnHøyesteAvkortetVerdi()
+        val resultat = grunnlagsBeregninger.map { beregning -> beregning.calculate(fakta) }.toSet().finnHøyesteAvkortetVerdi() ?: throw NoResultException("Ingen resultat for grunnlagsberegning")
 
         val grunnlagResultat = GrunnlagResultat(
             ulidGenerator.nextULID(),
             ulidGenerator.nextULID(),
             REGELIDENTIFIKATOR,
-            resultat?.avkortet ?: BigDecimal.ZERO,
-            resultat?.uavkortet ?: BigDecimal.ZERO
+            resultat.avkortet,
+            resultat.uavkortet,
+            resultat.beregningsregel
         )
 
         packet.putValue(GRUNNLAG_RESULTAT, grunnlagResultat.toMap())
@@ -77,3 +78,5 @@ fun main(args: Array<String>) {
     val service = Grunnlag(Environment())
     service.start()
 }
+
+class NoResultException(message: String) : RuntimeException(message)

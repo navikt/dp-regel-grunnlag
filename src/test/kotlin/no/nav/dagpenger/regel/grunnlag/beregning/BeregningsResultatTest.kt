@@ -28,7 +28,7 @@ class BeregningsResultatTest {
     }
 
     @Test
-    fun `Skal returnere beregningsregel Vernelikt dersom verneplikt gir høyest avkortet grunnlag`(){
+    fun `Skal returnere beregningsregel Vernelikt dersom verneplikt gir høyest avkortet grunnlag`() {
         val resultater = setOf(
             BeregningsResultat(1000.toBigDecimal(), 2000.toBigDecimal(), "Verneplikt", true),
             BeregningsResultat(1000.toBigDecimal(), 1000.toBigDecimal(), "Ordinær", false))
