@@ -145,7 +145,7 @@ class GrunnlagTopologyTest {
 
             assertTrue { resultPacket.hasField("grunnlagResultat") }
             assertEquals(50000, Integer.parseInt(resultPacket.getMapValue("grunnlagResultat")["avkortet"].toString()))
-            assertFalse{resultPacket.hasField("inntektV1")}
+            assertFalse { resultPacket.hasField("inntektV1") }
         }
     }
 }

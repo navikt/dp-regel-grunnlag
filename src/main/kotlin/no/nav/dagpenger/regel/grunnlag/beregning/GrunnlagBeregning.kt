@@ -18,8 +18,7 @@ val grunnlagsBeregninger = setOf(
 
 fun Collection<BeregningsResultat>.finnHøyesteAvkortetVerdi() = this.maxWith(PresedensOverManueltGrunnlag().then(PresedensOverVernepliktHvisAvkortertVerdiErLik()))
 
-
-private class PresedensOverManueltGrunnlag: Comparator<BeregningsResultat> {
+private class PresedensOverManueltGrunnlag : Comparator<BeregningsResultat> {
     override fun compare(resultat1: BeregningsResultat, resultat2: BeregningsResultat): Int {
         return when {
             isManuellBeregningsRegel(resultat1.beregningsregel) && resultat1.avkortet > BigDecimal.ZERO -> 1
