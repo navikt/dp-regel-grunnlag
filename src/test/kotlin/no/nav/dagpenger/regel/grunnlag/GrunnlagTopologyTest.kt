@@ -124,7 +124,7 @@ class GrunnlagTopologyTest {
         {
             "senesteInntektsmåned":"2018-03",
             "beregningsDato":"2018-04-06",
-            "harAvtjentVerneplikt": true,
+            "harAvtjentVerneplikt": false,
             "manueltGrunnlag":50000
             }
             """.trimIndent()
@@ -144,7 +144,7 @@ class GrunnlagTopologyTest {
             val resultPacket = ut.value()
 
             assertTrue { resultPacket.hasField("grunnlagResultat") }
-            assertEquals(50000, resultPacket.getMapValue("grunnlagResultat")["avkortet"])
+            assertEquals(50000, Integer.parseInt(resultPacket.getMapValue("grunnlagResultat")["avkortet"].toString()))
             assertFalse{resultPacket.hasField("inntektV1")}
         }
     }

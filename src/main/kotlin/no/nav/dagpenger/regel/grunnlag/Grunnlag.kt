@@ -47,8 +47,9 @@ class Grunnlag(private val env: Environment) : River() {
         val senesteInntektsmåned = YearMonth.parse(packet.getStringValue(SENESTE_INNTEKTSMÅNED))
         val fangstOgFisk = packet.getNullableBoolean(FANGST_OG_FISK) ?: false
         val beregningsDato = packet.getLocalDate(BEREGNINGSDAGTO)
+        val manueltGrunnlag = packet.getNullableIntValue(MANUELT_GRUNNLAG)
 
-        val fakta = Fakta(inntekt, senesteInntektsmåned, verneplikt, fangstOgFisk, beregningsDato)
+        val fakta = Fakta(inntekt, senesteInntektsmåned, verneplikt, fangstOgFisk, beregningsDato, manueltGrunnlag)
 
         val resultat = grunnlagsBeregninger.map { beregning -> beregning.calculate(fakta) }.toSet().finnHøyesteAvkortetVerdi() ?: throw NoResultException("Ingen resultat for grunnlagsberegning")
 

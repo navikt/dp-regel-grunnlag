@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test
 class BeregningsResultatTest {
 
     @Test
-    fun `Skal returnere den av beregningsresultatene med hlyest avkortet grunnlag`() {
+    fun `Skal returnere den av beregningsresultatene med høyest avkortet grunnlag`() {
 
         val resultater = listOf(
             BeregningsResultat(1000.toBigDecimal(), 500.toBigDecimal(), "Regel1", true),
