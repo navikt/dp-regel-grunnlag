@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test
 class BeregningsResultatTest {
 
     @Test
-    fun `Skal returnere den av beregningsresultatene med hlyest avkortet grunnlag`() {
+    fun `Skal returnere den av beregningsresultatene med høyest avkortet grunnlag`() {
 
         val resultater = listOf(
             BeregningsResultat(1000.toBigDecimal(), 500.toBigDecimal(), "Regel1", true),
@@ -35,5 +35,27 @@ class BeregningsResultatTest {
 
         assertEquals(2000.toBigDecimal(), resultater.finnHøyesteAvkortetVerdi()?.avkortet)
         assertEquals("Verneplikt", resultater.finnHøyesteAvkortetVerdi()?.beregningsregel)
+    }
+
+    @Test
+    fun `Skal alltid returnere manuelt grunnlag dersom det er satt`() {
+        val resultater = setOf(
+            BeregningsResultat(100000.toBigDecimal(), 20000.toBigDecimal(), "Verneplikt", true),
+            BeregningsResultat(1000.toBigDecimal(), 2000.toBigDecimal(), "Manuell", true),
+            BeregningsResultat(10000.toBigDecimal(), 10000.toBigDecimal(), "Ordinær", false))
+
+        assertEquals(2000.toBigDecimal(), resultater.finnHøyesteAvkortetVerdi()?.avkortet)
+        assertEquals("Manuell", resultater.finnHøyesteAvkortetVerdi()?.beregningsregel)
+    }
+
+    @Test
+    fun `Skal ikke returnere manuelt grunnlag dersom det ikke er satt`() {
+        val resultater = setOf(
+            BeregningsResultat(1000.toBigDecimal(), 2000.toBigDecimal(), "Verneplikt", true),
+            BeregningsResultat(0.toBigDecimal(), 0.toBigDecimal(), "Manuell", true),
+            BeregningsResultat(10000.toBigDecimal(), 10000.toBigDecimal(), "Ordinær", false))
+
+        assertEquals(10000.toBigDecimal(), resultater.finnHøyesteAvkortetVerdi()?.avkortet)
+        assertEquals("Ordinær", resultater.finnHøyesteAvkortetVerdi()?.beregningsregel)
     }
 }

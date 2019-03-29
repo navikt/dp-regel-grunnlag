@@ -90,4 +90,21 @@ class BruttoInntektMedFangstOgFiskDeSisteTolvKalendermånedeneBeregningsTest {
 
         assertEquals(BigDecimal(0), BruttoInntektMedFangstOgFiskDeSiste12AvsluttedeKalendermånedene().calculate(fakta).uavkortet)
     }
+
+    @Test
+    fun `Skal returnere 0 som grunnlag hvis ingen inntekt`() {
+
+        val fakta = Fakta(
+            inntekt = Inntekt("123", emptyList()),
+            senesteInntektsmåned = YearMonth.of(2019, 3),
+            fangstOgFisk = false,
+            verneplikt = false,
+            beregningsdato = LocalDate.of(2019, 4, 1)
+        )
+
+        assertEquals(
+            BigDecimal.ZERO,
+            BruttoInntektMedFangstOgFiskDeSiste12AvsluttedeKalendermånedene().calculate(fakta).uavkortet
+        )
+    }
 }

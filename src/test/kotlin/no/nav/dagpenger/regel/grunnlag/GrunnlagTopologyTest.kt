@@ -10,10 +10,12 @@ import no.nav.dagpenger.streams.Topics.DAGPENGER_BEHOV_PACKET_EVENT
 import org.apache.kafka.streams.StreamsConfig
 import org.apache.kafka.streams.TopologyTestDriver
 import org.apache.kafka.streams.test.ConsumerRecordFactory
+import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Test
 import java.math.BigDecimal
 import java.time.YearMonth
 import java.util.Properties
+import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
 class GrunnlagTopologyTest {
@@ -106,6 +108,44 @@ class GrunnlagTopologyTest {
             val resultPacket = ut.value()
 
             assertTrue { resultPacket.hasField("grunnlagResultat") }
+        }
+    }
+
+    @Test
+    fun ` Should add GrunnlagSubsumsjon to subsumsjonsBehov with manueltGrunnlag `() {
+        val grunnlag = Grunnlag(
+            Environment(
+                username = "bogus",
+                password = "bogus"
+            )
+        )
+
+        val json = """
+        {
+            "senesteInntektsmåned":"2018-03",
+            "beregningsDato":"2018-04-06",
+            "harAvtjentVerneplikt": true,
+            "manueltGrunnlag":50000
+            }
+            """.trimIndent()
+
+        val packet = Packet(json)
+
+        TopologyTestDriver(grunnlag.buildTopology(), config).use { topologyTestDriver ->
+            val inputRecord = factory.create(packet)
+            topologyTestDriver.pipeInput(inputRecord)
+
+            val ut = topologyTestDriver.readOutput(
+                DAGPENGER_BEHOV_PACKET_EVENT.name,
+                DAGPENGER_BEHOV_PACKET_EVENT.keySerde.deserializer(),
+                DAGPENGER_BEHOV_PACKET_EVENT.valueSerde.deserializer()
+            )
+
+            val resultPacket = ut.value()
+
+            assertTrue { resultPacket.hasField("grunnlagResultat") }
+            assertEquals(50000, Integer.parseInt(resultPacket.getMapValue("grunnlagResultat")["avkortet"].toString()))
+            assertFalse{resultPacket.hasField("inntektV1")}
         }
     }
 }

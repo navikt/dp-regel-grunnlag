@@ -32,13 +32,14 @@ class Grunnlag(private val env: Environment) : River() {
         val FANGST_OG_FISK = "fangstOgFisk"
         val SENESTE_INNTEKTSMÅNED = "senesteInntektsmåned"
         val BEREGNINGSDAGTO = "beregningsDato"
+        val MANUELT_GRUNNLAG = "manueltGrunnlag"
         val GRUNNLAG_INNTEKTSPERIODER = "grunnlagInntektsPerioder"
         val inntektAdapter = moshiInstance.adapter(Inntekt::class.java)
     }
 
     override fun filterPredicates(): List<Predicate<String, Packet>> {
         return listOf(
-            Predicate { _, packet -> packet.hasField(INNTEKT) },
+            Predicate { _, packet -> packet.hasField(INNTEKT) || packet.hasField(MANUELT_GRUNNLAG) },
             Predicate { _, packet -> packet.hasField(SENESTE_INNTEKTSMÅNED) },
             Predicate { _, packet -> !packet.hasField(GRUNNLAG_RESULTAT) }
         )
@@ -48,12 +49,13 @@ class Grunnlag(private val env: Environment) : River() {
 
         val verneplikt = packet.getNullableBoolean(AVTJENT_VERNEPLIKT) ?: false
         val inntekt: no.nav.dagpenger.events.inntekt.v1.Inntekt =
-            packet.getObjectValue(INNTEKT) { requireNotNull(inntektAdapter.fromJson(it)) }
+            getInntekt(packet)
         val senesteInntektsmåned = YearMonth.parse(packet.getStringValue(SENESTE_INNTEKTSMÅNED))
         val fangstOgFisk = packet.getNullableBoolean(FANGST_OG_FISK) ?: false
         val beregningsDato = packet.getLocalDate(BEREGNINGSDAGTO)
+        val manueltGrunnlag = packet.getNullableIntValue(MANUELT_GRUNNLAG)
 
-        val fakta = Fakta(inntekt, senesteInntektsmåned, verneplikt, fangstOgFisk, beregningsDato)
+        val fakta = Fakta(inntekt, senesteInntektsmåned, verneplikt, fangstOgFisk, beregningsDato, manueltGrunnlag)
 
         val resultat =
             grunnlagsBeregninger.map { beregning -> beregning.calculate(fakta) }.toSet().finnHøyesteAvkortetVerdi()
@@ -77,6 +79,15 @@ class Grunnlag(private val env: Environment) : River() {
         return packet
     }
 
+    private fun getInntekt(packet: Packet): Inntekt =
+        if (packet.hasField(MANUELT_GRUNNLAG) && packet.hasField(INNTEKT)) {
+            throw ManueltGrunnlagOgInntektException("Har manuelt grunnlag og inntekt")
+        } else if (packet.hasField(INNTEKT)) {
+            packet.getObjectValue(INNTEKT) { requireNotNull(inntektAdapter.fromJson(it)) }
+        } else {
+            Inntekt("", emptyList())
+        }
+
     fun createInntektPerioder(fakta: Fakta): List<InntektPeriodeInfo> {
         val arbeidsInntekt = listOf(
             InntektKlasse.ARBEIDSINNTEKT,
@@ -98,7 +109,13 @@ class Grunnlag(private val env: Environment) : River() {
                 ),
                 inntekt = list.sumInntekt(if (fakta.fangstOgFisk) medFangstOgFisk + arbeidsInntekt else arbeidsInntekt),
                 periode = index + 1,
-                inneholderFangstOgFisk = fakta.inntektsPerioder.toList()[index].any { klassifisertInntektMåned -> klassifisertInntektMåned.klassifiserteInntekter.any { medFangstOgFisk.contains(it.inntektKlasse) } },
+                inneholderFangstOgFisk = fakta.inntektsPerioder.toList()[index].any { klassifisertInntektMåned ->
+                    klassifisertInntektMåned.klassifiserteInntekter.any {
+                        medFangstOgFisk.contains(
+                            it.inntektKlasse
+                        )
+                    }
+                },
                 andel = fakta.inntektsPerioder.toList()[index].sumInntekt(if (fakta.fangstOgFisk) medFangstOgFisk + arbeidsInntekt else arbeidsInntekt)
             )
         }
@@ -119,3 +136,5 @@ fun main(args: Array<String>) {
 }
 
 class NoResultException(message: String) : RuntimeException(message)
+
+class ManueltGrunnlagOgInntektException(message: String) : RuntimeException(message)
