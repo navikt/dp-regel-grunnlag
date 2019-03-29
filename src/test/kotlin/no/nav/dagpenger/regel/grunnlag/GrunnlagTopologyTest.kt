@@ -124,7 +124,7 @@ class GrunnlagTopologyTest {
         {
             "senesteInntektsmåned":"2018-03",
             "beregningsDato":"2018-04-06",
-            "harAvtjentVerneplikt": false,
+            "harAvtjentVerneplikt": true,
             "manueltGrunnlag":50000
             }
             """.trimIndent()
