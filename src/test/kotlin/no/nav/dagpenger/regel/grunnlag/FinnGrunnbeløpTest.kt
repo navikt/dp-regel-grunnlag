@@ -10,27 +10,33 @@ import java.time.YearMonth
 class FinnGrunnbeløpTest {
 
     @Test
+    fun ` Skal returnere grunnbeløp på 96883 for måned may 2019 `() {
+
+        assertEquals(96883.toBigDecimal(), getGrunnbeløpForMåned(YearMonth.of(2019, Month.MAY)).verdi)
+    }
+
+    @Test
     fun ` Skal returnere grunnbeløp på 96883 for måned april 2019 `() {
 
-        assertEquals( 96883.toBigDecimal(), getGrunnbeløpForMåned(YearMonth.of(2019, Month.APRIL)).verdi)
+        assertEquals(96883.toBigDecimal(), getGrunnbeløpForMåned(YearMonth.of(2019, Month.APRIL)).verdi)
     }
 
     @Test
     fun ` Skal returnere grunnbeløp på 93634 for måned mars 2018 `() {
 
-        assertEquals( 93634.toBigDecimal(), getGrunnbeløpForMåned(YearMonth.of(2018, Month.MARCH)).verdi)
+        assertEquals(93634.toBigDecimal(), getGrunnbeløpForMåned(YearMonth.of(2018, Month.MARCH)).verdi)
     }
 
     @Test
     fun ` Skal returnere grunnbeløp på 92576 for måned mai 2016  `() {
 
-        assertEquals( 92576.toBigDecimal(), getGrunnbeløpForMåned(YearMonth.of(2016, Month.MAY)).verdi)
+        assertEquals(92576.toBigDecimal(), getGrunnbeløpForMåned(YearMonth.of(2016, Month.MAY)).verdi)
     }
 
     @Test
     fun ` Skal returnere grunnbeløp på 90068 for måned mars 2015 `() {
 
-        assertEquals( 90068.toBigDecimal(), getGrunnbeløpForMåned(YearMonth.of(2015, Month.AUGUST)).verdi)
+        assertEquals(90068.toBigDecimal(), getGrunnbeløpForMåned(YearMonth.of(2015, Month.AUGUST)).verdi)
     }
 
     @Test

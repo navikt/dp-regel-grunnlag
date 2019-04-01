@@ -15,6 +15,7 @@ data class Grunnbeløp(
         return this.verdi.divide(grunnbeløp.verdi, antallDesimaler, RoundingMode.HALF_UP)
     }
 }
+
 val antallDesimaler: Int = 20
 
 val grunnbeløp: Set<Grunnbeløp> = setOf(
@@ -25,10 +26,8 @@ val grunnbeløp: Set<Grunnbeløp> = setOf(
 )
 
 fun getGrunnbeløpForMåned(måned: YearMonth): Grunnbeløp {
-
     val sisteMåned = findLastChange(måned)
-
-    return grunnbeløp.first { it.fraMåned.year == sisteMåned.year && it.fraMåned.month == sisteMåned.month }
+    return grunnbeløp.firstOrNull { it.fraMåned.year == sisteMåned.year && it.fraMåned.month == sisteMåned.month } ?: grunnbeløp.first()
 }
 
 private fun findLastChange(yearMonth: YearMonth): YearMonth {
