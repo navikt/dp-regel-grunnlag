@@ -113,8 +113,7 @@ class Grunnlag(private val env: Environment) : River() {
                             it.inntektKlasse
                         )
                     }
-                },
-                andel = fakta.inntektsPerioder.toList()[index].sumInntekt(if (fakta.fangstOgFisk) medFangstOgFisk + arbeidsInntekt else arbeidsInntekt)
+                }
             )
         }
     }

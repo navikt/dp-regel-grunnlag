@@ -7,8 +7,7 @@ data class InntektPeriodeInfo(
     val inntektsPeriode: InntektsPeriode,
     val inntekt: BigDecimal,
     val periode: Int,
-    val inneholderFangstOgFisk: Boolean,
-    val andel: BigDecimal
+    val inneholderFangstOgFisk: Boolean
 )
 
 data class InntektsPeriode(
