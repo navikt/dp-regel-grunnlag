@@ -93,7 +93,7 @@ class GrunnlagTopologyTest {
             """.trimIndent()
 
         val packet = Packet(json)
-        packet.putValue("inntektV1", inntekt, inntektAdapter::toJson)
+        packet.putValue("inntektV1", inntektAdapter.toJsonValue(inntekt)!!)
 
         TopologyTestDriver(grunnlag.buildTopology(), config).use { topologyTestDriver ->
             val inputRecord = factory.create(packet)

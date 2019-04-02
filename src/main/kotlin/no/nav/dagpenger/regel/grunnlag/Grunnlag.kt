@@ -70,11 +70,9 @@ class Grunnlag(private val env: Environment) : River() {
             resultat.beregningsregel
         )
 
-        packet.putValue(GRUNNLAG_INNTEKTSPERIODER, createInntektPerioder(fakta)) {
-            checkNotNull(
-                jsonAdapterInntektPeriodeInfo.toJson(it)
-            )
-        }
+        packet.putValue(GRUNNLAG_INNTEKTSPERIODER, checkNotNull(
+            jsonAdapterInntektPeriodeInfo.toJsonValue(createInntektPerioder(fakta))
+        ))
         packet.putValue(GRUNNLAG_RESULTAT, grunnlagResultat.toMap())
         return packet
     }
@@ -83,7 +81,7 @@ class Grunnlag(private val env: Environment) : River() {
         if (packet.hasField(MANUELT_GRUNNLAG) && packet.hasField(INNTEKT)) {
             throw ManueltGrunnlagOgInntektException("Har manuelt grunnlag og inntekt")
         } else if (packet.hasField(INNTEKT)) {
-            packet.getObjectValue(INNTEKT) { requireNotNull(inntektAdapter.fromJson(it)) }
+            packet.getObjectValue(INNTEKT) { requireNotNull(inntektAdapter.fromJsonValue(it)) }
         } else {
             Inntekt("", emptyList())
         }
