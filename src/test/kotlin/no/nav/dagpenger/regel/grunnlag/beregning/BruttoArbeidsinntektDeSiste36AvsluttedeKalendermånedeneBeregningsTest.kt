@@ -14,7 +14,7 @@ import kotlin.test.assertEquals
 class BruttoArbeidsinntektDeSiste36AvsluttedeKalendermånedeneBeregningsTest {
 
     @Test
-    fun ` Skal gi grunnlag på 4115 siste 36 kalendermåned gitt mars 2019 inntekt`() {
+    fun ` Skal gi uavkortet grunnlag på 4115 siste 36 kalendermåned gitt mars 2019 inntekt`() {
 
         val inntektsListe = listOf (
             KlassifisertInntektMåned(
@@ -63,7 +63,7 @@ class BruttoArbeidsinntektDeSiste36AvsluttedeKalendermånedeneBeregningsTest {
             beregningsdato = LocalDate.of(2019, 4, 1)
         )
 
-        assertEquals(BigDecimal("4115.92180538523099490000"), BruttoArbeidsinntektDeSiste36AvsluttedeKalendermånedene().calculate(fakta).uavkortet)
+        assertEquals(BigDecimal("1371.97393512841033163333"), BruttoArbeidsinntektDeSiste36AvsluttedeKalendermånedene().calculate(fakta).uavkortet)
     }
 
     @Test
@@ -177,7 +177,7 @@ class BruttoArbeidsinntektDeSiste36AvsluttedeKalendermånedeneBeregningsTest {
             beregningsdato = LocalDate.of(2019, 4, 1)
         )
 
-        assertEquals(BigDecimal("4115.92180538523099490000"), BruttoArbeidsinntektDeSiste36AvsluttedeKalendermånedene().calculate(fakta).uavkortet)
+        assertEquals(BigDecimal("1371.97393512841033163333"), BruttoArbeidsinntektDeSiste36AvsluttedeKalendermånedene().calculate(fakta).uavkortet)
     }
 
     @Test
