@@ -67,7 +67,8 @@ class Grunnlag(private val env: Environment) : River() {
             REGELIDENTIFIKATOR,
             resultat.avkortet,
             resultat.uavkortet,
-            resultat.beregningsregel
+            resultat.beregningsregel,
+            resultat.harAvkortet
         )
 
         packet.putValue(GRUNNLAG_INNTEKTSPERIODER, checkNotNull(
