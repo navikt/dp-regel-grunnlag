@@ -24,7 +24,6 @@ internal class CreateInntektPerioderTest {
         assertThreeCorrectPeriods(inntektsPerioder, senesteInnteksMåned)
 
         Assertions.assertTrue(inntektsPerioder.all { it.inntekt == BigDecimal.ZERO })
-        Assertions.assertTrue(inntektsPerioder.all { it.andel == BigDecimal.ZERO })
         Assertions.assertTrue(inntektsPerioder.none { it.inneholderFangstOgFisk })
     }
 
@@ -44,7 +43,6 @@ internal class CreateInntektPerioderTest {
         assertThreeCorrectPeriods(inntektsPerioder, senesteInnteksMåned)
 
         Assertions.assertTrue(inntektsPerioder.all { it.inntekt == BigDecimal(12000) })
-        Assertions.assertTrue(inntektsPerioder.all { it.andel == BigDecimal(12000) })
         Assertions.assertTrue(inntektsPerioder.none { it.inneholderFangstOgFisk })
     }
 
@@ -68,7 +66,6 @@ internal class CreateInntektPerioderTest {
         assertThreeCorrectPeriods(inntektsPerioder, senesteInnteksMåned)
 
         Assertions.assertTrue(inntektsPerioder.all { it.inntekt == BigDecimal(24000) })
-        Assertions.assertTrue(inntektsPerioder.all { it.andel == BigDecimal(24000) })
         Assertions.assertTrue(inntektsPerioder.all { it.inneholderFangstOgFisk })
     }
 
@@ -89,7 +86,6 @@ internal class CreateInntektPerioderTest {
         val inntektsPerioder = grunnlag.createInntektPerioder(fakta)
         assertThreeCorrectPeriods(inntektsPerioder, senesteInntektsmåned)
         Assertions.assertTrue(inntektsPerioder.all { it.inntekt == BigDecimal(48000) })
-        Assertions.assertTrue(inntektsPerioder.all { it.andel == BigDecimal(48000) })
         Assertions.assertTrue(inntektsPerioder.all { it.inneholderFangstOgFisk })
     }
 
@@ -110,7 +106,6 @@ internal class CreateInntektPerioderTest {
         assertThreeCorrectPeriods(inntektsPerioder, senesteInntektsmåned)
 
         Assertions.assertTrue(inntektsPerioder.all { it.inntekt == BigDecimal(24000) })
-        Assertions.assertTrue(inntektsPerioder.all { it.andel == BigDecimal(24000) })
         Assertions.assertTrue(inntektsPerioder.all { it.inneholderFangstOgFisk })
     }
 
@@ -132,7 +127,6 @@ internal class CreateInntektPerioderTest {
         assertThreeCorrectPeriods(inntektsPerioder, senesteInntektsmåned)
 
         Assertions.assertTrue(inntektsPerioder.all { it.inntekt == BigDecimal(24000) })
-        Assertions.assertTrue(inntektsPerioder.all { it.andel == BigDecimal(24000) })
         Assertions.assertFalse(inntektsPerioder.all { it.inneholderFangstOgFisk })
     }
 
