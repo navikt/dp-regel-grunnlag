@@ -41,18 +41,18 @@ class BeregningsResultatTest {
     fun `Skal alltid returnere manuelt grunnlag dersom det er satt`() {
         val resultater = setOf(
             BeregningsResultat(100000.toBigDecimal(), 20000.toBigDecimal(), "Verneplikt", true),
-            BeregningsResultat(1000.toBigDecimal(), 2000.toBigDecimal(), "Manuell under 6G", true),
+            BeregningsResultat(1000.toBigDecimal(), 2000.toBigDecimal(), "Manuell", true),
             BeregningsResultat(10000.toBigDecimal(), 10000.toBigDecimal(), "Ordinær", false))
 
         assertEquals(2000.toBigDecimal(), resultater.finnHøyesteAvkortetVerdi()?.avkortet)
-        assertEquals("Manuell under 6G", resultater.finnHøyesteAvkortetVerdi()?.beregningsregel)
+        assertEquals("Manuell", resultater.finnHøyesteAvkortetVerdi()?.beregningsregel)
     }
 
     @Test
     fun `Skal ikke returnere manuelt grunnlag dersom det ikke er satt`() {
         val resultater = setOf(
             BeregningsResultat(1000.toBigDecimal(), 2000.toBigDecimal(), "Verneplikt", true),
-            BeregningsResultat(0.toBigDecimal(), 0.toBigDecimal(), "Manuell under 6G", true),
+            BeregningsResultat(0.toBigDecimal(), 0.toBigDecimal(), "Manuell", true),
             BeregningsResultat(10000.toBigDecimal(), 10000.toBigDecimal(), "Ordinær", false))
 
         assertEquals(10000.toBigDecimal(), resultater.finnHøyesteAvkortetVerdi()?.avkortet)
