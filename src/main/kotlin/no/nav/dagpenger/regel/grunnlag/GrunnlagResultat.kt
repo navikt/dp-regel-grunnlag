@@ -9,7 +9,8 @@ data class GrunnlagResultat(
     val regelidentifikator: String,
     val avkortetGrunnlag: BigDecimal,
     val uavkortetGrunnlag: BigDecimal,
-    val beregningsregel: String
+    val beregningsregel: String,
+    val harAvkortet: Boolean
 ) {
 
     companion object {
@@ -19,6 +20,7 @@ data class GrunnlagResultat(
         val AVKORTET_GRUNNLAG = "avkortet"
         val UAVKORTET_GRUNNLAG = "uavkortet"
         val BEREGNINGSREGEL = "beregningsregel"
+        val HAR_AVKORTET = "harAvkortet"
     }
 
     fun toMap(): Map<String, Any> {
@@ -28,7 +30,8 @@ data class GrunnlagResultat(
             REGELIDENTIFIKATOR to regelidentifikator,
             AVKORTET_GRUNNLAG to avrundetAvkortet,
             UAVKORTET_GRUNNLAG to avrundetUavkortet,
-            BEREGNINGSREGEL to beregningsregel
+            BEREGNINGSREGEL to beregningsregel,
+            HAR_AVKORTET to harAvkortet
         )
     }
 
