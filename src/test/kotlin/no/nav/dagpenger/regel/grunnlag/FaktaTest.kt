@@ -47,7 +47,7 @@ internal class FaktaTest {
     )
 
     @Test
-    fun ` Skal returnere en liste over inntektene måned for måned `() {
+    fun ` Skal returnere en liste over inntektene måned for måned når inntekt er satt `() {
 
         val fakta = Fakta(inntekt, YearMonth.of(2019, 3), false, false, LocalDate.of(2019, 4, 1))
 
@@ -59,7 +59,7 @@ internal class FaktaTest {
     }
 
     @Test
-    fun `Skal bruke kun inntekter som er i inntektsklasse parameteret ` () {
+    fun `Skal bruke kun inntekter som er i inntektsklasse parameteret `() {
         val fakta = Fakta(inntekt, YearMonth.of(2019, 3), false, false, LocalDate.of(2019, 4, 1))
 
         val expected = 0.toBigDecimal()

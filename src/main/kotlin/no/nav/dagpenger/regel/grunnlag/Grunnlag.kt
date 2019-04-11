@@ -48,8 +48,7 @@ class Grunnlag(private val env: Environment) : River() {
     override fun onPacket(packet: Packet): Packet {
 
         val verneplikt = packet.getNullableBoolean(AVTJENT_VERNEPLIKT) ?: false
-        val inntekt: no.nav.dagpenger.events.inntekt.v1.Inntekt =
-            getInntekt(packet)
+        val inntekt: no.nav.dagpenger.events.inntekt.v1.Inntekt? = getInntekt(packet)
         val senesteInntektsmåned = YearMonth.parse(packet.getStringValue(SENESTE_INNTEKTSMÅNED))
         val fangstOgFisk = packet.getNullableBoolean(FANGST_OG_FISK) ?: false
         val beregningsDato = packet.getLocalDate(BEREGNINGSDAGTO)
@@ -71,23 +70,23 @@ class Grunnlag(private val env: Environment) : River() {
             resultat.harAvkortet
         )
 
-        packet.putValue(GRUNNLAG_INNTEKTSPERIODER, checkNotNull(
-            jsonAdapterInntektPeriodeInfo.toJsonValue(createInntektPerioder(fakta))
-        ))
+        createInntektPerioder(fakta)?.apply { packet.putValue(GRUNNLAG_INNTEKTSPERIODER, checkNotNull(
+            jsonAdapterInntektPeriodeInfo.toJsonValue(this))) }
+
         packet.putValue(GRUNNLAG_RESULTAT, grunnlagResultat.toMap())
         return packet
     }
 
-    private fun getInntekt(packet: Packet): Inntekt =
+    private fun getInntekt(packet: Packet): Inntekt? =
         if (packet.hasField(MANUELT_GRUNNLAG) && packet.hasField(INNTEKT)) {
             throw ManueltGrunnlagOgInntektException("Har manuelt grunnlag og inntekt")
         } else if (packet.hasField(INNTEKT)) {
             packet.getObjectValue(INNTEKT) { requireNotNull(inntektAdapter.fromJsonValue(it)) }
         } else {
-            Inntekt("", emptyList())
+            null
         }
 
-    fun createInntektPerioder(fakta: Fakta): List<InntektPeriodeInfo> {
+    fun createInntektPerioder(fakta: Fakta): List<InntektPeriodeInfo>? {
         val arbeidsInntekt = listOf(
             InntektKlasse.ARBEIDSINNTEKT,
             InntektKlasse.DAGPENGER,
@@ -100,7 +99,7 @@ class Grunnlag(private val env: Environment) : River() {
             InntektKlasse.SYKEPENGER_FANGST_FISKE
         )
 
-        return fakta.inntektsPerioder.toList().mapIndexed { index, list ->
+        return fakta.inntektsPerioder?.toList()?.mapIndexed { index, list ->
             InntektPeriodeInfo(
                 inntektsPeriode = InntektsPeriode(
                     list.first().årMåned,
