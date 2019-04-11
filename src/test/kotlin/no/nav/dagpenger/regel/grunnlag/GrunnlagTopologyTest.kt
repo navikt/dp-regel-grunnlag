@@ -34,7 +34,7 @@ class GrunnlagTopologyTest {
     }
 
     @Test
-    fun ` Should add not process behov without inntekt `() {
+    fun ` Should add not process behov without inntekt eller manuelt grunnlag`() {
         val grunnlag = Grunnlag(
             Environment(
                 username = "bogus",
@@ -108,6 +108,7 @@ class GrunnlagTopologyTest {
             val resultPacket = ut.value()
 
             assertTrue { resultPacket.hasField("grunnlagResultat") }
+            assertTrue { resultPacket.hasField("grunnlagInntektsPerioder") }
         }
     }
 
@@ -146,6 +147,7 @@ class GrunnlagTopologyTest {
             assertTrue { resultPacket.hasField("grunnlagResultat") }
             assertEquals(50000, Integer.parseInt(resultPacket.getMapValue("grunnlagResultat")["avkortet"].toString()))
             assertFalse { resultPacket.hasField("inntektV1") }
+            assertFalse { resultPacket.hasField("grunnlagInntektsPerioder") }
         }
     }
 }

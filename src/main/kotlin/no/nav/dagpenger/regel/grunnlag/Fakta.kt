@@ -2,6 +2,7 @@ package no.nav.dagpenger.regel.grunnlag
 
 import no.nav.dagpenger.events.inntekt.v1.Inntekt
 import no.nav.dagpenger.events.inntekt.v1.InntektKlasse
+import no.nav.dagpenger.events.inntekt.v1.InntektsPerioder
 import no.nav.dagpenger.events.inntekt.v1.KlassifisertInntektMåned
 import no.nav.dagpenger.events.inntekt.v1.sumInntekt
 import java.math.BigDecimal
@@ -10,7 +11,7 @@ import java.time.YearMonth
 import java.util.EnumSet
 
 data class Fakta(
-    val inntekt: Inntekt,
+    val inntekt: Inntekt? = null,
     val senesteInntektsmåned: YearMonth,
     val verneplikt: Boolean,
     val fangstOgFisk: Boolean,
@@ -20,13 +21,15 @@ data class Fakta(
     val gjeldendeGrunnbeløp =
         getGrunnbeløpForMåned(YearMonth.from(beregningsdato))
 
-    val inntektsPerioder = inntekt.splitIntoInntektsPerioder(senesteInntektsmåned)
+    val inntektsPerioder = inntekt?.splitIntoInntektsPerioder(senesteInntektsmåned)
 
-    fun oppjusterteInntekterFørstePeriode(inntektsKlasser: EnumSet<InntektKlasse>): BigDecimal = inntektsPerioder.first.map(oppjusterTilGjeldendeGrunnbeløp(gjeldendeGrunnbeløp)).sumInntekt(inntektsKlasser.toList())
+    private val inntektsPerioderOrEmpty = inntektsPerioder ?: InntektsPerioder(kotlin.collections.emptyList(), emptyList(), emptyList())
 
-    fun oppjusterteInntekterAndrePeriode(inntektsKlasser: EnumSet<InntektKlasse>): BigDecimal = inntektsPerioder.second.map(oppjusterTilGjeldendeGrunnbeløp(gjeldendeGrunnbeløp)).sumInntekt(inntektsKlasser.toList())
+    fun oppjusterteInntekterFørstePeriode(inntektsKlasser: EnumSet<InntektKlasse>): BigDecimal = inntektsPerioderOrEmpty.first.map(oppjusterTilGjeldendeGrunnbeløp(gjeldendeGrunnbeløp)).sumInntekt(inntektsKlasser.toList())
 
-    fun oppjusterteInntekterTredjePeriode(inntektsKlasser: EnumSet<InntektKlasse>): BigDecimal = inntektsPerioder.third.map(oppjusterTilGjeldendeGrunnbeløp(gjeldendeGrunnbeløp)).sumInntekt(inntektsKlasser.toList())
+    fun oppjusterteInntekterAndrePeriode(inntektsKlasser: EnumSet<InntektKlasse>): BigDecimal = inntektsPerioderOrEmpty.second.map(oppjusterTilGjeldendeGrunnbeløp(gjeldendeGrunnbeløp)).sumInntekt(inntektsKlasser.toList())
+
+    fun oppjusterteInntekterTredjePeriode(inntektsKlasser: EnumSet<InntektKlasse>): BigDecimal = inntektsPerioderOrEmpty.third.map(oppjusterTilGjeldendeGrunnbeløp(gjeldendeGrunnbeløp)).sumInntekt(inntektsKlasser.toList())
 
     private fun oppjusterTilGjeldendeGrunnbeløp(gjeldendeGrunnbeløp: Grunnbeløp): (KlassifisertInntektMåned) -> KlassifisertInntektMåned {
         return { inntekt ->

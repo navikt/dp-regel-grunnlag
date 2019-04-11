@@ -10,6 +10,7 @@ import java.math.BigDecimal
 import java.time.LocalDate
 import java.time.YearMonth
 import kotlin.test.assertNotNull
+import kotlin.test.assertNull
 
 internal class CreateInntektPerioderTest {
     private val grunnlag = Grunnlag(Environment("bogus", "bogus"))
@@ -18,13 +19,11 @@ internal class CreateInntektPerioderTest {
     fun `Skal ha perioder med 0 inntekt hvis det ikke er inntekt`() {
         val senesteInnteksMåned = YearMonth.of(2019, 1)
         val beregningsdato = LocalDate.of(2019, 2, 1)
-        val fakta = Fakta(Inntekt("id", emptyList()), senesteInnteksMåned, false, false, beregningsdato)
+        val fakta = Fakta(senesteInntektsmåned = senesteInnteksMåned, verneplikt = false, fangstOgFisk = false, beregningsdato = beregningsdato)
 
         val inntektsPerioder = grunnlag.createInntektPerioder(fakta)
-        assertThreeCorrectPeriods(inntektsPerioder, senesteInnteksMåned)
 
-        Assertions.assertTrue(inntektsPerioder.all { it.inntekt == BigDecimal.ZERO })
-        Assertions.assertTrue(inntektsPerioder.none { it.inneholderFangstOgFisk })
+        assertNull(inntektsPerioder)
     }
 
     @Test
@@ -39,7 +38,7 @@ internal class CreateInntektPerioderTest {
             beregningsdato
         )
 
-        val inntektsPerioder = grunnlag.createInntektPerioder(fakta)
+        val inntektsPerioder = grunnlag.createInntektPerioder(fakta)!!
         assertThreeCorrectPeriods(inntektsPerioder, senesteInnteksMåned)
 
         Assertions.assertTrue(inntektsPerioder.all { it.inntekt == BigDecimal(12000) })
@@ -62,7 +61,7 @@ internal class CreateInntektPerioderTest {
             beregningsdato
         )
 
-        val inntektsPerioder = grunnlag.createInntektPerioder(fakta)
+        val inntektsPerioder = grunnlag.createInntektPerioder(fakta)!!
         assertThreeCorrectPeriods(inntektsPerioder, senesteInnteksMåned)
 
         Assertions.assertTrue(inntektsPerioder.all { it.inntekt == BigDecimal(24000) })
@@ -83,7 +82,7 @@ internal class CreateInntektPerioderTest {
             beregningsdato = beregningsdato
         )
 
-        val inntektsPerioder = grunnlag.createInntektPerioder(fakta)
+        val inntektsPerioder = grunnlag.createInntektPerioder(fakta)!!
         assertThreeCorrectPeriods(inntektsPerioder, senesteInntektsmåned)
         Assertions.assertTrue(inntektsPerioder.all { it.inntekt == BigDecimal(48000) })
         Assertions.assertTrue(inntektsPerioder.all { it.inneholderFangstOgFisk })
@@ -102,7 +101,7 @@ internal class CreateInntektPerioderTest {
 
         )
 
-        val inntektsPerioder = grunnlag.createInntektPerioder(fakta)
+        val inntektsPerioder = grunnlag.createInntektPerioder(fakta)!!
         assertThreeCorrectPeriods(inntektsPerioder, senesteInntektsmåned)
 
         Assertions.assertTrue(inntektsPerioder.all { it.inntekt == BigDecimal(24000) })
@@ -123,19 +122,19 @@ internal class CreateInntektPerioderTest {
 
         )
 
-        val inntektsPerioder = grunnlag.createInntektPerioder(fakta)
+        val inntektsPerioder = grunnlag.createInntektPerioder(fakta)!!
         assertThreeCorrectPeriods(inntektsPerioder, senesteInntektsmåned)
 
         Assertions.assertTrue(inntektsPerioder.all { it.inntekt == BigDecimal(24000) })
         Assertions.assertFalse(inntektsPerioder.all { it.inneholderFangstOgFisk })
     }
 
-    fun assertThreeCorrectPeriods(inntektsInfoListe: List<InntektPeriodeInfo>, senesteMåned: YearMonth) {
-        Assertions.assertEquals(3, inntektsInfoListe.size)
+    fun assertThreeCorrectPeriods(inntektsInfoListe: List<InntektPeriodeInfo>?, senesteMåned: YearMonth) {
+        Assertions.assertEquals(3, inntektsInfoListe?.size)
 
-        val førstePeriode = inntektsInfoListe.find { it.periode == 1 }
-        val andrePeriode = inntektsInfoListe.find { it.periode == 2 }
-        val tredjePeriode = inntektsInfoListe.find { it.periode == 3 }
+        val førstePeriode = inntektsInfoListe?.find { it.periode == 1 }
+        val andrePeriode = inntektsInfoListe?.find { it.periode == 2 }
+        val tredjePeriode = inntektsInfoListe?.find { it.periode == 3 }
 
         assertNotNull(førstePeriode)
         assertNotNull(andrePeriode)
