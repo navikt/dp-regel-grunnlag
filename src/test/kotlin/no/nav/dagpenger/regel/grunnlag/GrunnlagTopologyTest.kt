@@ -5,7 +5,6 @@ import no.nav.dagpenger.events.inntekt.v1.Inntekt
 import no.nav.dagpenger.events.inntekt.v1.InntektKlasse
 import no.nav.dagpenger.events.inntekt.v1.KlassifisertInntekt
 import no.nav.dagpenger.events.inntekt.v1.KlassifisertInntektMåned
-import no.nav.dagpenger.events.moshiInstance
 import no.nav.dagpenger.regel.grunnlag.Grunnlag.Companion.inntektAdapter
 import no.nav.dagpenger.streams.Topics.DAGPENGER_BEHOV_PACKET_EVENT
 import org.apache.kafka.streams.StreamsConfig
@@ -34,8 +33,6 @@ class GrunnlagTopologyTest {
             this[StreamsConfig.APPLICATION_ID_CONFIG] = "test"
             this[StreamsConfig.BOOTSTRAP_SERVERS_CONFIG] = "dummy:1234"
         }
-
-        val jsonAdapterGrunnlagResultat = moshiInstance.adapter(GrunnlagResultat::class.java)
     }
 
     @Test
