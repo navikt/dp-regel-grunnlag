@@ -10,7 +10,9 @@ import no.nav.dagpenger.streams.Topics.DAGPENGER_BEHOV_PACKET_EVENT
 import org.apache.kafka.streams.StreamsConfig
 import org.apache.kafka.streams.TopologyTestDriver
 import org.apache.kafka.streams.test.ConsumerRecordFactory
+import org.json.JSONObject
 import org.junit.jupiter.api.Assertions.assertFalse
+import org.junit.jupiter.api.Assertions.assertNotEquals
 import org.junit.jupiter.api.Test
 import java.math.BigDecimal
 import java.time.YearMonth
@@ -148,6 +150,63 @@ class GrunnlagTopologyTest {
             assertEquals(50000, Integer.parseInt(resultPacket.getMapValue("grunnlagResultat")["avkortet"].toString()))
             assertFalse { resultPacket.hasField("inntektV1") }
             assertFalse { resultPacket.hasField("grunnlagInntektsPerioder") }
+        }
+    }
+
+    @Test
+    fun ` Should add GrunnlagSubsumsjon to subsumsjonsBehov with oppfyllerKravTilFangstOgFisk `() {
+        val grunnlag = Grunnlag(
+            Environment(
+                username = "bogus",
+                password = "bogus"
+            )
+        )
+
+        val inntekt: Inntekt = Inntekt(
+            inntektsId = "12345",
+            inntektsListe = listOf(
+                KlassifisertInntektMåned(
+                    årMåned = YearMonth.of(2018, 2),
+                    klassifiserteInntekter = listOf(
+                        KlassifisertInntekt(
+                            beløp = BigDecimal(99999),
+                            inntektKlasse = InntektKlasse.FANGST_FISKE
+                        )
+                    )
+
+                )
+            )
+        )
+
+        val json = """
+        {
+            "senesteInntektsmåned":"2018-03",
+            "beregningsDato":"2018-04-06",
+            "harAvtjentVerneplikt": false,
+            "oppfyllerKravTilFangstOgFisk": true
+            }
+            """.trimIndent()
+
+        val packet = Packet(json)
+        packet.putValue("inntektV1", inntektAdapter.toJsonValue(inntekt)!!)
+
+        TopologyTestDriver(grunnlag.buildTopology(), config).use { topologyTestDriver ->
+            val inputRecord = factory.create(packet)
+            topologyTestDriver.pipeInput(inputRecord)
+
+            val ut = topologyTestDriver.readOutput(
+                DAGPENGER_BEHOV_PACKET_EVENT.name,
+                DAGPENGER_BEHOV_PACKET_EVENT.keySerde.deserializer(),
+                DAGPENGER_BEHOV_PACKET_EVENT.valueSerde.deserializer()
+            )
+
+            val resultPacket = ut.value()
+
+            assertTrue { resultPacket.hasField("grunnlagResultat") }
+
+            val grunnlagResultat = JSONObject(ut.value().toJson()).getJSONObject("grunnlagResultat").get("avkortet")
+
+            assertNotEquals(0, grunnlagResultat)
         }
     }
 }

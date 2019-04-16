@@ -29,7 +29,7 @@ class Grunnlag(private val env: Environment) : River() {
         val GRUNNLAG_RESULTAT = "grunnlagResultat"
         val INNTEKT = "inntektV1"
         val AVTJENT_VERNEPLIKT = "harAvtjentVerneplikt"
-        val FANGST_OG_FISK = "fangstOgFisk"
+        val FANGST_OG_FISK = "oppfyllerKravTilFangstOgFisk"
         val SENESTE_INNTEKTSMÅNED = "senesteInntektsmåned"
         val BEREGNINGSDAGTO = "beregningsDato"
         val MANUELT_GRUNNLAG = "manueltGrunnlag"
