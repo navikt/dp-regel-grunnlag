@@ -4,7 +4,7 @@ metadata:
   name: dp-regel-grunnlag
 spec:
   image: repo.adeo.no:5443/dp-regel-grunnlag:latest
-  port: 8093
+  port: 8098
   liveness:
     path: /isAlive
   readiness:
