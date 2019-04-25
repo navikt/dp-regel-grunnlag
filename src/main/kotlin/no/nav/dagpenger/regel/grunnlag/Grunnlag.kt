@@ -14,7 +14,6 @@ import no.nav.dagpenger.streams.KafkaCredential
 import no.nav.dagpenger.streams.River
 import no.nav.dagpenger.streams.streamConfig
 import org.apache.kafka.streams.kstream.Predicate
-import java.time.YearMonth
 import java.util.Properties
 
 class Grunnlag(private val env: Environment) : River() {
@@ -47,14 +46,7 @@ class Grunnlag(private val env: Environment) : River() {
 
     override fun onPacket(packet: Packet): Packet {
 
-        val verneplikt = packet.getNullableBoolean(AVTJENT_VERNEPLIKT) ?: false
-        val inntekt: no.nav.dagpenger.events.inntekt.v1.Inntekt? = getInntekt(packet)
-        val senesteInntektsmåned = YearMonth.parse(packet.getStringValue(SENESTE_INNTEKTSMÅNED))
-        val fangstOgFisk = packet.getNullableBoolean(FANGST_OG_FISK) ?: false
-        val beregningsDato = packet.getLocalDate(BEREGNINGSDAGTO)
-        val manueltGrunnlag = packet.getNullableIntValue(MANUELT_GRUNNLAG)
-
-        val fakta = Fakta(inntekt, senesteInntektsmåned, verneplikt, fangstOgFisk, beregningsDato, manueltGrunnlag)
+        val fakta = packetToFakta(packet)
 
         val resultat =
             grunnlagsBeregninger.map { beregning -> beregning.calculate(fakta) }.toSet().finnHøyesteAvkortetVerdi()
@@ -76,15 +68,6 @@ class Grunnlag(private val env: Environment) : River() {
         packet.putValue(GRUNNLAG_RESULTAT, grunnlagResultat.toMap())
         return packet
     }
-
-    private fun getInntekt(packet: Packet): Inntekt? =
-        if (packet.hasField(MANUELT_GRUNNLAG) && packet.hasField(INNTEKT)) {
-            throw ManueltGrunnlagOgInntektException("Har manuelt grunnlag og inntekt")
-        } else if (packet.hasField(INNTEKT)) {
-            packet.getObjectValue(INNTEKT) { requireNotNull(inntektAdapter.fromJsonValue(it)) }
-        } else {
-            null
-        }
 
     fun createInntektPerioder(fakta: Fakta): List<InntektPeriodeInfo>? {
         val arbeidsInntekt = listOf(
