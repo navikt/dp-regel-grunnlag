@@ -11,10 +11,12 @@ import org.apache.kafka.streams.StreamsConfig
 import org.apache.kafka.streams.TopologyTestDriver
 import org.apache.kafka.streams.test.ConsumerRecordFactory
 import org.json.JSONObject
+import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertNotEquals
 import org.junit.jupiter.api.Test
 import java.math.BigDecimal
+import java.net.URI
 import java.time.YearMonth
 import java.util.Properties
 import kotlin.test.assertEquals
@@ -207,6 +209,35 @@ class GrunnlagTopologyTest {
             val grunnlagResultat = JSONObject(ut.value().toJson()).getJSONObject("grunnlagResultat").get("avkortet")
 
             assertNotEquals(0, grunnlagResultat)
+        }
+    }
+
+    @Test
+    fun ` Should add problem on failure`() {
+        val minsteinntekt = Grunnlag(
+            Environment(
+                username = "bogus",
+                password = "bogus"
+            )
+        )
+
+        val packet = Packet()
+        packet.putValue("senesteInntektsmåned", "ERROR")
+        packet.putValue("inntektV1", "ERROR")
+
+        TopologyTestDriver(minsteinntekt.buildTopology(), config).use { topologyTestDriver ->
+            val inputRecord = factory.create(packet)
+            topologyTestDriver.pipeInput(inputRecord)
+
+            val ut = topologyTestDriver.readOutput(
+                DAGPENGER_BEHOV_PACKET_EVENT.name,
+                DAGPENGER_BEHOV_PACKET_EVENT.keySerde.deserializer(),
+                DAGPENGER_BEHOV_PACKET_EVENT.valueSerde.deserializer()
+            )
+
+            assert(ut.value().hasProblem())
+            Assertions.assertEquals(URI("urn:dp:error:regel"), ut.value().getProblem()!!.type)
+            Assertions.assertEquals(URI("urn:dp:regel:grunnlag"), ut.value().getProblem()!!.instance)
         }
     }
 }
