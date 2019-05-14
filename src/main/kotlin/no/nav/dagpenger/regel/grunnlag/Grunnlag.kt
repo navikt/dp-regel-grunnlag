@@ -4,6 +4,7 @@ import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.Types
 import de.huxhorn.sulky.ulid.ULID
 import no.nav.dagpenger.events.Packet
+import no.nav.dagpenger.events.Problem
 import no.nav.dagpenger.events.inntekt.v1.Inntekt
 import no.nav.dagpenger.events.inntekt.v1.InntektKlasse
 import no.nav.dagpenger.events.inntekt.v1.sumInntekt
@@ -14,6 +15,7 @@ import no.nav.dagpenger.streams.KafkaCredential
 import no.nav.dagpenger.streams.River
 import no.nav.dagpenger.streams.streamConfig
 import org.apache.kafka.streams.kstream.Predicate
+import java.net.URI
 import java.util.Properties
 
 class Grunnlag(private val env: Environment) : River() {
@@ -107,6 +109,17 @@ class Grunnlag(private val env: Environment) : River() {
             bootStapServerUrl = env.bootstrapServersUrl,
             credential = KafkaCredential(env.username, env.password)
         )
+    }
+
+    override fun onFailure(packet: Packet): Packet {
+        packet.addProblem(
+            Problem(
+                type = URI("urn:dp:error:regel"),
+                title = "Ukjent feil ved bruk av grunnlagregel",
+                instance = URI("urn:dp:regel:grunnlag")
+            )
+        )
+        return packet
     }
 }
 
