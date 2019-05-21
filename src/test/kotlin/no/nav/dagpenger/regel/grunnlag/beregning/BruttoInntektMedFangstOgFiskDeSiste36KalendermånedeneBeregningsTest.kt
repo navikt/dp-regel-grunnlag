@@ -16,7 +16,7 @@ class BruttoInntektMedFangstOgFiskDeSiste36KalendermånedeneBeregningsTest {
     @Test
     fun ` Skal gi grunnlag på 4115 siste 36 kalendermåned gitt mars 2019 inntekt med fangstOgFisk inntekt når fangst og fisk er satt`() {
 
-        val inntektsListe = listOf (
+        val inntektsListe = listOf(
             KlassifisertInntektMåned(
                 YearMonth.of(2018, 4),
                 listOf(

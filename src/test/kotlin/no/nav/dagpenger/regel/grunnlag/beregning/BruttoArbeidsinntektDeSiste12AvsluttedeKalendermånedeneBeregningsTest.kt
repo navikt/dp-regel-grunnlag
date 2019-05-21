@@ -53,7 +53,7 @@ class BruttoArbeidsinntektDeSiste12AvsluttedeKalendermånedeneBeregningsTest {
     }
 
     @Test
-    fun `Skal gi riktig avkortet grunnlag siste 12 kalendermåneder gitt mars 2019 inntekt ` () {
+    fun `Skal gi riktig avkortet grunnlag siste 12 kalendermåneder gitt mars 2019 inntekt `() {
 
         val inntektsListe = listOf(
             KlassifisertInntektMåned(

@@ -16,7 +16,7 @@ class BruttoArbeidsinntektDeSiste36AvsluttedeKalendermånedeneBeregningsTest {
     @Test
     fun ` Skal gi uavkortet grunnlag på 4115 siste 36 kalendermåned gitt mars 2019 inntekt`() {
 
-        val inntektsListe = listOf (
+        val inntektsListe = listOf(
             KlassifisertInntektMåned(
                 YearMonth.of(2018, 4),
                 listOf(
@@ -68,7 +68,7 @@ class BruttoArbeidsinntektDeSiste36AvsluttedeKalendermånedeneBeregningsTest {
 
     @Test
     fun `Skal gi riktig avkortet grunnlag siste 36 kalendermåneder gitt mars 2019 inntekt`() {
-        val inntektsListe = listOf (
+        val inntektsListe = listOf(
             KlassifisertInntektMåned(
                 YearMonth.of(2018, 4),
                 listOf(
@@ -121,7 +121,7 @@ class BruttoArbeidsinntektDeSiste36AvsluttedeKalendermånedeneBeregningsTest {
     @Test
     fun `Skal ikke ta med måneder som ikke er innenfor ønsket periode`() {
 
-        val inntektsListe = listOf (
+        val inntektsListe = listOf(
             KlassifisertInntektMåned(
                 YearMonth.of(2018, 4),
                 listOf(

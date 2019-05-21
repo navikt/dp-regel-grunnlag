@@ -34,7 +34,7 @@ class BruttoInntektMedFangstOgFiskDeSisteTolvKalendermånedeneBeregningsTest {
                     BigDecimal(500),
                     InntektKlasse.ARBEIDSINNTEKT
                 ), KlassifisertInntekt(
-                    BigDecimal(500 ),
+                    BigDecimal(500),
                     InntektKlasse.SYKEPENGER_FANGST_FISKE
                 )
                 )
@@ -73,7 +73,7 @@ class BruttoInntektMedFangstOgFiskDeSisteTolvKalendermånedeneBeregningsTest {
                     BigDecimal(500),
                     InntektKlasse.ARBEIDSINNTEKT
                 ), KlassifisertInntekt(
-                    BigDecimal(500 ),
+                    BigDecimal(500),
                     InntektKlasse.SYKEPENGER_FANGST_FISKE
                 )
                 )

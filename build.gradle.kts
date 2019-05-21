@@ -57,7 +57,6 @@ dependencies {
     implementation("com.github.navikt:dagpenger-streams:2019.05.20-12.02.83ff2b7cb7f6")
     implementation("com.github.navikt:dagpenger-events:2019.05.20-11.56.33cd4c73a439")
 
-
     implementation("io.github.microutils:kotlin-logging:$kotlinLoggingVersion")
 
     implementation("com.squareup.moshi:moshi-adapters:$moshiVersion")
@@ -92,11 +91,11 @@ dependencies {
 
 spotless {
     kotlin {
-        ktlint()
+        ktlint("0.31.0")
     }
     kotlinGradle {
         target("*.gradle.kts", "additionalScripts/*.gradle.kts")
-        ktlint()
+        ktlint("0.31.0")
     }
 }
 
