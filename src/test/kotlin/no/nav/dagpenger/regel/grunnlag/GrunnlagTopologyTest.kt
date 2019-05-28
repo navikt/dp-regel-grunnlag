@@ -221,7 +221,6 @@ class GrunnlagTopologyTest {
         )
 
         val packet = Packet()
-        packet.putValue("senesteInntektsmåned", "ERROR")
         packet.putValue("inntektV1", "ERROR")
 
         TopologyTestDriver(minsteinntekt.buildTopology(), config).use { topologyTestDriver ->
