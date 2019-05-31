@@ -31,7 +31,6 @@ class Grunnlag(private val env: Environment) : River() {
         val INNTEKT = "inntektV1"
         val AVTJENT_VERNEPLIKT = "harAvtjentVerneplikt"
         val FANGST_OG_FISK = "oppfyllerKravTilFangstOgFisk"
-        val SENESTE_INNTEKTSMÅNED = "senesteInntektsmåned"
         val BEREGNINGSDAGTO = "beregningsDato"
         val MANUELT_GRUNNLAG = "manueltGrunnlag"
         val GRUNNLAG_INNTEKTSPERIODER = "grunnlagInntektsPerioder"
@@ -41,7 +40,6 @@ class Grunnlag(private val env: Environment) : River() {
     override fun filterPredicates(): List<Predicate<String, Packet>> {
         return listOf(
             Predicate { _, packet -> packet.hasField(INNTEKT) || packet.hasField(MANUELT_GRUNNLAG) },
-            Predicate { _, packet -> packet.hasField(SENESTE_INNTEKTSMÅNED) },
             Predicate { _, packet -> !packet.hasField(GRUNNLAG_RESULTAT) }
         )
     }

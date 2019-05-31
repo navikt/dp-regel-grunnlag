@@ -12,7 +12,6 @@ import java.util.EnumSet
 
 data class Fakta(
     val inntekt: Inntekt? = null,
-    val senesteInntektsmåned: YearMonth,
     val verneplikt: Boolean,
     val fangstOgFisk: Boolean,
     val beregningsdato: LocalDate,
@@ -21,9 +20,9 @@ data class Fakta(
     val gjeldendeGrunnbeløp =
         getGrunnbeløpForMåned(YearMonth.from(beregningsdato))
 
-    val inntektsPerioder = inntekt?.splitIntoInntektsPerioder(senesteInntektsmåned)
+    val inntektsPerioder = inntekt?.splitIntoInntektsPerioder()
 
-    private val inntektsPerioderOrEmpty = inntektsPerioder ?: InntektsPerioder(kotlin.collections.emptyList(), emptyList(), emptyList())
+    private val inntektsPerioderOrEmpty = inntektsPerioder ?: InntektsPerioder(emptyList(), emptyList(), emptyList())
 
     fun oppjusterteInntekterFørstePeriode(inntektsKlasser: EnumSet<InntektKlasse>): BigDecimal = inntektsPerioderOrEmpty.first.map(oppjusterTilGjeldendeGrunnbeløp(gjeldendeGrunnbeløp)).sumInntekt(inntektsKlasser.toList())
 

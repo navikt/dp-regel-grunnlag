@@ -17,9 +17,8 @@ internal class CreateInntektPerioderTest {
 
     @Test
     fun `Skal ha perioder med 0 inntekt hvis det ikke er inntekt`() {
-        val senesteInnteksMåned = YearMonth.of(2019, 1)
         val beregningsdato = LocalDate.of(2019, 2, 1)
-        val fakta = Fakta(senesteInntektsmåned = senesteInnteksMåned, verneplikt = false, fangstOgFisk = false, beregningsdato = beregningsdato)
+        val fakta = Fakta(verneplikt = false, fangstOgFisk = false, beregningsdato = beregningsdato)
 
         val inntektsPerioder = grunnlag.createInntektPerioder(fakta)
 
@@ -28,18 +27,22 @@ internal class CreateInntektPerioderTest {
 
     @Test
     fun ` Skal bare ta med Arbeidsinntekt hvis det kun finnes arbeidsinntekt i inntektslista  `() {
-        val senesteInnteksMåned = YearMonth.of(2019, 1)
+        val sisteAvsluttendeKalenderMåned = YearMonth.of(2019, 1)
         val beregningsdato = LocalDate.of(2019, 2, 1)
+        val inntektsListe = generateArbeidsinntekt(36, BigDecimal(1000), sisteAvsluttendeKalenderMåned)
         val fakta = Fakta(
-            Inntekt("id", generateArbeidsinntekt(36, BigDecimal(1000), senesteInnteksMåned)),
-            senesteInnteksMåned,
+            Inntekt(
+                "id",
+                inntektsListe,
+                sisteAvsluttendeKalenderMåned = sisteAvsluttendeKalenderMåned
+            ),
             false,
             false,
             beregningsdato
         )
 
         val inntektsPerioder = grunnlag.createInntektPerioder(fakta)!!
-        assertThreeCorrectPeriods(inntektsPerioder, senesteInnteksMåned)
+        assertThreeCorrectPeriods(inntektsPerioder, sisteAvsluttendeKalenderMåned)
 
         Assertions.assertTrue(inntektsPerioder.all { it.inntekt == BigDecimal(12000) })
         Assertions.assertTrue(inntektsPerioder.none { it.inneholderFangstOgFisk })
@@ -47,22 +50,22 @@ internal class CreateInntektPerioderTest {
 
     @Test
     fun ` Skal indikere at fangst og fisk er med men ikke summere opp fangst og fisk sammen med arbeidsinntekt hvis ikke parameteret fangstOgFisk er satt til true `() {
-        val senesteInnteksMåned = YearMonth.of(2019, 1)
+        val sisteAvsluttendeKalenderMåned = YearMonth.of(2019, 1)
         val beregningsdato = LocalDate.of(2019, 2, 1)
         val inntekt = Inntekt(
             "id",
-            generateArbeidsOgFangstOgFiskInntekt(36, BigDecimal(2000), BigDecimal(2000), senesteInnteksMåned)
+            generateArbeidsOgFangstOgFiskInntekt(36, BigDecimal(2000), BigDecimal(2000), sisteAvsluttendeKalenderMåned),
+            sisteAvsluttendeKalenderMåned = sisteAvsluttendeKalenderMåned
         )
         val fakta = Fakta(
             inntekt,
-            senesteInnteksMåned,
             false,
             false,
             beregningsdato
         )
 
         val inntektsPerioder = grunnlag.createInntektPerioder(fakta)!!
-        assertThreeCorrectPeriods(inntektsPerioder, senesteInnteksMåned)
+        assertThreeCorrectPeriods(inntektsPerioder, sisteAvsluttendeKalenderMåned)
 
         Assertions.assertTrue(inntektsPerioder.all { it.inntekt == BigDecimal(24000) })
         Assertions.assertTrue(inntektsPerioder.all { it.inneholderFangstOgFisk })
@@ -70,31 +73,40 @@ internal class CreateInntektPerioderTest {
 
     @Test
     fun ` Skal summere opp med fangst og fisk hvis paremeteret er satt til true`() {
-        val senesteInntektsmåned = YearMonth.of(2019, 1)
+        val sisteAvsluttendeKalenderMåned = YearMonth.of(2019, 1)
         val beregningsdato = LocalDate.of(2019, 2, 1)
         val fakta = Fakta(
             Inntekt(
                 "id",
-                generateArbeidsOgFangstOgFiskInntekt(36, BigDecimal(2000), BigDecimal(2000), senesteInntektsmåned)
-            ), senesteInntektsmåned,
+                generateArbeidsOgFangstOgFiskInntekt(
+                    36,
+                    BigDecimal(2000),
+                    BigDecimal(2000),
+                    sisteAvsluttendeKalenderMåned
+                ),
+                sisteAvsluttendeKalenderMåned = sisteAvsluttendeKalenderMåned
+            ),
             verneplikt = false,
             fangstOgFisk = true,
             beregningsdato = beregningsdato
         )
 
         val inntektsPerioder = grunnlag.createInntektPerioder(fakta)!!
-        assertThreeCorrectPeriods(inntektsPerioder, senesteInntektsmåned)
+        assertThreeCorrectPeriods(inntektsPerioder, sisteAvsluttendeKalenderMåned)
         Assertions.assertTrue(inntektsPerioder.all { it.inntekt == BigDecimal(48000) })
         Assertions.assertTrue(inntektsPerioder.all { it.inneholderFangstOgFisk })
     }
 
     @Test
     fun `Skal bare ta med fangst og fisk hvis paremeteret fangstOgFisk er satt til true og det bare finnes fangst og fiske inntekter`() {
-        val senesteInntektsmåned = YearMonth.of(2019, 1)
+        val sisteAvsluttendeKalenderMåned = YearMonth.of(2019, 1)
         val beregningsdato = LocalDate.of(2019, 2, 1)
         val fakta = Fakta(
-            Inntekt("id", generateFangstOgFiskInntekt(36, BigDecimal(2000), senesteInntektsmåned)),
-            senesteInntektsmåned = senesteInntektsmåned,
+            Inntekt(
+                "id",
+                generateFangstOgFiskInntekt(36, BigDecimal(2000), sisteAvsluttendeKalenderMåned),
+                sisteAvsluttendeKalenderMåned = sisteAvsluttendeKalenderMåned
+            ),
             verneplikt = false,
             fangstOgFisk = true,
             beregningsdato = beregningsdato
@@ -102,7 +114,7 @@ internal class CreateInntektPerioderTest {
         )
 
         val inntektsPerioder = grunnlag.createInntektPerioder(fakta)!!
-        assertThreeCorrectPeriods(inntektsPerioder, senesteInntektsmåned)
+        assertThreeCorrectPeriods(inntektsPerioder, sisteAvsluttendeKalenderMåned)
 
         Assertions.assertTrue(inntektsPerioder.all { it.inntekt == BigDecimal(24000) })
         Assertions.assertTrue(inntektsPerioder.all { it.inneholderFangstOgFisk })
@@ -111,11 +123,14 @@ internal class CreateInntektPerioderTest {
     @Test
     fun ` Skal bare ta med skal bare ta med Arbeidsinntekter selvom fangstOgFisk parameteret er satt til true men det ikke foreligger fangs og fiske inntekter`() {
 
-        val senesteInntektsmåned = YearMonth.of(2019, 1)
+        val sisteAvsluttendeKalenderMåned = YearMonth.of(2019, 1)
         val beregningsdato = LocalDate.of(2019, 2, 1)
         val fakta = Fakta(
-            Inntekt("id", generateArbeidsinntekt(36, BigDecimal(2000), senesteInntektsmåned)),
-            senesteInntektsmåned = senesteInntektsmåned,
+            Inntekt(
+                "id",
+                generateArbeidsinntekt(36, BigDecimal(2000), sisteAvsluttendeKalenderMåned),
+                sisteAvsluttendeKalenderMåned = sisteAvsluttendeKalenderMåned
+            ),
             verneplikt = false,
             fangstOgFisk = true,
             beregningsdato = beregningsdato
@@ -123,7 +138,7 @@ internal class CreateInntektPerioderTest {
         )
 
         val inntektsPerioder = grunnlag.createInntektPerioder(fakta)!!
-        assertThreeCorrectPeriods(inntektsPerioder, senesteInntektsmåned)
+        assertThreeCorrectPeriods(inntektsPerioder, sisteAvsluttendeKalenderMåned)
 
         Assertions.assertTrue(inntektsPerioder.all { it.inntekt == BigDecimal(24000) })
         Assertions.assertFalse(inntektsPerioder.all { it.inneholderFangstOgFisk })

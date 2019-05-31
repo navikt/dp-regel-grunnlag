@@ -56,22 +56,23 @@ class BruttoInntektMedFangstOgFiskDeSiste36KalendermånedeneBeregningsTest {
         )
 
         val fakta = Fakta(
-            inntekt = Inntekt("123", inntektsListe),
-            senesteInntektsmåned = YearMonth.of(2019, 3),
+            inntekt = Inntekt("123", inntektsListe, sisteAvsluttendeKalenderMåned = YearMonth.of(2019, 3)),
             fangstOgFisk = true,
             verneplikt = false,
             beregningsdato = LocalDate.of(2019, 4, 1)
         )
 
-        assertEquals(BigDecimal("1371.97393512841033163333"), BruttoInntektMedFangstOgFiskDeSiste36AvsluttedeKalendermånedene().calculate(fakta).uavkortet)
+        assertEquals(
+            BigDecimal("1371.97393512841033163333"),
+            BruttoInntektMedFangstOgFiskDeSiste36AvsluttedeKalendermånedene().calculate(fakta).uavkortet
+        )
     }
 
     @Test
     fun `Skal returnere 0 som grunnlag hvis ingen inntekt`() {
 
         val fakta = Fakta(
-            inntekt = Inntekt("123", emptyList()),
-            senesteInntektsmåned = YearMonth.of(2019, 3),
+            inntekt = Inntekt("123", emptyList(), sisteAvsluttendeKalenderMåned = YearMonth.of(2019, 3)),
             fangstOgFisk = false,
             verneplikt = false,
             beregningsdato = LocalDate.of(2019, 4, 1)

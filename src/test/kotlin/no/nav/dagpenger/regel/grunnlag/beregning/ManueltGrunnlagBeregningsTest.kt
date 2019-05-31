@@ -17,12 +17,13 @@ class ManueltGrunnlagBeregningsTest {
         val fakta = Fakta(
             Inntekt(
                 "123",
-                emptyList()),
-            YearMonth.of(2019, 3),
+                emptyList(), sisteAvsluttendeKalenderMåned = YearMonth.of(2019, 3)
+            ),
             false,
             false,
             LocalDate.of(2019, 4, 10),
-            manueltGrunnlag = 50000)
+            manueltGrunnlag = 50000
+        )
 
         assertEquals(BigDecimal("50000"), ManueltGrunnlagBeregning().calculate(fakta).uavkortet)
         assertEquals(BigDecimal("50000"), ManueltGrunnlagBeregning().calculate(fakta).avkortet)
@@ -35,12 +36,13 @@ class ManueltGrunnlagBeregningsTest {
         val fakta = Fakta(
             Inntekt(
                 "123",
-                emptyList()),
-            YearMonth.of(2019, 3),
+                emptyList(), sisteAvsluttendeKalenderMåned = YearMonth.of(2019, 3)
+            ),
             false,
             false,
             LocalDate.of(2019, 4, 10),
-            manueltGrunnlag = 600000)
+            manueltGrunnlag = 600000
+        )
 
         assertEquals(BigDecimal("600000"), ManueltGrunnlagBeregning().calculate(fakta).uavkortet)
         assertEquals(BigDecimal("581298"), ManueltGrunnlagBeregning().calculate(fakta).avkortet)

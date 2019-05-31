@@ -13,8 +13,7 @@ class DagpengerEtterAvtjentVernepliktBeregningsTest {
     fun `Skal få uavkortet grunnlag på 3G når verneplikt er satt`() {
 
         val fakta = Fakta(
-            Inntekt("123", emptyList()),
-            YearMonth.of(2019, 3),
+            Inntekt("123", emptyList(), sisteAvsluttendeKalenderMåned = YearMonth.of(2019, 3)),
             true,
             false,
             LocalDate.of(2019, 4, 1)
@@ -27,8 +26,7 @@ class DagpengerEtterAvtjentVernepliktBeregningsTest {
     fun `Skal få uavkortet grunnlag på 0 når verneplikt ikke er satt`() {
 
         val fakta = Fakta(
-            Inntekt("123", emptyList()),
-            YearMonth.of(2019, 3),
+            Inntekt("123", emptyList(), sisteAvsluttendeKalenderMåned = YearMonth.of(2019, 3)),
             false,
             false,
             LocalDate.of(2019, 4, 1)

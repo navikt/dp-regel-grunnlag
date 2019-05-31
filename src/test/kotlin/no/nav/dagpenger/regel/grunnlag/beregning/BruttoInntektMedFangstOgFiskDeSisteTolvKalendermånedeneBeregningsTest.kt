@@ -19,37 +19,41 @@ class BruttoInntektMedFangstOgFiskDeSisteTolvKalendermånedeneBeregningsTest {
         val inntektsListe = listOf(
             KlassifisertInntektMåned(
                 YearMonth.of(2018, 4),
-                listOf(KlassifisertInntekt(
-                    BigDecimal(500),
-                    InntektKlasse.ARBEIDSINNTEKT
-                ), KlassifisertInntekt(
-                    BigDecimal(500),
-                    InntektKlasse.FANGST_FISKE
-                )
+                listOf(
+                    KlassifisertInntekt(
+                        BigDecimal(500),
+                        InntektKlasse.ARBEIDSINNTEKT
+                    ), KlassifisertInntekt(
+                        BigDecimal(500),
+                        InntektKlasse.FANGST_FISKE
+                    )
                 )
             ),
             KlassifisertInntektMåned(
                 YearMonth.of(2018, 5),
-                listOf(KlassifisertInntekt(
-                    BigDecimal(500),
-                    InntektKlasse.ARBEIDSINNTEKT
-                ), KlassifisertInntekt(
-                    BigDecimal(500),
-                    InntektKlasse.SYKEPENGER_FANGST_FISKE
-                )
+                listOf(
+                    KlassifisertInntekt(
+                        BigDecimal(500),
+                        InntektKlasse.ARBEIDSINNTEKT
+                    ), KlassifisertInntekt(
+                        BigDecimal(500),
+                        InntektKlasse.SYKEPENGER_FANGST_FISKE
+                    )
                 )
             )
         )
 
         val fakta = Fakta(
-            inntekt = Inntekt("123", inntektsListe),
-            senesteInntektsmåned = YearMonth.of(2019, 3),
+            inntekt = Inntekt("123", inntektsListe, sisteAvsluttendeKalenderMåned = YearMonth.of(2019, 3)),
             verneplikt = false,
             fangstOgFisk = true,
             beregningsdato = LocalDate.of(2019, 4, 1)
         )
 
-        assertEquals(BigDecimal("2034.69893414785227588000"), BruttoInntektMedFangstOgFiskDeSiste12AvsluttedeKalendermånedene().calculate(fakta).uavkortet)
+        assertEquals(
+            BigDecimal("2034.69893414785227588000"),
+            BruttoInntektMedFangstOgFiskDeSiste12AvsluttedeKalendermånedene().calculate(fakta).uavkortet
+        )
     }
 
     @Test
@@ -58,45 +62,48 @@ class BruttoInntektMedFangstOgFiskDeSisteTolvKalendermånedeneBeregningsTest {
         val inntektsListe = listOf(
             KlassifisertInntektMåned(
                 YearMonth.of(2018, 4),
-                listOf(KlassifisertInntekt(
-                    BigDecimal(500),
-                    InntektKlasse.ARBEIDSINNTEKT
-                ), KlassifisertInntekt(
-                    BigDecimal(500),
-                    InntektKlasse.FANGST_FISKE
-                )
+                listOf(
+                    KlassifisertInntekt(
+                        BigDecimal(500),
+                        InntektKlasse.ARBEIDSINNTEKT
+                    ), KlassifisertInntekt(
+                        BigDecimal(500),
+                        InntektKlasse.FANGST_FISKE
+                    )
                 )
             ),
             KlassifisertInntektMåned(
                 YearMonth.of(2018, 5),
-                listOf(KlassifisertInntekt(
-                    BigDecimal(500),
-                    InntektKlasse.ARBEIDSINNTEKT
-                ), KlassifisertInntekt(
-                    BigDecimal(500),
-                    InntektKlasse.SYKEPENGER_FANGST_FISKE
-                )
+                listOf(
+                    KlassifisertInntekt(
+                        BigDecimal(500),
+                        InntektKlasse.ARBEIDSINNTEKT
+                    ), KlassifisertInntekt(
+                        BigDecimal(500),
+                        InntektKlasse.SYKEPENGER_FANGST_FISKE
+                    )
                 )
             )
         )
 
         val fakta = Fakta(
-            inntekt = Inntekt("123", inntektsListe),
-            senesteInntektsmåned = YearMonth.of(2019, 3),
+            inntekt = Inntekt("123", inntektsListe, sisteAvsluttendeKalenderMåned = YearMonth.of(2019, 3)),
             verneplikt = false,
             fangstOgFisk = false,
             beregningsdato = LocalDate.of(2019, 4, 1)
         )
 
-        assertEquals(BigDecimal(0), BruttoInntektMedFangstOgFiskDeSiste12AvsluttedeKalendermånedene().calculate(fakta).uavkortet)
+        assertEquals(
+            BigDecimal(0),
+            BruttoInntektMedFangstOgFiskDeSiste12AvsluttedeKalendermånedene().calculate(fakta).uavkortet
+        )
     }
 
     @Test
     fun `Skal returnere 0 som grunnlag hvis ingen inntekt`() {
 
         val fakta = Fakta(
-            inntekt = Inntekt("123", emptyList()),
-            senesteInntektsmåned = YearMonth.of(2019, 3),
+            inntekt = Inntekt("123", emptyList(), sisteAvsluttendeKalenderMåned = YearMonth.of(2019, 3)),
             fangstOgFisk = false,
             verneplikt = false,
             beregningsdato = LocalDate.of(2019, 4, 1)
