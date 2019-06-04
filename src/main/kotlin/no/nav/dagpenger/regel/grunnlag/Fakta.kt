@@ -5,9 +5,11 @@ import no.nav.dagpenger.events.inntekt.v1.InntektKlasse
 import no.nav.dagpenger.events.inntekt.v1.InntektsPerioder
 import no.nav.dagpenger.events.inntekt.v1.KlassifisertInntektMåned
 import no.nav.dagpenger.events.inntekt.v1.sumInntekt
+import no.nav.dagpenger.grunnbelop.Grunnbeløp
+import no.nav.dagpenger.grunnbelop.getGrunnbeløpForDato
+import no.nav.dagpenger.grunnbelop.getGrunnbeløpForMåned
 import java.math.BigDecimal
 import java.time.LocalDate
-import java.time.YearMonth
 import java.util.EnumSet
 
 data class Fakta(
@@ -18,7 +20,7 @@ data class Fakta(
     val manueltGrunnlag: Int? = null
 ) {
     val gjeldendeGrunnbeløp =
-        getGrunnbeløpForMåned(YearMonth.from(beregningsdato))
+        getGrunnbeløpForDato(LocalDate.from(beregningsdato))
 
     val inntektsPerioder = inntekt?.splitIntoInntektsPerioder()
 

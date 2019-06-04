@@ -1,7 +1,7 @@
 package no.nav.dagpenger.regel.grunnlag.beregning
 
+import no.nav.dagpenger.grunnbelop.getGrunnbeløpForMåned
 import no.nav.dagpenger.regel.grunnlag.Fakta
-import no.nav.dagpenger.regel.grunnlag.getGrunnbeløpForMåned
 import java.time.YearMonth
 
 class DagpengerEtterAvtjentVerneplikt() : GrunnlagBeregning("Verneplikt") {
