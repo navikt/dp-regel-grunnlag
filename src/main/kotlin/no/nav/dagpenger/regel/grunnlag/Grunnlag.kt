@@ -40,6 +40,7 @@ class Grunnlag(private val env: Environment) : River() {
     override fun filterPredicates(): List<Predicate<String, Packet>> {
         return listOf(
             Predicate { _, packet -> packet.hasField(INNTEKT) || packet.hasField(MANUELT_GRUNNLAG) },
+            Predicate { _, packet -> packet.hasField(BEREGNINGSDAGTO) },
             Predicate { _, packet -> !packet.hasField(GRUNNLAG_RESULTAT) }
         )
     }

@@ -45,12 +45,42 @@ class GrunnlagTopologyTest {
                 password = "bogus"
             )
         )
-        val emptyjsonBehov = """
-            {}
+        val json = """
+            {
+                "beregningsDato": "2019-05-20"
+            }
             """.trimIndent()
 
         TopologyTestDriver(grunnlag.buildTopology(), config).use { topologyTestDriver ->
-            val inputRecord = factory.create(Packet(emptyjsonBehov))
+            val inputRecord = factory.create(Packet(json))
+            topologyTestDriver.pipeInput(inputRecord)
+
+            val ut = topologyTestDriver.readOutput(
+                DAGPENGER_BEHOV_PACKET_EVENT.name,
+                DAGPENGER_BEHOV_PACKET_EVENT.keySerde.deserializer(),
+                DAGPENGER_BEHOV_PACKET_EVENT.valueSerde.deserializer()
+            )
+
+            assertTrue { null == ut }
+        }
+    }
+
+    @Test
+    fun ` Should add not process behov without beregningsDato `() {
+        val grunnlag = Grunnlag(
+            Environment(
+                username = "bogus",
+                password = "bogus"
+            )
+        )
+        val json = """
+            {
+                "manueltGrunnlag":50000
+            }
+            """.trimIndent()
+
+        TopologyTestDriver(grunnlag.buildTopology(), config).use { topologyTestDriver ->
+            val inputRecord = factory.create(Packet(json))
             topologyTestDriver.pipeInput(inputRecord)
 
             val ut = topologyTestDriver.readOutput(
@@ -213,17 +243,23 @@ class GrunnlagTopologyTest {
 
     @Test
     fun ` Should add problem on failure`() {
-        val minsteinntekt = Grunnlag(
+        val grunnlag = Grunnlag(
             Environment(
                 username = "bogus",
                 password = "bogus"
             )
         )
 
-        val packet = Packet()
+        val json = """
+            {
+                "beregningsDato": "2019-05-20"
+            }
+            """.trimIndent()
+
+        val packet = Packet(json)
         packet.putValue("inntektV1", "ERROR")
 
-        TopologyTestDriver(minsteinntekt.buildTopology(), config).use { topologyTestDriver ->
+        TopologyTestDriver(grunnlag.buildTopology(), config).use { topologyTestDriver ->
             val inputRecord = factory.create(packet)
             topologyTestDriver.pipeInput(inputRecord)
 
