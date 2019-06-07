@@ -2,7 +2,6 @@ package no.nav.dagpenger.regel.grunnlag.beregning
 
 import no.nav.dagpenger.events.inntekt.v1.InntektKlasse
 import no.nav.dagpenger.regel.grunnlag.Fakta
-import no.nav.dagpenger.regel.grunnlag.antallDesimaler
 import java.math.BigDecimal
 import java.math.RoundingMode
 import java.util.EnumSet
@@ -18,6 +17,7 @@ abstract class TrettiseksMånedersBeregning(
         val uavkortetFørstePeriode = fakta.oppjusterteInntekterFørstePeriode(inntektKlasser)
         val uavkortetAndrePeriode = fakta.oppjusterteInntekterAndrePeriode(inntektKlasser)
         val uavkortetTredjePeriode = fakta.oppjusterteInntekterTredjePeriode(inntektKlasser)
+        val antallDesimaler = 20
 
         val uavkortet = (uavkortetFørstePeriode + uavkortetAndrePeriode + uavkortetTredjePeriode) / BigDecimal(3)
 
