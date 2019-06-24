@@ -1,5 +1,6 @@
 package no.nav.dagpenger.regel.grunnlag
 
+import io.mockk.mockk
 import no.nav.dagpenger.events.inntekt.v1.Inntekt
 import no.nav.dagpenger.events.inntekt.v1.InntektKlasse
 import no.nav.dagpenger.events.inntekt.v1.KlassifisertInntekt
@@ -13,7 +14,7 @@ import kotlin.test.assertNotNull
 import kotlin.test.assertNull
 
 internal class CreateInntektPerioderTest {
-    private val grunnlag = Grunnlag(Environment("bogus", "bogus"))
+    private val grunnlag = Grunnlag(Environment("bogus", "bogus"), mockk<GrunnlagInstrumentation>())
 
     @Test
     fun `Skal ha perioder med 0 inntekt hvis det ikke er inntekt`() {
