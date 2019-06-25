@@ -51,6 +51,7 @@ val ktorVersion = "1.2.0"
 val moshiVersion = "1.8.0"
 val ktorMoshiVersion = "1.0.1"
 val orgJsonVersion = "20180813"
+val mockkVersion = "1.9.1"
 
 dependencies {
     implementation(kotlin("stdlib"))
@@ -88,6 +89,7 @@ dependencies {
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:$jupiterVersion")
     testImplementation("no.nav:kafka-embedded-env:2.0.2")
     testImplementation("org.apache.kafka:kafka-streams-test-utils:$kafkaVersion")
+    testImplementation("io.mockk:mockk:$mockkVersion")
 }
 
 spotless {

@@ -18,7 +18,10 @@ import org.apache.kafka.streams.kstream.Predicate
 import java.net.URI
 import java.util.Properties
 
-class Grunnlag(private val env: Environment) : River() {
+class Grunnlag(
+    private val env: Environment,
+    val instrumentation: GrunnlagInstrumentation
+) : River() {
     override val SERVICE_APP_ID: String = "dagpenger-regel-grunnlag"
     override val HTTP_PORT: Int = env.httpPort ?: super.HTTP_PORT
     private val ulidGenerator = ULID()
@@ -27,13 +30,13 @@ class Grunnlag(private val env: Environment) : River() {
         moshiInstance.adapter(Types.newParameterizedType(List::class.java, InntektPeriodeInfo::class.java))
 
     companion object {
-        val GRUNNLAG_RESULTAT = "grunnlagResultat"
-        val INNTEKT = "inntektV1"
-        val AVTJENT_VERNEPLIKT = "harAvtjentVerneplikt"
-        val FANGST_OG_FISK = "oppfyllerKravTilFangstOgFisk"
-        val BEREGNINGSDAGTO = "beregningsDato"
-        val MANUELT_GRUNNLAG = "manueltGrunnlag"
-        val GRUNNLAG_INNTEKTSPERIODER = "grunnlagInntektsPerioder"
+        const val GRUNNLAG_RESULTAT = "grunnlagResultat"
+        const val INNTEKT = "inntektV1"
+        const val AVTJENT_VERNEPLIKT = "harAvtjentVerneplikt"
+        const val FANGST_OG_FISK = "oppfyllerKravTilFangstOgFisk"
+        const val BEREGNINGSDAGTO = "beregningsDato"
+        const val MANUELT_GRUNNLAG = "manueltGrunnlag"
+        const val GRUNNLAG_INNTEKTSPERIODER = "grunnlagInntektsPerioder"
         val inntektAdapter = moshiInstance.adapter(Inntekt::class.java)
     }
 
@@ -63,10 +66,22 @@ class Grunnlag(private val env: Environment) : River() {
             resultat.harAvkortet
         )
 
-        createInntektPerioder(fakta)?.apply { packet.putValue(GRUNNLAG_INNTEKTSPERIODER, checkNotNull(
-            jsonAdapterInntektPeriodeInfo.toJsonValue(this))) }
+        createInntektPerioder(fakta)?.apply {
+            packet.putValue(
+                GRUNNLAG_INNTEKTSPERIODER, checkNotNull(
+                    jsonAdapterInntektPeriodeInfo.toJsonValue(this)
+                )
+            )
+        }
 
         packet.putValue(GRUNNLAG_RESULTAT, grunnlagResultat.toMap())
+
+        instrumentation.grunnlagBeregnet(
+            regelIdentifikator = REGELIDENTIFIKATOR,
+            beregningsregel = resultat.beregningsregel,
+            harAvkortet = resultat.harAvkortet
+        )
+
         return packet
     }
 
@@ -123,7 +138,7 @@ class Grunnlag(private val env: Environment) : River() {
 }
 
 fun main(args: Array<String>) {
-    val service = Grunnlag(Environment())
+    val service = Grunnlag(Environment(), GrunnlagInstrumentation())
     service.start()
 }
 

@@ -1,5 +1,6 @@
 package no.nav.dagpenger.regel.grunnlag
 
+import io.mockk.mockk
 import no.nav.dagpenger.events.Packet
 import no.nav.dagpenger.events.inntekt.v1.Inntekt
 import no.nav.dagpenger.events.inntekt.v1.InntektKlasse
@@ -23,7 +24,6 @@ import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
 class GrunnlagTopologyTest {
-
     companion object {
         val factory = ConsumerRecordFactory<String, Packet>(
             DAGPENGER_BEHOV_PACKET_EVENT.name,
@@ -35,6 +35,8 @@ class GrunnlagTopologyTest {
             this[StreamsConfig.APPLICATION_ID_CONFIG] = "test"
             this[StreamsConfig.BOOTSTRAP_SERVERS_CONFIG] = "dummy:1234"
         }
+
+        val fakeGrunnlagInstrumentation = mockk<GrunnlagInstrumentation>()
     }
 
     @Test
@@ -43,7 +45,8 @@ class GrunnlagTopologyTest {
             Environment(
                 username = "bogus",
                 password = "bogus"
-            )
+            ),
+            fakeGrunnlagInstrumentation
         )
         val json = """
             {
@@ -71,7 +74,8 @@ class GrunnlagTopologyTest {
             Environment(
                 username = "bogus",
                 password = "bogus"
-            )
+            ),
+            fakeGrunnlagInstrumentation
         )
         val json = """
             {
@@ -99,7 +103,8 @@ class GrunnlagTopologyTest {
             Environment(
                 username = "bogus",
                 password = "bogus"
-            )
+            ),
+            fakeGrunnlagInstrumentation
         )
 
         val inntekt: Inntekt = Inntekt(
@@ -152,7 +157,8 @@ class GrunnlagTopologyTest {
             Environment(
                 username = "bogus",
                 password = "bogus"
-            )
+            ),
+            fakeGrunnlagInstrumentation
         )
 
         val json = """
@@ -190,7 +196,8 @@ class GrunnlagTopologyTest {
             Environment(
                 username = "bogus",
                 password = "bogus"
-            )
+            ),
+            fakeGrunnlagInstrumentation
         )
 
         val inntekt: Inntekt = Inntekt(
@@ -247,7 +254,8 @@ class GrunnlagTopologyTest {
             Environment(
                 username = "bogus",
                 password = "bogus"
-            )
+            ),
+            fakeGrunnlagInstrumentation
         )
 
         val json = """
