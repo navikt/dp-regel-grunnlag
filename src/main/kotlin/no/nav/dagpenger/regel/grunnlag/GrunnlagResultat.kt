@@ -36,6 +36,5 @@ data class GrunnlagResultat(
     }
 
     val avrundetUavkortet: BigDecimal = uavkortetGrunnlag.setScale(0, RoundingMode.HALF_UP)
-
     val avrundetAvkortet: BigDecimal = avkortetGrunnlag.setScale(0, RoundingMode.HALF_UP)
 }

@@ -10,6 +10,7 @@ import java.math.BigDecimal
 import java.time.LocalDate
 import java.time.YearMonth
 import kotlin.test.assertEquals
+import kotlin.test.assertFalse
 
 class BruttoArbeidsinntektDeSiste36AvsluttedeKalendermånedeneBeregningsTest {
 
@@ -197,8 +198,45 @@ class BruttoArbeidsinntektDeSiste36AvsluttedeKalendermånedeneBeregningsTest {
         )
 
         assertEquals(
-            BigDecimal.ZERO,
+            BigDecimal.ZERO.setScale(20),
             BruttoArbeidsinntektDeSiste36AvsluttedeKalendermånedene().calculate(fakta).uavkortet
         )
+    }
+
+    @Test
+    fun ` gir ikke harAvkortet selv om heltallene er like (BigDecimal må lages i samme skala)`() {
+
+        val inntektsListe = listOf(
+            KlassifisertInntektMåned(
+                YearMonth.of(2018, 4),
+                listOf(
+                    KlassifisertInntekt(
+                        BigDecimal(1000).setScale(3),
+                        InntektKlasse.ARBEIDSINNTEKT
+                    )
+                )
+            ),
+            KlassifisertInntektMåned(
+                YearMonth.of(2017, 5),
+                listOf(
+                    KlassifisertInntekt(
+                        BigDecimal(1000).setScale(5),
+                        InntektKlasse.ARBEIDSINNTEKT
+                    )
+                )
+            )
+        )
+
+        val fakta = Fakta(
+            inntekt = Inntekt("123", inntektsListe, sisteAvsluttendeKalenderMåned = YearMonth.of(2019, 3)),
+            fangstOgFisk = false,
+            verneplikt = false,
+            beregningsdato = LocalDate.of(2019, 4, 1)
+        )
+
+        val resultat = BruttoArbeidsinntektDeSiste36AvsluttedeKalendermånedene().calculate(fakta)
+
+        assertFalse(resultat.harAvkortet)
+        assertEquals(resultat.avkortet, resultat.uavkortet)
     }
 }

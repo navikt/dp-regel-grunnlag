@@ -19,7 +19,7 @@ abstract class TrettiseksMånedersBeregning(
         val uavkortetTredjePeriode = fakta.oppjusterteInntekterTredjePeriode(inntektKlasser)
         val antallDesimaler = 20
 
-        val uavkortet = (uavkortetFørstePeriode + uavkortetAndrePeriode + uavkortetTredjePeriode) / BigDecimal(3)
+        val uavkortet = (uavkortetFørstePeriode + uavkortetAndrePeriode + uavkortetTredjePeriode).divide(3.toBigDecimal(), antallDesimaler, RoundingMode.HALF_UP)
 
         val seksGangerGrunnbeløp = fakta.gjeldendeGrunnbeløp.verdi.multiply(BigDecimal(6))
 
