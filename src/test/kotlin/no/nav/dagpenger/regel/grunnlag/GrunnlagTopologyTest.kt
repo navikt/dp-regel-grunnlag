@@ -6,12 +6,12 @@ import no.nav.dagpenger.events.inntekt.v1.Inntekt
 import no.nav.dagpenger.events.inntekt.v1.InntektKlasse
 import no.nav.dagpenger.events.inntekt.v1.KlassifisertInntekt
 import no.nav.dagpenger.events.inntekt.v1.KlassifisertInntektMåned
+import no.nav.dagpenger.events.moshiInstance
 import no.nav.dagpenger.regel.grunnlag.Grunnlag.Companion.inntektAdapter
 import no.nav.dagpenger.streams.Topics.DAGPENGER_BEHOV_PACKET_EVENT
 import org.apache.kafka.streams.StreamsConfig
 import org.apache.kafka.streams.TopologyTestDriver
 import org.apache.kafka.streams.test.ConsumerRecordFactory
-import org.json.JSONObject
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertNotEquals
@@ -22,6 +22,8 @@ import java.time.YearMonth
 import java.util.Properties
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
+
+private val jsonMapAdapter = moshiInstance.adapter(Map::class.java)
 
 class GrunnlagTopologyTest {
     companion object {
@@ -242,9 +244,9 @@ class GrunnlagTopologyTest {
 
             assertTrue { resultPacket.hasField("grunnlagResultat") }
 
-            val grunnlagResultat = JSONObject(ut.value().toJson()).getJSONObject("grunnlagResultat").get("avkortet")
+            val grunnlagresultat = ut.value().toJson()?.let { jsonMapAdapter.fromJson(it) }?.get("grunnlagResultat") as Map<*, *>
 
-            assertNotEquals(0, grunnlagResultat)
+            assertEquals("99999", grunnlagresultat["avkortet"])
         }
     }
 
