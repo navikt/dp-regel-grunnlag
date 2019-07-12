@@ -9,7 +9,6 @@ import no.nav.dagpenger.events.inntekt.v1.Inntekt
 import no.nav.dagpenger.events.inntekt.v1.InntektKlasse
 import no.nav.dagpenger.events.inntekt.v1.sumInntekt
 import no.nav.dagpenger.events.moshiInstance
-import no.nav.dagpenger.regel.grunnlag.beregning.BeregningsResultat
 import no.nav.dagpenger.regel.grunnlag.beregning.finnHøyesteAvkortetVerdi
 import no.nav.dagpenger.regel.grunnlag.beregning.grunnlagsBeregninger
 import no.nav.dagpenger.streams.River
@@ -53,10 +52,8 @@ class Grunnlag(
         val fakta = packetToFakta(packet)
 
         val resultat =
-            grunnlagsBeregninger.map { beregning -> beregning.calculate(fakta) }.toSet().finnHøyesteAvkortetVerdi()
+            grunnlagsBeregninger.map { beregning -> beregning.calculate(fakta) }.toSet().filterNot { beregningsResultat -> beregningsResultat.uavkortet <= 0.toBigDecimal() }.finnHøyesteAvkortetVerdi()
                 ?: throw NoResultException("Ingen resultat for grunnlagsberegning")
-
-        sjekkGyldigResultat(resultat)
 
         val grunnlagResultat = GrunnlagResultat(
             sporingsId = ulidGenerator.nextULID(),
@@ -120,12 +117,6 @@ class Grunnlag(
         }
     }
 
-    fun sjekkGyldigResultat(resultat: BeregningsResultat) {
-        if (resultat.uavkortet <= 0.toBigDecimal()) {
-            throw NoValidResultException("Ingen positive resultat av grunnlagsberegning")
-        }
-    }
-
     override fun getConfig(): Properties {
         return streamConfig(
             appId = SERVICE_APP_ID,
@@ -135,13 +126,25 @@ class Grunnlag(
     }
 
     override fun onFailure(packet: Packet, error: Throwable?): Packet {
-        packet.addProblem(
-            Problem(
-                type = URI("urn:dp:error:regel"),
-                title = "Ukjent feil ved bruk av grunnlagregel",
-                instance = URI("urn:dp:regel:grunnlag")
+        when (error) {
+            is NoResultException -> {
+                packet.addProblem(
+                    Problem(
+                        type = URI("urn:dp:error:regel"),
+                        title = "Inntektene gir 0 eller negativ resultat i grunnlag",
+                        instance = URI("urn:dp:regel:grunnlag")
+                    )
+                )
+            }
+            else -> { packet.addProblem(
+                Problem(
+                    type = URI("urn:dp:error:regel"),
+                    title = "Ukjent feil ved bruk av grunnlagregel",
+                    instance = URI("urn:dp:regel:grunnlag")
+                )
             )
-        )
+            }
+        }
         return packet
     }
 }
@@ -155,7 +158,5 @@ fun main(args: Array<String>) {
 }
 
 class NoResultException(message: String) : RuntimeException(message)
-
-class NoValidResultException(message: String) : RuntimeException(message)
 
 class ManueltGrunnlagOgInntektException(message: String) : RuntimeException(message)

@@ -42,7 +42,7 @@ class OnPacketTest {
         val packet = Packet(json)
         packet.putValue("inntektV1", Grunnlag.inntektAdapter.toJsonValue(inntekt)!!)
 
-        assertThrows<NoValidResultException> { grunnlag.onPacket(packet) }
+        assertThrows<NoResultException> { grunnlag.onPacket(packet) }
     }
 
     @Test
