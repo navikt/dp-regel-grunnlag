@@ -9,6 +9,7 @@ import no.nav.dagpenger.events.inntekt.v1.Inntekt
 import no.nav.dagpenger.events.inntekt.v1.InntektKlasse
 import no.nav.dagpenger.events.inntekt.v1.sumInntekt
 import no.nav.dagpenger.events.moshiInstance
+import no.nav.dagpenger.regel.grunnlag.beregning.BeregningsResultat
 import no.nav.dagpenger.regel.grunnlag.beregning.finnHøyesteAvkortetVerdi
 import no.nav.dagpenger.regel.grunnlag.beregning.grunnlagsBeregninger
 import no.nav.dagpenger.streams.River
@@ -54,6 +55,8 @@ class Grunnlag(
         val resultat =
             grunnlagsBeregninger.map { beregning -> beregning.calculate(fakta) }.toSet().finnHøyesteAvkortetVerdi()
                 ?: throw NoResultException("Ingen resultat for grunnlagsberegning")
+
+        sjekkGyldigResultat(resultat)
 
         val grunnlagResultat = GrunnlagResultat(
             sporingsId = ulidGenerator.nextULID(),
@@ -117,6 +120,12 @@ class Grunnlag(
         }
     }
 
+    fun sjekkGyldigResultat(resultat: BeregningsResultat) {
+        if (resultat.uavkortet <= 0.toBigDecimal()) {
+            throw NoValidResultException("Ingen positive resultat av grunnlagsberegning")
+        }
+    }
+
     override fun getConfig(): Properties {
         return streamConfig(
             appId = SERVICE_APP_ID,
@@ -146,5 +155,7 @@ fun main(args: Array<String>) {
 }
 
 class NoResultException(message: String) : RuntimeException(message)
+
+class NoValidResultException(message: String) : RuntimeException(message)
 
 class ManueltGrunnlagOgInntektException(message: String) : RuntimeException(message)

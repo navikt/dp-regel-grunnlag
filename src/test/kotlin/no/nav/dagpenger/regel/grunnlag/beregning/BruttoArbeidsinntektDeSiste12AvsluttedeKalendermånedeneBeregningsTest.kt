@@ -137,6 +137,88 @@ class BruttoArbeidsinntektDeSiste12AvsluttedeKalendermånedeneBeregningsTest {
     }
 
     @Test
+    fun ` Skal gi riktig grunnlag med minusinntekt`() {
+
+        val inntektsListe = listOf(
+            KlassifisertInntektMåned(
+                YearMonth.of(2018, 4),
+                listOf(
+                    KlassifisertInntekt(
+                        BigDecimal(1000),
+                        InntektKlasse.ARBEIDSINNTEKT
+                    )
+                )
+            ),
+            KlassifisertInntektMåned(
+                YearMonth.of(2018, 5),
+                listOf(
+                    KlassifisertInntekt(
+                        BigDecimal(1000),
+                        InntektKlasse.ARBEIDSINNTEKT
+                    ),
+                    KlassifisertInntekt(
+                        BigDecimal(-1000),
+                        InntektKlasse.ARBEIDSINNTEKT
+                    )
+                )
+            )
+        )
+
+        val fakta = Fakta(
+            inntekt = Inntekt("123", inntektsListe, sisteAvsluttendeKalenderMåned = YearMonth.of(2019, 1)),
+            fangstOgFisk = false,
+            verneplikt = false,
+            beregningsdato = LocalDate.of(2019, 2, 10)
+        )
+
+        assertEquals(
+            BigDecimal("1034.69893414785227588000"),
+            BruttoArbeidsinntektDeSiste12AvsluttedeKalendermånedene().calculate(fakta).uavkortet
+        )
+    }
+
+    @Test
+    fun ` Skal gi riktig grunnlag dersom summen av inntekter er minus`() {
+
+        val inntektsListe = listOf(
+            KlassifisertInntektMåned(
+                YearMonth.of(2018, 4),
+                listOf(
+                    KlassifisertInntekt(
+                        BigDecimal(-1000),
+                        InntektKlasse.ARBEIDSINNTEKT
+                    )
+                )
+            ),
+            KlassifisertInntektMåned(
+                YearMonth.of(2018, 5),
+                listOf(
+                    KlassifisertInntekt(
+                        BigDecimal(1000),
+                        InntektKlasse.ARBEIDSINNTEKT
+                    ),
+                    KlassifisertInntekt(
+                        BigDecimal(-1000),
+                        InntektKlasse.ARBEIDSINNTEKT
+                    )
+                )
+            )
+        )
+
+        val fakta = Fakta(
+            inntekt = Inntekt("123", inntektsListe, sisteAvsluttendeKalenderMåned = YearMonth.of(2019, 1)),
+            fangstOgFisk = false,
+            verneplikt = false,
+            beregningsdato = LocalDate.of(2019, 2, 10)
+        )
+
+        assertEquals(
+            BigDecimal("-1034.69893414785227588000"),
+            BruttoArbeidsinntektDeSiste12AvsluttedeKalendermånedene().calculate(fakta).uavkortet
+        )
+    }
+
+    @Test
     fun `Skal returnere 0 som grunnlag hvis ingen inntekt`() {
 
         val fakta = Fakta(
