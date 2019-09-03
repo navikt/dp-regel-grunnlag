@@ -2,10 +2,6 @@ package no.nav.dagpenger.regel.grunnlag
 
 import no.nav.dagpenger.events.Packet
 import no.nav.dagpenger.events.inntekt.v1.Inntekt
-import no.nav.dagpenger.grunnbelop.Grunnbeløp
-import no.nav.dagpenger.grunnbelop.getGrunnbeløpForDato
-import java.time.LocalDate
-import java.time.Month
 
 internal fun packetToFakta(packet: Packet): Fakta {
 

@@ -75,7 +75,7 @@ dependencies {
     testImplementation(Junit5.api)
     testRuntimeOnly(Junit5.engine)
     testRuntimeOnly(Junit5.vintageEngine)
-    
+
     testImplementation(Junit5.kotlinRunner)
     testImplementation(Kafka.streamTestUtils)
     testImplementation(KafkaEmbedded.env)

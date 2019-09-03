@@ -67,4 +67,3 @@ private fun getGrunnbeløp(beregningsdato: LocalDate): Grunnbeløp {
 
     return getGrunnbeløpForDato(LocalDate.from(beregningsdato))
 }
-
