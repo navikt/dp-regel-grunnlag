@@ -68,13 +68,15 @@ dependencies {
     implementation(Log4j2.slf4j)
     implementation(Log4j2.Logstash.logstashLayout)
     implementation(Kotlin.Logging.kotlinLogging)
+    implementation(Konfig.konfig)
 
     testImplementation(kotlin("test"))
 
     testImplementation(Junit5.api)
     testRuntimeOnly(Junit5.engine)
     testRuntimeOnly(Junit5.vintageEngine)
-
+    
+    testImplementation(Junit5.kotlinRunner)
     testImplementation(Kafka.streamTestUtils)
     testImplementation(KafkaEmbedded.env)
     testImplementation(Wiremock.standalone)

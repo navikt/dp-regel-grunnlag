@@ -14,7 +14,7 @@ import kotlin.test.assertNotNull
 import kotlin.test.assertNull
 
 internal class CreateInntektPerioderTest {
-    private val grunnlag = Grunnlag(Environment("bogus", "bogus"), mockk<GrunnlagInstrumentation>())
+    private val grunnlag = Grunnlag(Configuration(), mockk<GrunnlagInstrumentation>())
 
     @Test
     fun `Skal ha perioder med 0 inntekt hvis det ikke er inntekt`() {
