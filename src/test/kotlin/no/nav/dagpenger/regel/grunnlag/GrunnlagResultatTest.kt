@@ -9,13 +9,15 @@ class GrunnlagResultatTest {
     @Test
     fun `toMap skal returnere rett resultat`() {
         val grunnlagResultat = GrunnlagResultat(
-            "111",
-            "222",
-            "Grunnlag.v1",
-            4455.toBigDecimal(),
-            1122.toBigDecimal(),
-            "ORDINÆR",
-            true)
+            sporingsId = "111",
+            subsumsjonsId = "222",
+            regelidentifikator = "Grunnlag.v1",
+            avkortetGrunnlag = 4455.toBigDecimal(),
+            uavkortetGrunnlag = 1122.toBigDecimal(),
+            beregningsregel = "ORDINÆR",
+            harAvkortet = true,
+            grunnbeløpBrukt = 123.toBigDecimal()
+        )
 
         assertEquals("111", grunnlagResultat.sporingsId)
         assertEquals("222", grunnlagResultat.subsumsjonsId)
@@ -29,13 +31,15 @@ class GrunnlagResultatTest {
     @Test
     fun `getAvrundetUavkortet skal avrunde det uavkortede resultatet riktig`() {
         val grunnlagResultat = GrunnlagResultat(
-            "123",
-            "123",
-            "Grunnlag.v1",
-            1234.5678.toBigDecimal(),
-            100.499.toBigDecimal(),
-            "ORDINÆR",
-            false)
+            sporingsId = "123",
+            subsumsjonsId = "123",
+            regelidentifikator = "Grunnlag.v1",
+            avkortetGrunnlag = 1234.5678.toBigDecimal(),
+            uavkortetGrunnlag = 100.499.toBigDecimal(),
+            beregningsregel = "ORDINÆR",
+            harAvkortet = false,
+            grunnbeløpBrukt = 123.toBigDecimal()
+        )
 
         assertEquals(100.toBigDecimal(), grunnlagResultat.avrundetUavkortet)
     }
@@ -43,13 +47,15 @@ class GrunnlagResultatTest {
     @Test
     fun `getAvrundetAvkortet skal avrunde det avkortede resultatet riktig`() {
         val grunnlagResultat = GrunnlagResultat(
-            "123",
-            "123",
-            "Grunnlag.v1",
-            1234.5678.toBigDecimal(),
-            100.499.toBigDecimal(),
-            "ORDINÆR",
-            false)
+            sporingsId = "123",
+            subsumsjonsId = "123",
+            regelidentifikator = "Grunnlag.v1",
+            avkortetGrunnlag = 1234.5678.toBigDecimal(),
+            uavkortetGrunnlag = 100.499.toBigDecimal(),
+            beregningsregel = "ORDINÆR",
+            harAvkortet = false,
+            grunnbeløpBrukt = 123.toBigDecimal()
+        )
 
         assertEquals(1235.toBigDecimal(), grunnlagResultat.avrundetAvkortet)
     }

@@ -10,17 +10,19 @@ data class GrunnlagResultat(
     val avkortetGrunnlag: BigDecimal,
     val uavkortetGrunnlag: BigDecimal,
     val beregningsregel: String,
-    val harAvkortet: Boolean
+    val harAvkortet: Boolean,
+    val grunnbeløpBrukt: BigDecimal
 ) {
 
     companion object {
-        val SPORINGSID = "sporingsId"
-        val SUBSUMSJONSID = "subsumsjonsId"
-        val REGELIDENTIFIKATOR = "regelIdentifikator"
-        val AVKORTET_GRUNNLAG = "avkortet"
-        val UAVKORTET_GRUNNLAG = "uavkortet"
-        val BEREGNINGSREGEL = "beregningsregel"
-        val HAR_AVKORTET = "harAvkortet"
+        const val SPORINGSID = "sporingsId"
+        const val SUBSUMSJONSID = "subsumsjonsId"
+        const val REGELIDENTIFIKATOR = "regelIdentifikator"
+        const val AVKORTET_GRUNNLAG = "avkortet"
+        const val UAVKORTET_GRUNNLAG = "uavkortet"
+        const val BEREGNINGSREGEL = "beregningsregel"
+        const val HAR_AVKORTET = "harAvkortet"
+        const val GRUNNBELØP_BRUKT = "grunnbeløpBrukt"
     }
 
     fun toMap(): Map<String, Any> {
@@ -31,7 +33,8 @@ data class GrunnlagResultat(
             AVKORTET_GRUNNLAG to avrundetAvkortet,
             UAVKORTET_GRUNNLAG to avrundetUavkortet,
             BEREGNINGSREGEL to beregningsregel,
-            HAR_AVKORTET to harAvkortet
+            HAR_AVKORTET to harAvkortet,
+            GRUNNBELØP_BRUKT to grunnbeløpBrukt
         )
     }
 

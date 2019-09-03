@@ -56,13 +56,14 @@ class Grunnlag(
                 ?: throw NoResultException("Ingen resultat for grunnlagsberegning")
 
         val grunnlagResultat = GrunnlagResultat(
-            ulidGenerator.nextULID(),
-            ulidGenerator.nextULID(),
-            REGELIDENTIFIKATOR,
-            resultat.avkortet,
-            resultat.uavkortet,
-            resultat.beregningsregel,
-            resultat.harAvkortet
+            sporingsId = ulidGenerator.nextULID(),
+            subsumsjonsId = ulidGenerator.nextULID(),
+            regelidentifikator = REGELIDENTIFIKATOR,
+            avkortetGrunnlag = resultat.avkortet,
+            uavkortetGrunnlag = resultat.uavkortet,
+            beregningsregel = resultat.beregningsregel,
+            harAvkortet = resultat.harAvkortet,
+            grunnbeløpBrukt = fakta.gjeldendeGrunnbeløp.verdi
         )
 
         createInntektPerioder(fakta)?.apply {
