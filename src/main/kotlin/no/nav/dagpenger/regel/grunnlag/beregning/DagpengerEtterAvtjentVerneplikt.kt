@@ -8,7 +8,7 @@ class DagpengerEtterAvtjentVerneplikt() : GrunnlagBeregning("Verneplikt") {
 
     override fun calculate(fakta: Fakta): BeregningsResultat {
         if (fakta.verneplikt) {
-            val vernepliktGrunnlag = getGrunnbeløpForMåned(YearMonth.from(fakta.beregningsdato)).verdi * 3.toBigDecimal()
+            val vernepliktGrunnlag = fakta.gjeldendeGrunnbeløp.verdi * 3.toBigDecimal()
 
             return BeregningsResultat(
                 vernepliktGrunnlag,
