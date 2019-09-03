@@ -21,7 +21,8 @@ private val devProperties = ConfigurationMap(
     mapOf(
         "kafka.bootstrap.servers" to "b27apvl00045.preprod.local:8443,b27apvl00046.preprod.local:8443,b27apvl00047.preprod.local:8443",
         "application.profile" to Profile.DEV.toString(),
-        "application.httpPort" to "8098"
+        "application.httpPort" to "8098",
+        "feature.gjustering" to true.toString()
 
     )
 )
@@ -63,7 +64,7 @@ data class Configuration(
     )
 
     val features = mapOf(
-        "gjustering" to config().getOrElse(Key("gjustering", booleanType), false)
+        "gjustering" to config().getOrElse(Key("feature.gjustering", booleanType), false)
     )
 }
 
