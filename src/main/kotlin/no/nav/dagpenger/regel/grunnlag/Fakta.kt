@@ -10,6 +10,7 @@ import no.nav.dagpenger.grunnbelop.getGrunnbeløpForDato
 import no.nav.dagpenger.grunnbelop.getGrunnbeløpForMåned
 import java.math.BigDecimal
 import java.time.LocalDate
+import java.time.Month
 import java.util.EnumSet
 
 data class Fakta(
@@ -19,9 +20,7 @@ data class Fakta(
     val beregningsdato: LocalDate,
     val manueltGrunnlag: Int? = null
 ) {
-    val gjeldendeGrunnbeløp =
-        getGrunnbeløpForDato(LocalDate.from(beregningsdato))
-
+    val gjeldendeGrunnbeløp = getGrunnbeløp(LocalDate.from(beregningsdato))
     val inntektsPerioder = inntekt?.splitIntoInntektsPerioder()
 
     private val inntektsPerioderOrEmpty = inntektsPerioder ?: InntektsPerioder(emptyList(), emptyList(), emptyList())
@@ -55,3 +54,17 @@ data class Fakta(
         }
     }
 }
+
+private fun getGrunnbeløp(beregningsdato: LocalDate): Grunnbeløp {
+    if (features.isEnabled("gjustering")) {
+        if (beregningsdato.isAfter(LocalDate.of(2019, 8, 1)))
+            Grunnbeløp(
+                LocalDate.of(2015, Month.AUGUST, 1),
+                LocalDate.of(2016, Month.APRIL, 30),
+                100000.toBigDecimal()
+            )
+    }
+
+    return getGrunnbeløpForDato(LocalDate.from(beregningsdato))
+}
+

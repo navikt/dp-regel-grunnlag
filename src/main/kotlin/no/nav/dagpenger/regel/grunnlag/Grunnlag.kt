@@ -137,6 +137,7 @@ class Grunnlag(
 }
 
 private val config = Configuration()
+val features = Features(config.features)
 
 fun main(args: Array<String>) {
     val service = Grunnlag(instrumentation = GrunnlagInstrumentation(), config = config)
