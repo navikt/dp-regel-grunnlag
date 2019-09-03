@@ -58,9 +58,9 @@ data class Fakta(
 private fun getGrunnbeløp(beregningsdato: LocalDate): Grunnbeløp {
     if (features.isEnabled("gjustering")) {
         if (beregningsdato.isAfter(LocalDate.of(2019, 8, 1)))
-            Grunnbeløp(
-                LocalDate.of(2015, Month.AUGUST, 1),
-                LocalDate.of(2016, Month.APRIL, 30),
+            return Grunnbeløp(
+                LocalDate.of(2019, Month.AUGUST, 1),
+                LocalDate.of(2020, Month.APRIL, 30),
                 100000.toBigDecimal()
             )
     }
