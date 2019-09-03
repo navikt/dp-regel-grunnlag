@@ -43,10 +43,7 @@ class GrunnlagTopologyTest {
     @Test
     fun ` Should add not process behov without inntekt eller manuelt grunnlag`() {
         val grunnlag = Grunnlag(
-            Environment(
-                username = "bogus",
-                password = "bogus"
-            ),
+            Configuration(),
             fakeGrunnlagInstrumentation
         )
         val json = """
@@ -72,10 +69,7 @@ class GrunnlagTopologyTest {
     @Test
     fun ` Should add not process behov without beregningsDato `() {
         val grunnlag = Grunnlag(
-            Environment(
-                username = "bogus",
-                password = "bogus"
-            ),
+            Configuration(),
             fakeGrunnlagInstrumentation
         )
         val json = """
@@ -101,10 +95,7 @@ class GrunnlagTopologyTest {
     @Test
     fun ` Should add GrunnlagSubsumsjon to subsumsjonsBehov with inntekt `() {
         val grunnlag = Grunnlag(
-            Environment(
-                username = "bogus",
-                password = "bogus"
-            ),
+            Configuration(),
             fakeGrunnlagInstrumentation
         )
 
@@ -155,10 +146,7 @@ class GrunnlagTopologyTest {
     @Test
     fun ` Should add GrunnlagSubsumsjon to subsumsjonsBehov with manueltGrunnlag `() {
         val grunnlag = Grunnlag(
-            Environment(
-                username = "bogus",
-                password = "bogus"
-            ),
+            Configuration(),
             fakeGrunnlagInstrumentation
         )
 
@@ -194,10 +182,7 @@ class GrunnlagTopologyTest {
     @Test
     fun ` Should add GrunnlagSubsumsjon to subsumsjonsBehov with oppfyllerKravTilFangstOgFisk `() {
         val grunnlag = Grunnlag(
-            Environment(
-                username = "bogus",
-                password = "bogus"
-            ),
+            Configuration(),
             fakeGrunnlagInstrumentation
         )
 
@@ -252,10 +237,7 @@ class GrunnlagTopologyTest {
     @Test
     fun ` Should add problem on failure`() {
         val grunnlag = Grunnlag(
-            Environment(
-                username = "bogus",
-                password = "bogus"
-            ),
+            Configuration(),
             fakeGrunnlagInstrumentation
         )
 

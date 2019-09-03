@@ -11,7 +11,6 @@ import no.nav.dagpenger.events.inntekt.v1.sumInntekt
 import no.nav.dagpenger.events.moshiInstance
 import no.nav.dagpenger.regel.grunnlag.beregning.finnHøyesteAvkortetVerdi
 import no.nav.dagpenger.regel.grunnlag.beregning.grunnlagsBeregninger
-import no.nav.dagpenger.streams.KafkaCredential
 import no.nav.dagpenger.streams.River
 import no.nav.dagpenger.streams.streamConfig
 import org.apache.kafka.streams.kstream.Predicate
@@ -19,11 +18,11 @@ import java.net.URI
 import java.util.Properties
 
 class Grunnlag(
-    private val env: Environment,
-    val instrumentation: GrunnlagInstrumentation
+    private val config: Configuration,
+    private val instrumentation: GrunnlagInstrumentation
 ) : River() {
     override val SERVICE_APP_ID: String = "dagpenger-regel-grunnlag"
-    override val HTTP_PORT: Int = env.httpPort ?: super.HTTP_PORT
+    override val HTTP_PORT: Int = config.application.httpPort ?: super.HTTP_PORT
     private val ulidGenerator = ULID()
     private val REGELIDENTIFIKATOR = "Grunnlag.v1"
     private val jsonAdapterInntektPeriodeInfo: JsonAdapter<List<InntektPeriodeInfo>> =
@@ -120,8 +119,8 @@ class Grunnlag(
     override fun getConfig(): Properties {
         return streamConfig(
             appId = SERVICE_APP_ID,
-            bootStapServerUrl = env.bootstrapServersUrl,
-            credential = KafkaCredential(env.username, env.password)
+            bootStapServerUrl = config.kafka.brokers,
+            credential = config.kafka.credential()
         )
     }
 
@@ -137,8 +136,10 @@ class Grunnlag(
     }
 }
 
+private val config = Configuration()
+
 fun main(args: Array<String>) {
-    val service = Grunnlag(Environment(), GrunnlagInstrumentation())
+    val service = Grunnlag(instrumentation = GrunnlagInstrumentation(), config = config)
     service.start()
 }
 
