@@ -61,6 +61,10 @@ data class Configuration(
         val profile: Profile = config()[Key("application.profile", stringType)].let { Profile.valueOf(it) },
         val httpPort: Int = config()[Key("application.httpPort", intType)]
     )
+
+    val features = mapOf(
+        "gjustering" to config().getOrElse(Key("gjustering", booleanType), false)
+    )
 }
 
 enum class Profile {

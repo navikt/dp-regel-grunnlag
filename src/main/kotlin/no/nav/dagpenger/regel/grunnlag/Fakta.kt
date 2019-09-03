@@ -10,6 +10,7 @@ import no.nav.dagpenger.grunnbelop.getGrunnbeløpForDato
 import no.nav.dagpenger.grunnbelop.getGrunnbeløpForMåned
 import java.math.BigDecimal
 import java.time.LocalDate
+import java.time.Month
 import java.util.EnumSet
 
 data class Fakta(
@@ -17,10 +18,12 @@ data class Fakta(
     val verneplikt: Boolean,
     val fangstOgFisk: Boolean,
     val beregningsdato: LocalDate,
-    val manueltGrunnlag: Int? = null
+    val manueltGrunnlag: Int? = null,
+    val grunnbeløp: Grunnbeløp? = null
 ) {
-    val gjeldendeGrunnbeløp =
-        getGrunnbeløpForDato(LocalDate.from(beregningsdato))
+    val gjeldendeGrunnbeløp = supportInjectionOfGrunnbeløp()
+
+    private fun supportInjectionOfGrunnbeløp() = grunnbeløp ?: getGrunnbeløpForDato(LocalDate.from(beregningsdato))
 
     val inntektsPerioder = inntekt?.splitIntoInntektsPerioder()
 

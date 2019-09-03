@@ -10,13 +10,13 @@ import kotlin.test.assertEquals
 
 class PacketToFaktaTest {
 
-    val emptyInntekt: Inntekt = Inntekt(
+    private val emptyInntekt: Inntekt = Inntekt(
         inntektsId = "12345",
         inntektsListe = emptyList(),
         sisteAvsluttendeKalenderMåned = YearMonth.of(2018, 3)
     )
 
-    val simplePacketJson = """
+    private val simplePacketJson = """
         {
             "beregningsDato":"2019-04-10"
         }""".trimIndent()
