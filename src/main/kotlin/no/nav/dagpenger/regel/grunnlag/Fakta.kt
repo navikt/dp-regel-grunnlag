@@ -10,7 +10,6 @@ import no.nav.dagpenger.grunnbelop.Regel
 import no.nav.dagpenger.grunnbelop.faktorMellom
 import no.nav.dagpenger.grunnbelop.forDato
 import no.nav.dagpenger.grunnbelop.forMåned
-import no.nav.dagpenger.grunnbelop.getGrunnbeløpForMåned
 import no.nav.dagpenger.grunnbelop.getGrunnbeløpForRegel
 import java.math.BigDecimal
 import java.time.LocalDate
@@ -60,12 +59,9 @@ data class Fakta(
 
 private fun getGrunnbeløp(beregningsdato: LocalDate): Grunnbeløp {
     if (features.isEnabled("gjustering")) {
-        if (beregningsdato.isAfter(LocalDate.of(2019, 8, 1).minusDays(1)))
-            return Grunnbeløp(
-                LocalDate.of(2019, Month.AUGUST, 1),
-                LocalDate.of(2020, Month.APRIL, 30),
-                100000.toBigDecimal()
-            )
+        if (beregningsdato.isAfter(LocalDate.of(2019, 8, 1).minusDays(1))) {
+            return Grunnbeløp.GjusteringsTest
+        }
     }
 
     return getGrunnbeløpForRegel(Regel.Grunnlag).forDato(beregningsdato)
