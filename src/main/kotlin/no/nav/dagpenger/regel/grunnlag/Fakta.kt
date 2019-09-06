@@ -6,11 +6,14 @@ import no.nav.dagpenger.events.inntekt.v1.InntektsPerioder
 import no.nav.dagpenger.events.inntekt.v1.KlassifisertInntektMåned
 import no.nav.dagpenger.events.inntekt.v1.sumInntekt
 import no.nav.dagpenger.grunnbelop.Grunnbeløp
-import no.nav.dagpenger.grunnbelop.getGrunnbeløpForDato
+import no.nav.dagpenger.grunnbelop.Regel
+import no.nav.dagpenger.grunnbelop.faktorMellom
+import no.nav.dagpenger.grunnbelop.forDato
+import no.nav.dagpenger.grunnbelop.forMåned
 import no.nav.dagpenger.grunnbelop.getGrunnbeløpForMåned
+import no.nav.dagpenger.grunnbelop.getGrunnbeløpForRegel
 import java.math.BigDecimal
 import java.time.LocalDate
-import java.time.Month
 import java.util.EnumSet
 
 data class Fakta(
@@ -45,7 +48,7 @@ data class Fakta(
             val oppjusterteinntekter = inntekt.klassifiserteInntekter.map { klassifisertInntekt ->
                 val oppjustert = klassifisertInntekt.beløp.multiply(
                     gjeldendeGrunnbeløp.faktorMellom(
-                        getGrunnbeløpForMåned(inntekt.årMåned)
+                        getGrunnbeløpForRegel(Regel.Grunnlag).forMåned(inntekt.årMåned)
                     )
                 )
                 klassifisertInntekt.copy(beløp = oppjustert)
@@ -65,5 +68,5 @@ private fun getGrunnbeløp(beregningsdato: LocalDate): Grunnbeløp {
             )
     }
 
-    return getGrunnbeløpForDato(LocalDate.from(beregningsdato))
+    return getGrunnbeløpForRegel(Regel.Grunnlag).forDato(beregningsdato)
 }
