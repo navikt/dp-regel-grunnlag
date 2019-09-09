@@ -22,10 +22,7 @@ class OnPacketTest {
     fun ` Skal kaste en feil hvis det ikke finnes gyldige (positive) resultater av beregningen `() {
 
         val grunnlag = Grunnlag(
-            Environment(
-                username = "bogus",
-                password = "bogus"
-            ),
+            Configuration(),
             fakeGrunnlagInstrumentation
         )
 
@@ -49,10 +46,7 @@ class OnPacketTest {
     fun ` Skal legge på 0 i grunnlag hvis det ikke er inntekt `() {
 
         val grunnlag = Grunnlag(
-            Environment(
-                username = "bogus",
-                password = "bogus"
-            ),
+            Configuration(),
             fakeGrunnlagInstrumentation
         )
 
@@ -80,10 +74,7 @@ class OnPacketTest {
     fun ` Skal velge rett beregningsregel og gi rett resultat ved arbeidsinntekt `() {
 
         val grunnlag = Grunnlag(
-            Environment(
-                username = "bogus",
-                password = "bogus"
-            ),
+            Configuration(),
             fakeGrunnlagInstrumentation
         )
 
@@ -117,10 +108,7 @@ class OnPacketTest {
     fun ` Skal velge rett beregningsregel og gi rett resultat ved verneplikt `() {
 
         val grunnlag = Grunnlag(
-            Environment(
-                username = "bogus",
-                password = "bogus"
-            ),
+            Configuration(),
             fakeGrunnlagInstrumentation
         )
 
