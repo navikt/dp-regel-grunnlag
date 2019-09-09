@@ -57,7 +57,6 @@ class Grunnlag(
                 .map { beregning -> beregning.calculate(fakta) }
                 .filterIsInstance<BeregningsResultat>()
                 .toSet()
-                .filterNot { beregningsResultat -> beregningsResultat.uavkortet < 0.toBigDecimal() }
                 .finnHøyesteAvkortetVerdi()
                 ?: throw NoResultException("Ingen resultat for grunnlagsberegning")
 

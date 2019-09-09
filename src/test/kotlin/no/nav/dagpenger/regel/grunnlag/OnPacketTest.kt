@@ -6,7 +6,6 @@ import no.nav.dagpenger.events.inntekt.v1.Inntekt
 import no.nav.dagpenger.events.inntekt.v1.InntektKlasse
 import no.nav.dagpenger.events.inntekt.v1.KlassifisertInntekt
 import no.nav.dagpenger.events.inntekt.v1.KlassifisertInntektMåned
-import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.api.Test
 import java.math.BigDecimal
 import java.time.YearMonth
@@ -19,7 +18,7 @@ class OnPacketTest {
     }
 
     @Test
-    fun ` Skal kaste en feil hvis det ikke finnes gyldige (positive) resultater av beregningen `() {
+    fun ` Skal legge på minus i grunnlag dersom det blir negativt i sum `() {
 
         val grunnlag = Grunnlag(
             Configuration(),
@@ -39,7 +38,11 @@ class OnPacketTest {
         val packet = Packet(json)
         packet.putValue("inntektV1", Grunnlag.inntektAdapter.toJsonValue(inntekt)!!)
 
-        assertThrows<NoResultException> { grunnlag.onPacket(packet) }
+        val resultPacket = grunnlag.onPacket(packet)
+
+        assertTrue { resultPacket.hasField("grunnlagResultat") }
+
+        assertEquals("ArbeidsinntektSiste36", resultPacket.getMapValue("grunnlagResultat")["beregningsregel"])
     }
 
     @Test
