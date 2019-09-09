@@ -5,6 +5,7 @@ import no.nav.dagpenger.events.inntekt.v1.Inntekt
 import no.nav.dagpenger.events.inntekt.v1.InntektKlasse
 import no.nav.dagpenger.events.inntekt.v1.KlassifisertInntekt
 import no.nav.dagpenger.events.inntekt.v1.KlassifisertInntektMåned
+import no.nav.dagpenger.grunnbelop.Grunnbeløp
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 import java.math.BigDecimal
@@ -19,7 +20,14 @@ internal class CreateInntektPerioderTest {
     @Test
     fun `Skal ha perioder med 0 inntekt hvis det ikke er inntekt`() {
         val beregningsdato = LocalDate.of(2019, 2, 1)
-        val fakta = Fakta(verneplikt = false, fangstOgFisk = false, beregningsdato = beregningsdato)
+        val fakta = Fakta(
+            verneplikt = false,
+            fangstOgFisk = false,
+            beregningsdato = beregningsdato,
+            dagensDato = LocalDate.now(),
+            gjeldendeGrunnbeløpVedBeregningsdato = Grunnbeløp.FastsattI2019,
+            gjeldendeGrunnbeløpForDagensDato = Grunnbeløp.FastsattI2019
+        )
 
         val inntektsPerioder = grunnlag.createInntektPerioder(fakta)
 
@@ -32,14 +40,17 @@ internal class CreateInntektPerioderTest {
         val beregningsdato = LocalDate.of(2019, 2, 1)
         val inntektsListe = generateArbeidsinntekt(36, BigDecimal(1000), sisteAvsluttendeKalenderMåned)
         val fakta = Fakta(
-            Inntekt(
+            inntekt = Inntekt(
                 "id",
                 inntektsListe,
                 sisteAvsluttendeKalenderMåned = sisteAvsluttendeKalenderMåned
             ),
-            false,
-            false,
-            beregningsdato
+            verneplikt = false,
+            fangstOgFisk = false,
+            beregningsdato = beregningsdato,
+            dagensDato = LocalDate.now(),
+            gjeldendeGrunnbeløpVedBeregningsdato = Grunnbeløp.FastsattI2019,
+            gjeldendeGrunnbeløpForDagensDato = Grunnbeløp.FastsattI2019
         )
 
         val inntektsPerioder = grunnlag.createInntektPerioder(fakta)!!
@@ -62,7 +73,10 @@ internal class CreateInntektPerioderTest {
             inntekt,
             false,
             false,
-            beregningsdato
+            beregningsdato,
+            dagensDato = LocalDate.now(),
+            gjeldendeGrunnbeløpVedBeregningsdato = Grunnbeløp.FastsattI2019,
+            gjeldendeGrunnbeløpForDagensDato = Grunnbeløp.FastsattI2019
         )
 
         val inntektsPerioder = grunnlag.createInntektPerioder(fakta)!!
@@ -89,7 +103,10 @@ internal class CreateInntektPerioderTest {
             ),
             verneplikt = false,
             fangstOgFisk = true,
-            beregningsdato = beregningsdato
+            beregningsdato = beregningsdato,
+            dagensDato = LocalDate.now(),
+            gjeldendeGrunnbeløpVedBeregningsdato = Grunnbeløp.FastsattI2019,
+            gjeldendeGrunnbeløpForDagensDato = Grunnbeløp.FastsattI2019
         )
 
         val inntektsPerioder = grunnlag.createInntektPerioder(fakta)!!
@@ -110,8 +127,10 @@ internal class CreateInntektPerioderTest {
             ),
             verneplikt = false,
             fangstOgFisk = true,
-            beregningsdato = beregningsdato
-
+            beregningsdato = beregningsdato,
+            dagensDato = LocalDate.now(),
+            gjeldendeGrunnbeløpVedBeregningsdato = Grunnbeløp.FastsattI2019,
+            gjeldendeGrunnbeløpForDagensDato = Grunnbeløp.FastsattI2019
         )
 
         val inntektsPerioder = grunnlag.createInntektPerioder(fakta)!!
@@ -134,8 +153,10 @@ internal class CreateInntektPerioderTest {
             ),
             verneplikt = false,
             fangstOgFisk = true,
-            beregningsdato = beregningsdato
-
+            beregningsdato = beregningsdato,
+            dagensDato = LocalDate.now(),
+            gjeldendeGrunnbeløpVedBeregningsdato = Grunnbeløp.FastsattI2019,
+            gjeldendeGrunnbeløpForDagensDato = Grunnbeløp.FastsattI2019
         )
 
         val inntektsPerioder = grunnlag.createInntektPerioder(fakta)!!
