@@ -20,25 +20,26 @@ data class Fakta(
     val verneplikt: Boolean,
     val fangstOgFisk: Boolean,
     val beregningsdato: LocalDate,
-    val manueltGrunnlag: Int? = null
+    val manueltGrunnlag: Int? = null,
+    val gjeldendeGrunnbeløpVedBeregningsdato: Grunnbeløp = getGrunnbeløp(LocalDate.from(beregningsdato)),
+    val gjeldendeGrunnbeløpForDagensDato: Grunnbeløp = getGrunnbeløp(LocalDate.now())
 ) {
-    val gjeldendeGrunnbeløp = getGrunnbeløp(LocalDate.from(beregningsdato))
     val inntektsPerioder = inntekt?.splitIntoInntektsPerioder()
 
     private val inntektsPerioderOrEmpty = inntektsPerioder ?: InntektsPerioder(emptyList(), emptyList(), emptyList())
 
     fun oppjusterteInntekterFørstePeriode(inntektsKlasser: EnumSet<InntektKlasse>): BigDecimal =
-        inntektsPerioderOrEmpty.first.map(oppjusterTilGjeldendeGrunnbeløp(gjeldendeGrunnbeløp)).sumInntekt(
+        inntektsPerioderOrEmpty.first.map(oppjusterTilGjeldendeGrunnbeløp(gjeldendeGrunnbeløpVedBeregningsdato)).sumInntekt(
             inntektsKlasser.toList()
         )
 
     fun oppjusterteInntekterAndrePeriode(inntektsKlasser: EnumSet<InntektKlasse>): BigDecimal =
-        inntektsPerioderOrEmpty.second.map(oppjusterTilGjeldendeGrunnbeløp(gjeldendeGrunnbeløp)).sumInntekt(
+        inntektsPerioderOrEmpty.second.map(oppjusterTilGjeldendeGrunnbeløp(gjeldendeGrunnbeløpVedBeregningsdato)).sumInntekt(
             inntektsKlasser.toList()
         )
 
     fun oppjusterteInntekterTredjePeriode(inntektsKlasser: EnumSet<InntektKlasse>): BigDecimal =
-        inntektsPerioderOrEmpty.third.map(oppjusterTilGjeldendeGrunnbeløp(gjeldendeGrunnbeløp)).sumInntekt(
+        inntektsPerioderOrEmpty.third.map(oppjusterTilGjeldendeGrunnbeløp(gjeldendeGrunnbeløpVedBeregningsdato)).sumInntekt(
             inntektsKlasser.toList()
         )
 
