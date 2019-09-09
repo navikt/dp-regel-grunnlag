@@ -21,10 +21,10 @@ data class Fakta(
     val fangstOgFisk: Boolean,
     val beregningsdato: LocalDate,
     val dagensDato: LocalDate = LocalDate.now(),
-    val manueltGrunnlag: Int? = null,
-    val gjeldendeGrunnbeløpVedBeregningsdato: Grunnbeløp = getGrunnbeløp(LocalDate.from(beregningsdato)),
-    val gjeldendeGrunnbeløpForDagensDato: Grunnbeløp = getGrunnbeløp(dagensDato)
+    val manueltGrunnlag: Int? = null
 ) {
+    val gjeldendeGrunnbeløpVedBeregningsdato: Grunnbeløp = getGrunnbeløp(LocalDate.from(beregningsdato))
+    val gjeldendeGrunnbeløpForDagensDato: Grunnbeløp = getGrunnbeløp(dagensDato)
     val inntektsPerioder = inntekt?.splitIntoInntektsPerioder()
 
     private val inntektsPerioderOrEmpty = inntektsPerioder ?: InntektsPerioder(emptyList(), emptyList(), emptyList())
@@ -57,14 +57,15 @@ data class Fakta(
             inntekt.copy(klassifiserteInntekter = oppjusterteinntekter)
         }
     }
-}
 
-private fun getGrunnbeløp(beregningsdato: LocalDate): Grunnbeløp {
-    if (features.isEnabled("gjustering")) {
-        if (beregningsdato.isAfter(LocalDate.of(2019, 8, 1).minusDays(1))) {
-            return Grunnbeløp.GjusteringsTest
+    private fun getGrunnbeløp(beregningsdato: LocalDate): Grunnbeløp {
+        if (features.isEnabled("gjustering")) {
+            val isBeregningsDatoAfterGjustering = beregningsdato.isAfter(LocalDate.of(2019, 8, 1).minusDays(1))
+            if (isBeregningsDatoAfterGjustering || this.verneplikt) {
+                return Grunnbeløp.GjusteringsTest
+            }
         }
-    }
 
-    return getGrunnbeløpForRegel(Regel.Grunnlag).forDato(beregningsdato)
+        return getGrunnbeløpForRegel(Regel.Grunnlag).forDato(beregningsdato)
+    }
 }
