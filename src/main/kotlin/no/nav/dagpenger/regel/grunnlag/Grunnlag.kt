@@ -132,25 +132,12 @@ class Grunnlag(
     }
 
     override fun onFailure(packet: Packet, error: Throwable?): Packet {
-        when (error) {
-            is NoResultException -> {
-                packet.addProblem(
-                    Problem(
-                        type = URI("urn:dp:error:regel"),
-                        title = "Inntektene gir 0 eller negativ resultat i grunnlag",
-                        instance = URI("urn:dp:regel:grunnlag")
-                    )
-                )
-            }
-            else -> { packet.addProblem(
-                Problem(
-                    type = URI("urn:dp:error:regel"),
-                    title = "Ukjent feil ved bruk av grunnlagregel",
-                    instance = URI("urn:dp:regel:grunnlag")
-                )
-            )
-            }
-        }
+
+        packet.addProblem(
+            Problem(
+                type = URI("urn:dp:error:regel"),
+                title = "Ukjent feil ved bruk av grunnlagregel",
+                instance = URI("urn:dp:regel:grunnlag")))
         return packet
     }
 }

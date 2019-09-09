@@ -10,7 +10,7 @@ class ManueltGrunnlagBeregning : GrunnlagBeregning("Manuell") {
         val seksGangerGrunnbeløp = fakta.gjeldendeGrunnbeløp.verdi.multiply(BigDecimal(6))
 
         if (manueltGrunnlag <= 0) {
-            return BeregningsResultat(Integer.MIN_VALUE.toBigDecimal(), Integer.MIN_VALUE.toBigDecimal(), beregningsregel)
+            return IngenBeregningsResultat(beregningsregel)
         } else if (manueltGrunnlag.toBigDecimal() <= seksGangerGrunnbeløp) {
             return BeregningsResultat(manueltGrunnlag.toBigDecimal(), manueltGrunnlag.toBigDecimal(), beregningsregel)
         } else {
