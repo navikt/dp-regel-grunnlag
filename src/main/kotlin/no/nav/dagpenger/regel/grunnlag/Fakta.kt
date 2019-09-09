@@ -20,9 +20,10 @@ data class Fakta(
     val verneplikt: Boolean,
     val fangstOgFisk: Boolean,
     val beregningsdato: LocalDate,
+    val dagensDato: LocalDate = LocalDate.now(),
     val manueltGrunnlag: Int? = null,
     val gjeldendeGrunnbeløpVedBeregningsdato: Grunnbeløp = getGrunnbeløp(LocalDate.from(beregningsdato)),
-    val gjeldendeGrunnbeløpForDagensDato: Grunnbeløp = getGrunnbeløp(LocalDate.now())
+    val gjeldendeGrunnbeløpForDagensDato: Grunnbeløp = getGrunnbeløp(dagensDato)
 ) {
     val inntektsPerioder = inntekt?.splitIntoInntektsPerioder()
 
