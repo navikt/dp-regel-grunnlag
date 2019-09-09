@@ -63,10 +63,12 @@ class BruttoArbeidsinntektDeSiste36AvsluttedeKalendermånedeneBeregningsTest {
             beregningsdato = LocalDate.of(2019, 4, 1)
         )
 
-        assertEquals(
-            BigDecimal("1371.97393512841033163333"),
-            BruttoArbeidsinntektDeSiste36AvsluttedeKalendermånedene().calculate(fakta).uavkortet
-        )
+        when (val beregningsResultat = BruttoArbeidsinntektDeSiste36AvsluttedeKalendermånedene().calculate(fakta)) {
+            is BeregningsResultat -> assertEquals(
+                BigDecimal("1371.97393512841033163333"),
+                beregningsResultat.uavkortet
+            )
+        }
     }
 
     @Test
@@ -117,10 +119,12 @@ class BruttoArbeidsinntektDeSiste36AvsluttedeKalendermånedeneBeregningsTest {
             beregningsdato = LocalDate.of(2019, 4, 1)
         )
 
-        assertEquals(
-            BigDecimal("387876.89964471595075862667"),
-            BruttoArbeidsinntektDeSiste36AvsluttedeKalendermånedene().calculate(fakta).avkortet
-        )
+        when (val beregningsResultat = BruttoArbeidsinntektDeSiste36AvsluttedeKalendermånedene().calculate(fakta)) {
+            is BeregningsResultat -> assertEquals(
+                BigDecimal("387876.89964471595075862667"),
+                beregningsResultat.avkortet
+            )
+        }
     }
 
     @Test
@@ -181,10 +185,12 @@ class BruttoArbeidsinntektDeSiste36AvsluttedeKalendermånedeneBeregningsTest {
             beregningsdato = LocalDate.of(2019, 4, 1)
         )
 
-        assertEquals(
-            BigDecimal("1371.97393512841033163333"),
-            BruttoArbeidsinntektDeSiste36AvsluttedeKalendermånedene().calculate(fakta).uavkortet
-        )
+        when (val beregningsResultat = BruttoArbeidsinntektDeSiste36AvsluttedeKalendermånedene().calculate(fakta)) {
+            is BeregningsResultat -> assertEquals(
+                BigDecimal("1371.97393512841033163333"),
+                beregningsResultat.uavkortet
+            )
+        }
     }
 
     @Test
@@ -248,10 +254,12 @@ class BruttoArbeidsinntektDeSiste36AvsluttedeKalendermånedeneBeregningsTest {
             beregningsdato = LocalDate.of(2019, 2, 10)
         )
 
-        assertEquals(
-            BigDecimal("344.89964471595075862667"),
-            BruttoArbeidsinntektDeSiste36AvsluttedeKalendermånedene().calculate(fakta).uavkortet
-        )
+        when (val beregningsResultat = BruttoArbeidsinntektDeSiste36AvsluttedeKalendermånedene().calculate(fakta)) {
+            is BeregningsResultat -> assertEquals(
+                BigDecimal("344.89964471595075862667"),
+                beregningsResultat.uavkortet
+            )
+        }
     }
 
     @Test
@@ -315,10 +323,12 @@ class BruttoArbeidsinntektDeSiste36AvsluttedeKalendermånedeneBeregningsTest {
             beregningsdato = LocalDate.of(2019, 2, 10)
         )
 
-        assertEquals(
-            BigDecimal("-344.89964471595075862667"),
-            BruttoArbeidsinntektDeSiste36AvsluttedeKalendermånedene().calculate(fakta).uavkortet
-        )
+        when (val beregningsResultat = BruttoArbeidsinntektDeSiste36AvsluttedeKalendermånedene().calculate(fakta)) {
+            is BeregningsResultat -> assertEquals(
+                BigDecimal("-344.89964471595075862667"),
+                beregningsResultat.uavkortet
+            )
+        }
     }
 
     @Test
@@ -331,10 +341,12 @@ class BruttoArbeidsinntektDeSiste36AvsluttedeKalendermånedeneBeregningsTest {
             beregningsdato = LocalDate.of(2019, 4, 1)
         )
 
-        assertEquals(
-            BigDecimal.ZERO.setScale(20),
-            BruttoArbeidsinntektDeSiste36AvsluttedeKalendermånedene().calculate(fakta).uavkortet
-        )
+        when (val beregningsResultat = BruttoArbeidsinntektDeSiste36AvsluttedeKalendermånedene().calculate(fakta)) {
+            is BeregningsResultat -> assertEquals(
+                BigDecimal.ZERO.setScale(20),
+                beregningsResultat.uavkortet
+            )
+        }
     }
 
     @Test
@@ -368,9 +380,11 @@ class BruttoArbeidsinntektDeSiste36AvsluttedeKalendermånedeneBeregningsTest {
             beregningsdato = LocalDate.of(2019, 4, 1)
         )
 
-        val resultat = BruttoArbeidsinntektDeSiste36AvsluttedeKalendermånedene().calculate(fakta)
-
-        assertFalse(resultat.harAvkortet)
-        assertEquals(resultat.avkortet, resultat.uavkortet)
+        when (val beregningsResultat = BruttoArbeidsinntektDeSiste36AvsluttedeKalendermånedene().calculate(fakta)) {
+            is BeregningsResultat -> {
+                assertFalse(beregningsResultat.harAvkortet)
+                assertEquals(beregningsResultat.avkortet, beregningsResultat.uavkortet)
+            }
+        }
     }
 }

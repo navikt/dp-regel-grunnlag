@@ -46,6 +46,37 @@ class OnPacketTest {
     }
 
     @Test
+    fun ` Skal legge på 0 i grunnlag hvis det ikke er inntekt `() {
+
+        val grunnlag = Grunnlag(
+            Environment(
+                username = "bogus",
+                password = "bogus"
+            ),
+            fakeGrunnlagInstrumentation
+        )
+
+        val inntekt = getInntekt((0).toBigDecimal())
+
+        val json = """
+            {
+                "beregningsDato":"2018-08-10",
+                "harAvtjentVerneplikt": false,
+                "oppfyllerKravTilFangstOgFisk": false
+            }
+            """.trimIndent()
+
+        val packet = Packet(json)
+        packet.putValue("inntektV1", Grunnlag.inntektAdapter.toJsonValue(inntekt)!!)
+
+        val resultPacket = grunnlag.onPacket(packet)
+
+        assertTrue { resultPacket.hasField("grunnlagResultat") }
+
+        assertEquals("ArbeidsinntektSiste12", resultPacket.getMapValue("grunnlagResultat")["beregningsregel"])
+    }
+
+    @Test
     fun ` Skal velge rett beregningsregel og gi rett resultat ved arbeidsinntekt `() {
 
         val grunnlag = Grunnlag(

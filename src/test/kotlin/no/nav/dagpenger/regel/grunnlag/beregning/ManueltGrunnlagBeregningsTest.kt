@@ -25,10 +25,14 @@ class ManueltGrunnlagBeregningsTest {
             manueltGrunnlag = 50000
         )
 
-        assertEquals(BigDecimal("50000"), ManueltGrunnlagBeregning().calculate(fakta).uavkortet)
-        assertEquals(BigDecimal("50000"), ManueltGrunnlagBeregning().calculate(fakta).avkortet)
-        assertEquals("Manuell", ManueltGrunnlagBeregning().calculate(fakta).beregningsregel)
-        assertFalse(ManueltGrunnlagBeregning().calculate(fakta).harAvkortet)
+        when (val beregningsResultat = ManueltGrunnlagBeregning().calculate(fakta)) {
+            is BeregningsResultat -> {
+                assertEquals(BigDecimal("50000"), beregningsResultat.uavkortet)
+                assertEquals(BigDecimal("50000"), beregningsResultat.avkortet)
+                assertEquals("Manuell", beregningsResultat.beregningsregel)
+                assertFalse(beregningsResultat.harAvkortet)
+            }
+        }
     }
 
     @Test
@@ -44,9 +48,13 @@ class ManueltGrunnlagBeregningsTest {
             manueltGrunnlag = 600000
         )
 
-        assertEquals(BigDecimal("600000"), ManueltGrunnlagBeregning().calculate(fakta).uavkortet)
-        assertEquals(BigDecimal("581298"), ManueltGrunnlagBeregning().calculate(fakta).avkortet)
-        assertEquals("Manuell", ManueltGrunnlagBeregning().calculate(fakta).beregningsregel)
-        assertTrue(ManueltGrunnlagBeregning().calculate(fakta).harAvkortet)
+        when (val beregningsResultat = ManueltGrunnlagBeregning().calculate(fakta)) {
+            is BeregningsResultat -> {
+                assertEquals(BigDecimal("600000"), beregningsResultat.uavkortet)
+                assertEquals(BigDecimal("581298"), beregningsResultat.avkortet)
+                assertEquals("Manuell", beregningsResultat.beregningsregel)
+                assertTrue(beregningsResultat.harAvkortet)
+            }
+        }
     }
 }

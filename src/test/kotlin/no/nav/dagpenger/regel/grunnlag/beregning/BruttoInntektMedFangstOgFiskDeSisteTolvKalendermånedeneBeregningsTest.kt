@@ -50,14 +50,16 @@ class BruttoInntektMedFangstOgFiskDeSisteTolvKalendermånedeneBeregningsTest {
             beregningsdato = LocalDate.of(2019, 4, 1)
         )
 
-        assertEquals(
-            BigDecimal("2034.69893414785227588000"),
-            BruttoInntektMedFangstOgFiskDeSiste12AvsluttedeKalendermånedene().calculate(fakta).uavkortet
-        )
+        when (val beregningsResultat = BruttoInntektMedFangstOgFiskDeSiste12AvsluttedeKalendermånedene().calculate(fakta)) {
+            is BeregningsResultat -> assertEquals(
+                BigDecimal("2034.69893414785227588000"),
+                beregningsResultat.uavkortet
+            )
+        }
     }
 
     @Test
-    fun ` Skal gi grunnlag på 0 dersom fangst og fisk ikke er satt `() {
+    fun ` Skal gi IngenBeregningsGrunnlag dersom fangst og fisk ikke er satt `() {
 
         val inntektsListe = listOf(
             KlassifisertInntektMåned(
@@ -93,10 +95,12 @@ class BruttoInntektMedFangstOgFiskDeSisteTolvKalendermånedeneBeregningsTest {
             beregningsdato = LocalDate.of(2019, 4, 1)
         )
 
-        assertEquals(
-            BigDecimal(0),
-            BruttoInntektMedFangstOgFiskDeSiste12AvsluttedeKalendermånedene().calculate(fakta).uavkortet
-        )
+        when (val beregningsResultat = BruttoInntektMedFangstOgFiskDeSiste12AvsluttedeKalendermånedene().calculate(fakta)) {
+            is IngenBeregningsResultat -> assertEquals(
+                "FangstOgFiskeSiste12",
+                beregningsResultat.beskrivelse
+            )
+        }
     }
 
     @Test
@@ -134,10 +138,12 @@ class BruttoInntektMedFangstOgFiskDeSisteTolvKalendermånedeneBeregningsTest {
             beregningsdato = LocalDate.of(2019, 2, 10)
         )
 
-        assertEquals(
-            BigDecimal("1034.69893414785227588000"),
-            BruttoInntektMedFangstOgFiskDeSiste12AvsluttedeKalendermånedene().calculate(fakta).uavkortet
-        )
+        when (val beregningsResultat = BruttoInntektMedFangstOgFiskDeSiste12AvsluttedeKalendermånedene().calculate(fakta)) {
+            is BeregningsResultat -> assertEquals(
+                BigDecimal("1034.69893414785227588000"),
+                beregningsResultat.uavkortet
+            )
+        }
     }
 
     @Test
@@ -175,14 +181,16 @@ class BruttoInntektMedFangstOgFiskDeSisteTolvKalendermånedeneBeregningsTest {
             beregningsdato = LocalDate.of(2019, 2, 10)
         )
 
-        assertEquals(
-            BigDecimal("-1034.69893414785227588000"),
-            BruttoInntektMedFangstOgFiskDeSiste12AvsluttedeKalendermånedene().calculate(fakta).uavkortet
-        )
+        when (val beregningsResultat = BruttoInntektMedFangstOgFiskDeSiste12AvsluttedeKalendermånedene().calculate(fakta)) {
+            is BeregningsResultat -> assertEquals(
+                BigDecimal("-1034.69893414785227588000"),
+                beregningsResultat.uavkortet
+            )
+        }
     }
 
     @Test
-    fun `Skal returnere 0 som grunnlag hvis ingen inntekt`() {
+    fun `Skal returnere ingenBeregningsResultat med 0 inntekt`() {
 
         val fakta = Fakta(
             inntekt = Inntekt("123", emptyList(), sisteAvsluttendeKalenderMåned = YearMonth.of(2019, 3)),
@@ -191,9 +199,11 @@ class BruttoInntektMedFangstOgFiskDeSisteTolvKalendermånedeneBeregningsTest {
             beregningsdato = LocalDate.of(2019, 4, 1)
         )
 
-        assertEquals(
-            BigDecimal.ZERO,
-            BruttoInntektMedFangstOgFiskDeSiste12AvsluttedeKalendermånedene().calculate(fakta).uavkortet
-        )
+        when (val beregningsResultat = BruttoInntektMedFangstOgFiskDeSiste12AvsluttedeKalendermånedene().calculate(fakta)) {
+            is IngenBeregningsResultat -> assertEquals(
+                "FangstOgFiskeSiste12",
+                beregningsResultat.beskrivelse
+            )
+        }
     }
 }

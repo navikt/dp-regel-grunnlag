@@ -9,6 +9,7 @@ import no.nav.dagpenger.events.inntekt.v1.Inntekt
 import no.nav.dagpenger.events.inntekt.v1.InntektKlasse
 import no.nav.dagpenger.events.inntekt.v1.sumInntekt
 import no.nav.dagpenger.events.moshiInstance
+import no.nav.dagpenger.regel.grunnlag.beregning.BeregningsResultat
 import no.nav.dagpenger.regel.grunnlag.beregning.finnHøyesteAvkortetVerdi
 import no.nav.dagpenger.regel.grunnlag.beregning.grunnlagsBeregninger
 import no.nav.dagpenger.streams.River
@@ -52,7 +53,12 @@ class Grunnlag(
         val fakta = packetToFakta(packet)
 
         val resultat =
-            grunnlagsBeregninger.map { beregning -> beregning.calculate(fakta) }.toSet().filterNot { beregningsResultat -> beregningsResultat.uavkortet <= 0.toBigDecimal() }.finnHøyesteAvkortetVerdi()
+            grunnlagsBeregninger
+                .map { beregning -> beregning.calculate(fakta) }
+                .filterIsInstance<BeregningsResultat>()
+                .toSet()
+                .filterNot { beregningsResultat -> beregningsResultat.uavkortet < 0.toBigDecimal() }
+                .finnHøyesteAvkortetVerdi()
                 ?: throw NoResultException("Ingen resultat for grunnlagsberegning")
 
         val grunnlagResultat = GrunnlagResultat(

@@ -19,11 +19,16 @@ class DagpengerEtterAvtjentVernepliktBeregningsTest {
             LocalDate.of(2019, 4, 1)
         )
 
-        assertEquals(290649.toBigDecimal(), DagpengerEtterAvtjentVerneplikt().calculate(fakta).uavkortet)
+        when (val beregningsResultat = DagpengerEtterAvtjentVerneplikt().calculate(fakta)) {
+            is BeregningsResultat -> assertEquals(
+                290649.toBigDecimal(),
+                beregningsResultat.uavkortet
+            )
+        }
     }
 
     @Test
-    fun `Skal få uavkortet grunnlag på 0 når verneplikt ikke er satt`() {
+    fun `Skal få ingenBeregningsResultat på verneplikt når den ikke er satt`() {
 
         val fakta = Fakta(
             Inntekt("123", emptyList(), sisteAvsluttendeKalenderMåned = YearMonth.of(2019, 3)),
@@ -32,6 +37,11 @@ class DagpengerEtterAvtjentVernepliktBeregningsTest {
             LocalDate.of(2019, 4, 1)
         )
 
-        assertEquals(0.toBigDecimal(), DagpengerEtterAvtjentVerneplikt().calculate(fakta).uavkortet)
+        when (val beregningsResultat = DagpengerEtterAvtjentVerneplikt().calculate(fakta)) {
+            is IngenBeregningsResultat -> assertEquals(
+                "Verneplikt",
+                beregningsResultat.beskrivelse
+            )
+        }
     }
 }

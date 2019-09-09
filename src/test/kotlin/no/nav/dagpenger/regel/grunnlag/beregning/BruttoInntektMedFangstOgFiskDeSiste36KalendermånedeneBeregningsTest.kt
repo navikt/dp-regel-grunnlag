@@ -62,10 +62,12 @@ class BruttoInntektMedFangstOgFiskDeSiste36KalendermånedeneBeregningsTest {
             beregningsdato = LocalDate.of(2019, 4, 1)
         )
 
-        assertEquals(
-            BigDecimal("1371.97393512841033163333"),
-            BruttoInntektMedFangstOgFiskDeSiste36AvsluttedeKalendermånedene().calculate(fakta).uavkortet
-        )
+        when (val beregningsResultat = BruttoInntektMedFangstOgFiskDeSiste36AvsluttedeKalendermånedene().calculate(fakta)) {
+            is BeregningsResultat -> assertEquals(
+                BigDecimal("1371.97393512841033163333"),
+                beregningsResultat.uavkortet
+            )
+        }
     }
 
     @Test
@@ -129,10 +131,12 @@ class BruttoInntektMedFangstOgFiskDeSiste36KalendermånedeneBeregningsTest {
             beregningsdato = LocalDate.of(2019, 2, 10)
         )
 
-        assertEquals(
-            BigDecimal("344.89964471595075862667"),
-            BruttoInntektMedFangstOgFiskDeSiste36AvsluttedeKalendermånedene().calculate(fakta).uavkortet
-        )
+        when (val beregningsResultat = BruttoInntektMedFangstOgFiskDeSiste36AvsluttedeKalendermånedene().calculate(fakta)) {
+            is BeregningsResultat -> assertEquals(
+                BigDecimal("344.89964471595075862667"),
+                beregningsResultat.uavkortet
+            )
+        }
     }
 
     @Test
@@ -196,10 +200,12 @@ class BruttoInntektMedFangstOgFiskDeSiste36KalendermånedeneBeregningsTest {
             beregningsdato = LocalDate.of(2019, 2, 10)
         )
 
-        assertEquals(
-            BigDecimal("-344.89964471595075862667"),
-            BruttoInntektMedFangstOgFiskDeSiste36AvsluttedeKalendermånedene().calculate(fakta).uavkortet
-        )
+        when (val beregningsResultat = BruttoInntektMedFangstOgFiskDeSiste36AvsluttedeKalendermånedene().calculate(fakta)) {
+            is BeregningsResultat -> assertEquals(
+                BigDecimal("-344.89964471595075862667"),
+                beregningsResultat.uavkortet
+            )
+        }
     }
 
     @Test
@@ -212,9 +218,11 @@ class BruttoInntektMedFangstOgFiskDeSiste36KalendermånedeneBeregningsTest {
             beregningsdato = LocalDate.of(2019, 4, 1)
         )
 
-        assertEquals(
-            BigDecimal.ZERO,
-            BruttoInntektMedFangstOgFiskDeSiste36AvsluttedeKalendermånedene().calculate(fakta).uavkortet
-        )
+        when (val beregningsResultat = BruttoInntektMedFangstOgFiskDeSiste36AvsluttedeKalendermånedene().calculate(fakta)) {
+            is BeregningsResultat -> assertEquals(
+                BigDecimal.ZERO,
+                beregningsResultat.uavkortet
+            )
+        }
     }
 }

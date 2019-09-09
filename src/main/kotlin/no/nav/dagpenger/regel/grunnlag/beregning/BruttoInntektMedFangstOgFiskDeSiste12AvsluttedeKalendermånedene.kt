@@ -11,9 +11,10 @@ class BruttoInntektMedFangstOgFiskDeSiste12AvsluttedeKalendermånedene : TolvMå
     InntektKlasse.TILTAKSLØNN,
     InntektKlasse.FANGST_FISKE,
     InntektKlasse.DAGPENGER_FANGST_FISKE,
-    InntektKlasse.SYKEPENGER_FANGST_FISKE), "FangstOgFiskSiste12") {
+    InntektKlasse.SYKEPENGER_FANGST_FISKE),
+    "FangstOgFiskSiste12") {
 
-    override fun calculate(fakta: Fakta): BeregningsResultat {
-        return if (fakta.fangstOgFisk) super.calculate(fakta) else BeregningsResultat(0.toBigDecimal(), 0.toBigDecimal(), "FangstOgFiskeSiste12")
+    override fun calculate(fakta: Fakta): Resultat {
+        return if (fakta.fangstOgFisk) super.calculate(fakta) else IngenBeregningsResultat("FangstOgFiskeSiste12")
     }
 }

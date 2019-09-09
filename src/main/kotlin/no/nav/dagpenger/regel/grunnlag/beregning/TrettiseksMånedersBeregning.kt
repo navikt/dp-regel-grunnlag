@@ -12,7 +12,7 @@ abstract class TrettiseksMånedersBeregning(
 ) :
     GrunnlagBeregning(beregningsregel) {
 
-    override fun calculate(fakta: Fakta): BeregningsResultat {
+    override fun calculate(fakta: Fakta): Resultat {
 
         val uavkortetFørstePeriode = fakta.oppjusterteInntekterFørstePeriode(inntektKlasser)
         val uavkortetAndrePeriode = fakta.oppjusterteInntekterAndrePeriode(inntektKlasser)

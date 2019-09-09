@@ -45,10 +45,12 @@ class BruttoArbeidsinntektDeSiste12AvsluttedeKalendermånedeneBeregningsTest {
             beregningsdato = LocalDate.of(2019, 4, 1)
         )
 
-        assertEquals(
-            BigDecimal("2034.69893414785227588000"),
-            BruttoArbeidsinntektDeSiste12AvsluttedeKalendermånedene().calculate(fakta).uavkortet
-        )
+        when (val beregningsResultat = BruttoArbeidsinntektDeSiste12AvsluttedeKalendermånedene().calculate(fakta)) {
+            is BeregningsResultat -> assertEquals(
+                BigDecimal("2034.69893414785227588000"),
+                beregningsResultat.uavkortet
+            )
+        }
     }
 
     @Test
@@ -82,13 +84,15 @@ class BruttoArbeidsinntektDeSiste12AvsluttedeKalendermånedeneBeregningsTest {
             beregningsdato = LocalDate.of(2019, 4, 1)
         )
 
-        val resultat = BruttoArbeidsinntektDeSiste12AvsluttedeKalendermånedene().calculate(fakta)
-        assertEquals(
-            BigDecimal("581298"),
-            resultat.avkortet
-        )
-
-        assertTrue(resultat.harAvkortet)
+        when (val beregningsResultat = BruttoArbeidsinntektDeSiste12AvsluttedeKalendermånedene().calculate(fakta)) {
+            is BeregningsResultat -> {
+                assertEquals(
+                    BigDecimal("581298"),
+                    beregningsResultat.avkortet
+                )
+                assertTrue { beregningsResultat.harAvkortet }
+            }
+        }
     }
 
     @Test
@@ -130,10 +134,12 @@ class BruttoArbeidsinntektDeSiste12AvsluttedeKalendermånedeneBeregningsTest {
             beregningsdato = LocalDate.of(2019, 4, 1)
         )
 
-        assertEquals(
-            BigDecimal("2034.69893414785227588000"),
-            BruttoArbeidsinntektDeSiste12AvsluttedeKalendermånedene().calculate(fakta).uavkortet
-        )
+        when (val beregningsResultat = BruttoArbeidsinntektDeSiste12AvsluttedeKalendermånedene().calculate(fakta)) {
+            is BeregningsResultat -> assertEquals(
+                BigDecimal("2034.69893414785227588000"),
+                beregningsResultat.uavkortet
+            )
+        }
     }
 
     @Test
@@ -171,10 +177,12 @@ class BruttoArbeidsinntektDeSiste12AvsluttedeKalendermånedeneBeregningsTest {
             beregningsdato = LocalDate.of(2019, 2, 10)
         )
 
-        assertEquals(
-            BigDecimal("1034.69893414785227588000"),
-            BruttoArbeidsinntektDeSiste12AvsluttedeKalendermånedene().calculate(fakta).uavkortet
-        )
+        when (val beregningsResultat = BruttoArbeidsinntektDeSiste12AvsluttedeKalendermånedene().calculate(fakta)) {
+            is BeregningsResultat -> assertEquals(
+                BigDecimal("1034.69893414785227588000"),
+                beregningsResultat.uavkortet
+            )
+        }
     }
 
     @Test
@@ -212,10 +220,12 @@ class BruttoArbeidsinntektDeSiste12AvsluttedeKalendermånedeneBeregningsTest {
             beregningsdato = LocalDate.of(2019, 2, 10)
         )
 
-        assertEquals(
-            BigDecimal("-1034.69893414785227588000"),
-            BruttoArbeidsinntektDeSiste12AvsluttedeKalendermånedene().calculate(fakta).uavkortet
-        )
+        when (val beregningsResultat = BruttoArbeidsinntektDeSiste12AvsluttedeKalendermånedene().calculate(fakta)) {
+            is BeregningsResultat -> assertEquals(
+                BigDecimal("-1034.69893414785227588000"),
+                beregningsResultat.uavkortet
+            )
+        }
     }
 
     @Test
@@ -228,9 +238,11 @@ class BruttoArbeidsinntektDeSiste12AvsluttedeKalendermånedeneBeregningsTest {
             beregningsdato = LocalDate.of(2019, 4, 1)
         )
 
-        assertEquals(
-            BigDecimal.ZERO,
-            BruttoArbeidsinntektDeSiste12AvsluttedeKalendermånedene().calculate(fakta).uavkortet
-        )
+        when (val beregningsResultat = BruttoArbeidsinntektDeSiste12AvsluttedeKalendermånedene().calculate(fakta)) {
+            is BeregningsResultat -> assertEquals(
+                BigDecimal.ZERO,
+                beregningsResultat.uavkortet
+            )
+        }
     }
 }
