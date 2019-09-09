@@ -8,7 +8,6 @@ import no.nav.dagpenger.events.inntekt.v1.sumInntekt
 import no.nav.dagpenger.grunnbelop.Grunnbeløp
 import no.nav.dagpenger.grunnbelop.Regel
 import no.nav.dagpenger.grunnbelop.faktorMellom
-import no.nav.dagpenger.grunnbelop.forDato
 import no.nav.dagpenger.grunnbelop.forMåned
 import no.nav.dagpenger.grunnbelop.getGrunnbeløpForRegel
 import java.math.BigDecimal
@@ -20,10 +19,10 @@ data class Fakta(
     val verneplikt: Boolean,
     val fangstOgFisk: Boolean,
     val beregningsdato: LocalDate,
-    val dagensDato: LocalDate = LocalDate.now(),
+    val dagensDato: LocalDate,
     val manueltGrunnlag: Int? = null,
-    val gjeldendeGrunnbeløpVedBeregningsdato: Grunnbeløp = getGrunnbeløpWithFeatureFlagForGjustering(LocalDate.from(beregningsdato)),
-    val gjeldendeGrunnbeløpForDagensDato: Grunnbeløp = getGrunnbeløpWithFeatureFlagForGjustering(dagensDato, verneplikt)
+    val gjeldendeGrunnbeløpVedBeregningsdato: Grunnbeløp,
+    val gjeldendeGrunnbeløpForDagensDato: Grunnbeløp
 ) {
     val inntektsPerioder = inntekt?.splitIntoInntektsPerioder()
 
@@ -59,14 +58,3 @@ data class Fakta(
     }
 }
 
-private fun getGrunnbeløpWithFeatureFlagForGjustering(beregningsdato: LocalDate, verneplikt: Boolean = false): Grunnbeløp {
-    if (features.isEnabled("gjustering")) {
-        val isBeregningsDatoAfterGjustering = beregningsdato.isAfter(LocalDate.of(2019, 8, 1).minusDays(1))
-
-        if (isBeregningsDatoAfterGjustering || verneplikt) {
-            return Grunnbeløp.GjusteringsTest
-        }
-    }
-
-    return getGrunnbeløpForRegel(Regel.Grunnlag).forDato(beregningsdato)
-}
