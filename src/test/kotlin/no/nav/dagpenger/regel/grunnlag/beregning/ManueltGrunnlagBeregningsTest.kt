@@ -1,6 +1,7 @@
 package no.nav.dagpenger.regel.grunnlag.beregning
 
 import no.nav.dagpenger.events.inntekt.v1.Inntekt
+import no.nav.dagpenger.grunnbelop.Grunnbeløp
 import no.nav.dagpenger.regel.grunnlag.Fakta
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Test
@@ -22,7 +23,9 @@ class ManueltGrunnlagBeregningsTest {
             false,
             false,
             LocalDate.of(2019, 4, 10),
-            manueltGrunnlag = 50000
+            manueltGrunnlag = 50000,
+            gjeldendeGrunnbeløpVedBeregningsdato = Grunnbeløp.FastsattI2018,
+            gjeldendeGrunnbeløpForDagensDato = Grunnbeløp.FastsattI2019
         )
 
         assertEquals(BigDecimal("50000"), ManueltGrunnlagBeregning().calculate(fakta).uavkortet)
@@ -41,7 +44,9 @@ class ManueltGrunnlagBeregningsTest {
             false,
             false,
             LocalDate.of(2019, 4, 10),
-            manueltGrunnlag = 600000
+            manueltGrunnlag = 600000,
+            gjeldendeGrunnbeløpVedBeregningsdato = Grunnbeløp.FastsattI2018,
+            gjeldendeGrunnbeløpForDagensDato = Grunnbeløp.FastsattI2019
         )
 
         assertEquals(BigDecimal("600000"), ManueltGrunnlagBeregning().calculate(fakta).uavkortet)

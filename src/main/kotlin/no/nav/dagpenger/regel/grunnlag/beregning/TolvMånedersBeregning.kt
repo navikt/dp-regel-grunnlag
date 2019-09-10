@@ -6,7 +6,7 @@ import java.math.BigDecimal
 import java.util.EnumSet
 
 abstract class TolvMånedersBeregning(
-    val inntektKlasser: EnumSet<InntektKlasse>,
+    private val inntektKlasser: EnumSet<InntektKlasse>,
     beregningsregel: String
 ) :
     GrunnlagBeregning(beregningsregel) {
@@ -14,7 +14,7 @@ abstract class TolvMånedersBeregning(
     override fun calculate(fakta: Fakta): BeregningsResultat {
         val uavkortet = fakta.oppjusterteInntekterFørstePeriode(inntektKlasser)
 
-        val seksGangerGrunnbeløp = fakta.gjeldendeGrunnbeløp.verdi.multiply(BigDecimal(6))
+        val seksGangerGrunnbeløp = fakta.gjeldendeGrunnbeløpVedBeregningsdato.verdi.multiply(BigDecimal(6))
 
         val avkortet = if (uavkortet > seksGangerGrunnbeløp) seksGangerGrunnbeløp else uavkortet
 

@@ -63,7 +63,10 @@ class Grunnlag(
             uavkortetGrunnlag = resultat.uavkortet,
             beregningsregel = resultat.beregningsregel,
             harAvkortet = resultat.harAvkortet,
-            grunnbeløpBrukt = fakta.gjeldendeGrunnbeløp.verdi
+            grunnbeløpBrukt = when (fakta.verneplikt) {
+                true -> fakta.gjeldendeGrunnbeløpForDagensDato.verdi
+                false -> fakta.gjeldendeGrunnbeløpVedBeregningsdato.verdi
+            }
         )
 
         createInntektPerioder(fakta)?.apply {
