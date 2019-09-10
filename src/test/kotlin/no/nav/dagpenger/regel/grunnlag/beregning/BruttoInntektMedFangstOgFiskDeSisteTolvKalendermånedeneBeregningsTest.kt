@@ -49,7 +49,6 @@ class BruttoInntektMedFangstOgFiskDeSisteTolvKalendermånedeneBeregningsTest {
             verneplikt = false,
             fangstOgFisk = true,
             beregningsdato = LocalDate.of(2019, 4, 1),
-            dagensDato = LocalDate.now(),
             gjeldendeGrunnbeløpVedBeregningsdato = Grunnbeløp.FastsattI2018,
             gjeldendeGrunnbeløpForDagensDato = Grunnbeløp.FastsattI2019
         )
@@ -95,7 +94,6 @@ class BruttoInntektMedFangstOgFiskDeSisteTolvKalendermånedeneBeregningsTest {
             verneplikt = false,
             fangstOgFisk = false,
             beregningsdato = LocalDate.of(2019, 4, 1),
-            dagensDato = LocalDate.now(),
             gjeldendeGrunnbeløpVedBeregningsdato = Grunnbeløp.FastsattI2018,
             gjeldendeGrunnbeløpForDagensDato = Grunnbeløp.FastsattI2019
         )
@@ -114,7 +112,6 @@ class BruttoInntektMedFangstOgFiskDeSisteTolvKalendermånedeneBeregningsTest {
             fangstOgFisk = false,
             verneplikt = false,
             beregningsdato = LocalDate.of(2019, 4, 1),
-            dagensDato = LocalDate.now(),
             gjeldendeGrunnbeløpVedBeregningsdato = Grunnbeløp.FastsattI2018,
             gjeldendeGrunnbeløpForDagensDato = Grunnbeløp.FastsattI2019
         )

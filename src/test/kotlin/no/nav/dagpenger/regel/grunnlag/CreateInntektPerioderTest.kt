@@ -24,7 +24,6 @@ internal class CreateInntektPerioderTest {
             verneplikt = false,
             fangstOgFisk = false,
             beregningsdato = beregningsdato,
-            dagensDato = LocalDate.now(),
             gjeldendeGrunnbeløpVedBeregningsdato = Grunnbeløp.FastsattI2019,
             gjeldendeGrunnbeløpForDagensDato = Grunnbeløp.FastsattI2019
         )
@@ -48,7 +47,6 @@ internal class CreateInntektPerioderTest {
             verneplikt = false,
             fangstOgFisk = false,
             beregningsdato = beregningsdato,
-            dagensDato = LocalDate.now(),
             gjeldendeGrunnbeløpVedBeregningsdato = Grunnbeløp.FastsattI2019,
             gjeldendeGrunnbeløpForDagensDato = Grunnbeløp.FastsattI2019
         )
@@ -74,7 +72,6 @@ internal class CreateInntektPerioderTest {
             false,
             false,
             beregningsdato,
-            dagensDato = LocalDate.now(),
             gjeldendeGrunnbeløpVedBeregningsdato = Grunnbeløp.FastsattI2019,
             gjeldendeGrunnbeløpForDagensDato = Grunnbeløp.FastsattI2019
         )
@@ -104,7 +101,6 @@ internal class CreateInntektPerioderTest {
             verneplikt = false,
             fangstOgFisk = true,
             beregningsdato = beregningsdato,
-            dagensDato = LocalDate.now(),
             gjeldendeGrunnbeløpVedBeregningsdato = Grunnbeløp.FastsattI2019,
             gjeldendeGrunnbeløpForDagensDato = Grunnbeløp.FastsattI2019
         )
@@ -128,7 +124,6 @@ internal class CreateInntektPerioderTest {
             verneplikt = false,
             fangstOgFisk = true,
             beregningsdato = beregningsdato,
-            dagensDato = LocalDate.now(),
             gjeldendeGrunnbeløpVedBeregningsdato = Grunnbeløp.FastsattI2019,
             gjeldendeGrunnbeløpForDagensDato = Grunnbeløp.FastsattI2019
         )
@@ -154,7 +149,6 @@ internal class CreateInntektPerioderTest {
             verneplikt = false,
             fangstOgFisk = true,
             beregningsdato = beregningsdato,
-            dagensDato = LocalDate.now(),
             gjeldendeGrunnbeløpVedBeregningsdato = Grunnbeløp.FastsattI2019,
             gjeldendeGrunnbeløpForDagensDato = Grunnbeløp.FastsattI2019
         )

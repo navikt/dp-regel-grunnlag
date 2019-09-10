@@ -24,7 +24,6 @@ class ManueltGrunnlagBeregningsTest {
             false,
             LocalDate.of(2019, 4, 10),
             manueltGrunnlag = 50000,
-            dagensDato = LocalDate.now(),
             gjeldendeGrunnbeløpVedBeregningsdato = Grunnbeløp.FastsattI2018,
             gjeldendeGrunnbeløpForDagensDato = Grunnbeløp.FastsattI2019
         )
@@ -46,7 +45,6 @@ class ManueltGrunnlagBeregningsTest {
             false,
             LocalDate.of(2019, 4, 10),
             manueltGrunnlag = 600000,
-            dagensDato = LocalDate.now(),
             gjeldendeGrunnbeløpVedBeregningsdato = Grunnbeløp.FastsattI2018,
             gjeldendeGrunnbeløpForDagensDato = Grunnbeløp.FastsattI2019
         )

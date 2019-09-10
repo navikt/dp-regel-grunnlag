@@ -56,7 +56,6 @@ internal class FaktaTest {
             verneplikt = false,
             fangstOgFisk = false,
             beregningsdato = LocalDate.of(2019, 4, 1),
-            dagensDato = LocalDate.now(),
             gjeldendeGrunnbeløpVedBeregningsdato = Grunnbeløp.FastsattI2018,
             gjeldendeGrunnbeløpForDagensDato = Grunnbeløp.FastsattI2019
         )
@@ -75,7 +74,6 @@ internal class FaktaTest {
             verneplikt = false,
             fangstOgFisk = false,
             beregningsdato = LocalDate.of(2019, 4, 1),
-            dagensDato = LocalDate.now(),
             gjeldendeGrunnbeløpVedBeregningsdato = Grunnbeløp.FastsattI2018,
             gjeldendeGrunnbeløpForDagensDato = Grunnbeløp.FastsattI2019
         )

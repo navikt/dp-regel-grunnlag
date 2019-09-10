@@ -18,7 +18,6 @@ class DagpengerEtterAvtjentVernepliktBeregningsTest {
             verneplikt = true,
             fangstOgFisk = false,
             beregningsdato = LocalDate.of(2019, 4, 1),
-            dagensDato = LocalDate.now(),
             gjeldendeGrunnbeløpVedBeregningsdato = Grunnbeløp.FastsattI2019,
             gjeldendeGrunnbeløpForDagensDato = Grunnbeløp.FastsattI2019
         )
@@ -34,7 +33,6 @@ class DagpengerEtterAvtjentVernepliktBeregningsTest {
             verneplikt = false,
             fangstOgFisk = false,
             beregningsdato = LocalDate.of(2019, 4, 1),
-            dagensDato = LocalDate.now(),
             gjeldendeGrunnbeløpVedBeregningsdato = Grunnbeløp.FastsattI2019,
             gjeldendeGrunnbeløpForDagensDato = Grunnbeløp.FastsattI2019
         )

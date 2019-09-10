@@ -32,7 +32,6 @@ internal fun packetToFakta(packet: Packet): Fakta {
         fangstOgFisk = fangstOgFisk,
         beregningsdato = beregningsdato,
         manueltGrunnlag = manueltGrunnlag,
-        dagensDato = dagensDato,
         gjeldendeGrunnbeløpVedBeregningsdato = grunnbeløpVedBeregningsdato,
         gjeldendeGrunnbeløpForDagensDato = grunnbeløpVedDagensDato
     )

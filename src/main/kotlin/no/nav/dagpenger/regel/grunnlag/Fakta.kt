@@ -19,7 +19,6 @@ data class Fakta(
     val verneplikt: Boolean,
     val fangstOgFisk: Boolean,
     val beregningsdato: LocalDate,
-    val dagensDato: LocalDate,
     val manueltGrunnlag: Int? = null,
     val gjeldendeGrunnbeløpVedBeregningsdato: Grunnbeløp,
     val gjeldendeGrunnbeløpForDagensDato: Grunnbeløp
