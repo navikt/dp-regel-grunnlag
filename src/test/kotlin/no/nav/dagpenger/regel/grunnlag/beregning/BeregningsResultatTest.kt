@@ -1,5 +1,6 @@
 package no.nav.dagpenger.regel.grunnlag.beregning
 
+import io.kotlintest.shouldBe
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 
@@ -13,8 +14,9 @@ class BeregningsResultatTest {
             BeregningsResultat(1000.toBigDecimal(), 1000.toBigDecimal(), "Regel2", false),
             BeregningsResultat(500.toBigDecimal(), 500.toBigDecimal(), "Regel3", true))
 
+        resultater.finnHøyesteAvkortetVerdi()?.avkortet shouldBe 1000.toBigDecimal()
+        resultater.finnHøyesteAvkortetVerdi()?.beregningsregel shouldBe "Regel2"
         assertEquals(1000.toBigDecimal(), resultater.finnHøyesteAvkortetVerdi()?.avkortet)
-        assertEquals("Regel2", resultater.finnHøyesteAvkortetVerdi()?.beregningsregel)
     }
 
     @Test
@@ -23,8 +25,8 @@ class BeregningsResultatTest {
             BeregningsResultat(1000.toBigDecimal(), 1000.toBigDecimal(), "Verneplikt", true),
             BeregningsResultat(1000.toBigDecimal(), 1000.toBigDecimal(), "Ordinær", false))
 
-        assertEquals(1000.toBigDecimal(), resultater.finnHøyesteAvkortetVerdi()?.avkortet)
-        assertEquals("Ordinær", resultater.finnHøyesteAvkortetVerdi()?.beregningsregel)
+        resultater.finnHøyesteAvkortetVerdi()?.avkortet shouldBe 1000.toBigDecimal()
+        resultater.finnHøyesteAvkortetVerdi()?.beregningsregel shouldBe "Ordinær"
     }
 
     @Test
@@ -33,8 +35,8 @@ class BeregningsResultatTest {
             BeregningsResultat(1000.toBigDecimal(), 2000.toBigDecimal(), "Verneplikt", true),
             BeregningsResultat(1000.toBigDecimal(), 1000.toBigDecimal(), "Ordinær", false))
 
-        assertEquals(2000.toBigDecimal(), resultater.finnHøyesteAvkortetVerdi()?.avkortet)
-        assertEquals("Verneplikt", resultater.finnHøyesteAvkortetVerdi()?.beregningsregel)
+        resultater.finnHøyesteAvkortetVerdi()?.avkortet shouldBe 2000.toBigDecimal()
+        resultater.finnHøyesteAvkortetVerdi()?.beregningsregel shouldBe "Verneplikt"
     }
 
     @Test
@@ -44,8 +46,8 @@ class BeregningsResultatTest {
             BeregningsResultat(1000.toBigDecimal(), 2000.toBigDecimal(), "Manuell", true),
             BeregningsResultat(10000.toBigDecimal(), 10000.toBigDecimal(), "Ordinær", false))
 
-        assertEquals(2000.toBigDecimal(), resultater.finnHøyesteAvkortetVerdi()?.avkortet)
-        assertEquals("Manuell", resultater.finnHøyesteAvkortetVerdi()?.beregningsregel)
+        resultater.finnHøyesteAvkortetVerdi()?.avkortet shouldBe 2000.toBigDecimal()
+        resultater.finnHøyesteAvkortetVerdi()?.beregningsregel shouldBe "Manuell"
     }
 
     @Test
@@ -55,7 +57,7 @@ class BeregningsResultatTest {
             BeregningsResultat(0.toBigDecimal(), 0.toBigDecimal(), "Manuell", true),
             BeregningsResultat(10000.toBigDecimal(), 10000.toBigDecimal(), "Ordinær", false))
 
-        assertEquals(10000.toBigDecimal(), resultater.finnHøyesteAvkortetVerdi()?.avkortet)
-        assertEquals("Ordinær", resultater.finnHøyesteAvkortetVerdi()?.beregningsregel)
+        resultater.finnHøyesteAvkortetVerdi()?.avkortet shouldBe 10000.toBigDecimal()
+        resultater.finnHøyesteAvkortetVerdi()?.beregningsregel shouldBe "Ordinær"
     }
 }

@@ -15,6 +15,6 @@ class BruttoInntektMedFangstOgFiskDeSiste36AvsluttedeKalendermånedene : Trettis
     "FangstOgFiskSiste36") {
 
     override fun calculate(fakta: Fakta): Resultat {
-        return if (fakta.fangstOgFisk) super.calculate(fakta) else IngenBeregningsResultat("FanstOgFiskSiste36")
+        return if (fakta.fangstOgFisk) super.calculate(fakta) else IngenBeregningsResultat("FangstOgFiskSiste36")
     }
 }

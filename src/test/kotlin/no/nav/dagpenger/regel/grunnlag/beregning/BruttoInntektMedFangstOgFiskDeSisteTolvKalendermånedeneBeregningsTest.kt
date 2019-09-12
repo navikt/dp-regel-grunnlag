@@ -1,5 +1,7 @@
 package no.nav.dagpenger.regel.grunnlag.beregning
 
+import io.kotlintest.matchers.types.shouldBeTypeOf
+import io.kotlintest.shouldBe
 import no.nav.dagpenger.events.inntekt.v1.Inntekt
 import no.nav.dagpenger.events.inntekt.v1.InntektKlasse
 import no.nav.dagpenger.events.inntekt.v1.KlassifisertInntekt
@@ -9,7 +11,6 @@ import org.junit.jupiter.api.Test
 import java.math.BigDecimal
 import java.time.LocalDate
 import java.time.YearMonth
-import kotlin.test.assertEquals
 
 class BruttoInntektMedFangstOgFiskDeSisteTolvKalendermånedeneBeregningsTest {
 
@@ -51,55 +52,9 @@ class BruttoInntektMedFangstOgFiskDeSisteTolvKalendermånedeneBeregningsTest {
         )
 
         when (val beregningsResultat = BruttoInntektMedFangstOgFiskDeSiste12AvsluttedeKalendermånedene().calculate(fakta)) {
-            is BeregningsResultat -> assertEquals(
-                BigDecimal("2034.69893414785227588000"),
-                beregningsResultat.uavkortet
-            )
-        }
-    }
-
-    @Test
-    fun ` Skal gi IngenBeregningsGrunnlag dersom fangst og fisk ikke er satt `() {
-
-        val inntektsListe = listOf(
-            KlassifisertInntektMåned(
-                YearMonth.of(2018, 4),
-                listOf(
-                    KlassifisertInntekt(
-                        BigDecimal(500),
-                        InntektKlasse.ARBEIDSINNTEKT
-                    ), KlassifisertInntekt(
-                        BigDecimal(500),
-                        InntektKlasse.FANGST_FISKE
-                    )
-                )
-            ),
-            KlassifisertInntektMåned(
-                YearMonth.of(2018, 5),
-                listOf(
-                    KlassifisertInntekt(
-                        BigDecimal(500),
-                        InntektKlasse.ARBEIDSINNTEKT
-                    ), KlassifisertInntekt(
-                        BigDecimal(500),
-                        InntektKlasse.SYKEPENGER_FANGST_FISKE
-                    )
-                )
-            )
-        )
-
-        val fakta = Fakta(
-            inntekt = Inntekt("123", inntektsListe, sisteAvsluttendeKalenderMåned = YearMonth.of(2019, 3)),
-            verneplikt = false,
-            fangstOgFisk = false,
-            beregningsdato = LocalDate.of(2019, 4, 1)
-        )
-
-        when (val beregningsResultat = BruttoInntektMedFangstOgFiskDeSiste12AvsluttedeKalendermånedene().calculate(fakta)) {
-            is IngenBeregningsResultat -> assertEquals(
-                "FangstOgFiskeSiste12",
-                beregningsResultat.beskrivelse
-            )
+            is BeregningsResultat ->
+                beregningsResultat.uavkortet shouldBe BigDecimal("2034.69893414785227588000")
+            else -> beregningsResultat.shouldBeTypeOf<BeregningsResultat>()
         }
     }
 
@@ -139,10 +94,9 @@ class BruttoInntektMedFangstOgFiskDeSisteTolvKalendermånedeneBeregningsTest {
         )
 
         when (val beregningsResultat = BruttoInntektMedFangstOgFiskDeSiste12AvsluttedeKalendermånedene().calculate(fakta)) {
-            is BeregningsResultat -> assertEquals(
-                BigDecimal("1034.69893414785227588000"),
-                beregningsResultat.uavkortet
-            )
+            is BeregningsResultat ->
+                beregningsResultat.uavkortet shouldBe BigDecimal("1034.69893414785227588000")
+            else -> beregningsResultat.shouldBeTypeOf<BeregningsResultat>()
         }
     }
 
@@ -182,15 +136,14 @@ class BruttoInntektMedFangstOgFiskDeSisteTolvKalendermånedeneBeregningsTest {
         )
 
         when (val beregningsResultat = BruttoInntektMedFangstOgFiskDeSiste12AvsluttedeKalendermånedene().calculate(fakta)) {
-            is BeregningsResultat -> assertEquals(
-                BigDecimal("-1034.69893414785227588000"),
-                beregningsResultat.uavkortet
-            )
+            is BeregningsResultat ->
+                beregningsResultat.uavkortet shouldBe BigDecimal("-1034.69893414785227588000")
+            else -> beregningsResultat.shouldBeTypeOf<BeregningsResultat>()
         }
     }
 
     @Test
-    fun `Skal returnere ingenBeregningsResultat med 0 inntekt`() {
+    fun `Skal returnere ingenBeregningsResultat når fangst og fisk er false`() {
 
         val fakta = Fakta(
             inntekt = Inntekt("123", emptyList(), sisteAvsluttendeKalenderMåned = YearMonth.of(2019, 3)),
@@ -200,10 +153,53 @@ class BruttoInntektMedFangstOgFiskDeSisteTolvKalendermånedeneBeregningsTest {
         )
 
         when (val beregningsResultat = BruttoInntektMedFangstOgFiskDeSiste12AvsluttedeKalendermånedene().calculate(fakta)) {
-            is IngenBeregningsResultat -> assertEquals(
-                "FangstOgFiskeSiste12",
-                beregningsResultat.beskrivelse
+            is IngenBeregningsResultat ->
+                beregningsResultat.beskrivelse shouldBe "FangstOgFiskeSiste12"
+            else -> beregningsResultat.shouldBeTypeOf<IngenBeregningsResultat>()
+        }
+    }
+
+    @Test
+    fun ` Skal gi IngenBeregningsRegel dersom fangst og fisk ikke er satt selv om det er inntekt`() {
+
+        val inntektsListe = listOf(
+            KlassifisertInntektMåned(
+                YearMonth.of(2018, 4),
+                listOf(
+                    KlassifisertInntekt(
+                        BigDecimal(500),
+                        InntektKlasse.ARBEIDSINNTEKT
+                    ), KlassifisertInntekt(
+                        BigDecimal(500),
+                        InntektKlasse.FANGST_FISKE
+                    )
+                )
+            ),
+            KlassifisertInntektMåned(
+                YearMonth.of(2018, 5),
+                listOf(
+                    KlassifisertInntekt(
+                        BigDecimal(500),
+                        InntektKlasse.ARBEIDSINNTEKT
+                    ), KlassifisertInntekt(
+                        BigDecimal(500),
+                        InntektKlasse.SYKEPENGER_FANGST_FISKE
+                    )
+                )
             )
+        )
+
+        val fakta = Fakta(
+            inntekt = Inntekt("123", inntektsListe, sisteAvsluttendeKalenderMåned = YearMonth.of(2019, 3)),
+            verneplikt = false,
+            fangstOgFisk = false,
+            beregningsdato = LocalDate.of(2019, 4, 1)
+        )
+
+        when (val beregningsResultat = BruttoInntektMedFangstOgFiskDeSiste12AvsluttedeKalendermånedene().calculate(fakta)) {
+            is IngenBeregningsResultat ->
+                beregningsResultat.beskrivelse shouldBe "FangstOgFiskeSiste12"
+            else -> beregningsResultat.shouldBeTypeOf<IngenBeregningsResultat>()
         }
     }
 }

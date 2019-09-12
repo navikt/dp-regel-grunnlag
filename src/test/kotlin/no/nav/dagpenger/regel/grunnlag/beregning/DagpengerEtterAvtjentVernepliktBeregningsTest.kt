@@ -1,11 +1,12 @@
 package no.nav.dagpenger.regel.grunnlag.beregning
 
+import io.kotlintest.matchers.types.shouldBeTypeOf
+import io.kotlintest.shouldBe
 import no.nav.dagpenger.events.inntekt.v1.Inntekt
 import no.nav.dagpenger.regel.grunnlag.Fakta
 import org.junit.jupiter.api.Test
 import java.time.LocalDate
 import java.time.YearMonth
-import kotlin.test.assertEquals
 
 class DagpengerEtterAvtjentVernepliktBeregningsTest {
 
@@ -20,10 +21,9 @@ class DagpengerEtterAvtjentVernepliktBeregningsTest {
         )
 
         when (val beregningsResultat = DagpengerEtterAvtjentVerneplikt().calculate(fakta)) {
-            is BeregningsResultat -> assertEquals(
-                290649.toBigDecimal(),
-                beregningsResultat.uavkortet
-            )
+            is BeregningsResultat ->
+                beregningsResultat.uavkortet shouldBe 290649.toBigDecimal()
+            else -> beregningsResultat.shouldBeTypeOf<BeregningsResultat>()
         }
     }
 
@@ -38,10 +38,9 @@ class DagpengerEtterAvtjentVernepliktBeregningsTest {
         )
 
         when (val beregningsResultat = DagpengerEtterAvtjentVerneplikt().calculate(fakta)) {
-            is IngenBeregningsResultat -> assertEquals(
-                "Verneplikt",
-                beregningsResultat.beskrivelse
-            )
+            is IngenBeregningsResultat ->
+                beregningsResultat.beskrivelse shouldBe "Verneplikt"
+            else -> beregningsResultat.shouldBeTypeOf<BeregningsResultat>()
         }
     }
 }

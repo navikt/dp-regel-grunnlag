@@ -1,5 +1,7 @@
 package no.nav.dagpenger.regel.grunnlag.beregning
 
+import io.kotlintest.matchers.types.shouldBeTypeOf
+import io.kotlintest.shouldBe
 import no.nav.dagpenger.events.inntekt.v1.Inntekt
 import no.nav.dagpenger.events.inntekt.v1.InntektKlasse
 import no.nav.dagpenger.events.inntekt.v1.KlassifisertInntekt
@@ -9,7 +11,6 @@ import org.junit.jupiter.api.Test
 import java.math.BigDecimal
 import java.time.LocalDate
 import java.time.YearMonth
-import kotlin.test.assertEquals
 
 class BruttoInntektMedFangstOgFiskDeSiste36KalendermånedeneBeregningsTest {
 
@@ -63,10 +64,9 @@ class BruttoInntektMedFangstOgFiskDeSiste36KalendermånedeneBeregningsTest {
         )
 
         when (val beregningsResultat = BruttoInntektMedFangstOgFiskDeSiste36AvsluttedeKalendermånedene().calculate(fakta)) {
-            is BeregningsResultat -> assertEquals(
-                BigDecimal("1371.97393512841033163333"),
-                beregningsResultat.uavkortet
-            )
+            is BeregningsResultat ->
+                beregningsResultat.uavkortet shouldBe BigDecimal("1371.97393512841033163333")
+            else -> beregningsResultat.shouldBeTypeOf<BeregningsResultat>()
         }
     }
 
@@ -132,10 +132,9 @@ class BruttoInntektMedFangstOgFiskDeSiste36KalendermånedeneBeregningsTest {
         )
 
         when (val beregningsResultat = BruttoInntektMedFangstOgFiskDeSiste36AvsluttedeKalendermånedene().calculate(fakta)) {
-            is BeregningsResultat -> assertEquals(
-                BigDecimal("344.89964471595075862667"),
-                beregningsResultat.uavkortet
-            )
+            is BeregningsResultat ->
+                beregningsResultat.uavkortet shouldBe BigDecimal("344.89964471595075862667")
+            else -> beregningsResultat.shouldBeTypeOf<BeregningsResultat>()
         }
     }
 
@@ -201,15 +200,14 @@ class BruttoInntektMedFangstOgFiskDeSiste36KalendermånedeneBeregningsTest {
         )
 
         when (val beregningsResultat = BruttoInntektMedFangstOgFiskDeSiste36AvsluttedeKalendermånedene().calculate(fakta)) {
-            is BeregningsResultat -> assertEquals(
-                BigDecimal("-344.89964471595075862667"),
-                beregningsResultat.uavkortet
-            )
+            is BeregningsResultat ->
+                beregningsResultat.uavkortet shouldBe BigDecimal("-344.89964471595075862667")
+            else -> beregningsResultat.shouldBeTypeOf<BeregningsResultat>()
         }
     }
 
     @Test
-    fun `Skal returnere 0 som grunnlag hvis ingen inntekt`() {
+    fun `Skal returnere IngenBeregningsResultat fra denne reglenen hvis ingen inntekt`() {
 
         val fakta = Fakta(
             inntekt = Inntekt("123", emptyList(), sisteAvsluttendeKalenderMåned = YearMonth.of(2019, 3)),
@@ -219,10 +217,10 @@ class BruttoInntektMedFangstOgFiskDeSiste36KalendermånedeneBeregningsTest {
         )
 
         when (val beregningsResultat = BruttoInntektMedFangstOgFiskDeSiste36AvsluttedeKalendermånedene().calculate(fakta)) {
-            is BeregningsResultat -> assertEquals(
-                BigDecimal.ZERO,
-                beregningsResultat.uavkortet
-            )
+            is IngenBeregningsResultat ->
+                beregningsResultat.beskrivelse shouldBe
+                "FangstOgFiskSiste36"
+            else -> beregningsResultat.shouldBeTypeOf<IngenBeregningsResultat>()
         }
     }
 }
