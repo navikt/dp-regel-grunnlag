@@ -37,7 +37,7 @@ internal fun packetToFakta(packet: Packet): Fakta {
     )
 }
 
-private fun isThisGjusteringTest(
+internal fun isThisGjusteringTest(
     beregningsdato: LocalDate,
     verneplikt: Boolean
 ): Boolean {
