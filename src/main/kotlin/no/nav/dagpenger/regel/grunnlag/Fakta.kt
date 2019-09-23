@@ -8,7 +8,6 @@ import no.nav.dagpenger.events.inntekt.v1.sumInntekt
 import no.nav.dagpenger.grunnbelop.Grunnbeløp
 import no.nav.dagpenger.grunnbelop.Regel
 import no.nav.dagpenger.grunnbelop.faktorMellom
-import no.nav.dagpenger.grunnbelop.forDato
 import no.nav.dagpenger.grunnbelop.forMåned
 import no.nav.dagpenger.grunnbelop.getGrunnbeløpForRegel
 import java.math.BigDecimal
@@ -20,25 +19,26 @@ data class Fakta(
     val verneplikt: Boolean,
     val fangstOgFisk: Boolean,
     val beregningsdato: LocalDate,
-    val manueltGrunnlag: Int? = null
+    val manueltGrunnlag: Int? = null,
+    val gjeldendeGrunnbeløpVedBeregningsdato: Grunnbeløp,
+    val gjeldendeGrunnbeløpForDagensDato: Grunnbeløp
 ) {
-    val gjeldendeGrunnbeløp = getGrunnbeløp(LocalDate.from(beregningsdato))
     val inntektsPerioder = inntekt?.splitIntoInntektsPerioder()
 
     private val inntektsPerioderOrEmpty = inntektsPerioder ?: InntektsPerioder(emptyList(), emptyList(), emptyList())
 
     fun oppjusterteInntekterFørstePeriode(inntektsKlasser: EnumSet<InntektKlasse>): BigDecimal =
-        inntektsPerioderOrEmpty.first.map(oppjusterTilGjeldendeGrunnbeløp(gjeldendeGrunnbeløp)).sumInntekt(
+        inntektsPerioderOrEmpty.first.map(oppjusterTilGjeldendeGrunnbeløp(gjeldendeGrunnbeløpVedBeregningsdato)).sumInntekt(
             inntektsKlasser.toList()
         )
 
     fun oppjusterteInntekterAndrePeriode(inntektsKlasser: EnumSet<InntektKlasse>): BigDecimal =
-        inntektsPerioderOrEmpty.second.map(oppjusterTilGjeldendeGrunnbeløp(gjeldendeGrunnbeløp)).sumInntekt(
+        inntektsPerioderOrEmpty.second.map(oppjusterTilGjeldendeGrunnbeløp(gjeldendeGrunnbeløpVedBeregningsdato)).sumInntekt(
             inntektsKlasser.toList()
         )
 
     fun oppjusterteInntekterTredjePeriode(inntektsKlasser: EnumSet<InntektKlasse>): BigDecimal =
-        inntektsPerioderOrEmpty.third.map(oppjusterTilGjeldendeGrunnbeløp(gjeldendeGrunnbeløp)).sumInntekt(
+        inntektsPerioderOrEmpty.third.map(oppjusterTilGjeldendeGrunnbeløp(gjeldendeGrunnbeløpVedBeregningsdato)).sumInntekt(
             inntektsKlasser.toList()
         )
 
@@ -55,14 +55,4 @@ data class Fakta(
             inntekt.copy(klassifiserteInntekter = oppjusterteinntekter)
         }
     }
-}
-
-private fun getGrunnbeløp(beregningsdato: LocalDate): Grunnbeløp {
-    if (features.isEnabled("gjustering")) {
-        if (beregningsdato.isAfter(LocalDate.of(2019, 8, 1).minusDays(1))) {
-            return Grunnbeløp.GjusteringsTest
-        }
-    }
-
-    return getGrunnbeløpForRegel(Regel.Grunnlag).forDato(beregningsdato)
 }

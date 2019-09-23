@@ -21,7 +21,7 @@ abstract class TrettiseksMånedersBeregning(
 
         val uavkortet = (uavkortetFørstePeriode + uavkortetAndrePeriode + uavkortetTredjePeriode).divide(3.toBigDecimal(), antallDesimaler, RoundingMode.HALF_UP)
 
-        val seksGangerGrunnbeløp = fakta.gjeldendeGrunnbeløp.verdi.multiply(BigDecimal(6))
+        val seksGangerGrunnbeløp = fakta.gjeldendeGrunnbeløpVedBeregningsdato.verdi.multiply(BigDecimal(6))
 
         val avkortetFørste = if (uavkortetFørstePeriode > seksGangerGrunnbeløp) seksGangerGrunnbeløp else uavkortetFørstePeriode
 
