@@ -4,7 +4,7 @@ import no.nav.dagpenger.regel.grunnlag.Fakta
 import java.math.BigDecimal
 
 abstract class GrunnlagBeregning(val beregningsregel: String) {
-    abstract fun calculate(fakta: Fakta): BeregningsResultat
+    abstract fun calculate(fakta: Fakta): Resultat
 }
 
 val grunnlagsBeregninger = setOf(

@@ -1,15 +1,14 @@
 package no.nav.dagpenger.regel.grunnlag.beregning
 
+import io.kotlintest.matchers.types.shouldBeTypeOf
+import io.kotlintest.shouldBe
 import no.nav.dagpenger.events.inntekt.v1.Inntekt
 import no.nav.dagpenger.grunnbelop.Grunnbeløp
 import no.nav.dagpenger.regel.grunnlag.Fakta
-import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Test
 import java.math.BigDecimal
 import java.time.LocalDate
 import java.time.YearMonth
-import kotlin.test.assertEquals
-import kotlin.test.assertTrue
 
 class ManueltGrunnlagBeregningsTest {
 
@@ -28,10 +27,14 @@ class ManueltGrunnlagBeregningsTest {
             gjeldendeGrunnbeløpForDagensDato = Grunnbeløp.FastsattI2019
         )
 
-        assertEquals(BigDecimal("50000"), ManueltGrunnlagBeregning().calculate(fakta).uavkortet)
-        assertEquals(BigDecimal("50000"), ManueltGrunnlagBeregning().calculate(fakta).avkortet)
-        assertEquals("Manuell", ManueltGrunnlagBeregning().calculate(fakta).beregningsregel)
-        assertFalse(ManueltGrunnlagBeregning().calculate(fakta).harAvkortet)
+        when (val beregningsResultat = ManueltGrunnlagBeregning().calculate(fakta)) {
+            is BeregningsResultat -> {
+                beregningsResultat.uavkortet shouldBe BigDecimal("50000")
+                beregningsResultat.avkortet shouldBe BigDecimal("50000")
+                beregningsResultat.beregningsregel shouldBe "Manuell"
+                beregningsResultat.harAvkortet shouldBe false
+            }
+        }
     }
 
     @Test
@@ -49,9 +52,35 @@ class ManueltGrunnlagBeregningsTest {
             gjeldendeGrunnbeløpForDagensDato = Grunnbeløp.FastsattI2019
         )
 
-        assertEquals(BigDecimal("600000"), ManueltGrunnlagBeregning().calculate(fakta).uavkortet)
-        assertEquals(BigDecimal("581298"), ManueltGrunnlagBeregning().calculate(fakta).avkortet)
-        assertEquals("Manuell", ManueltGrunnlagBeregning().calculate(fakta).beregningsregel)
-        assertTrue(ManueltGrunnlagBeregning().calculate(fakta).harAvkortet)
+        when (val beregningsResultat = ManueltGrunnlagBeregning().calculate(fakta)) {
+            is BeregningsResultat -> {
+                beregningsResultat.uavkortet shouldBe BigDecimal("600000")
+                beregningsResultat.avkortet shouldBe BigDecimal("581298")
+                beregningsResultat.beregningsregel shouldBe "Manuell"
+                beregningsResultat.harAvkortet shouldBe true
+            }
+        }
+    }
+
+    @Test
+    fun ` Skal gi IngenBeregningsRegel når manuelt grunnlag er satt til 0 `() {
+        val fakta = Fakta(
+            Inntekt(
+                "123",
+                emptyList(), sisteAvsluttendeKalenderMåned = YearMonth.of(2019, 3)
+            ),
+            false,
+            false,
+            LocalDate.of(2019, 4, 10),
+            manueltGrunnlag = 0,
+            gjeldendeGrunnbeløpVedBeregningsdato = Grunnbeløp.FastsattI2019,
+            gjeldendeGrunnbeløpForDagensDato = Grunnbeløp.FastsattI2019
+        )
+
+        when (val beregningsResultat = ManueltGrunnlagBeregning().calculate(fakta)) {
+            is IngenBeregningsResultat ->
+                beregningsResultat.beskrivelse shouldBe "Manuell"
+            else -> beregningsResultat.shouldBeTypeOf<IngenBeregningsResultat>()
+        }
     }
 }

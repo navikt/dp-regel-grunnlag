@@ -1,5 +1,7 @@
 package no.nav.dagpenger.regel.grunnlag.beregning
 
+import io.kotlintest.matchers.types.shouldBeTypeOf
+import io.kotlintest.shouldBe
 import no.nav.dagpenger.events.inntekt.v1.Inntekt
 import no.nav.dagpenger.events.inntekt.v1.InntektKlasse
 import no.nav.dagpenger.events.inntekt.v1.KlassifisertInntekt
@@ -10,8 +12,6 @@ import org.junit.jupiter.api.Test
 import java.math.BigDecimal
 import java.time.LocalDate
 import java.time.YearMonth
-import kotlin.test.assertEquals
-import kotlin.test.assertTrue
 
 class BruttoArbeidsinntektDeSiste12AvsluttedeKalendermånedeneBeregningsTest {
 
@@ -48,10 +48,12 @@ class BruttoArbeidsinntektDeSiste12AvsluttedeKalendermånedeneBeregningsTest {
             gjeldendeGrunnbeløpForDagensDato = Grunnbeløp.FastsattI2019
         )
 
-        assertEquals(
-            BigDecimal("2034.69893414785227588000"),
-            BruttoArbeidsinntektDeSiste12AvsluttedeKalendermånedene().calculate(fakta).uavkortet
-        )
+        when (val beregningsResultat = BruttoArbeidsinntektDeSiste12AvsluttedeKalendermånedene().calculate(fakta)) {
+            is BeregningsResultat ->
+                beregningsResultat.uavkortet shouldBe
+                BigDecimal("2034.69893414785227588000")
+            else -> beregningsResultat.shouldBeTypeOf<BeregningsResultat>()
+        }
     }
 
     @Test
@@ -87,13 +89,13 @@ class BruttoArbeidsinntektDeSiste12AvsluttedeKalendermånedeneBeregningsTest {
             gjeldendeGrunnbeløpForDagensDato = Grunnbeløp.FastsattI2019
         )
 
-        val resultat = BruttoArbeidsinntektDeSiste12AvsluttedeKalendermånedene().calculate(fakta)
-        assertEquals(
-            BigDecimal("581298"),
-            resultat.avkortet
-        )
-
-        assertTrue(resultat.harAvkortet)
+        when (val beregningsResultat = BruttoArbeidsinntektDeSiste12AvsluttedeKalendermånedene().calculate(fakta)) {
+            is BeregningsResultat -> {
+                beregningsResultat.avkortet shouldBe BigDecimal("581298")
+                beregningsResultat.harAvkortet shouldBe true
+            }
+            else -> beregningsResultat.shouldBeTypeOf<BeregningsResultat>()
+        }
     }
 
     @Test
@@ -137,10 +139,101 @@ class BruttoArbeidsinntektDeSiste12AvsluttedeKalendermånedeneBeregningsTest {
             gjeldendeGrunnbeløpForDagensDato = Grunnbeløp.FastsattI2019
         )
 
-        assertEquals(
-            BigDecimal("2034.69893414785227588000"),
-            BruttoArbeidsinntektDeSiste12AvsluttedeKalendermånedene().calculate(fakta).uavkortet
+        when (val beregningsResultat = BruttoArbeidsinntektDeSiste12AvsluttedeKalendermånedene().calculate(fakta)) {
+            is BeregningsResultat -> beregningsResultat.uavkortet shouldBe
+                BigDecimal("2034.69893414785227588000")
+            else -> beregningsResultat.shouldBeTypeOf<BeregningsResultat>()
+        }
+    }
+
+    @Test
+    fun ` Skal gi riktig grunnlag med minusinntekt`() {
+
+        val inntektsListe = listOf(
+            KlassifisertInntektMåned(
+                YearMonth.of(2018, 4),
+                listOf(
+                    KlassifisertInntekt(
+                        BigDecimal(1000),
+                        InntektKlasse.ARBEIDSINNTEKT
+                    )
+                )
+            ),
+            KlassifisertInntektMåned(
+                YearMonth.of(2018, 5),
+                listOf(
+                    KlassifisertInntekt(
+                        BigDecimal(1000),
+                        InntektKlasse.ARBEIDSINNTEKT
+                    ),
+                    KlassifisertInntekt(
+                        BigDecimal(-1000),
+                        InntektKlasse.ARBEIDSINNTEKT
+                    )
+                )
+            )
         )
+
+        val fakta = Fakta(
+            inntekt = Inntekt("123", inntektsListe, sisteAvsluttendeKalenderMåned = YearMonth.of(2019, 1)),
+            fangstOgFisk = false,
+            verneplikt = false,
+            beregningsdato = LocalDate.of(2019, 2, 10),
+            gjeldendeGrunnbeløpVedBeregningsdato = Grunnbeløp.FastsattI2019,
+            gjeldendeGrunnbeløpForDagensDato = Grunnbeløp.FastsattI2019
+        )
+
+        when (val beregningsResultat = BruttoArbeidsinntektDeSiste12AvsluttedeKalendermånedene().calculate(fakta)) {
+            is BeregningsResultat ->
+                beregningsResultat.uavkortet shouldBe
+                BigDecimal("1066.47158083602110345000")
+            else -> beregningsResultat.shouldBeTypeOf<BeregningsResultat>()
+        }
+    }
+
+    @Test
+    fun ` Skal gi riktig grunnlag dersom summen av inntekter er minus`() {
+
+        val inntektsListe = listOf(
+            KlassifisertInntektMåned(
+                YearMonth.of(2018, 4),
+                listOf(
+                    KlassifisertInntekt(
+                        BigDecimal(-1000),
+                        InntektKlasse.ARBEIDSINNTEKT
+                    )
+                )
+            ),
+            KlassifisertInntektMåned(
+                YearMonth.of(2018, 5),
+                listOf(
+                    KlassifisertInntekt(
+                        BigDecimal(1000),
+                        InntektKlasse.ARBEIDSINNTEKT
+                    ),
+                    KlassifisertInntekt(
+                        BigDecimal(-1000),
+                        InntektKlasse.ARBEIDSINNTEKT
+                    )
+                )
+            )
+        )
+
+        val fakta = Fakta(
+            inntekt = Inntekt("123", inntektsListe, sisteAvsluttendeKalenderMåned = YearMonth.of(2019, 1)),
+            fangstOgFisk = false,
+            verneplikt = false,
+            beregningsdato = LocalDate.of(2019, 2, 10),
+            gjeldendeGrunnbeløpVedBeregningsdato = Grunnbeløp.FastsattI2019,
+            gjeldendeGrunnbeløpForDagensDato = Grunnbeløp.FastsattI2019
+        )
+
+        when (val beregningsResultat = BruttoArbeidsinntektDeSiste12AvsluttedeKalendermånedene().calculate(fakta)) {
+            is BeregningsResultat ->
+                beregningsResultat.uavkortet shouldBe
+                BigDecimal("-1066.47158083602110345000")
+            else -> beregningsResultat.shouldBeTypeOf<BeregningsResultat>()
+        }
     }
 
     @Test
@@ -155,9 +248,11 @@ class BruttoArbeidsinntektDeSiste12AvsluttedeKalendermånedeneBeregningsTest {
             gjeldendeGrunnbeløpForDagensDato = Grunnbeløp.FastsattI2019
         )
 
-        assertEquals(
-            BigDecimal.ZERO,
-            BruttoArbeidsinntektDeSiste12AvsluttedeKalendermånedene().calculate(fakta).uavkortet
-        )
+        when (val beregningsResultat = BruttoArbeidsinntektDeSiste12AvsluttedeKalendermånedene().calculate(fakta)) {
+            is BeregningsResultat ->
+                beregningsResultat.uavkortet shouldBe
+                BigDecimal.ZERO
+            else -> beregningsResultat.shouldBeTypeOf<BeregningsResultat>()
+        }
     }
 }

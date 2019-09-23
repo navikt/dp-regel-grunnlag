@@ -1,5 +1,7 @@
 package no.nav.dagpenger.regel.grunnlag.beregning
 
+import io.kotlintest.matchers.types.shouldBeTypeOf
+import io.kotlintest.shouldBe
 import no.nav.dagpenger.events.inntekt.v1.Inntekt
 import no.nav.dagpenger.events.inntekt.v1.InntektKlasse
 import no.nav.dagpenger.events.inntekt.v1.KlassifisertInntekt
@@ -10,7 +12,6 @@ import org.junit.jupiter.api.Test
 import java.math.BigDecimal
 import java.time.LocalDate
 import java.time.YearMonth
-import kotlin.test.assertEquals
 
 class BruttoInntektMedFangstOgFiskDeSiste36KalendermånedeneBeregningsTest {
 
@@ -65,14 +66,155 @@ class BruttoInntektMedFangstOgFiskDeSiste36KalendermånedeneBeregningsTest {
             gjeldendeGrunnbeløpForDagensDato = Grunnbeløp.FastsattI2018
         )
 
-        assertEquals(
-            BigDecimal("1371.97393512841033163333"),
-            BruttoInntektMedFangstOgFiskDeSiste36AvsluttedeKalendermånedene().calculate(fakta).uavkortet
-        )
+        when (val beregningsResultat = BruttoInntektMedFangstOgFiskDeSiste36AvsluttedeKalendermånedene().calculate(fakta)) {
+            is BeregningsResultat ->
+                beregningsResultat.uavkortet shouldBe BigDecimal("1371.97393512841033163333")
+            else -> beregningsResultat.shouldBeTypeOf<BeregningsResultat>()
+        }
     }
 
     @Test
-    fun `Skal returnere 0 som grunnlag hvis ingen inntekt`() {
+    fun ` Skal gi riktig grunnlag med minusinntekt`() {
+
+        val inntektsListe = listOf(
+            KlassifisertInntektMåned(
+                YearMonth.of(2018, 4),
+                listOf(
+                    KlassifisertInntekt(
+                        BigDecimal(1000),
+                        InntektKlasse.FANGST_FISKE
+                    )
+                )
+            ),
+            KlassifisertInntektMåned(
+                YearMonth.of(2018, 5),
+                listOf(
+                    KlassifisertInntekt(
+                        BigDecimal(1000),
+                        InntektKlasse.ARBEIDSINNTEKT
+                    ),
+                    KlassifisertInntekt(
+                        BigDecimal(-1000),
+                        InntektKlasse.FANGST_FISKE
+                    )
+                )
+            ),
+            KlassifisertInntektMåned(
+                YearMonth.of(2017, 5),
+                listOf(
+                    KlassifisertInntekt(
+                        BigDecimal(1000),
+                        InntektKlasse.FANGST_FISKE
+                    ),
+                    KlassifisertInntekt(
+                        BigDecimal(-1000),
+                        InntektKlasse.ARBEIDSINNTEKT
+                    )
+                )
+            ),
+            KlassifisertInntektMåned(
+                YearMonth.of(2016, 10),
+                listOf(
+                    KlassifisertInntekt(
+                        BigDecimal(1000),
+                        InntektKlasse.FANGST_FISKE
+                    ),
+                    KlassifisertInntekt(
+                        BigDecimal(-1000),
+                        InntektKlasse.FANGST_FISKE
+                    )
+                )
+            )
+        )
+
+        val fakta = Fakta(
+            inntekt = Inntekt("123", inntektsListe, sisteAvsluttendeKalenderMåned = YearMonth.of(2019, 1)),
+            fangstOgFisk = true,
+            verneplikt = false,
+            beregningsdato = LocalDate.of(2019, 2, 10),
+            gjeldendeGrunnbeløpVedBeregningsdato = Grunnbeløp.FastsattI2019,
+            gjeldendeGrunnbeløpForDagensDato = Grunnbeløp.FastsattI2019
+        )
+
+        when (val beregningsResultat = BruttoInntektMedFangstOgFiskDeSiste36AvsluttedeKalendermånedene().calculate(fakta)) {
+            is BeregningsResultat ->
+                beregningsResultat.uavkortet shouldBe BigDecimal("355.49052694534036781667")
+            else -> beregningsResultat.shouldBeTypeOf<BeregningsResultat>()
+        }
+    }
+
+    @Test
+    fun ` Skal gi riktig grunnlag dersom summen av inntekter er minus`() {
+
+        val inntektsListe = listOf(
+            KlassifisertInntektMåned(
+                YearMonth.of(2018, 4),
+                listOf(
+                    KlassifisertInntekt(
+                        BigDecimal(-1000),
+                        InntektKlasse.FANGST_FISKE
+                    )
+                )
+            ),
+            KlassifisertInntektMåned(
+                YearMonth.of(2018, 5),
+                listOf(
+                    KlassifisertInntekt(
+                        BigDecimal(1000),
+                        InntektKlasse.ARBEIDSINNTEKT
+                    ),
+                    KlassifisertInntekt(
+                        BigDecimal(-1000),
+                        InntektKlasse.FANGST_FISKE
+                    )
+                )
+            ),
+            KlassifisertInntektMåned(
+                YearMonth.of(2017, 5),
+                listOf(
+                    KlassifisertInntekt(
+                        BigDecimal(1000),
+                        InntektKlasse.ARBEIDSINNTEKT
+                    ),
+                    KlassifisertInntekt(
+                        BigDecimal(-1000),
+                        InntektKlasse.FANGST_FISKE
+                    )
+                )
+            ),
+            KlassifisertInntektMåned(
+                YearMonth.of(2016, 10),
+                listOf(
+                    KlassifisertInntekt(
+                        BigDecimal(1000),
+                        InntektKlasse.FANGST_FISKE
+                    ),
+                    KlassifisertInntekt(
+                        BigDecimal(-1000),
+                        InntektKlasse.FANGST_FISKE
+                    )
+                )
+            )
+        )
+
+        val fakta = Fakta(
+            inntekt = Inntekt("123", inntektsListe, sisteAvsluttendeKalenderMåned = YearMonth.of(2019, 1)),
+            fangstOgFisk = true,
+            verneplikt = false,
+            beregningsdato = LocalDate.of(2019, 2, 10),
+            gjeldendeGrunnbeløpVedBeregningsdato = Grunnbeløp.FastsattI2019,
+            gjeldendeGrunnbeløpForDagensDato = Grunnbeløp.FastsattI2019
+        )
+
+        when (val beregningsResultat = BruttoInntektMedFangstOgFiskDeSiste36AvsluttedeKalendermånedene().calculate(fakta)) {
+            is BeregningsResultat ->
+                beregningsResultat.uavkortet shouldBe BigDecimal("-355.49052694534036781667")
+            else -> beregningsResultat.shouldBeTypeOf<BeregningsResultat>()
+        }
+    }
+
+    @Test
+    fun `Skal returnere IngenBeregningsResultat fra denne reglenen hvis ingen inntekt`() {
 
         val fakta = Fakta(
             inntekt = Inntekt("123", emptyList(), sisteAvsluttendeKalenderMåned = YearMonth.of(2019, 3)),
@@ -83,9 +225,11 @@ class BruttoInntektMedFangstOgFiskDeSiste36KalendermånedeneBeregningsTest {
             gjeldendeGrunnbeløpForDagensDato = Grunnbeløp.FastsattI2019
         )
 
-        assertEquals(
-            BigDecimal.ZERO,
-            BruttoInntektMedFangstOgFiskDeSiste36AvsluttedeKalendermånedene().calculate(fakta).uavkortet
-        )
+        when (val beregningsResultat = BruttoInntektMedFangstOgFiskDeSiste36AvsluttedeKalendermånedene().calculate(fakta)) {
+            is IngenBeregningsResultat ->
+                beregningsResultat.beskrivelse shouldBe
+                "FangstOgFiskSiste36"
+            else -> beregningsResultat.shouldBeTypeOf<IngenBeregningsResultat>()
+        }
     }
 }

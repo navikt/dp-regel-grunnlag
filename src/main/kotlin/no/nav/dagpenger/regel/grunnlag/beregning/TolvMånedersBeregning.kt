@@ -11,7 +11,7 @@ abstract class TolvMånedersBeregning(
 ) :
     GrunnlagBeregning(beregningsregel) {
 
-    override fun calculate(fakta: Fakta): BeregningsResultat {
+    override fun calculate(fakta: Fakta): Resultat {
         val uavkortet = fakta.oppjusterteInntekterFørstePeriode(inntektKlasser)
 
         val seksGangerGrunnbeløp = fakta.gjeldendeGrunnbeløpVedBeregningsdato.verdi.multiply(BigDecimal(6))

@@ -1,12 +1,13 @@
 package no.nav.dagpenger.regel.grunnlag.beregning
 
+import io.kotlintest.matchers.types.shouldBeTypeOf
+import io.kotlintest.shouldBe
 import no.nav.dagpenger.events.inntekt.v1.Inntekt
 import no.nav.dagpenger.grunnbelop.Grunnbeløp
 import no.nav.dagpenger.regel.grunnlag.Fakta
 import org.junit.jupiter.api.Test
 import java.time.LocalDate
 import java.time.YearMonth
-import kotlin.test.assertEquals
 
 class DagpengerEtterAvtjentVernepliktBeregningsTest {
 
@@ -22,11 +23,15 @@ class DagpengerEtterAvtjentVernepliktBeregningsTest {
             gjeldendeGrunnbeløpForDagensDato = Grunnbeløp.FastsattI2019
         )
 
-        assertEquals(299574.toBigDecimal(), DagpengerEtterAvtjentVerneplikt().calculate(fakta).uavkortet)
+        when (val beregningsResultat = DagpengerEtterAvtjentVerneplikt().calculate(fakta)) {
+            is BeregningsResultat ->
+                beregningsResultat.uavkortet shouldBe 299574.toBigDecimal()
+            else -> beregningsResultat.shouldBeTypeOf<BeregningsResultat>()
+        }
     }
 
     @Test
-    fun `Skal få uavkortet grunnlag på 0 når verneplikt ikke er satt`() {
+    fun `Skal få ingenBeregningsResultat på verneplikt når den ikke er satt`() {
 
         val fakta = Fakta(
             inntekt = Inntekt("123", emptyList(), sisteAvsluttendeKalenderMåned = YearMonth.of(2019, 3)),
@@ -37,6 +42,10 @@ class DagpengerEtterAvtjentVernepliktBeregningsTest {
             gjeldendeGrunnbeløpForDagensDato = Grunnbeløp.FastsattI2019
         )
 
-        assertEquals(0.toBigDecimal(), DagpengerEtterAvtjentVerneplikt().calculate(fakta).uavkortet)
+        when (val beregningsResultat = DagpengerEtterAvtjentVerneplikt().calculate(fakta)) {
+            is IngenBeregningsResultat ->
+                beregningsResultat.beskrivelse shouldBe "Verneplikt"
+            else -> beregningsResultat.shouldBeTypeOf<BeregningsResultat>()
+        }
     }
 }

@@ -117,9 +117,9 @@ class GrunnlagTopologyTest {
         )
 
         val json = """
-        {
-            "beregningsDato":"2018-04-06",
-            "harAvtjentVerneplikt": true
+            {
+                "beregningsDato":"2018-04-06",
+                "harAvtjentVerneplikt": true
             }
             """.trimIndent()
 
@@ -151,10 +151,10 @@ class GrunnlagTopologyTest {
         )
 
         val json = """
-        {
-            "beregningsDato":"2018-04-06",
-            "harAvtjentVerneplikt": true,
-            "manueltGrunnlag":50000
+            {
+                "beregningsDato":"2018-04-06",
+                "harAvtjentVerneplikt": true,
+                "manueltGrunnlag":50000
             }
             """.trimIndent()
 
@@ -204,10 +204,10 @@ class GrunnlagTopologyTest {
         )
 
         val json = """
-        {
-            "beregningsDato":"2018-04-06",
-            "harAvtjentVerneplikt": false,
-            "oppfyllerKravTilFangstOgFisk": true
+            {
+                "beregningsDato":"2018-04-06",
+                "harAvtjentVerneplikt": false,
+                "oppfyllerKravTilFangstOgFisk": true
             }
             """.trimIndent()
 

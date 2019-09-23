@@ -1,8 +1,7 @@
 package no.nav.dagpenger.regel.grunnlag
 
-import org.junit.jupiter.api.Assertions.assertTrue
+import io.kotlintest.shouldBe
 import org.junit.jupiter.api.Test
-import kotlin.test.assertEquals
 
 class GrunnlagResultatTest {
 
@@ -19,13 +18,13 @@ class GrunnlagResultatTest {
             grunnbeløpBrukt = 123.toBigDecimal()
         )
 
-        assertEquals("111", grunnlagResultat.sporingsId)
-        assertEquals("222", grunnlagResultat.subsumsjonsId)
-        assertEquals("Grunnlag.v1", grunnlagResultat.regelidentifikator)
-        assertEquals(4455.toBigDecimal(), grunnlagResultat.avkortetGrunnlag)
-        assertEquals(1122.toBigDecimal(), grunnlagResultat.uavkortetGrunnlag)
-        assertEquals("ORDINÆR", grunnlagResultat.beregningsregel)
-        assertTrue(grunnlagResultat.harAvkortet)
+        grunnlagResultat.sporingsId shouldBe "111"
+        grunnlagResultat.subsumsjonsId shouldBe "222"
+        grunnlagResultat.regelidentifikator shouldBe "Grunnlag.v1"
+        grunnlagResultat.avkortetGrunnlag shouldBe 4455.toBigDecimal()
+        grunnlagResultat.uavkortetGrunnlag shouldBe 1122.toBigDecimal()
+        grunnlagResultat.beregningsregel shouldBe "ORDINÆR"
+        grunnlagResultat.harAvkortet shouldBe true
     }
 
     @Test
@@ -41,7 +40,7 @@ class GrunnlagResultatTest {
             grunnbeløpBrukt = 123.toBigDecimal()
         )
 
-        assertEquals(100.toBigDecimal(), grunnlagResultat.avrundetUavkortet)
+        grunnlagResultat.avrundetUavkortet shouldBe 100.toBigDecimal()
     }
 
     @Test
@@ -57,6 +56,6 @@ class GrunnlagResultatTest {
             grunnbeløpBrukt = 123.toBigDecimal()
         )
 
-        assertEquals(1235.toBigDecimal(), grunnlagResultat.avrundetAvkortet)
+        grunnlagResultat.avrundetAvkortet shouldBe 1235.toBigDecimal()
     }
 }

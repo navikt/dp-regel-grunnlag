@@ -160,6 +160,43 @@ internal class CreateInntektPerioderTest {
         Assertions.assertFalse(inntektsPerioder.all { it.inneholderFangstOgFisk })
     }
 
+    @Test
+    fun ` Skal ta med minus-inntekt `() {
+        val sisteAvsluttedeKalenderMåned = YearMonth.of(2019, 4)
+        val inntekt = listOf(
+            KlassifisertInntektMåned(
+                YearMonth.of(2019, 3),
+                klassifiserteInntekter = getMinusInntekt()
+            ),
+            KlassifisertInntektMåned(
+                YearMonth.of(2018, 3),
+                klassifiserteInntekter = getMinusInntekt()
+            ),
+            KlassifisertInntektMåned(
+                YearMonth.of(2017, 3),
+                klassifiserteInntekter = getMinusInntekt()
+            )
+        )
+
+        val fakta = Fakta(
+            inntekt = Inntekt(
+                "123",
+                inntekt,
+                sisteAvsluttendeKalenderMåned = sisteAvsluttedeKalenderMåned
+            ),
+            verneplikt = false,
+            fangstOgFisk = false,
+            beregningsdato = LocalDate.of(2019, 5, 20),
+            gjeldendeGrunnbeløpVedBeregningsdato = Grunnbeløp.FastsattI2019,
+            gjeldendeGrunnbeløpForDagensDato = Grunnbeløp.FastsattI2019
+        )
+
+        val inntektsPerioder = grunnlag.createInntektPerioder(fakta)!!
+        assertThreeCorrectPeriods(inntektsPerioder, sisteAvsluttedeKalenderMåned)
+
+        Assertions.assertTrue(inntektsPerioder.all { it.inntekt == BigDecimal(-100) })
+    }
+
     fun assertThreeCorrectPeriods(inntektsInfoListe: List<InntektPeriodeInfo>?, senesteMåned: YearMonth) {
         Assertions.assertEquals(3, inntektsInfoListe?.size)
 
@@ -206,6 +243,19 @@ internal class CreateInntektPerioderTest {
                 )
             )
         }
+    }
+
+    fun getMinusInntekt(): List<KlassifisertInntekt> {
+        return listOf(
+            KlassifisertInntekt(
+                beløp = BigDecimal(100),
+                inntektKlasse = InntektKlasse.ARBEIDSINNTEKT
+            ),
+            KlassifisertInntekt(
+                beløp = BigDecimal(-200),
+                inntektKlasse = InntektKlasse.ARBEIDSINNTEKT
+            )
+        )
     }
 
     fun generateFangstOgFiskInntekt(

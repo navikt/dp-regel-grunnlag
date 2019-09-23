@@ -14,7 +14,7 @@ class BruttoInntektMedFangstOgFiskDeSiste36AvsluttedeKalendermånedene : Trettis
     InntektKlasse.SYKEPENGER_FANGST_FISKE),
     "FangstOgFiskSiste36") {
 
-    override fun calculate(fakta: Fakta): BeregningsResultat {
-        return if (fakta.fangstOgFisk) super.calculate(fakta) else BeregningsResultat(0.toBigDecimal(), 0.toBigDecimal(), "FanstOgFiskSiste36")
+    override fun calculate(fakta: Fakta): Resultat {
+        return if (fakta.fangstOgFisk) super.calculate(fakta) else IngenBeregningsResultat("FangstOgFiskSiste36")
     }
 }
