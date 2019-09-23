@@ -92,7 +92,7 @@ class BruttoInntektMedFangstOgFiskDeSisteTolvKalendermånedeneBeregningsTest {
         val fakta = Fakta(
             inntekt = Inntekt("123", inntektsListe, sisteAvsluttendeKalenderMåned = YearMonth.of(2019, 1)),
             verneplikt = false,
-            fangstOgFisk = false,
+            fangstOgFisk = true,
             beregningsdato = LocalDate.of(2019, 4, 1),
             gjeldendeGrunnbeløpVedBeregningsdato = Grunnbeløp.FastsattI2018,
             gjeldendeGrunnbeløpForDagensDato = Grunnbeløp.FastsattI2019
@@ -168,7 +168,7 @@ class BruttoInntektMedFangstOgFiskDeSisteTolvKalendermånedeneBeregningsTest {
     }
 
     @Test
-    fun ` Skal gi IngenBeregningsRegel dersom fangst og fisk ikke er satt selv om det er inntekt`() {
+    fun ` Skal gi ingen beregningsresultat dersom fangst og fisk ikke er satt selv om det er inntekt`() {
 
         val inntektsListe = listOf(
             KlassifisertInntektMåned(
