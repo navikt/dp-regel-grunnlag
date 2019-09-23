@@ -186,7 +186,9 @@ internal class CreateInntektPerioderTest {
             ),
             verneplikt = false,
             fangstOgFisk = false,
-            beregningsdato = LocalDate.of(2019, 5, 20)
+            beregningsdato = LocalDate.of(2019, 5, 20),
+            gjeldendeGrunnbeløpVedBeregningsdato = Grunnbeløp.FastsattI2019,
+            gjeldendeGrunnbeløpForDagensDato = Grunnbeløp.FastsattI2019
         )
 
         val inntektsPerioder = grunnlag.createInntektPerioder(fakta)!!

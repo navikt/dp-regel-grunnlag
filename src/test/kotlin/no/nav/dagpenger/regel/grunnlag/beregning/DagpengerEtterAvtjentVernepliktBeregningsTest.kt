@@ -28,7 +28,6 @@ class DagpengerEtterAvtjentVernepliktBeregningsTest {
                 beregningsResultat.uavkortet shouldBe 299574.toBigDecimal()
             else -> beregningsResultat.shouldBeTypeOf<BeregningsResultat>()
         }
-
     }
 
     @Test

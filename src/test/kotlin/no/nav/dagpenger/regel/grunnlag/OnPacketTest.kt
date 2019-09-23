@@ -132,7 +132,7 @@ class OnPacketTest {
 
         assertTrue { resultPacket.hasField("grunnlagResultat") }
 
-        assertEquals(290649, Integer.parseInt(resultPacket.getMapValue("grunnlagResultat")["avkortet"].toString()))
+        assertEquals(299574, Integer.parseInt(resultPacket.getMapValue("grunnlagResultat")["avkortet"].toString()))
         assertEquals(
             Integer.parseInt(resultPacket.getMapValue("grunnlagResultat")["avkortet"].toString()),
             Integer.parseInt(resultPacket.getMapValue("grunnlagResultat")["uavkortet"].toString())

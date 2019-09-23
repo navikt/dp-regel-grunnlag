@@ -72,7 +72,9 @@ class ManueltGrunnlagBeregningsTest {
             false,
             false,
             LocalDate.of(2019, 4, 10),
-            manueltGrunnlag = 0
+            manueltGrunnlag = 0,
+            gjeldendeGrunnbeløpVedBeregningsdato = Grunnbeløp.FastsattI2019,
+            gjeldendeGrunnbeløpForDagensDato = Grunnbeløp.FastsattI2019
         )
 
         when (val beregningsResultat = ManueltGrunnlagBeregning().calculate(fakta)) {

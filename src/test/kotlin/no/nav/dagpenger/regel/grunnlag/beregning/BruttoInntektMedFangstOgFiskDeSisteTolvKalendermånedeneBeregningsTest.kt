@@ -206,10 +206,10 @@ class BruttoInntektMedFangstOgFiskDeSisteTolvKalendermånedeneBeregningsTest {
             gjeldendeGrunnbeløpForDagensDato = Grunnbeløp.FastsattI2019
         )
 
-        when (val beregningsResultat = BruttoInntektMedFangstOgFiskDeSiste12AvsluttedeKalendermånedene().calculate(fakta)) {
-            is IngenBeregningsResultat ->
-                beregningsResultat.beskrivelse shouldBe "FangstOgFiskeSiste12"
-            else -> beregningsResultat.shouldBeTypeOf<IngenBeregningsResultat>()
+        BruttoInntektMedFangstOgFiskDeSiste12AvsluttedeKalendermånedene().calculate(fakta).also {
+            it.shouldBeTypeOf<IngenBeregningsResultat>()
+            val resultat = it as IngenBeregningsResultat
+            resultat.beskrivelse shouldBe "FangstOgFiskeSiste12"
         }
     }
 }

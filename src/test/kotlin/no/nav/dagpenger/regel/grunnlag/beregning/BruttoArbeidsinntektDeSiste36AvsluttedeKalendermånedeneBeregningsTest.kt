@@ -258,13 +258,15 @@ class BruttoArbeidsinntektDeSiste36AvsluttedeKalendermånedeneBeregningsTest {
             inntekt = Inntekt("123", inntektsListe, sisteAvsluttendeKalenderMåned = YearMonth.of(2019, 1)),
             fangstOgFisk = false,
             verneplikt = false,
-            beregningsdato = LocalDate.of(2019, 2, 10)
+            beregningsdato = LocalDate.of(2019, 2, 10),
+            gjeldendeGrunnbeløpVedBeregningsdato = Grunnbeløp.FastsattI2019,
+            gjeldendeGrunnbeløpForDagensDato = Grunnbeløp.FastsattI2019
         )
 
         when (val beregningsResultat = BruttoArbeidsinntektDeSiste36AvsluttedeKalendermånedene().calculate(fakta)) {
             is BeregningsResultat ->
                 beregningsResultat.uavkortet shouldBe
-                BigDecimal("344.89964471595075862667")
+                BigDecimal("355.49052694534036781667")
             else -> beregningsResultat.shouldBeTypeOf<BeregningsResultat>()
         }
     }
@@ -327,13 +329,15 @@ class BruttoArbeidsinntektDeSiste36AvsluttedeKalendermånedeneBeregningsTest {
             inntekt = Inntekt("123", inntektsListe, sisteAvsluttendeKalenderMåned = YearMonth.of(2019, 1)),
             fangstOgFisk = false,
             verneplikt = false,
-            beregningsdato = LocalDate.of(2019, 2, 10)
+            beregningsdato = LocalDate.of(2019, 2, 10),
+            gjeldendeGrunnbeløpVedBeregningsdato = Grunnbeløp.FastsattI2019,
+            gjeldendeGrunnbeløpForDagensDato = Grunnbeløp.FastsattI2019
         )
 
         when (val beregningsResultat = BruttoArbeidsinntektDeSiste36AvsluttedeKalendermånedene().calculate(fakta)) {
             is BeregningsResultat ->
                 beregningsResultat.uavkortet shouldBe
-                BigDecimal("-344.89964471595075862667")
+                BigDecimal("-355.49052694534036781667")
             else -> beregningsResultat.shouldBeTypeOf<BeregningsResultat>()
         }
     }
