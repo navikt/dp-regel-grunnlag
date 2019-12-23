@@ -22,7 +22,7 @@ class Grunnlag(
     private val config: Configuration,
     private val instrumentation: GrunnlagInstrumentation
 ) : River(config.behovTopic) {
-    override val SERVICE_APP_ID: String = "dagpenger-regel-grunnlag"
+    override val SERVICE_APP_ID: String = config.application.id
     override val HTTP_PORT: Int = config.application.httpPort
     private val ulidGenerator = ULID()
     private val REGELIDENTIFIKATOR = "Grunnlag.v1"
