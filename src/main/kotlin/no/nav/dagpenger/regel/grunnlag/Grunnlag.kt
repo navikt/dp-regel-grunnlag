@@ -49,7 +49,6 @@ class Grunnlag(
     }
 
     override fun onPacket(packet: Packet): Packet {
-
         val fakta = packetToFakta(packet)
 
         val resultat =
@@ -86,8 +85,8 @@ class Grunnlag(
 
         instrumentation.grunnlagBeregnet(
             regelIdentifikator = REGELIDENTIFIKATOR,
-            beregningsregel = resultat.beregningsregel,
-            harAvkortet = resultat.harAvkortet
+            fakta = fakta,
+            resultat = grunnlagResultat
         )
 
         return packet
@@ -139,7 +138,9 @@ class Grunnlag(
             Problem(
                 type = URI("urn:dp:error:regel"),
                 title = "Ukjent feil ved bruk av grunnlagregel",
-                instance = URI("urn:dp:regel:grunnlag")))
+                instance = URI("urn:dp:regel:grunnlag")
+            )
+        )
         return packet
     }
 }
