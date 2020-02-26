@@ -1,6 +1,7 @@
 package no.nav.dagpenger.regel.grunnlag
 
 import io.mockk.mockk
+import io.mockk.verify
 import no.nav.dagpenger.events.Packet
 import no.nav.dagpenger.events.inntekt.v1.Inntekt
 import no.nav.dagpenger.events.inntekt.v1.InntektKlasse
@@ -14,7 +15,7 @@ import kotlin.test.assertTrue
 
 class OnPacketTest {
     companion object {
-        val fakeGrunnlagInstrumentation = mockk<GrunnlagInstrumentation> (relaxed = true)
+        val fakeGrunnlagInstrumentation = mockk<GrunnlagInstrumentation>(relaxed = true)
     }
 
     @Test
@@ -141,7 +142,38 @@ class OnPacketTest {
         assertEquals(false, resultPacket.getMapValue("grunnlagResultat")["harAvkortet"])
     }
 
-    fun getInntekt(månedsbeløp: BigDecimal): Inntekt {
+    @Test
+    fun ` Skal instrumentere beregninger`() {
+        val grunnlag = Grunnlag(
+            Configuration(),
+            fakeGrunnlagInstrumentation
+        )
+
+        val inntekt = getInntekt(1000.toBigDecimal())
+
+        val json = """
+            {
+                "beregningsDato":"2018-08-10",
+                "harAvtjentVerneplikt": true,
+                "oppfyllerKravTilFangstOgFisk": false
+            }
+            """.trimIndent()
+
+        val packet = Packet(json)
+        packet.putValue("inntektV1", Grunnlag.inntektAdapter.toJsonValue(inntekt)!!)
+
+        val resultPacket = grunnlag.onPacket(packet)
+
+        verify {
+            fakeGrunnlagInstrumentation.grunnlagBeregnet(
+                regelIdentifikator = ofType(String::class),
+                fakta = ofType(Fakta::class),
+                resultat = ofType(GrunnlagResultat::class)
+            )
+        }
+    }
+
+    private fun getInntekt(månedsbeløp: BigDecimal): Inntekt {
         return Inntekt(
             inntektsId = "12345",
             inntektsListe = listOf(
