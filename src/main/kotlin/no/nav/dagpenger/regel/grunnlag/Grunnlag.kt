@@ -14,6 +14,7 @@ import no.nav.dagpenger.regel.grunnlag.beregning.finnHøyesteAvkortetVerdi
 import no.nav.dagpenger.regel.grunnlag.beregning.grunnlagsBeregninger
 import no.nav.dagpenger.streams.River
 import no.nav.dagpenger.streams.streamConfig
+import org.apache.kafka.streams.StreamsConfig
 import org.apache.kafka.streams.kstream.Predicate
 import java.net.URI
 import java.util.Properties
@@ -129,7 +130,10 @@ class Grunnlag(
             appId = SERVICE_APP_ID,
             bootStapServerUrl = config.kafka.brokers,
             credential = config.kafka.credential()
-        )
+        ).apply {
+            this[StreamsConfig.DEFAULT_DESERIALIZATION_EXCEPTION_HANDLER_CLASS_CONFIG] =
+                config.kafka.deserializationExceptionHandler
+        }
     }
 
     override fun onFailure(packet: Packet, error: Throwable?): Packet {
