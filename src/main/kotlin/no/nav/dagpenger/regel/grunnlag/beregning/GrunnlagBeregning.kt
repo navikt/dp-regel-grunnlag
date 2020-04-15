@@ -13,10 +13,23 @@ val grunnlagsBeregninger = setOf(
     BruttoInntektMedFangstOgFiskDeSiste12AvsluttedeKalendermånedene(),
     BruttoInntektMedFangstOgFiskDeSiste36AvsluttedeKalendermånedene(),
     ManueltGrunnlagBeregning(),
+    LærlingForskriftSisteAvsluttendeKalenderMånedFangstOgFisk(),
+    LærlingForskriftSiste3AvsluttendeKalenderMånedFangsOgFisk(),
+    LærlingForskriftSisteAvsluttendeKalenderMåned(),
+    LærlingForskriftSiste3AvsluttendeKalenderMåned(),
     DagpengerEtterAvtjentVerneplikt()
 )
+fun Collection<BeregningsResultat>.finnHøyesteAvkortetVerdi() =
+    this.maxWith(PresedensOverManueltGrunnlag() then LærlingHarPresedensOverOrdinær() then PresedensOverVernepliktHvisAvkortertVerdiErLik())
 
-fun Collection<BeregningsResultat>.finnHøyesteAvkortetVerdi() = this.maxWith(PresedensOverManueltGrunnlag().then(PresedensOverVernepliktHvisAvkortertVerdiErLik()))
+
+
+private class LærlingHarPresedensOverOrdinær : Comparator<BeregningsResultat> {
+    override fun compare(resultat1: BeregningsResultat, resultat2: BeregningsResultat): Int {
+       return if(resultat1.beregningsregel.startsWith("Lærling")) 1 else resultat1.avkortet.compareTo(resultat2.avkortet)
+    }
+}
+
 
 private class PresedensOverManueltGrunnlag : Comparator<BeregningsResultat> {
     override fun compare(resultat1: BeregningsResultat, resultat2: BeregningsResultat): Int {

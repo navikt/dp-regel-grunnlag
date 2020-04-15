@@ -1,5 +1,6 @@
 package no.nav.dagpenger.regel.grunnlag.beregning
 
+import io.kotlintest.assertSoftly
 import io.kotlintest.shouldBe
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
@@ -59,5 +60,37 @@ class BeregningsResultatTest {
 
         resultater.finnHøyesteAvkortetVerdi()?.avkortet shouldBe 10000.toBigDecimal()
         resultater.finnHøyesteAvkortetVerdi()?.beregningsregel shouldBe "Ordinær"
+    }
+
+    @Test
+    fun `Skal returnere beregningsregel Lærling selvom lærling gir mindre enn og ordinær avkortet grunnlag`() {
+
+        val resultater = setOf(
+            BeregningsResultat(2000.toBigDecimal(), 2000.toBigDecimal(), "LærlingFangstOgFiskSiste1", true),
+            BeregningsResultat(0.toBigDecimal(), 0.toBigDecimal(), "Manuell", true),
+            BeregningsResultat(10000.toBigDecimal(), 10000.toBigDecimal(), "Ordinær", false))
+
+        assertSoftly {
+            with(resultater.finnHøyesteAvkortetVerdi()!!) {
+                this.avkortet shouldBe 2000.toBigDecimal()
+                this.beregningsregel shouldBe "LærlingFangstOgFiskSiste1"
+            }
+        }
+    }
+
+
+    @Test
+    fun `Manuelt grunnlag har presedens over Lærling`() {
+
+        val resultater = setOf(
+            BeregningsResultat(2000.toBigDecimal(), 2000.toBigDecimal(), "LærlingFangstOgFiskSiste1", true),
+            BeregningsResultat(1500.toBigDecimal(), 1500.toBigDecimal(), "Manuell", true))
+
+        assertSoftly {
+            with(resultater.finnHøyesteAvkortetVerdi()!!) {
+                this.avkortet shouldBe 1500.toBigDecimal()
+                this.beregningsregel shouldBe "Manuell"
+            }
+        }
     }
 }

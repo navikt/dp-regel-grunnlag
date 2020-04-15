@@ -21,11 +21,12 @@ data class Fakta(
     val beregningsdato: LocalDate,
     val manueltGrunnlag: Int? = null,
     val gjeldendeGrunnbeløpVedBeregningsdato: Grunnbeløp,
-    val gjeldendeGrunnbeløpForDagensDato: Grunnbeløp
+    val gjeldendeGrunnbeløpForDagensDato: Grunnbeløp,
+    val lærling: Boolean = false
 ) {
     val inntektsPerioder = inntekt?.splitIntoInntektsPerioder()
 
-    private val inntektsPerioderOrEmpty = inntektsPerioder ?: InntektsPerioder(emptyList(), emptyList(), emptyList())
+    val inntektsPerioderOrEmpty = inntektsPerioder ?: InntektsPerioder(emptyList(), emptyList(), emptyList())
 
     fun oppjusterteInntekterFørstePeriode(inntektsKlasser: EnumSet<InntektKlasse>): BigDecimal =
         inntektsPerioderOrEmpty.first.map(oppjusterTilGjeldendeGrunnbeløp(gjeldendeGrunnbeløpVedBeregningsdato)).sumInntekt(
@@ -41,6 +42,10 @@ data class Fakta(
         inntektsPerioderOrEmpty.third.map(oppjusterTilGjeldendeGrunnbeløp(gjeldendeGrunnbeløpVedBeregningsdato)).sumInntekt(
             inntektsKlasser.toList()
         )
+
+    fun oppjusterTilGjeldendeGrunnbeløp(): (KlassifisertInntektMåned) -> KlassifisertInntektMåned {
+        return oppjusterTilGjeldendeGrunnbeløp(gjeldendeGrunnbeløpVedBeregningsdato)
+    }
 
     private fun oppjusterTilGjeldendeGrunnbeløp(gjeldendeGrunnbeløp: Grunnbeløp): (KlassifisertInntektMåned) -> KlassifisertInntektMåned {
         return { inntekt ->

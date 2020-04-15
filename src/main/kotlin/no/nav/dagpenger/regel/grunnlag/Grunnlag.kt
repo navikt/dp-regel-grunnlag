@@ -30,6 +30,7 @@ class Grunnlag(
         moshiInstance.adapter(Types.newParameterizedType(List::class.java, InntektPeriodeInfo::class.java))
 
     companion object {
+        const val LÆRLING: String = "lærling"
         const val GRUNNLAG_RESULTAT = "grunnlagResultat"
         const val INNTEKT = "inntektV1"
         const val AVTJENT_VERNEPLIKT = "harAvtjentVerneplikt"
