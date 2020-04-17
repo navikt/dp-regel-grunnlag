@@ -44,7 +44,7 @@ class SisteAvsluttendeMånedUtvelgelse : GrunnlagUtvelgelse(antallMåneder = 1, 
 class Siste3AvsluttendeMånederUtvelgelse : GrunnlagUtvelgelse(antallMåneder = 3, månedFaktor = 4)
 
 class LærlingForskriftSisteAvsluttendeKalenderMånedFangstOgFisk : GrunnlagEtterLærlingForskrift(
-    regelIdentifikator = "LærlingFangstOgFiskSiste1",
+    regelIdentifikator = "LærlingFangstOgFisk1x12",
     grunnlagUtvelgelse = SisteAvsluttendeMånedUtvelgelse(),
     inntektKlasser = inntektKlassifisertEtterFangstOgFisk
 ) {
@@ -55,7 +55,7 @@ class LærlingForskriftSisteAvsluttendeKalenderMånedFangstOgFisk : GrunnlagEtte
 }
 
 class LærlingForskriftSiste3AvsluttendeKalenderMånedFangsOgFisk : GrunnlagEtterLærlingForskrift(
-    regelIdentifikator = "LærlingFangstOgFiskSiste3",
+    regelIdentifikator = "LærlingFangstOgFisk3x4",
     grunnlagUtvelgelse = Siste3AvsluttendeMånederUtvelgelse(),
     inntektKlasser = inntektKlassifisertEtterFangstOgFisk
 ) {
@@ -65,13 +65,13 @@ class LærlingForskriftSiste3AvsluttendeKalenderMånedFangsOgFisk : GrunnlagEtte
 }
 
 class LærlingForskriftSisteAvsluttendeKalenderMåned : GrunnlagEtterLærlingForskrift(
-    regelIdentifikator = "LærlingArbeidsinntektSiste1",
+    regelIdentifikator = "LærlingArbeidsinntekt1x12",
     grunnlagUtvelgelse = SisteAvsluttendeMånedUtvelgelse(),
     inntektKlasser = inntektKlassifisertEtterArbeidsInntekt
 )
 
 class LærlingForskriftSiste3AvsluttendeKalenderMåned : GrunnlagEtterLærlingForskrift(
-    regelIdentifikator = "LærlingArbeidsinntektSiste3",
+    regelIdentifikator = "LærlingArbeidsinntekt3x4",
     grunnlagUtvelgelse = Siste3AvsluttendeMånederUtvelgelse(),
     inntektKlasser = inntektKlassifisertEtterArbeidsInntekt
 )

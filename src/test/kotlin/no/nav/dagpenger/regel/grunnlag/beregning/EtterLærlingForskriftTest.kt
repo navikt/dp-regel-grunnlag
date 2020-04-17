@@ -32,7 +32,7 @@ internal class EtterLærlingForskriftTest() {
             is BeregningsResultat -> {
                 BigDecimal("12000.00000000000000000000") shouldBe beregningsResultat.uavkortet
                 BigDecimal("12000.00000000000000000000") shouldBe beregningsResultat.avkortet
-                "LærlingArbeidsinntektSiste1" shouldBe beregningsResultat.beregningsregel
+                "LærlingArbeidsinntekt1x12" shouldBe beregningsResultat.beregningsregel
             }
 
             else -> beregningsResultat.shouldBeTypeOf<BeregningsResultat>()
@@ -57,7 +57,7 @@ internal class EtterLærlingForskriftTest() {
             is BeregningsResultat -> {
                 BigDecimal("20000.00000000000000000000") shouldBe beregningsResultat.uavkortet
                 BigDecimal("20000.00000000000000000000") shouldBe beregningsResultat.avkortet
-                "LærlingArbeidsinntektSiste3" shouldBe beregningsResultat.beregningsregel
+                "LærlingArbeidsinntekt3x4" shouldBe beregningsResultat.beregningsregel
             }
 
             else -> beregningsResultat.shouldBeTypeOf<BeregningsResultat>()
@@ -82,7 +82,7 @@ internal class EtterLærlingForskriftTest() {
             is BeregningsResultat -> {
                 BigDecimal("36000.00000000000000000000") shouldBe beregningsResultat.uavkortet
                 BigDecimal("36000.00000000000000000000") shouldBe beregningsResultat.avkortet
-                "LærlingFangstOgFiskSiste1" shouldBe beregningsResultat.beregningsregel
+                "LærlingFangstOgFisk1x12" shouldBe beregningsResultat.beregningsregel
             }
 
             else -> beregningsResultat.shouldBeTypeOf<BeregningsResultat>()
@@ -107,7 +107,7 @@ internal class EtterLærlingForskriftTest() {
             is BeregningsResultat -> {
                 BigDecimal("28000.00000000000000000000") shouldBe beregningsResultat.uavkortet
                 BigDecimal("28000.00000000000000000000") shouldBe beregningsResultat.avkortet
-                "LærlingFangstOgFiskSiste3" shouldBe beregningsResultat.beregningsregel
+                "LærlingFangstOgFisk3x4" shouldBe beregningsResultat.beregningsregel
             }
 
             else -> beregningsResultat.shouldBeTypeOf<BeregningsResultat>()

@@ -19,17 +19,15 @@ val grunnlagsBeregninger = setOf(
     LærlingForskriftSiste3AvsluttendeKalenderMåned(),
     DagpengerEtterAvtjentVerneplikt()
 )
+
 fun Collection<BeregningsResultat>.finnHøyesteAvkortetVerdi() =
     this.maxWith(PresedensOverManueltGrunnlag() then LærlingHarPresedensOverOrdinær() then PresedensOverVernepliktHvisAvkortertVerdiErLik())
 
-
-
 private class LærlingHarPresedensOverOrdinær : Comparator<BeregningsResultat> {
     override fun compare(resultat1: BeregningsResultat, resultat2: BeregningsResultat): Int {
-       return if(resultat1.beregningsregel.startsWith("Lærling")) 1 else resultat1.avkortet.compareTo(resultat2.avkortet)
+        return if (resultat1.beregningsregel.startsWith("Lærling")) 1 else resultat1.avkortet.compareTo(resultat2.avkortet)
     }
 }
-
 
 private class PresedensOverManueltGrunnlag : Comparator<BeregningsResultat> {
     override fun compare(resultat1: BeregningsResultat, resultat2: BeregningsResultat): Int {

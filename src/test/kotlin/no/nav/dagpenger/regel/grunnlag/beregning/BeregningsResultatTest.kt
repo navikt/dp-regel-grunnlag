@@ -78,7 +78,6 @@ class BeregningsResultatTest {
         }
     }
 
-
     @Test
     fun `Manuelt grunnlag har presedens over Lærling`() {
 
