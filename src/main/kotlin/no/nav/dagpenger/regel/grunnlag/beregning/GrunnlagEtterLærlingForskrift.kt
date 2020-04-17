@@ -4,6 +4,8 @@ import no.nav.dagpenger.events.inntekt.v1.InntektKlasse
 import no.nav.dagpenger.events.inntekt.v1.sumInntekt
 import no.nav.dagpenger.regel.grunnlag.Fakta
 import java.math.BigDecimal
+import java.time.LocalDate
+import java.time.YearMonth
 import java.util.EnumSet
 
 abstract class GrunnlagEtterLærlingForskrift(
@@ -13,11 +15,15 @@ abstract class GrunnlagEtterLærlingForskrift(
 ) : GrunnlagBeregning(regelIdentifikator) {
 
     override fun calculate(fakta: Fakta): Resultat {
-        return if (fakta.lærling) {
+        return if (fakta.lærling && fakta.manueltGrunnlag == null && fakta.inntekt != null) {
+
+            val sisteAvsluttendeKalenderMåned = fakta.inntekt.sisteAvsluttendeKalenderMåned
 
             val sortertEtterInntektsmåned =
                 fakta.inntektsPerioderOrEmpty.first.map(fakta.oppjusterTilGjeldendeGrunnbeløp())
+                    .filter { it.årMåned.isBefore(sisteAvsluttendeKalenderMåned) || it.årMåned == sisteAvsluttendeKalenderMåned }
                     .sortedByDescending { it.årMåned }
+
             val uavkortet =
                 sortertEtterInntektsmåned.take(grunnlagUtvelgelse.antallMåneder).sumInntekt(inntektKlasser.toList())
                     .multiply(grunnlagUtvelgelse.månedFaktor.toBigDecimal())
@@ -34,6 +40,8 @@ abstract class GrunnlagEtterLærlingForskrift(
         }
     }
 }
+
+private fun LocalDate.toYearMonth(): YearMonth = YearMonth.from(this)
 
 sealed class GrunnlagUtvelgelse(
     val antallMåneder: Int,

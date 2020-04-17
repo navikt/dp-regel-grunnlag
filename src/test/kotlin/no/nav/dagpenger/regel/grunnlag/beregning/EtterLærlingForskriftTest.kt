@@ -1,5 +1,6 @@
 package no.nav.dagpenger.regel.grunnlag.beregning
 
+import io.kotlintest.assertSoftly
 import io.kotlintest.matchers.types.shouldBeTypeOf
 import io.kotlintest.shouldBe
 import no.nav.dagpenger.events.inntekt.v1.Inntekt
@@ -111,6 +112,76 @@ internal class EtterLærlingForskriftTest() {
             }
 
             else -> beregningsResultat.shouldBeTypeOf<BeregningsResultat>()
+        }
+    }
+
+    @Test
+    fun `Manuelt grunnlag skal ikke beregnes av lærling grunnlag `() {
+
+        val fakta = Fakta(
+            inntekt = null,
+            manueltGrunnlag = 1000,
+            verneplikt = false,
+            fangstOgFisk = true,
+            lærling = true,
+            beregningsdato = LocalDate.now(),
+            gjeldendeGrunnbeløpVedBeregningsdato = Grunnbeløp.FastsattI2018,
+            gjeldendeGrunnbeløpForDagensDato = Grunnbeløp.FastsattI2019
+        )
+
+        LærlingForskriftSiste3AvsluttendeKalenderMånedFangsOgFisk().calculate(fakta).shouldBeTypeOf<IngenBeregningsResultat>()
+        LærlingForskriftSiste3AvsluttendeKalenderMånedFangsOgFisk().calculate(fakta).shouldBeTypeOf<IngenBeregningsResultat>()
+        LærlingForskriftSiste3AvsluttendeKalenderMånedFangsOgFisk().calculate(fakta).shouldBeTypeOf<IngenBeregningsResultat>()
+        LærlingForskriftSisteAvsluttendeKalenderMånedFangstOgFisk().calculate(fakta).shouldBeTypeOf<IngenBeregningsResultat>()
+    }
+
+    @Test
+    fun `Ingen inntekt gir ingen grunnlag for fangst og fisk`() {
+
+        val fakta = Fakta(
+            inntekt = Inntekt("123", inntektsListe, sisteAvsluttendeKalenderMåned = YearMonth.now()),
+            verneplikt = false,
+            fangstOgFisk = true,
+            lærling = true,
+            beregningsdato = LocalDate.now(),
+            gjeldendeGrunnbeløpVedBeregningsdato = Grunnbeløp.FastsattI2018,
+            gjeldendeGrunnbeløpForDagensDato = Grunnbeløp.FastsattI2019
+        )
+
+        assertSoftly {
+
+            val resultatSiste3 = LærlingForskriftSiste3AvsluttendeKalenderMånedFangsOgFisk().calculate(fakta) as BeregningsResultat
+            0.toBigDecimal() shouldBe resultatSiste3.avkortet
+            0.toBigDecimal() shouldBe resultatSiste3.uavkortet
+
+            val resultatSiste1 = LærlingForskriftSisteAvsluttendeKalenderMånedFangstOgFisk().calculate(fakta) as BeregningsResultat
+            0.toBigDecimal() shouldBe resultatSiste1.avkortet
+            0.toBigDecimal() shouldBe resultatSiste1.uavkortet
+        }
+    }
+
+    @Test
+    fun `Ingen inntekt gir ingen grunnlag for arbeidsinntekt`() {
+
+        val fakta = Fakta(
+            inntekt = Inntekt("123", inntektsListe, sisteAvsluttendeKalenderMåned = YearMonth.now()),
+            verneplikt = false,
+            fangstOgFisk = false,
+            lærling = true,
+            beregningsdato = LocalDate.now(),
+            gjeldendeGrunnbeløpVedBeregningsdato = Grunnbeløp.FastsattI2018,
+            gjeldendeGrunnbeløpForDagensDato = Grunnbeløp.FastsattI2019
+        )
+
+        assertSoftly {
+
+            val resultatSiste3 = LærlingForskriftSisteAvsluttendeKalenderMåned().calculate(fakta) as BeregningsResultat
+            0.toBigDecimal() shouldBe resultatSiste3.avkortet
+            0.toBigDecimal() shouldBe resultatSiste3.uavkortet
+
+            val resultatSiste1 = LærlingForskriftSiste3AvsluttendeKalenderMåned().calculate(fakta) as BeregningsResultat
+            0.toBigDecimal() shouldBe resultatSiste1.avkortet
+            0.toBigDecimal() shouldBe resultatSiste1.uavkortet
         }
     }
 

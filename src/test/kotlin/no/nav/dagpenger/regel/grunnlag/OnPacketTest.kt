@@ -162,7 +162,7 @@ class OnPacketTest {
         val packet = Packet(json)
         packet.putValue("inntektV1", Grunnlag.inntektAdapter.toJsonValue(inntekt)!!)
 
-        val resultPacket = grunnlag.onPacket(packet)
+        grunnlag.onPacket(packet)
 
         verify {
             fakeGrunnlagInstrumentation.grunnlagBeregnet(
