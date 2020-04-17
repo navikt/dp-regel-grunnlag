@@ -11,7 +11,9 @@ import no.nav.dagpenger.events.inntekt.v1.sumInntekt
 import no.nav.dagpenger.events.moshiInstance
 import no.nav.dagpenger.regel.grunnlag.beregning.BeregningsResultat
 import no.nav.dagpenger.regel.grunnlag.beregning.finnHøyesteAvkortetVerdi
+import no.nav.dagpenger.regel.grunnlag.beregning.finnHøyesteAvkortetVerdiLæring
 import no.nav.dagpenger.regel.grunnlag.beregning.grunnlagsBeregninger
+import no.nav.dagpenger.regel.grunnlag.beregning.lærlingGrunnlagsberegninger
 import no.nav.dagpenger.streams.River
 import no.nav.dagpenger.streams.streamConfig
 import org.apache.kafka.streams.kstream.Predicate
@@ -52,13 +54,22 @@ class Grunnlag(
     override fun onPacket(packet: Packet): Packet {
         val fakta = packetToFakta(packet)
 
-        val resultat =
-            grunnlagsBeregninger
-                .map { beregning -> beregning.calculate(fakta) }
-                .filterIsInstance<BeregningsResultat>()
-                .toSet()
-                .finnHøyesteAvkortetVerdi()
-                ?: throw NoResultException("Ingen resultat for grunnlagsberegning")
+        val resultat = when (fakta.lærling) {
+            true ->
+                lærlingGrunnlagsberegninger
+                    .map { beregning -> beregning.calculate(fakta) }
+                    .filterIsInstance<BeregningsResultat>()
+                    .toSet()
+                    .finnHøyesteAvkortetVerdiLæring()
+                    ?: throw NoResultException("Ingen resultat for grunnlagsberegning")
+            else ->
+                grunnlagsBeregninger
+                    .map { beregning -> beregning.calculate(fakta) }
+                    .filterIsInstance<BeregningsResultat>()
+                    .toSet()
+                    .finnHøyesteAvkortetVerdi()
+                    ?: throw NoResultException("Ingen resultat for grunnlagsberegning")
+        }
 
         val grunnlagResultat = GrunnlagResultat(
             sporingsId = ulidGenerator.nextULID(),

@@ -7,27 +7,25 @@ abstract class GrunnlagBeregning(val beregningsregel: String) {
     abstract fun calculate(fakta: Fakta): Resultat
 }
 
+val lærlingGrunnlagsberegninger = setOf(
+    LærlingForskriftSisteAvsluttendeKalenderMånedFangstOgFisk(),
+    LærlingForskriftSiste3AvsluttendeKalenderMånedFangsOgFisk(),
+    LærlingForskriftSisteAvsluttendeKalenderMåned(),
+    LærlingForskriftSiste3AvsluttendeKalenderMåned()
+)
 val grunnlagsBeregninger = setOf(
     BruttoArbeidsinntektDeSiste12AvsluttedeKalendermånedene(),
     BruttoArbeidsinntektDeSiste36AvsluttedeKalendermånedene(),
     BruttoInntektMedFangstOgFiskDeSiste12AvsluttedeKalendermånedene(),
     BruttoInntektMedFangstOgFiskDeSiste36AvsluttedeKalendermånedene(),
     ManueltGrunnlagBeregning(),
-    LærlingForskriftSisteAvsluttendeKalenderMånedFangstOgFisk(),
-    LærlingForskriftSiste3AvsluttendeKalenderMånedFangsOgFisk(),
-    LærlingForskriftSisteAvsluttendeKalenderMåned(),
-    LærlingForskriftSiste3AvsluttendeKalenderMåned(),
     DagpengerEtterAvtjentVerneplikt()
 )
 
 fun Collection<BeregningsResultat>.finnHøyesteAvkortetVerdi() =
-    this.maxWith(PresedensOverManueltGrunnlag() then LærlingHarPresedensOverOrdinær() then PresedensOverVernepliktHvisAvkortertVerdiErLik())
+    this.maxWith(PresedensOverManueltGrunnlag() then PresedensOverVernepliktHvisAvkortertVerdiErLik())
 
-private class LærlingHarPresedensOverOrdinær : Comparator<BeregningsResultat> {
-    override fun compare(resultat1: BeregningsResultat, resultat2: BeregningsResultat): Int {
-        return if (resultat1.beregningsregel.startsWith("Lærling")) 1 else resultat1.avkortet.compareTo(resultat2.avkortet)
-    }
-}
+fun Collection<BeregningsResultat>.finnHøyesteAvkortetVerdiLæring() = this.maxWith(Comparator { o1, o2 -> o1.avkortet.compareTo(o2.avkortet) })
 
 private class PresedensOverManueltGrunnlag : Comparator<BeregningsResultat> {
     override fun compare(resultat1: BeregningsResultat, resultat2: BeregningsResultat): Int {

@@ -66,29 +66,31 @@ class BeregningsResultatTest {
     fun `Skal returnere beregningsregel Lærling selvom lærling gir mindre enn og ordinær avkortet grunnlag`() {
 
         val resultater = setOf(
-            BeregningsResultat(2000.toBigDecimal(), 2000.toBigDecimal(), "LærlingFangstOgFiskSiste1", true),
-            BeregningsResultat(0.toBigDecimal(), 0.toBigDecimal(), "Manuell", true),
-            BeregningsResultat(10000.toBigDecimal(), 10000.toBigDecimal(), "Ordinær", false))
+            BeregningsResultat(2000.toBigDecimal(), 2000.toBigDecimal(), "LærlingFangstOgFisk1x12", true),
+            BeregningsResultat(4000.toBigDecimal(), 4000.toBigDecimal(), "LærlingFangstOgFisk3x4", true))
 
         assertSoftly {
-            with(resultater.finnHøyesteAvkortetVerdi()!!) {
-                this.avkortet shouldBe 2000.toBigDecimal()
-                this.beregningsregel shouldBe "LærlingFangstOgFiskSiste1"
+            with(resultater.finnHøyesteAvkortetVerdiLæring()!!) {
+                this.avkortet shouldBe 4000.toBigDecimal()
+                this.beregningsregel shouldBe "LærlingFangstOgFisk3x4"
             }
         }
     }
 
     @Test
-    fun `Manuelt grunnlag har presedens over Lærling`() {
+    fun `Skal returnere beste grunnlag for Lærling`() {
 
         val resultater = setOf(
-            BeregningsResultat(2000.toBigDecimal(), 2000.toBigDecimal(), "LærlingFangstOgFiskSiste1", true),
-            BeregningsResultat(1500.toBigDecimal(), 1500.toBigDecimal(), "Manuell", true))
+            BeregningsResultat(100.toBigDecimal(), 100.toBigDecimal(), "LærlingFangstOgFisk1x12", true),
+            BeregningsResultat(1000.toBigDecimal(), 1000.toBigDecimal(), "LærlingArbeidsinntekt1x12", true),
+            BeregningsResultat(500.toBigDecimal(), 500.toBigDecimal(), "LærlingFangstOgFisk3x4", true),
+            BeregningsResultat(11.toBigDecimal(), 11.toBigDecimal(), "LærlingArbeidsinntekt3x4", true)
+        )
 
         assertSoftly {
-            with(resultater.finnHøyesteAvkortetVerdi()!!) {
-                this.avkortet shouldBe 1500.toBigDecimal()
-                this.beregningsregel shouldBe "Manuell"
+            with(resultater.finnHøyesteAvkortetVerdiLæring()!!) {
+                this.avkortet shouldBe 1000.toBigDecimal()
+                this.beregningsregel shouldBe "LærlingArbeidsinntekt1x12"
             }
         }
     }

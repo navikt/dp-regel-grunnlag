@@ -161,7 +161,7 @@ internal class EtterLærlingForskriftTest() {
     }
 
     @Test
-    fun `Ingen inntekt gir ingen grunnlag for arbeidsinntekt`() {
+    fun `Ingen inntekt gir ingen grunnlag for arbeidsinntekt eller fangst og fiske`() {
 
         val fakta = Fakta(
             inntekt = Inntekt("123", inntektsListe, sisteAvsluttendeKalenderMåned = YearMonth.now()),
