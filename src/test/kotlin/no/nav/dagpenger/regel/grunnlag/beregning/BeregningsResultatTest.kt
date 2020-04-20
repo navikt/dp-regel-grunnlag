@@ -70,7 +70,7 @@ class BeregningsResultatTest {
             BeregningsResultat(4000.toBigDecimal(), 4000.toBigDecimal(), "LærlingFangstOgFisk3x4", true))
 
         assertSoftly {
-            with(resultater.finnHøyesteAvkortetVerdiLæring()!!) {
+            with(resultater.finnHøyesteAvkortetVerdi()!!) {
                 this.avkortet shouldBe 4000.toBigDecimal()
                 this.beregningsregel shouldBe "LærlingFangstOgFisk3x4"
             }
@@ -88,10 +88,23 @@ class BeregningsResultatTest {
         )
 
         assertSoftly {
-            with(resultater.finnHøyesteAvkortetVerdiLæring()!!) {
+            with(resultater.finnHøyesteAvkortetVerdi()!!) {
                 this.avkortet shouldBe 1000.toBigDecimal()
                 this.beregningsregel shouldBe "LærlingArbeidsinntekt1x12"
             }
         }
     }
+
+
+    @Test
+    fun `Skal alltid returnere manuelt grunnlag dersom det er satt i lærlingsforskrift`() {
+        val resultater = setOf(
+            BeregningsResultat(100000.toBigDecimal(), 20000.toBigDecimal(), "LærlingFangstOgFisk1x12", true),
+            BeregningsResultat(1000.toBigDecimal(), 2000.toBigDecimal(), "Manuell", true),
+            BeregningsResultat(10000.toBigDecimal(), 10000.toBigDecimal(), "LærlingFangstOgFisk3x4", false))
+
+        resultater.finnHøyesteAvkortetVerdi()?.avkortet shouldBe 2000.toBigDecimal()
+        resultater.finnHøyesteAvkortetVerdi()?.beregningsregel shouldBe "Manuell"
+    }
+
 }

@@ -16,7 +16,8 @@ internal class HovedBeregning : GrunnlagBeregning("Hoved") {
             LærlingForskriftSisteAvsluttendeKalenderMånedFangstOgFisk(),
             LærlingForskriftSiste3AvsluttendeKalenderMånedFangsOgFisk(),
             LærlingForskriftSisteAvsluttendeKalenderMåned(),
-            LærlingForskriftSiste3AvsluttendeKalenderMåned()
+            LærlingForskriftSiste3AvsluttendeKalenderMåned(),
+            ManueltGrunnlagBeregning()
         )
         private val grunnlagsBeregninger = setOf(
             BruttoArbeidsinntektDeSiste12AvsluttedeKalendermånedene(),
@@ -34,17 +35,12 @@ internal class HovedBeregning : GrunnlagBeregning("Hoved") {
                 lærlingGrunnlagsberegninger
                     .map { beregning -> beregning.calculate(fakta) }
                     .filterIsInstance<BeregningsResultat>()
-                    .toSet()
-                    .finnHøyesteAvkortetVerdiLæring()
-                    ?: throw NoResultException("Ingen resultat for grunnlagsberegning")
+
             else ->
                 grunnlagsBeregninger
                     .map { beregning -> beregning.calculate(fakta) }
                     .filterIsInstance<BeregningsResultat>()
-                    .toSet()
-                    .finnHøyesteAvkortetVerdi()
-                    ?: throw NoResultException("Ingen resultat for grunnlagsberegning")
-        }
+        }.toSet().finnHøyesteAvkortetVerdi() ?: throw NoResultException("Ingen resultat for grunnlagsberegning")
     }
 }
 
@@ -52,9 +48,6 @@ private fun LocalDate.erKoronaPeriode() = this in (LocalDate.of(2020, 3, 20)..Lo
 
 fun Collection<BeregningsResultat>.finnHøyesteAvkortetVerdi() =
     this.maxWith(PresedensOverManueltGrunnlag() then PresedensOverVernepliktHvisAvkortertVerdiErLik())
-
-fun Collection<BeregningsResultat>.finnHøyesteAvkortetVerdiLæring() =
-    this.maxWith(Comparator { o1, o2 -> o1.avkortet.compareTo(o2.avkortet) })
 
 private class PresedensOverManueltGrunnlag : Comparator<BeregningsResultat> {
     override fun compare(resultat1: BeregningsResultat, resultat2: BeregningsResultat): Int {
