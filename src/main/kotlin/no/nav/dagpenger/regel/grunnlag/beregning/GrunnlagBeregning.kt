@@ -6,41 +6,37 @@ import java.math.BigDecimal
 import java.time.LocalDate
 
 abstract class GrunnlagBeregning(val beregningsregel: String) {
+    abstract fun isActive(fakta: Fakta): Boolean
     abstract fun calculate(fakta: Fakta): Resultat
 }
 
 internal class HovedBeregning : GrunnlagBeregning("Hoved") {
 
     companion object {
-        private val lærlingGrunnlagsberegninger = setOf(
+        private val grunnlagsBeregninger = setOf(
             LærlingForskriftSisteAvsluttendeKalenderMånedFangstOgFisk(),
             LærlingForskriftSiste3AvsluttendeKalenderMånedFangsOgFisk(),
             LærlingForskriftSisteAvsluttendeKalenderMåned(),
             LærlingForskriftSiste3AvsluttendeKalenderMåned(),
-            ManueltGrunnlagBeregning()
-        )
-        private val grunnlagsBeregninger = setOf(
             BruttoArbeidsinntektDeSiste12AvsluttedeKalendermånedene(),
             BruttoArbeidsinntektDeSiste36AvsluttedeKalendermånedene(),
             BruttoInntektMedFangstOgFiskDeSiste12AvsluttedeKalendermånedene(),
             BruttoInntektMedFangstOgFiskDeSiste36AvsluttedeKalendermånedene(),
-            ManueltGrunnlagBeregning(),
-            DagpengerEtterAvtjentVerneplikt()
+            DagpengerEtterAvtjentVerneplikt(),
+            ManueltGrunnlagBeregning()
         )
     }
 
-    override fun calculate(fakta: Fakta): BeregningsResultat {
-        return when (fakta.lærling && fakta.beregningsdato.erKoronaPeriode()) {
-            true ->
-                lærlingGrunnlagsberegninger
-                    .map { beregning -> beregning.calculate(fakta) }
-                    .filterIsInstance<BeregningsResultat>()
+    override fun isActive(fakta: Fakta): Boolean = true
 
-            else ->
-                grunnlagsBeregninger
-                    .map { beregning -> beregning.calculate(fakta) }
-                    .filterIsInstance<BeregningsResultat>()
-        }.toSet().finnHøyesteAvkortetVerdi() ?: throw NoResultException("Ingen resultat for grunnlagsberegning")
+    override fun calculate(fakta: Fakta): BeregningsResultat {
+        return grunnlagsBeregninger
+            .filter { it.isActive(fakta) }
+            .map { it.calculate(fakta) }
+            .filterIsInstance<BeregningsResultat>()
+            .toSet()
+            .finnHøyesteAvkortetVerdi()
+            ?: throw NoResultException("Ingen resultat for grunnlagsberegning")
     }
 }
 

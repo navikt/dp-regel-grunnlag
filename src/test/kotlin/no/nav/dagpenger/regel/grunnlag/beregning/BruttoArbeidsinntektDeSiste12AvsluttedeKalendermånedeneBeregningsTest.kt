@@ -15,6 +15,22 @@ import java.time.YearMonth
 
 class BruttoArbeidsinntektDeSiste12AvsluttedeKalendermånedeneBeregningsTest {
 
+    private val beregning = BruttoArbeidsinntektDeSiste12AvsluttedeKalendermånedene()
+
+    @Test
+    fun `Skal ikke behandle lærlinger`() {
+        val fakta = Fakta(
+            inntekt = null,
+            fangstOgFisk = false,
+            lærling = true,
+            verneplikt = false,
+            beregningsdato = LocalDate.of(2019, 4, 1),
+            gjeldendeGrunnbeløpVedBeregningsdato = Grunnbeløp.FastsattI2018,
+            gjeldendeGrunnbeløpForDagensDato = Grunnbeløp.FastsattI2019
+        )
+        false shouldBe beregning.isActive(fakta)
+    }
+
     @Test
     fun ` Skal gi uavkortet grunnlag på 2034,699 siste 12 kalendermåned gitt mars 2019 inntekt`() {
 
@@ -48,7 +64,7 @@ class BruttoArbeidsinntektDeSiste12AvsluttedeKalendermånedeneBeregningsTest {
             gjeldendeGrunnbeløpForDagensDato = Grunnbeløp.FastsattI2019
         )
 
-        when (val beregningsResultat = BruttoArbeidsinntektDeSiste12AvsluttedeKalendermånedene().calculate(fakta)) {
+        when (val beregningsResultat = beregning.calculate(fakta)) {
             is BeregningsResultat ->
                 beregningsResultat.uavkortet shouldBe
                 BigDecimal("2034.69893414785227588000")
@@ -89,7 +105,7 @@ class BruttoArbeidsinntektDeSiste12AvsluttedeKalendermånedeneBeregningsTest {
             gjeldendeGrunnbeløpForDagensDato = Grunnbeløp.FastsattI2019
         )
 
-        when (val beregningsResultat = BruttoArbeidsinntektDeSiste12AvsluttedeKalendermånedene().calculate(fakta)) {
+        when (val beregningsResultat = beregning.calculate(fakta)) {
             is BeregningsResultat -> {
                 beregningsResultat.avkortet shouldBe BigDecimal("581298")
                 beregningsResultat.harAvkortet shouldBe true
@@ -139,7 +155,7 @@ class BruttoArbeidsinntektDeSiste12AvsluttedeKalendermånedeneBeregningsTest {
             gjeldendeGrunnbeløpForDagensDato = Grunnbeløp.FastsattI2019
         )
 
-        when (val beregningsResultat = BruttoArbeidsinntektDeSiste12AvsluttedeKalendermånedene().calculate(fakta)) {
+        when (val beregningsResultat = beregning.calculate(fakta)) {
             is BeregningsResultat -> beregningsResultat.uavkortet shouldBe
                 BigDecimal("2034.69893414785227588000")
             else -> beregningsResultat.shouldBeTypeOf<BeregningsResultat>()
@@ -183,7 +199,7 @@ class BruttoArbeidsinntektDeSiste12AvsluttedeKalendermånedeneBeregningsTest {
             gjeldendeGrunnbeløpForDagensDato = Grunnbeløp.FastsattI2019
         )
 
-        when (val beregningsResultat = BruttoArbeidsinntektDeSiste12AvsluttedeKalendermånedene().calculate(fakta)) {
+        when (val beregningsResultat = beregning.calculate(fakta)) {
             is BeregningsResultat ->
                 beregningsResultat.uavkortet shouldBe
                 BigDecimal("1066.47158083602110345000")
@@ -228,7 +244,7 @@ class BruttoArbeidsinntektDeSiste12AvsluttedeKalendermånedeneBeregningsTest {
             gjeldendeGrunnbeløpForDagensDato = Grunnbeløp.FastsattI2019
         )
 
-        when (val beregningsResultat = BruttoArbeidsinntektDeSiste12AvsluttedeKalendermånedene().calculate(fakta)) {
+        when (val beregningsResultat = beregning.calculate(fakta)) {
             is BeregningsResultat ->
                 beregningsResultat.uavkortet shouldBe
                 BigDecimal("-1066.47158083602110345000")
@@ -248,7 +264,7 @@ class BruttoArbeidsinntektDeSiste12AvsluttedeKalendermånedeneBeregningsTest {
             gjeldendeGrunnbeløpForDagensDato = Grunnbeløp.FastsattI2019
         )
 
-        when (val beregningsResultat = BruttoArbeidsinntektDeSiste12AvsluttedeKalendermånedene().calculate(fakta)) {
+        when (val beregningsResultat = beregning.calculate(fakta)) {
             is BeregningsResultat ->
                 beregningsResultat.uavkortet shouldBe
                 BigDecimal.ZERO

@@ -10,6 +10,7 @@ abstract class TolvMånedersBeregning(
     beregningsregel: String
 ) :
     GrunnlagBeregning(beregningsregel) {
+    override fun isActive(fakta: Fakta): Boolean = !fakta.lærling
 
     override fun calculate(fakta: Fakta): Resultat {
         val uavkortet = fakta.oppjusterteInntekterFørstePeriode(inntektKlasser)
