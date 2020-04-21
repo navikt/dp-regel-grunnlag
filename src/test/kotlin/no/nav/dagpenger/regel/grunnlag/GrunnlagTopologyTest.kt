@@ -99,7 +99,7 @@ class GrunnlagTopologyTest {
             fakeGrunnlagInstrumentation
         )
 
-        val inntekt: Inntekt = Inntekt(
+        val inntekt = Inntekt(
             inntektsId = "12345",
             inntektsListe = listOf(
                 KlassifisertInntektMåned(

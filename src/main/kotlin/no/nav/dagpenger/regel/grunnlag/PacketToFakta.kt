@@ -15,6 +15,7 @@ internal fun packetToFakta(packet: Packet): Fakta {
     val fangstOgFisk = packet.getNullableBoolean(Grunnlag.FANGST_OG_FISK) ?: false
     val beregningsdato = packet.getLocalDate(Grunnlag.BEREGNINGSDAGTO)
     val manueltGrunnlag = packet.getNullableIntValue(Grunnlag.MANUELT_GRUNNLAG)
+    val lærling = packet.getNullableBoolean(Grunnlag.LÆRLING) == true
     val dagensDato = LocalDate.now()
 
     val grunnbeløpVedBeregningsdato = when {
@@ -32,6 +33,7 @@ internal fun packetToFakta(packet: Packet): Fakta {
         fangstOgFisk = fangstOgFisk,
         beregningsdato = beregningsdato,
         manueltGrunnlag = manueltGrunnlag,
+        lærling = lærling,
         gjeldendeGrunnbeløpVedBeregningsdato = grunnbeløpVedBeregningsdato,
         gjeldendeGrunnbeløpForDagensDato = grunnbeløpVedDagensDato
     )

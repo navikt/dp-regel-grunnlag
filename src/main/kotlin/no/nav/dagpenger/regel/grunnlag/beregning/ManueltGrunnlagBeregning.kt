@@ -9,12 +9,12 @@ class ManueltGrunnlagBeregning : GrunnlagBeregning("Manuell") {
         val manueltGrunnlag = fakta.manueltGrunnlag ?: 0
         val seksGangerGrunnbeløp = fakta.gjeldendeGrunnbeløpVedBeregningsdato.verdi.multiply(BigDecimal(6))
 
-        if (manueltGrunnlag <= 0) {
-            return IngenBeregningsResultat(beregningsregel)
+        return if (manueltGrunnlag <= 0) {
+            IngenBeregningsResultat(beregningsregel)
         } else if (manueltGrunnlag.toBigDecimal() <= seksGangerGrunnbeløp) {
-            return BeregningsResultat(manueltGrunnlag.toBigDecimal(), manueltGrunnlag.toBigDecimal(), beregningsregel)
+            BeregningsResultat(manueltGrunnlag.toBigDecimal(), manueltGrunnlag.toBigDecimal(), beregningsregel)
         } else {
-            return BeregningsResultat(manueltGrunnlag.toBigDecimal(), seksGangerGrunnbeløp, beregningsregel)
+            BeregningsResultat(manueltGrunnlag.toBigDecimal(), seksGangerGrunnbeløp, beregningsregel)
         }
     }
 }

@@ -143,6 +143,38 @@ class OnPacketTest {
     }
 
     @Test
+    fun ` Skal velge rett beregningsregel ved lærling `() {
+        val grunnlag = Grunnlag(
+            Configuration(),
+            fakeGrunnlagInstrumentation
+        )
+
+        val inntekt = getInntekt(1000.toBigDecimal(), YearMonth.of(2020, 3))
+
+        val json = """
+            {
+                "beregningsDato":"2020-03-20",
+                "oppfyllerKravTilFangstOgFisk": false,
+                "lærling": true
+            }
+            """.trimIndent()
+
+        val packet = Packet(json)
+        packet.putValue("inntektV1", Grunnlag.inntektAdapter.toJsonValue(inntekt)!!)
+
+        val resultPacket = grunnlag.onPacket(packet)
+
+        assertTrue { resultPacket.hasField("grunnlagResultat") }
+
+        assertEquals(
+            Integer.parseInt(resultPacket.getMapValue("grunnlagResultat")["avkortet"].toString()),
+            Integer.parseInt(resultPacket.getMapValue("grunnlagResultat")["uavkortet"].toString())
+        )
+        assertEquals("LærlingArbeidsinntekt1x12", resultPacket.getMapValue("grunnlagResultat")["beregningsregel"])
+        assertEquals(false, resultPacket.getMapValue("grunnlagResultat")["harAvkortet"])
+    }
+
+    @Test
     fun ` Skal instrumentere beregninger`() {
         val grunnlag = Grunnlag(
             Configuration(),
@@ -162,7 +194,7 @@ class OnPacketTest {
         val packet = Packet(json)
         packet.putValue("inntektV1", Grunnlag.inntektAdapter.toJsonValue(inntekt)!!)
 
-        val resultPacket = grunnlag.onPacket(packet)
+        grunnlag.onPacket(packet)
 
         verify {
             fakeGrunnlagInstrumentation.grunnlagBeregnet(
@@ -173,12 +205,12 @@ class OnPacketTest {
         }
     }
 
-    private fun getInntekt(månedsbeløp: BigDecimal): Inntekt {
+    private fun getInntekt(månedsbeløp: BigDecimal, inntektsdatoStart: YearMonth? = null): Inntekt {
         return Inntekt(
             inntektsId = "12345",
             inntektsListe = listOf(
                 KlassifisertInntektMåned(
-                    årMåned = YearMonth.of(2018, 4),
+                    årMåned = inntektsdatoStart ?: YearMonth.of(2018, 4),
                     klassifiserteInntekter = listOf(
                         KlassifisertInntekt(
                             beløp = månedsbeløp,
@@ -187,7 +219,7 @@ class OnPacketTest {
                     )
                 ),
                 KlassifisertInntektMåned(
-                    YearMonth.of(2018, 5),
+                    inntektsdatoStart?.plusMonths(1) ?: YearMonth.of(2018, 5),
                     listOf(
                         KlassifisertInntekt(
                             månedsbeløp,

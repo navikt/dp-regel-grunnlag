@@ -9,9 +9,7 @@ import no.nav.dagpenger.events.inntekt.v1.Inntekt
 import no.nav.dagpenger.events.inntekt.v1.InntektKlasse
 import no.nav.dagpenger.events.inntekt.v1.sumInntekt
 import no.nav.dagpenger.events.moshiInstance
-import no.nav.dagpenger.regel.grunnlag.beregning.BeregningsResultat
-import no.nav.dagpenger.regel.grunnlag.beregning.finnHøyesteAvkortetVerdi
-import no.nav.dagpenger.regel.grunnlag.beregning.grunnlagsBeregninger
+import no.nav.dagpenger.regel.grunnlag.beregning.HovedBeregning
 import no.nav.dagpenger.streams.River
 import no.nav.dagpenger.streams.streamConfig
 import org.apache.kafka.streams.kstream.Predicate
@@ -30,6 +28,7 @@ class Grunnlag(
         moshiInstance.adapter(Types.newParameterizedType(List::class.java, InntektPeriodeInfo::class.java))
 
     companion object {
+        const val LÆRLING: String = "lærling"
         const val GRUNNLAG_RESULTAT = "grunnlagResultat"
         const val INNTEKT = "inntektV1"
         const val AVTJENT_VERNEPLIKT = "harAvtjentVerneplikt"
@@ -50,14 +49,7 @@ class Grunnlag(
 
     override fun onPacket(packet: Packet): Packet {
         val fakta = packetToFakta(packet)
-
-        val resultat =
-            grunnlagsBeregninger
-                .map { beregning -> beregning.calculate(fakta) }
-                .filterIsInstance<BeregningsResultat>()
-                .toSet()
-                .finnHøyesteAvkortetVerdi()
-                ?: throw NoResultException("Ingen resultat for grunnlagsberegning")
+        val resultat = HovedBeregning().calculate(fakta)
 
         val grunnlagResultat = GrunnlagResultat(
             sporingsId = ulidGenerator.nextULID(),

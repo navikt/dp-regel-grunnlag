@@ -1,22 +1,53 @@
 package no.nav.dagpenger.regel.grunnlag.beregning
 
 import no.nav.dagpenger.regel.grunnlag.Fakta
+import no.nav.dagpenger.regel.grunnlag.NoResultException
 import java.math.BigDecimal
+import java.time.LocalDate
 
 abstract class GrunnlagBeregning(val beregningsregel: String) {
     abstract fun calculate(fakta: Fakta): Resultat
 }
 
-val grunnlagsBeregninger = setOf(
-    BruttoArbeidsinntektDeSiste12AvsluttedeKalendermånedene(),
-    BruttoArbeidsinntektDeSiste36AvsluttedeKalendermånedene(),
-    BruttoInntektMedFangstOgFiskDeSiste12AvsluttedeKalendermånedene(),
-    BruttoInntektMedFangstOgFiskDeSiste36AvsluttedeKalendermånedene(),
-    ManueltGrunnlagBeregning(),
-    DagpengerEtterAvtjentVerneplikt()
-)
+internal class HovedBeregning : GrunnlagBeregning("Hoved") {
 
-fun Collection<BeregningsResultat>.finnHøyesteAvkortetVerdi() = this.maxWith(PresedensOverManueltGrunnlag().then(PresedensOverVernepliktHvisAvkortertVerdiErLik()))
+    companion object {
+        private val lærlingGrunnlagsberegninger = setOf(
+            LærlingForskriftSisteAvsluttendeKalenderMånedFangstOgFisk(),
+            LærlingForskriftSiste3AvsluttendeKalenderMånedFangsOgFisk(),
+            LærlingForskriftSisteAvsluttendeKalenderMåned(),
+            LærlingForskriftSiste3AvsluttendeKalenderMåned(),
+            ManueltGrunnlagBeregning()
+        )
+        private val grunnlagsBeregninger = setOf(
+            BruttoArbeidsinntektDeSiste12AvsluttedeKalendermånedene(),
+            BruttoArbeidsinntektDeSiste36AvsluttedeKalendermånedene(),
+            BruttoInntektMedFangstOgFiskDeSiste12AvsluttedeKalendermånedene(),
+            BruttoInntektMedFangstOgFiskDeSiste36AvsluttedeKalendermånedene(),
+            ManueltGrunnlagBeregning(),
+            DagpengerEtterAvtjentVerneplikt()
+        )
+    }
+
+    override fun calculate(fakta: Fakta): BeregningsResultat {
+        return when (fakta.lærling && fakta.beregningsdato.erKoronaPeriode()) {
+            true ->
+                lærlingGrunnlagsberegninger
+                    .map { beregning -> beregning.calculate(fakta) }
+                    .filterIsInstance<BeregningsResultat>()
+
+            else ->
+                grunnlagsBeregninger
+                    .map { beregning -> beregning.calculate(fakta) }
+                    .filterIsInstance<BeregningsResultat>()
+        }.toSet().finnHøyesteAvkortetVerdi() ?: throw NoResultException("Ingen resultat for grunnlagsberegning")
+    }
+}
+
+private fun LocalDate.erKoronaPeriode() = this in (LocalDate.of(2020, 3, 20)..LocalDate.of(2020, 12, 31))
+
+fun Collection<BeregningsResultat>.finnHøyesteAvkortetVerdi() =
+    this.maxWith(PresedensOverManueltGrunnlag() then PresedensOverVernepliktHvisAvkortertVerdiErLik())
 
 private class PresedensOverManueltGrunnlag : Comparator<BeregningsResultat> {
     override fun compare(resultat1: BeregningsResultat, resultat2: BeregningsResultat): Int {
