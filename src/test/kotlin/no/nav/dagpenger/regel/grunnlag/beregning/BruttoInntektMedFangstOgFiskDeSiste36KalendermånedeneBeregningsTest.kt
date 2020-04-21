@@ -16,6 +16,20 @@ import java.time.YearMonth
 class BruttoInntektMedFangstOgFiskDeSiste36KalendermånedeneBeregningsTest {
 
     @Test
+    fun `Skal ikke behandle lærlinger`() {
+        val fakta = Fakta(
+            inntekt = null,
+            fangstOgFisk = false,
+            lærling = true,
+            verneplikt = false,
+            beregningsdato = LocalDate.of(2019, 4, 1),
+            gjeldendeGrunnbeløpVedBeregningsdato = Grunnbeløp.FastsattI2018,
+            gjeldendeGrunnbeløpForDagensDato = Grunnbeløp.FastsattI2019
+        )
+        false shouldBe BruttoInntektMedFangstOgFiskDeSiste36AvsluttedeKalendermånedene().isActive(fakta)
+    }
+
+    @Test
     fun ` Skal gi grunnlag på 4115 siste 36 kalendermåned gitt mars 2019 inntekt med fangstOgFisk inntekt når fangst og fisk er satt`() {
 
         val inntektsListe = listOf(

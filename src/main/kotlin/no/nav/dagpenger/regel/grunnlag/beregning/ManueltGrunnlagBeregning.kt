@@ -4,6 +4,8 @@ import no.nav.dagpenger.regel.grunnlag.Fakta
 import java.math.BigDecimal
 
 class ManueltGrunnlagBeregning : GrunnlagBeregning("Manuell") {
+    override fun isActive(fakta: Fakta): Boolean = fakta.manueltGrunnlag != null
+
     override fun calculate(fakta: Fakta): Resultat {
 
         val manueltGrunnlag = fakta.manueltGrunnlag ?: 0

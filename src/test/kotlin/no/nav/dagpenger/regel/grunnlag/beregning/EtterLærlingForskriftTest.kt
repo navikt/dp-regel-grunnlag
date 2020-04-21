@@ -19,12 +19,12 @@ internal class EtterLærlingForskriftTest() {
     fun `Skal bruke siste kalender måned og gange med 12 for å finne uavkortet grunnlag for arbeidsinntekt`() {
 
         val fakta = Fakta(
-            inntekt = Inntekt("123", inntektsListe, sisteAvsluttendeKalenderMåned = YearMonth.of(2019, 3)),
+            inntekt = Inntekt("123", inntektsListe, sisteAvsluttendeKalenderMåned = YearMonth.of(2020, 3)),
             verneplikt = false,
             fangstOgFisk = false,
             lærling = true,
-            beregningsdato = LocalDate.of(2019, 4, 1),
-            gjeldendeGrunnbeløpVedBeregningsdato = Grunnbeløp.FastsattI2018,
+            beregningsdato = LocalDate.of(2020, 4, 1),
+            gjeldendeGrunnbeløpVedBeregningsdato = Grunnbeløp.FastsattI2019,
             gjeldendeGrunnbeløpForDagensDato = Grunnbeløp.FastsattI2019
         )
 
@@ -44,12 +44,12 @@ internal class EtterLærlingForskriftTest() {
     fun `Skal bruke siste 3 kalendermånedene og gange med 4 for å finne uavkortet grunnlag for arbeidsinntekt `() {
 
         val fakta = Fakta(
-            inntekt = Inntekt("123", inntektsListe, sisteAvsluttendeKalenderMåned = YearMonth.of(2019, 3)),
+            inntekt = Inntekt("123", inntektsListe, sisteAvsluttendeKalenderMåned = YearMonth.of(2020, 3)),
             verneplikt = false,
             fangstOgFisk = false,
             lærling = true,
-            beregningsdato = LocalDate.of(2019, 4, 1),
-            gjeldendeGrunnbeløpVedBeregningsdato = Grunnbeløp.FastsattI2018,
+            beregningsdato = LocalDate.of(2020, 4, 1),
+            gjeldendeGrunnbeløpVedBeregningsdato = Grunnbeløp.FastsattI2019,
             gjeldendeGrunnbeløpForDagensDato = Grunnbeløp.FastsattI2019
         )
 
@@ -69,12 +69,12 @@ internal class EtterLærlingForskriftTest() {
     fun `Skal bruke siste kalender måned og gange med 12 for å finne uavkortet grunnlag for fangst- og fiskeinntekt`() {
 
         val fakta = Fakta(
-            inntekt = Inntekt("123", inntektsListe, sisteAvsluttendeKalenderMåned = YearMonth.of(2019, 3)),
+            inntekt = Inntekt("123", inntektsListe, sisteAvsluttendeKalenderMåned = YearMonth.of(2020, 3)),
             verneplikt = false,
             fangstOgFisk = true,
             lærling = true,
-            beregningsdato = LocalDate.of(2019, 4, 1),
-            gjeldendeGrunnbeløpVedBeregningsdato = Grunnbeløp.FastsattI2018,
+            beregningsdato = LocalDate.of(2020, 4, 1),
+            gjeldendeGrunnbeløpVedBeregningsdato = Grunnbeløp.FastsattI2019,
             gjeldendeGrunnbeløpForDagensDato = Grunnbeløp.FastsattI2019
         )
 
@@ -94,12 +94,12 @@ internal class EtterLærlingForskriftTest() {
     fun `Skal bruke siste 3 kalendermånedene og gange med 4 for å finne uavkortet grunnlag for fangst- og fiskeinntekt `() {
 
         val fakta = Fakta(
-            inntekt = Inntekt("123", inntektsListe, sisteAvsluttendeKalenderMåned = YearMonth.of(2019, 3)),
+            inntekt = Inntekt("123", inntektsListe, sisteAvsluttendeKalenderMåned = YearMonth.of(2020, 3)),
             verneplikt = false,
             fangstOgFisk = true,
             lærling = true,
-            beregningsdato = LocalDate.of(2019, 4, 1),
-            gjeldendeGrunnbeløpVedBeregningsdato = Grunnbeløp.FastsattI2018,
+            beregningsdato = LocalDate.of(2020, 4, 1),
+            gjeldendeGrunnbeløpVedBeregningsdato = Grunnbeløp.FastsattI2019,
             gjeldendeGrunnbeløpForDagensDato = Grunnbeløp.FastsattI2019
         )
 
@@ -125,7 +125,7 @@ internal class EtterLærlingForskriftTest() {
             fangstOgFisk = true,
             lærling = true,
             beregningsdato = LocalDate.now(),
-            gjeldendeGrunnbeløpVedBeregningsdato = Grunnbeløp.FastsattI2018,
+            gjeldendeGrunnbeløpVedBeregningsdato = Grunnbeløp.FastsattI2019,
             gjeldendeGrunnbeløpForDagensDato = Grunnbeløp.FastsattI2019
         )
 
@@ -139,7 +139,7 @@ internal class EtterLærlingForskriftTest() {
     fun `Ingen inntekt gir ingen grunnlag for fangst og fisk`() {
 
         val fakta = Fakta(
-            inntekt = Inntekt("123", inntektsListe, sisteAvsluttendeKalenderMåned = YearMonth.now()),
+            inntekt = Inntekt("123", emptyList(), sisteAvsluttendeKalenderMåned = YearMonth.now()),
             verneplikt = false,
             fangstOgFisk = true,
             lærling = true,
@@ -161,15 +161,15 @@ internal class EtterLærlingForskriftTest() {
     }
 
     @Test
-    fun `Ingen inntekt gir ingen grunnlag for arbeidsinntekt eller fangst og fiske`() {
+    fun `Ingen inntekt gir ingen grunnlag for arbeidsinntekt `() {
 
         val fakta = Fakta(
-            inntekt = Inntekt("123", inntektsListe, sisteAvsluttendeKalenderMåned = YearMonth.now()),
+            inntekt = Inntekt("123", emptyList(), sisteAvsluttendeKalenderMåned = YearMonth.now()),
             verneplikt = false,
             fangstOgFisk = false,
             lærling = true,
             beregningsdato = LocalDate.now(),
-            gjeldendeGrunnbeløpVedBeregningsdato = Grunnbeløp.FastsattI2018,
+            gjeldendeGrunnbeløpVedBeregningsdato = Grunnbeløp.FastsattI2019,
             gjeldendeGrunnbeløpForDagensDato = Grunnbeløp.FastsattI2019
         )
 
@@ -187,7 +187,7 @@ internal class EtterLærlingForskriftTest() {
 
     private val inntektsListe = listOf(
         KlassifisertInntektMåned(
-            YearMonth.of(2019, 3),
+            YearMonth.of(2020, 3),
             listOf(
                 KlassifisertInntekt(
                     BigDecimal(1000),
@@ -200,7 +200,7 @@ internal class EtterLærlingForskriftTest() {
             )
         ),
         KlassifisertInntektMåned(
-            YearMonth.of(2019, 2),
+            YearMonth.of(2020, 2),
             listOf(
                 KlassifisertInntekt(
                     BigDecimal(2000),
@@ -209,7 +209,7 @@ internal class EtterLærlingForskriftTest() {
             )
         ),
         KlassifisertInntektMåned(
-            YearMonth.of(2019, 1),
+            YearMonth.of(2020, 1),
             listOf(
                 KlassifisertInntekt(
                     BigDecimal(2000),
@@ -218,7 +218,7 @@ internal class EtterLærlingForskriftTest() {
             )
         ),
         KlassifisertInntektMåned(
-            YearMonth.of(2018, 12),
+            YearMonth.of(2019, 12),
             listOf(
                 KlassifisertInntekt(
                     BigDecimal(2000),

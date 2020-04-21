@@ -3,9 +3,9 @@ package no.nav.dagpenger.regel.grunnlag.beregning
 import no.nav.dagpenger.events.inntekt.v1.InntektKlasse
 import no.nav.dagpenger.events.inntekt.v1.sumInntekt
 import no.nav.dagpenger.regel.grunnlag.Fakta
+import java.lang.RuntimeException
 import java.math.BigDecimal
 import java.time.LocalDate
-import java.time.YearMonth
 import java.util.EnumSet
 
 abstract class GrunnlagEtterLærlingForskrift(
@@ -13,11 +13,12 @@ abstract class GrunnlagEtterLærlingForskrift(
     private val grunnlagUtvelgelse: GrunnlagUtvelgelse,
     private val inntektKlasser: EnumSet<InntektKlasse>
 ) : GrunnlagBeregning(regelIdentifikator) {
+    override fun isActive(fakta: Fakta): Boolean = fakta.lærling && fakta.beregningsdato.erKoronaPeriode() && fakta.manueltGrunnlag == null
 
     override fun calculate(fakta: Fakta): Resultat {
-        return if (fakta.lærling && fakta.manueltGrunnlag == null && fakta.inntekt != null) {
+        return if (isActive(fakta)) {
 
-            val sisteAvsluttendeKalenderMåned = fakta.inntekt.sisteAvsluttendeKalenderMåned
+            val sisteAvsluttendeKalenderMåned = fakta.inntekt?.sisteAvsluttendeKalenderMåned ?: throw RuntimeException("GrunnlagEtterLærlingForskrift kan bare håndteres hvis inntekt er satt")
 
             val sortertEtterInntektsmåned =
                 fakta.inntektsPerioderOrEmpty.first.map(fakta.oppjusterTilGjeldendeGrunnbeløp())
@@ -41,7 +42,7 @@ abstract class GrunnlagEtterLærlingForskrift(
     }
 }
 
-private fun LocalDate.toYearMonth(): YearMonth = YearMonth.from(this)
+private fun LocalDate.erKoronaPeriode() = this in (LocalDate.of(2020, 3, 20)..LocalDate.of(2020, 12, 31))
 
 sealed class GrunnlagUtvelgelse(
     val antallMåneder: Int,

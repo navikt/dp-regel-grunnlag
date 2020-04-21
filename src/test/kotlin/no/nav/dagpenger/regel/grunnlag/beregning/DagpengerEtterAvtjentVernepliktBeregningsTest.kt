@@ -11,6 +11,22 @@ import java.time.YearMonth
 
 class DagpengerEtterAvtjentVernepliktBeregningsTest {
 
+    private val beregning = DagpengerEtterAvtjentVerneplikt()
+
+    @Test
+    fun `Skal ikke behandle hvis ikke verneplikt parameter er satt`() {
+        val fakta = Fakta(
+            inntekt = null,
+            fangstOgFisk = false,
+            lærling = true,
+            verneplikt = false,
+            beregningsdato = LocalDate.of(2019, 4, 1),
+            gjeldendeGrunnbeløpVedBeregningsdato = Grunnbeløp.FastsattI2018,
+            gjeldendeGrunnbeløpForDagensDato = Grunnbeløp.FastsattI2019
+        )
+        false shouldBe beregning.isActive(fakta)
+    }
+
     @Test
     fun `Skal få uavkortet grunnlag på 3G når verneplikt er satt`() {
 
@@ -23,7 +39,7 @@ class DagpengerEtterAvtjentVernepliktBeregningsTest {
             gjeldendeGrunnbeløpForDagensDato = Grunnbeløp.FastsattI2019
         )
 
-        when (val beregningsResultat = DagpengerEtterAvtjentVerneplikt().calculate(fakta)) {
+        when (val beregningsResultat = beregning.calculate(fakta)) {
             is BeregningsResultat ->
                 beregningsResultat.uavkortet shouldBe 299574.toBigDecimal()
             else -> beregningsResultat.shouldBeTypeOf<BeregningsResultat>()
@@ -42,7 +58,7 @@ class DagpengerEtterAvtjentVernepliktBeregningsTest {
             gjeldendeGrunnbeløpForDagensDato = Grunnbeløp.FastsattI2019
         )
 
-        when (val beregningsResultat = DagpengerEtterAvtjentVerneplikt().calculate(fakta)) {
+        when (val beregningsResultat = beregning.calculate(fakta)) {
             is IngenBeregningsResultat ->
                 beregningsResultat.beskrivelse shouldBe "Verneplikt"
             else -> beregningsResultat.shouldBeTypeOf<BeregningsResultat>()
