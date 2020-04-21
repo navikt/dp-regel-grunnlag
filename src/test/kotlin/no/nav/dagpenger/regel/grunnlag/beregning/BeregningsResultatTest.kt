@@ -95,7 +95,6 @@ class BeregningsResultatTest {
         }
     }
 
-
     @Test
     fun `Skal alltid returnere manuelt grunnlag dersom det er satt i lærlingsforskrift`() {
         val resultater = setOf(
@@ -106,5 +105,4 @@ class BeregningsResultatTest {
         resultater.finnHøyesteAvkortetVerdi()?.avkortet shouldBe 2000.toBigDecimal()
         resultater.finnHøyesteAvkortetVerdi()?.beregningsregel shouldBe "Manuell"
     }
-
 }
