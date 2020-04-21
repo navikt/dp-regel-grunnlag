@@ -1,9 +1,9 @@
 package no.nav.dagpenger.regel.grunnlag.beregning
 
-import io.kotlintest.matchers.string.shouldNotStartWith
-import io.kotlintest.matchers.string.shouldStartWith
-import io.kotlintest.matchers.types.shouldBeInstanceOf
-import io.kotlintest.specs.FreeSpec
+import io.kotest.core.spec.style.FreeSpec
+import io.kotest.matchers.string.shouldNotStartWith
+import io.kotest.matchers.string.shouldStartWith
+import io.kotest.matchers.types.shouldBeInstanceOf
 import java.math.BigDecimal
 import java.time.LocalDate
 import java.time.YearMonth

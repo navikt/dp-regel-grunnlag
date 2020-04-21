@@ -1,8 +1,8 @@
 package no.nav.dagpenger.regel.grunnlag.beregning
 
-import io.kotlintest.assertSoftly
-import io.kotlintest.matchers.types.shouldBeTypeOf
-import io.kotlintest.shouldBe
+import io.kotest.assertions.assertSoftly
+import io.kotest.matchers.shouldBe
+import io.kotest.matchers.types.shouldBeTypeOf
 import java.math.BigDecimal
 import java.time.LocalDate
 import java.time.YearMonth

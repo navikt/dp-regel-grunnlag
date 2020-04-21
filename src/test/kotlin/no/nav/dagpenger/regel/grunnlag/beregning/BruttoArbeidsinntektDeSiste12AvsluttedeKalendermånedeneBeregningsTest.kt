@@ -1,7 +1,7 @@
 package no.nav.dagpenger.regel.grunnlag.beregning
 
-import io.kotlintest.matchers.types.shouldBeTypeOf
-import io.kotlintest.shouldBe
+import io.kotest.matchers.shouldBe
+import io.kotest.matchers.types.shouldBeTypeOf
 import java.math.BigDecimal
 import java.time.LocalDate
 import java.time.YearMonth
@@ -67,7 +67,7 @@ class BruttoArbeidsinntektDeSiste12AvsluttedeKalendermånedeneBeregningsTest {
         when (val beregningsResultat = beregning.calculate(fakta)) {
             is BeregningsResultat ->
                 beregningsResultat.uavkortet shouldBe
-                BigDecimal("2034.69893414785227588000")
+                    BigDecimal("2034.69893414785227588000")
             else -> beregningsResultat.shouldBeTypeOf<BeregningsResultat>()
         }
     }
@@ -202,7 +202,7 @@ class BruttoArbeidsinntektDeSiste12AvsluttedeKalendermånedeneBeregningsTest {
         when (val beregningsResultat = beregning.calculate(fakta)) {
             is BeregningsResultat ->
                 beregningsResultat.uavkortet shouldBe
-                BigDecimal("1066.47158083602110345000")
+                    BigDecimal("1066.47158083602110345000")
             else -> beregningsResultat.shouldBeTypeOf<BeregningsResultat>()
         }
     }
@@ -247,7 +247,7 @@ class BruttoArbeidsinntektDeSiste12AvsluttedeKalendermånedeneBeregningsTest {
         when (val beregningsResultat = beregning.calculate(fakta)) {
             is BeregningsResultat ->
                 beregningsResultat.uavkortet shouldBe
-                BigDecimal("-1066.47158083602110345000")
+                    BigDecimal("-1066.47158083602110345000")
             else -> beregningsResultat.shouldBeTypeOf<BeregningsResultat>()
         }
     }
@@ -267,7 +267,7 @@ class BruttoArbeidsinntektDeSiste12AvsluttedeKalendermånedeneBeregningsTest {
         when (val beregningsResultat = beregning.calculate(fakta)) {
             is BeregningsResultat ->
                 beregningsResultat.uavkortet shouldBe
-                BigDecimal.ZERO
+                    BigDecimal.ZERO
             else -> beregningsResultat.shouldBeTypeOf<BeregningsResultat>()
         }
     }

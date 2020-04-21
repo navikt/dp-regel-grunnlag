@@ -1,6 +1,6 @@
 package no.nav.dagpenger.regel.grunnlag
 
-import io.kotlintest.shouldBe
+import io.kotest.matchers.shouldBe
 import java.time.LocalDate
 import org.junit.jupiter.api.Test
 

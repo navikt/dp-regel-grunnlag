@@ -1,8 +1,7 @@
 package no.nav.dagpenger.regel.grunnlag.beregning
 
-import io.kotlintest.assertSoftly
-import io.kotlintest.shouldBe
-import org.junit.jupiter.api.Assertions.assertEquals
+import io.kotest.assertions.assertSoftly
+import io.kotest.matchers.shouldBe
 import org.junit.jupiter.api.Test
 
 class BeregningsResultatTest {
@@ -17,7 +16,6 @@ class BeregningsResultatTest {
 
         resultater.finnHøyesteAvkortetVerdi()?.avkortet shouldBe 1000.toBigDecimal()
         resultater.finnHøyesteAvkortetVerdi()?.beregningsregel shouldBe "Regel2"
-        assertEquals(1000.toBigDecimal(), resultater.finnHøyesteAvkortetVerdi()?.avkortet)
     }
 
     @Test
