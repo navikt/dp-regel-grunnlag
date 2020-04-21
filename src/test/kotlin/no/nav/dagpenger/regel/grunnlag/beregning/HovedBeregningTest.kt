@@ -4,15 +4,15 @@ import io.kotlintest.matchers.string.shouldNotStartWith
 import io.kotlintest.matchers.string.shouldStartWith
 import io.kotlintest.matchers.types.shouldBeInstanceOf
 import io.kotlintest.specs.FreeSpec
+import java.math.BigDecimal
+import java.time.LocalDate
+import java.time.YearMonth
 import no.nav.dagpenger.events.inntekt.v1.Inntekt
 import no.nav.dagpenger.events.inntekt.v1.InntektKlasse
 import no.nav.dagpenger.events.inntekt.v1.KlassifisertInntekt
 import no.nav.dagpenger.events.inntekt.v1.KlassifisertInntektMåned
 import no.nav.dagpenger.grunnbelop.Grunnbeløp
 import no.nav.dagpenger.regel.grunnlag.Fakta
-import java.math.BigDecimal
-import java.time.LocalDate
-import java.time.YearMonth
 
 private val koronatid = DateIterator(startDate = LocalDate.of(2020, 3, 20), endDateInclusive = LocalDate.of(2020, 12, 31))
 

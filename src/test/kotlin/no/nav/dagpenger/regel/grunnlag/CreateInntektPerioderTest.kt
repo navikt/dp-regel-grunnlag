@@ -1,6 +1,11 @@
 package no.nav.dagpenger.regel.grunnlag
 
 import io.mockk.mockk
+import java.math.BigDecimal
+import java.time.LocalDate
+import java.time.YearMonth
+import kotlin.test.assertNotNull
+import kotlin.test.assertNull
 import no.nav.dagpenger.events.inntekt.v1.Inntekt
 import no.nav.dagpenger.events.inntekt.v1.InntektKlasse
 import no.nav.dagpenger.events.inntekt.v1.KlassifisertInntekt
@@ -8,11 +13,6 @@ import no.nav.dagpenger.events.inntekt.v1.KlassifisertInntektMåned
 import no.nav.dagpenger.grunnbelop.Grunnbeløp
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
-import java.math.BigDecimal
-import java.time.LocalDate
-import java.time.YearMonth
-import kotlin.test.assertNotNull
-import kotlin.test.assertNull
 
 internal class CreateInntektPerioderTest {
     private val grunnlag = Grunnlag(Configuration(), mockk<GrunnlagInstrumentation>())

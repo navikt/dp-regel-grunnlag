@@ -1,7 +1,7 @@
 package no.nav.dagpenger.regel.grunnlag.beregning
 
-import no.nav.dagpenger.events.inntekt.v1.InntektKlasse
 import java.util.EnumSet
+import no.nav.dagpenger.events.inntekt.v1.InntektKlasse
 
 val inntektKlassifisertEtterFangstOgFisk = EnumSet.of(
     InntektKlasse.ARBEIDSINNTEKT,

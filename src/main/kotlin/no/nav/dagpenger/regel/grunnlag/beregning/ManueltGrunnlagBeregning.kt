@@ -1,7 +1,7 @@
 package no.nav.dagpenger.regel.grunnlag.beregning
 
-import no.nav.dagpenger.regel.grunnlag.Fakta
 import java.math.BigDecimal
+import no.nav.dagpenger.regel.grunnlag.Fakta
 
 class ManueltGrunnlagBeregning : GrunnlagBeregning("Manuell") {
     override fun isActive(fakta: Fakta): Boolean = fakta.manueltGrunnlag != null

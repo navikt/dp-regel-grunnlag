@@ -1,5 +1,8 @@
 package no.nav.dagpenger.regel.grunnlag
 
+import java.math.BigDecimal
+import java.time.LocalDate
+import java.util.EnumSet
 import no.nav.dagpenger.events.inntekt.v1.Inntekt
 import no.nav.dagpenger.events.inntekt.v1.InntektKlasse
 import no.nav.dagpenger.events.inntekt.v1.InntektsPerioder
@@ -10,9 +13,6 @@ import no.nav.dagpenger.grunnbelop.Regel
 import no.nav.dagpenger.grunnbelop.faktorMellom
 import no.nav.dagpenger.grunnbelop.forMåned
 import no.nav.dagpenger.grunnbelop.getGrunnbeløpForRegel
-import java.math.BigDecimal
-import java.time.LocalDate
-import java.util.EnumSet
 
 data class Fakta(
     val inntekt: Inntekt? = null,

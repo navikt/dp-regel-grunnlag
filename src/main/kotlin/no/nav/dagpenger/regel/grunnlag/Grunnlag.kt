@@ -3,6 +3,8 @@ package no.nav.dagpenger.regel.grunnlag
 import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.Types
 import de.huxhorn.sulky.ulid.ULID
+import java.net.URI
+import java.util.Properties
 import no.nav.dagpenger.events.Packet
 import no.nav.dagpenger.events.Problem
 import no.nav.dagpenger.events.inntekt.v1.Inntekt
@@ -13,8 +15,6 @@ import no.nav.dagpenger.regel.grunnlag.beregning.HovedBeregning
 import no.nav.dagpenger.streams.River
 import no.nav.dagpenger.streams.streamConfig
 import org.apache.kafka.streams.kstream.Predicate
-import java.net.URI
-import java.util.Properties
 
 class Grunnlag(
     private val config: Configuration,

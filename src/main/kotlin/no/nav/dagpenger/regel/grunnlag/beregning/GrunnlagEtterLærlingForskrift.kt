@@ -1,12 +1,12 @@
 package no.nav.dagpenger.regel.grunnlag.beregning
 
-import no.nav.dagpenger.events.inntekt.v1.InntektKlasse
-import no.nav.dagpenger.events.inntekt.v1.sumInntekt
-import no.nav.dagpenger.regel.grunnlag.Fakta
 import java.lang.RuntimeException
 import java.math.BigDecimal
 import java.time.LocalDate
 import java.util.EnumSet
+import no.nav.dagpenger.events.inntekt.v1.InntektKlasse
+import no.nav.dagpenger.events.inntekt.v1.sumInntekt
+import no.nav.dagpenger.regel.grunnlag.Fakta
 
 abstract class GrunnlagEtterLærlingForskrift(
     private val regelIdentifikator: String,

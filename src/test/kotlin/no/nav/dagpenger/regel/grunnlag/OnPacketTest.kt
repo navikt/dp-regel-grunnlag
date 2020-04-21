@@ -2,16 +2,16 @@ package no.nav.dagpenger.regel.grunnlag
 
 import io.mockk.mockk
 import io.mockk.verify
+import java.math.BigDecimal
+import java.time.YearMonth
+import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 import no.nav.dagpenger.events.Packet
 import no.nav.dagpenger.events.inntekt.v1.Inntekt
 import no.nav.dagpenger.events.inntekt.v1.InntektKlasse
 import no.nav.dagpenger.events.inntekt.v1.KlassifisertInntekt
 import no.nav.dagpenger.events.inntekt.v1.KlassifisertInntektMåned
 import org.junit.jupiter.api.Test
-import java.math.BigDecimal
-import java.time.YearMonth
-import kotlin.test.assertEquals
-import kotlin.test.assertTrue
 
 class OnPacketTest {
     companion object {
