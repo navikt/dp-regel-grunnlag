@@ -55,7 +55,7 @@ internal class HovedBeregningTest : FreeSpec({
                 ),
                 verneplikt = false,
                 fangstOgFisk = false,
-                lærling = false,
+                lærling = true,
                 beregningsdato = beregningsDato,
                 gjeldendeGrunnbeløpVedBeregningsdato = Grunnbeløp.FastsattI2019,
                 gjeldendeGrunnbeløpForDagensDato = Grunnbeløp.FastsattI2019
