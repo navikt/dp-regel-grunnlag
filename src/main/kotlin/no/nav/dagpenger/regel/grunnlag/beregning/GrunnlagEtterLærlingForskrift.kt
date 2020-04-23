@@ -2,7 +2,6 @@ package no.nav.dagpenger.regel.grunnlag.beregning
 
 import java.lang.RuntimeException
 import java.math.BigDecimal
-import java.time.LocalDate
 import java.util.EnumSet
 import no.nav.dagpenger.events.inntekt.v1.InntektKlasse
 import no.nav.dagpenger.events.inntekt.v1.sumInntekt
@@ -41,8 +40,6 @@ abstract class GrunnlagEtterLærlingForskrift(
         }
     }
 }
-
-private fun LocalDate.erKoronaPeriode() = this in (LocalDate.of(2020, 3, 20)..LocalDate.of(2020, 12, 31))
 
 sealed class GrunnlagUtvelgelse(
     val antallMåneder: Int,

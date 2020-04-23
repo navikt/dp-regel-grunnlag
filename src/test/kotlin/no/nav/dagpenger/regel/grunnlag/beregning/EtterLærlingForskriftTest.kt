@@ -15,6 +15,57 @@ import no.nav.dagpenger.regel.grunnlag.Fakta
 import org.junit.jupiter.api.Test
 
 internal class EtterLærlingForskriftTest() {
+
+    val beregning = object : GrunnlagEtterLærlingForskrift(
+        regelIdentifikator = "test",
+        grunnlagUtvelgelse = SisteAvsluttendeMånedUtvelgelse(),
+        inntektKlasser = inntektKlassifisertEtterFangstOgFisk
+    ) {
+    }
+
+    @Test
+    fun `Skal behandle lærlinger der beregningsdato er definert innenfor korona periode (20 mars til 31 desember 2020)`() {
+        val fakta = Fakta(
+            inntekt = null,
+            fangstOgFisk = false,
+            lærling = true,
+            verneplikt = false,
+            beregningsdato = LocalDate.of(2020, 3, 20),
+            gjeldendeGrunnbeløpVedBeregningsdato = Grunnbeløp.FastsattI2018,
+            gjeldendeGrunnbeløpForDagensDato = Grunnbeløp.FastsattI2019
+        )
+        true shouldBe beregning.isActive(fakta)
+    }
+
+    @Test
+    fun `Skal ikke behandle lærlinger der beregningsdato er definert utenfor korona periode 20 mars til 31 desember 2020`() {
+        val fakta = Fakta(
+            inntekt = null,
+            fangstOgFisk = false,
+            lærling = true,
+            verneplikt = false,
+            beregningsdato = LocalDate.of(2020, 3, 1),
+            gjeldendeGrunnbeløpVedBeregningsdato = Grunnbeløp.FastsattI2018,
+            gjeldendeGrunnbeløpForDagensDato = Grunnbeløp.FastsattI2019
+        )
+        false shouldBe beregning.isActive(fakta)
+    }
+
+    @Test
+    fun `Skal ikke behandle lærlinger der manuelt grunnlag er satt`() {
+        val fakta = Fakta(
+            inntekt = null,
+            fangstOgFisk = false,
+            manueltGrunnlag = 1000,
+            lærling = true,
+            verneplikt = false,
+            beregningsdato = LocalDate.of(2020, 3, 21),
+            gjeldendeGrunnbeløpVedBeregningsdato = Grunnbeløp.FastsattI2018,
+            gjeldendeGrunnbeløpForDagensDato = Grunnbeløp.FastsattI2019
+        )
+        false shouldBe beregning.isActive(fakta)
+    }
+
     @Test
     fun `Skal bruke siste kalender måned og gange med 12 for å finne uavkortet grunnlag for arbeidsinntekt`() {
 

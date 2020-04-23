@@ -18,17 +18,31 @@ class BruttoArbeidsinntektDeSiste36AvsluttedeKalendermånedeneBeregningsTest {
     private val beregning = BruttoArbeidsinntektDeSiste36AvsluttedeKalendermånedene()
 
     @Test
-    fun `Skal ikke behandle lærlinger`() {
+    fun `Skal ikke behandle lærlinger der beregningsdato er definert innenfor korona periode (20 mars til 31 desember 2020)`() {
         val fakta = Fakta(
             inntekt = null,
             fangstOgFisk = false,
             lærling = true,
             verneplikt = false,
-            beregningsdato = LocalDate.of(2019, 4, 1),
+            beregningsdato = LocalDate.of(2020, 3, 20),
             gjeldendeGrunnbeløpVedBeregningsdato = Grunnbeløp.FastsattI2018,
             gjeldendeGrunnbeløpForDagensDato = Grunnbeløp.FastsattI2019
         )
         false shouldBe beregning.isActive(fakta)
+    }
+
+    @Test
+    fun `Skal ikke behandle lærlinger som ordinær der beregningsdato er definert utenfor korona periode (20 mars til 31 desember 2020)`() {
+        val fakta = Fakta(
+            inntekt = null,
+            fangstOgFisk = false,
+            lærling = true,
+            verneplikt = false,
+            beregningsdato = LocalDate.of(2020, 3, 1),
+            gjeldendeGrunnbeløpVedBeregningsdato = Grunnbeløp.FastsattI2018,
+            gjeldendeGrunnbeløpForDagensDato = Grunnbeløp.FastsattI2019
+        )
+        true shouldBe beregning.isActive(fakta)
     }
 
     @Test

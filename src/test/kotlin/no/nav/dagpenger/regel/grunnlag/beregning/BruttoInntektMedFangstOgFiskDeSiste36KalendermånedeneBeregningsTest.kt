@@ -15,18 +15,34 @@ import org.junit.jupiter.api.Test
 
 class BruttoInntektMedFangstOgFiskDeSiste36KalendermånedeneBeregningsTest {
 
+    private val beregning = BruttoInntektMedFangstOgFiskDeSiste36AvsluttedeKalendermånedene()
+
     @Test
-    fun `Skal ikke behandle lærlinger`() {
+    fun `Skal ikke behandle lærlinger der beregningsdato er definert innenfor korona periode (20 mars til 31 desember 2020)`() {
         val fakta = Fakta(
             inntekt = null,
             fangstOgFisk = false,
             lærling = true,
             verneplikt = false,
-            beregningsdato = LocalDate.of(2019, 4, 1),
+            beregningsdato = LocalDate.of(2020, 3, 20),
             gjeldendeGrunnbeløpVedBeregningsdato = Grunnbeløp.FastsattI2018,
             gjeldendeGrunnbeløpForDagensDato = Grunnbeløp.FastsattI2019
         )
-        false shouldBe BruttoInntektMedFangstOgFiskDeSiste36AvsluttedeKalendermånedene().isActive(fakta)
+        false shouldBe beregning.isActive(fakta)
+    }
+
+    @Test
+    fun `Skal ikke behandle lærlinger som ordinær der beregningsdato er definert utenfor korona periode (20 mars til 31 desember 2020)`() {
+        val fakta = Fakta(
+            inntekt = null,
+            fangstOgFisk = false,
+            lærling = true,
+            verneplikt = false,
+            beregningsdato = LocalDate.of(2020, 3, 1),
+            gjeldendeGrunnbeløpVedBeregningsdato = Grunnbeløp.FastsattI2018,
+            gjeldendeGrunnbeløpForDagensDato = Grunnbeløp.FastsattI2019
+        )
+        true shouldBe beregning.isActive(fakta)
     }
 
     @Test
@@ -80,7 +96,7 @@ class BruttoInntektMedFangstOgFiskDeSiste36KalendermånedeneBeregningsTest {
             gjeldendeGrunnbeløpForDagensDato = Grunnbeløp.FastsattI2018
         )
 
-        when (val beregningsResultat = BruttoInntektMedFangstOgFiskDeSiste36AvsluttedeKalendermånedene().calculate(fakta)) {
+        when (val beregningsResultat = beregning.calculate(fakta)) {
             is BeregningsResultat ->
                 beregningsResultat.uavkortet shouldBe BigDecimal("1371.97393512841033163333")
             else -> beregningsResultat.shouldBeTypeOf<BeregningsResultat>()
@@ -150,7 +166,7 @@ class BruttoInntektMedFangstOgFiskDeSiste36KalendermånedeneBeregningsTest {
             gjeldendeGrunnbeløpForDagensDato = Grunnbeløp.FastsattI2019
         )
 
-        when (val beregningsResultat = BruttoInntektMedFangstOgFiskDeSiste36AvsluttedeKalendermånedene().calculate(fakta)) {
+        when (val beregningsResultat = beregning.calculate(fakta)) {
             is BeregningsResultat ->
                 beregningsResultat.uavkortet shouldBe BigDecimal("355.49052694534036781667")
             else -> beregningsResultat.shouldBeTypeOf<BeregningsResultat>()
@@ -220,7 +236,7 @@ class BruttoInntektMedFangstOgFiskDeSiste36KalendermånedeneBeregningsTest {
             gjeldendeGrunnbeløpForDagensDato = Grunnbeløp.FastsattI2019
         )
 
-        when (val beregningsResultat = BruttoInntektMedFangstOgFiskDeSiste36AvsluttedeKalendermånedene().calculate(fakta)) {
+        when (val beregningsResultat = beregning.calculate(fakta)) {
             is BeregningsResultat ->
                 beregningsResultat.uavkortet shouldBe BigDecimal("-355.49052694534036781667")
             else -> beregningsResultat.shouldBeTypeOf<BeregningsResultat>()
@@ -239,7 +255,7 @@ class BruttoInntektMedFangstOgFiskDeSiste36KalendermånedeneBeregningsTest {
             gjeldendeGrunnbeløpForDagensDato = Grunnbeløp.FastsattI2019
         )
 
-        when (val beregningsResultat = BruttoInntektMedFangstOgFiskDeSiste36AvsluttedeKalendermånedene().calculate(fakta)) {
+        when (val beregningsResultat = beregning.calculate(fakta)) {
             is IngenBeregningsResultat ->
                 beregningsResultat.beskrivelse shouldBe
                 "FangstOgFiskSiste36"
