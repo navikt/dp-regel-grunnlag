@@ -48,6 +48,8 @@ dependencies {
     implementation(Dagpenger.Events)
     implementation(Dagpenger.Biblioteker.grunnbeløp)
 
+    implementation(RapidAndRivers)
+
     implementation(Moshi.moshi)
     implementation(Moshi.moshiAdapters)
     implementation(Moshi.moshiKotlin)
@@ -64,10 +66,8 @@ dependencies {
     implementation(Kafka.clients)
     implementation(Kafka.streams)
 
-    implementation(Log4j2.api)
-    implementation(Log4j2.core)
-    implementation(Log4j2.slf4j)
-    implementation(Log4j2.Logstash.logstashLayout)
+    implementation("ch.qos.logback:logback-classic:1.2.3")
+
     implementation(Kotlin.Logging.kotlinLogging)
     implementation(Konfig.konfig)
 
