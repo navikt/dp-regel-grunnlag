@@ -13,28 +13,30 @@ private val log = KotlinLogging.logger {}
 class RapidGrunnlag(
     rapidsConnection: RapidsConnection,
     private val instrumentation: GrunnlagInstrumentation = GrunnlagInstrumentation()
-): River.PacketListener {
+) : River.PacketListener {
     private val ulidGenerator = ULID()
 
     init {
         River(rapidsConnection).apply {
             validate { it.requireAll("@behov", listOf(GRUNNLAG)) }
-            validate { it.forbid("@løsning") }
             validate { it.requireKey("@id") }
             validate { it.requireKey(BEREGNINGSDATO) }
+            validate { it.requireKey(INNTEKT) }
             validate { it.interestedIn(LÆRLING) }
+            validate { it.interestedIn(AVTJENT_VERNEPLIKT) }
+            validate { it.interestedIn(FANGST_OG_FISK) }
+            validate { it.interestedIn(MANUELT_GRUNNLAG) }
+            validate { it.forbid("@løsning") }
         }.register(this)
     }
 
     companion object {
         const val LÆRLING: String = "lærling"
-        const val GRUNNLAG_RESULTAT = "grunnlagResultat"
         const val INNTEKT = "inntektV1"
         const val AVTJENT_VERNEPLIKT = "harAvtjentVerneplikt"
         const val FANGST_OG_FISK = "oppfyllerKravTilFangstOgFisk"
         const val BEREGNINGSDATO = "beregningsdato"
         const val MANUELT_GRUNNLAG = "manueltGrunnlag"
-        const val GRUNNLAG_INNTEKTSPERIODER = "grunnlagInntektsPerioder"
         const val GRUNNLAG = "Grunnlag"
         const val REGELIDENTIFIKATOR = "Grunnlag.v1"
     }
@@ -50,7 +52,7 @@ class RapidGrunnlag(
             try {
                 val resultat = HovedBeregning().calculate(fakta)
 
-                val grunnlagResultat = GrunnlagResultat(
+                val grunnlagResultat = RapidGrunnlagResultat(
                     sporingsId = ulidGenerator.nextULID(),
                     subsumsjonsId = ulidGenerator.nextULID(),
                     regelidentifikator = REGELIDENTIFIKATOR,
@@ -61,7 +63,8 @@ class RapidGrunnlag(
                     grunnbeløpBrukt = when (fakta.verneplikt) {
                         true -> fakta.gjeldendeGrunnbeløpForDagensDato.verdi
                         false -> fakta.gjeldendeGrunnbeløpVedBeregningsdato.verdi
-                    }
+                    },
+                    grunnlagInntektsPerioder = createInntektPerioder(fakta)
                 )
 
                 packet["@løsning"] = mapOf(

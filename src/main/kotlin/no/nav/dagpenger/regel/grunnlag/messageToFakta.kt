@@ -1,5 +1,7 @@
 package no.nav.dagpenger.regel.grunnlag
 
+import java.math.BigDecimal
+import java.time.LocalDate
 import no.nav.dagpenger.events.inntekt.v1.Inntekt
 import no.nav.dagpenger.events.inntekt.v1.InntektKlasse
 import no.nav.dagpenger.events.inntekt.v1.KlassifisertInntekt
@@ -17,8 +19,6 @@ import no.nav.helse.rapids_rivers.JsonMessage
 import no.nav.helse.rapids_rivers.asLocalDate
 import no.nav.helse.rapids_rivers.asYearMonth
 import no.nav.helse.rapids_rivers.isMissingOrNull
-import java.math.BigDecimal
-import java.time.LocalDate
 
 internal fun messageToFakta(packet: JsonMessage): Fakta {
 
@@ -68,7 +68,8 @@ private fun getInntekt(packet: JsonMessage): Inntekt? =
                                 ), inntektKlasse = InntektKlasse.valueOf(it["inntektKlasse"].asText())
                             )
                         })
-                }, manueltRedigert = it["manueltRedigert"].asBoolean(),
+                },
+                manueltRedigert = it["manueltRedigert"].asBoolean(),
                 sisteAvsluttendeKalenderMåned = it["sisteAvsluttendeKalenderMåned"].asYearMonth()
             )
         }

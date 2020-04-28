@@ -46,6 +46,25 @@ class GrunnlagInstrumentation {
         )
     }
 
+    fun grunnlagBeregnet(
+        regelIdentifikator: String,
+        fakta: Fakta,
+        resultat: RapidGrunnlagResultat
+    ) {
+        this.countGrunnlagBeregnet(
+            regelIdentifikator = regelIdentifikator,
+            beregningsregel = resultat.beregningsregel,
+            harAvkortet = resultat.harAvkortet
+        )
+
+        this.beregnNormaltFastsattArbeidstid(
+            regelIdentifikator = regelIdentifikator,
+            beregningsregel = resultat.beregningsregel,
+            harAvkortet = resultat.harAvkortet,
+            klassifisering = fastsettArbeidstid(resultat.avkortetGrunnlag, fakta.gjeldendeGrunnbeløpForDagensDato.verdi)
+        )
+    }
+
     private fun countGrunnlagBeregnet(
         regelIdentifikator: String,
         beregningsregel: String,

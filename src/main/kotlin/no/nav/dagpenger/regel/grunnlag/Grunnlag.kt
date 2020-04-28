@@ -190,4 +190,3 @@ object RapidHealthCheck : RapidsConnection.StatusListener, HealthCheck {
         false -> HealthStatus.DOWN
     }
 }
-
