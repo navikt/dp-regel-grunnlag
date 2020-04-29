@@ -28,7 +28,7 @@ internal class CreateInntektPerioderTest {
             gjeldendeGrunnbeløpForDagensDato = Grunnbeløp.FastsattI2019
         )
 
-        val inntektsPerioder = grunnlag.createInntektPerioder(fakta)
+        val inntektsPerioder = createInntektPerioder(fakta)
 
         assertNull(inntektsPerioder)
     }
@@ -51,7 +51,7 @@ internal class CreateInntektPerioderTest {
             gjeldendeGrunnbeløpForDagensDato = Grunnbeløp.FastsattI2019
         )
 
-        val inntektsPerioder = grunnlag.createInntektPerioder(fakta)!!
+        val inntektsPerioder = createInntektPerioder(fakta)!!
         assertThreeCorrectPeriods(inntektsPerioder, sisteAvsluttendeKalenderMåned)
 
         Assertions.assertTrue(inntektsPerioder.all { it.inntekt == BigDecimal(12000) })
@@ -76,7 +76,7 @@ internal class CreateInntektPerioderTest {
             gjeldendeGrunnbeløpForDagensDato = Grunnbeløp.FastsattI2019
         )
 
-        val inntektsPerioder = grunnlag.createInntektPerioder(fakta)!!
+        val inntektsPerioder = createInntektPerioder(fakta)!!
         assertThreeCorrectPeriods(inntektsPerioder, sisteAvsluttendeKalenderMåned)
 
         Assertions.assertTrue(inntektsPerioder.all { it.inntekt == BigDecimal(24000) })
@@ -105,7 +105,7 @@ internal class CreateInntektPerioderTest {
             gjeldendeGrunnbeløpForDagensDato = Grunnbeløp.FastsattI2019
         )
 
-        val inntektsPerioder = grunnlag.createInntektPerioder(fakta)!!
+        val inntektsPerioder = createInntektPerioder(fakta)!!
         assertThreeCorrectPeriods(inntektsPerioder, sisteAvsluttendeKalenderMåned)
         Assertions.assertTrue(inntektsPerioder.all { it.inntekt == BigDecimal(48000) })
         Assertions.assertTrue(inntektsPerioder.all { it.inneholderFangstOgFisk })
@@ -128,7 +128,7 @@ internal class CreateInntektPerioderTest {
             gjeldendeGrunnbeløpForDagensDato = Grunnbeløp.FastsattI2019
         )
 
-        val inntektsPerioder = grunnlag.createInntektPerioder(fakta)!!
+        val inntektsPerioder = createInntektPerioder(fakta)!!
         assertThreeCorrectPeriods(inntektsPerioder, sisteAvsluttendeKalenderMåned)
 
         Assertions.assertTrue(inntektsPerioder.all { it.inntekt == BigDecimal(24000) })
@@ -153,7 +153,7 @@ internal class CreateInntektPerioderTest {
             gjeldendeGrunnbeløpForDagensDato = Grunnbeløp.FastsattI2019
         )
 
-        val inntektsPerioder = grunnlag.createInntektPerioder(fakta)!!
+        val inntektsPerioder = createInntektPerioder(fakta)!!
         assertThreeCorrectPeriods(inntektsPerioder, sisteAvsluttendeKalenderMåned)
 
         Assertions.assertTrue(inntektsPerioder.all { it.inntekt == BigDecimal(24000) })
@@ -191,7 +191,7 @@ internal class CreateInntektPerioderTest {
             gjeldendeGrunnbeløpForDagensDato = Grunnbeløp.FastsattI2019
         )
 
-        val inntektsPerioder = grunnlag.createInntektPerioder(fakta)!!
+        val inntektsPerioder = createInntektPerioder(fakta)!!
         assertThreeCorrectPeriods(inntektsPerioder, sisteAvsluttedeKalenderMåned)
 
         Assertions.assertTrue(inntektsPerioder.all { it.inntekt == BigDecimal(-100) })
