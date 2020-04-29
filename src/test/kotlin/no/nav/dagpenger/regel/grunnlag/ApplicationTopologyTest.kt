@@ -1,28 +1,20 @@
 package no.nav.dagpenger.regel.grunnlag
 
 import com.fasterxml.jackson.databind.JsonNode
-import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import io.kotest.matchers.collections.shouldContain
 import io.kotest.matchers.ints.shouldBeExactly
 import io.mockk.mockk
 import no.nav.dagpenger.regel.grunnlag.RapidGrunnlag.Companion.BEREGNINGSDATO
 import no.nav.dagpenger.regel.grunnlag.RapidGrunnlag.Companion.GRUNNLAG
 import no.nav.dagpenger.regel.grunnlag.RapidGrunnlag.Companion.INNTEKT
-import no.nav.helse.rapids_rivers.InMemoryRapid
-import no.nav.helse.rapids_rivers.inMemoryRapid
+import no.nav.helse.rapids_rivers.testsupport.TestRapid
 import org.intellij.lang.annotations.Language
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
 class ApplicationTopologyTest {
     private val instrumentation = mockk<GrunnlagInstrumentation>(relaxed = true)
-    private lateinit var rapid: InMemoryRapid
-
-    @BeforeEach
-    fun setUp() {
-        rapid = createRapid {
-            RapidGrunnlag(it, instrumentation = instrumentation)
-        }
+    private val rapid = TestRapid().apply {
+        RapidGrunnlag(this, instrumentation)
     }
 
     @Test
@@ -52,28 +44,17 @@ class ApplicationTopologyTest {
             }
             """.trimIndent()
 
-        rapid.sendToListeners(json)
+        rapid.sendTestMessage(json)
 
-        validateMessages(rapid) { messages ->
-            messages.size shouldBeExactly 1
+        val inspektør = rapid.inspektør
+        inspektør.size shouldBeExactly 1
 
-            messages.first().also { message ->
-                message["@behov"].map(JsonNode::asText) shouldContain GRUNNLAG
-                message["@løsning"].hasNonNull(GRUNNLAG)
-                message["@løsning"][GRUNNLAG].hasNonNull("avkortetGrunnlag")
-                message["@løsning"][GRUNNLAG].hasNonNull("uavkortetGrunnlag")
-                message["@løsning"][GRUNNLAG].hasNonNull("harAvkortet")
-                message["@løsning"][GRUNNLAG].hasNonNull("grunnbeløpBrukt")
-                message["@løsning"][GRUNNLAG].hasNonNull("grunnlagInntektsPerioder")
-            }
-        }
-    }
-
-    private fun createRapid(service: (InMemoryRapid) -> Any): InMemoryRapid {
-        return inMemoryRapid { }.also { service(it) }
-    }
-
-    private fun validateMessages(rapid: InMemoryRapid, assertions: (messages: List<JsonNode>) -> Any) {
-        rapid.outgoingMessages.map { jacksonObjectMapper().readTree(it.value) }.also { assertions(it) }
+        inspektør.field(0, "@behov").map(JsonNode::asText) shouldContain GRUNNLAG
+        inspektør.field(0, "@løsning").hasNonNull(GRUNNLAG)
+        inspektør.field(0, "@løsning")[GRUNNLAG].hasNonNull("avkortetGrunnlag")
+        inspektør.field(0, "@løsning")[GRUNNLAG].hasNonNull("uavkortetGrunnlag")
+        inspektør.field(0, "@løsning")[GRUNNLAG].hasNonNull("harAvkortet")
+        inspektør.field(0, "@løsning")[GRUNNLAG].hasNonNull("grunnbeløpBrukt")
+        inspektør.field(0, "@løsning")[GRUNNLAG].hasNonNull("grunnlagInntektsPerioder")
     }
 }
