@@ -24,14 +24,14 @@ object Cucumber {
 object Dagpenger {
 
     object Biblioteker {
-        const val version = "2020.03.12-13.01.1e6c5fe0396d"
+        const val version = "2020.04.27-20.17.e64cb8a0fb81"
         const val stsKlient = "com.github.navikt.dp-biblioteker:sts-klient:$version"
         const val grunnbeløp = "com.github.navikt.dp-biblioteker:grunnbelop:$version"
         const val ktorUtils = "com.github.navikt.dp-biblioteker:ktor-utils:$version"
     }
 
-    const val Streams = "com.github.navikt:dagpenger-streams:2020.03.12-15.34.55b8a8dbab65"
-    const val Events = "com.github.navikt:dagpenger-events:2020.03.12-15.47.9ee02e57a328"
+    const val Streams = "com.github.navikt:dagpenger-streams:2020.04.28-09.38.acb13848c1b4"
+    const val Events = "com.github.navikt:dagpenger-events:2020.04.27-16.29.d11aef4d21d1"
 }
 
 object Database {
@@ -200,7 +200,7 @@ object Prometheus {
     }
 }
 
-const val RapidAndRivers = "com.github.navikt:rapids-and-rivers:1.73dddb5"
+const val RapidAndRivers = "com.github.navikt:rapids-and-rivers:1.47c31b4"
 
 object Slf4j {
     const val version = "1.7.25"
