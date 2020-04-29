@@ -1,0 +1,11 @@
+apiVersion: "nais.io/v1alpha1"
+kind: "Application"
+metadata:
+  name: dp-regel-grunnlag
+spec:
+  vault:
+    paths:
+      - mountPath: /var/run/secrets/nais.io/service_user
+        kvPath: /serviceuser/data/prod/srvdp-regel-grunnlag
+  secureLogs:
+    enabled: true
