@@ -24,7 +24,10 @@ private val localProperties = ConfigurationMap(
         "nav.truststore.password" to "changeme",
         "application.profile" to Profile.LOCAL.toString(),
         "application.httpPort" to "8098",
-        "behov.topic" to Topics.DAGPENGER_BEHOV_PACKET_EVENT.name
+        "behov.topic" to Topics.DAGPENGER_BEHOV_PACKET_EVENT.name,
+        "inntekt.gprc.address" to "localhost",
+        "inntekt.gprc.api.key" to "apikey",
+        "inntekt.gprc.api.secret" to "secret"
     )
 )
 private val devProperties = ConfigurationMap(
@@ -35,7 +38,8 @@ private val devProperties = ConfigurationMap(
         "application.profile" to Profile.DEV.toString(),
         "application.httpPort" to "8098",
         "feature.gjustering" to false.toString(),
-        "behov.topic" to Topics.DAGPENGER_BEHOV_PACKET_EVENT.name
+        "behov.topic" to Topics.DAGPENGER_BEHOV_PACKET_EVENT.name,
+        "inntekt.gprc.address" to "dp-inntekt-api-grpc.default.svc.nais.local"
     )
 )
 private val prodProperties = ConfigurationMap(
@@ -46,7 +50,8 @@ private val prodProperties = ConfigurationMap(
         "kafka.bootstrap.servers" to "a01apvl00145.adeo.no:8443,a01apvl00146.adeo.no:8443,a01apvl00147.adeo.no:8443,a01apvl00148.adeo.no:8443,a01apvl00149.adeo.no:8443,a01apvl00150.adeo.no:8443",
         "application.profile" to Profile.PROD.toString(),
         "application.httpPort" to "8098",
-        "behov.topic" to Topics.DAGPENGER_BEHOV_PACKET_EVENT.name
+        "behov.topic" to Topics.DAGPENGER_BEHOV_PACKET_EVENT.name,
+        "inntekt.gprc.address" to "dp-inntekt-api-grpc.default.svc.nais.local"
     )
 )
 
@@ -88,7 +93,10 @@ data class Configuration(
     data class Application(
         val id: String = config().getOrElse(Key("application.id", stringType), "dagpenger-regel-grunnlag"),
         val profile: Profile = config()[Key("application.profile", stringType)].let { Profile.valueOf(it) },
-        val httpPort: Int = config()[Key("application.httpPort", intType)]
+        val httpPort: Int = config()[Key("application.httpPort", intType)],
+        val inntektGprcAddress: String = config()[Key("inntekt.gprc.address", stringType)],
+        val inntektGprcApiKey: String = config()[Key("inntekt.gprc.api.key", stringType)],
+        val inntektGprcApiSecret: String = config()[Key("inntekt.gprc.api.secret", stringType)]
     )
 
     val features = mapOf(

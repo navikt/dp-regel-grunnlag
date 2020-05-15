@@ -11,6 +11,8 @@ import no.nav.dagpenger.events.inntekt.v1.Inntekt
 import no.nav.dagpenger.events.inntekt.v1.InntektKlasse
 import no.nav.dagpenger.events.inntekt.v1.sumInntekt
 import no.nav.dagpenger.events.moshiInstance
+import no.nav.dagpenger.inntekt.rpc.InntektHenterWrapper
+import no.nav.dagpenger.ktor.auth.ApiKeyVerifier
 import no.nav.dagpenger.regel.grunnlag.beregning.HovedBeregning
 import no.nav.dagpenger.streams.HealthCheck
 import no.nav.dagpenger.streams.HealthStatus
@@ -142,19 +144,26 @@ fun createInntektPerioder(fakta: Fakta): List<InntektPeriodeInfo>? {
 }
 
 private val config = Configuration()
-val features = Features(config.features)
+internal val features = Features(config.features)
 
 fun main(args: Array<String>) {
     val instrumentation = GrunnlagInstrumentation()
 
+    val apiKeyVerifier = ApiKeyVerifier(config.application.inntektGprcApiSecret)
+    val apiKey = apiKeyVerifier.generate(config.application.inntektGprcApiKey)
+    val inntektClient = InntektHenterWrapper(
+        serveraddress = config.application.inntektGprcAddress,
+        apiKey = apiKey
+    )
     val service = Grunnlag(instrumentation = instrumentation, config = config)
     service.start()
 
     RapidApplication.create(
         Configuration().rapidApplication
     ).apply {
-        RapidGrunnlag(
-            this,
+        LøsningService(
+            rapidsConnection = this,
+            inntektHenter = inntektClient,
             instrumentation = instrumentation
         )
     }.also {

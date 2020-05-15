@@ -4,19 +4,13 @@ import java.math.BigDecimal
 import java.math.RoundingMode
 
 data class RapidGrunnlagResultat(
-    val sporingsId: String,
-    val subsumsjonsId: String,
-    val regelidentifikator: String,
-    var avkortetGrunnlag: BigDecimal,
-    var uavkortetGrunnlag: BigDecimal,
+    private val avkortetKandidat: BigDecimal,
+    private val uavkortetKandidat: BigDecimal,
     val beregningsregel: String,
     val harAvkortet: Boolean,
-    val grunnbeløpBrukt: BigDecimal,
-    val grunnlagInntektsPerioder: List<InntektPeriodeInfo>?
+    val grunnbeløp: BigDecimal,
+    val inntektsperioder: List<InntektPeriodeInfo>?
 ) {
-
-    init {
-        avkortetGrunnlag = avkortetGrunnlag.setScale(0, RoundingMode.HALF_UP)
-        uavkortetGrunnlag = uavkortetGrunnlag.setScale(0, RoundingMode.HALF_UP)
-    }
+    val avkortet = avkortetKandidat.setScale(0, RoundingMode.HALF_UP)
+    val uavkortet = uavkortetKandidat.setScale(0, RoundingMode.HALF_UP)
 }

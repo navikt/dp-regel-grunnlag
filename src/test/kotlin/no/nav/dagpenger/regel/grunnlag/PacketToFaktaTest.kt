@@ -1,5 +1,6 @@
 package no.nav.dagpenger.regel.grunnlag
 
+import io.kotest.matchers.shouldBe
 import java.time.LocalDate
 import java.time.YearMonth
 import kotlin.test.assertEquals
@@ -20,6 +21,11 @@ class PacketToFaktaTest {
         {
             "beregningsDato":"2019-04-10"
         }""".trimIndent()
+
+    @Test
+    fun packetToFakta() {
+        isThisGjusteringTest(LocalDate.now(), false) shouldBe false
+    }
 
     @Test
     fun ` should map avtjent_verneplikt from packet to Fakta `() {
