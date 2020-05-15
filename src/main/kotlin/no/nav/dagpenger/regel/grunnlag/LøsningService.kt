@@ -44,8 +44,8 @@ class LøsningService(
     }
 
     override fun onError(problems: MessageProblems, context: RapidsConnection.MessageContext) {
-        log.error { problems.toString() }
-        sikkerLogg.error { problems.toExtendedReport() }
+        log.info { problems.toString() }
+        sikkerLogg.info { problems.toExtendedReport() }
     }
 
     override fun onPacket(packet: JsonMessage, context: RapidsConnection.MessageContext) {
