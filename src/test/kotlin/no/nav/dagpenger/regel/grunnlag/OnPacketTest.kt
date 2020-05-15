@@ -16,15 +16,15 @@ import org.junit.jupiter.api.Test
 class OnPacketTest {
     companion object {
         val fakeGrunnlagInstrumentation = mockk<GrunnlagInstrumentation>(relaxed = true)
+        val grunnlag = Grunnlag(
+            Configuration(),
+            fakeGrunnlagInstrumentation,
+            mockk()
+        )
     }
 
     @Test
     fun ` Skal legge på minus i grunnlag dersom det blir negativt i sum `() {
-
-        val grunnlag = Grunnlag(
-            Configuration(),
-            fakeGrunnlagInstrumentation
-        )
 
         val inntekt = getInntekt((-1000).toBigDecimal())
 
@@ -49,11 +49,6 @@ class OnPacketTest {
     @Test
     fun ` Skal legge på 0 i grunnlag hvis det ikke er inntekt `() {
 
-        val grunnlag = Grunnlag(
-            Configuration(),
-            fakeGrunnlagInstrumentation
-        )
-
         val inntekt = getInntekt((0).toBigDecimal())
 
         val json = """
@@ -76,11 +71,6 @@ class OnPacketTest {
 
     @Test
     fun ` Skal velge rett beregningsregel og gi rett resultat ved arbeidsinntekt `() {
-
-        val grunnlag = Grunnlag(
-            Configuration(),
-            fakeGrunnlagInstrumentation
-        )
 
         val inntekt = getInntekt(1000.toBigDecimal())
 
@@ -111,11 +101,6 @@ class OnPacketTest {
     @Test
     fun ` Skal velge rett beregningsregel og gi rett resultat ved verneplikt `() {
 
-        val grunnlag = Grunnlag(
-            Configuration(),
-            fakeGrunnlagInstrumentation
-        )
-
         val inntekt = getInntekt(1000.toBigDecimal())
 
         val json = """
@@ -144,10 +129,6 @@ class OnPacketTest {
 
     @Test
     fun ` Skal velge rett beregningsregel ved lærling `() {
-        val grunnlag = Grunnlag(
-            Configuration(),
-            fakeGrunnlagInstrumentation
-        )
 
         val inntekt = getInntekt(1000.toBigDecimal(), YearMonth.of(2020, 3))
 
@@ -176,10 +157,6 @@ class OnPacketTest {
 
     @Test
     fun ` Skal instrumentere beregninger`() {
-        val grunnlag = Grunnlag(
-            Configuration(),
-            fakeGrunnlagInstrumentation
-        )
 
         val inntekt = getInntekt(1000.toBigDecimal())
 

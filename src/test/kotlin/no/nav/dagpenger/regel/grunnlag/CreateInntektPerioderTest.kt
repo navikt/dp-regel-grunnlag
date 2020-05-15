@@ -1,6 +1,5 @@
 package no.nav.dagpenger.regel.grunnlag
 
-import io.mockk.mockk
 import java.math.BigDecimal
 import java.time.LocalDate
 import java.time.YearMonth
@@ -15,8 +14,6 @@ import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 
 internal class CreateInntektPerioderTest {
-    private val grunnlag = Grunnlag(Configuration(), mockk<GrunnlagInstrumentation>())
-
     @Test
     fun `Skal ha perioder med 0 inntekt hvis det ikke er inntekt`() {
         val beregningsdato = LocalDate.of(2019, 2, 1)

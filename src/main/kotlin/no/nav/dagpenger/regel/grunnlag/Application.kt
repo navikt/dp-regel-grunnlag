@@ -24,7 +24,8 @@ import org.apache.kafka.streams.kstream.Predicate
 
 class Grunnlag(
     private val config: Configuration,
-    private val instrumentation: GrunnlagInstrumentation
+    private val instrumentation: GrunnlagInstrumentation,
+    private val healthCheck: HealthCheck
 ) : River(config.behovTopic) {
     override val SERVICE_APP_ID: String = config.application.id
     override val HTTP_PORT: Int = config.application.httpPort
@@ -32,6 +33,8 @@ class Grunnlag(
     private val REGELIDENTIFIKATOR = "Grunnlag.v1"
     private val jsonAdapterInntektPeriodeInfo: JsonAdapter<List<InntektPeriodeInfo>> =
         moshiInstance.adapter(Types.newParameterizedType(List::class.java, InntektPeriodeInfo::class.java))
+
+    override val healthChecks: List<HealthCheck> = listOf(healthCheck)
 
     companion object {
         const val LÆRLING: String = "lærling"
@@ -155,7 +158,7 @@ fun main(args: Array<String>) {
         serveraddress = config.application.inntektGprcAddress,
         apiKey = apiKey
     )
-    val service = Grunnlag(instrumentation = instrumentation, config = config)
+    val service = Grunnlag(instrumentation = instrumentation, config = config, healthCheck = RapidHealthCheck as HealthCheck)
     service.start()
 
     RapidApplication.create(
