@@ -34,8 +34,6 @@ class Grunnlag(
     private val jsonAdapterInntektPeriodeInfo: JsonAdapter<List<InntektPeriodeInfo>> =
         moshiInstance.adapter(Types.newParameterizedType(List::class.java, InntektPeriodeInfo::class.java))
 
-    override val healthChecks: List<HealthCheck> = listOf(healthCheck)
-
     companion object {
         const val LÆRLING: String = "lærling"
         const val GRUNNLAG_RESULTAT = "grunnlagResultat"
