@@ -31,7 +31,7 @@ class LøsningService(
 
     init {
         River(rapidsConnection).apply {
-            validate { it.requireAll("@behov", listOf(GRUNNLAG)) }
+            validate { it.requireAll("@behov", listOf("Grunnlag")) }
             validate { it.rejectKey("@løsning") }
             validate { it.requireKey("@id", "vedtakId") }
             validate { it.require("InntektId") { id -> id.asULID() } }
@@ -41,13 +41,6 @@ class LøsningService(
     }
 
     companion object {
-        const val LÆRLING: String = "lærling"
-        const val INNTEKT = "inntektV1"
-        const val AVTJENT_VERNEPLIKT = "harAvtjentVerneplikt"
-        const val FANGST_OG_FISK = "oppfyllerKravTilFangstOgFisk"
-        const val BEREGNINGSDATO = "beregningsdato"
-        const val MANUELT_GRUNNLAG = "manueltGrunnlag"
-        const val GRUNNLAG = "Grunnlag"
         const val REGELIDENTIFIKATOR = "Grunnlag.v1"
     }
 
