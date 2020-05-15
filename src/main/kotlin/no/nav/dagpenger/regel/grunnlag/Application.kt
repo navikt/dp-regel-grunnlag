@@ -5,6 +5,7 @@ import com.squareup.moshi.Types
 import de.huxhorn.sulky.ulid.ULID
 import java.net.URI
 import java.util.Properties
+import mu.KotlinLogging
 import no.nav.dagpenger.events.Packet
 import no.nav.dagpenger.events.Problem
 import no.nav.dagpenger.events.inntekt.v1.Inntekt
@@ -177,6 +178,9 @@ class NoResultException(message: String) : RuntimeException(message)
 class ManueltGrunnlagOgInntektException(message: String) : RuntimeException(message)
 
 object RapidHealthCheck : RapidsConnection.StatusListener, HealthCheck {
+
+    private val log = KotlinLogging.logger {}
+
     var healthy: Boolean = false
 
     override fun onStartup(rapidsConnection: RapidsConnection) {
@@ -184,10 +188,12 @@ object RapidHealthCheck : RapidsConnection.StatusListener, HealthCheck {
     }
 
     override fun onReady(rapidsConnection: RapidsConnection) {
+        log.info { "Rapid ready" }
         healthy = true
     }
 
     override fun onNotReady(rapidsConnection: RapidsConnection) {
+        log.error { "Rapid not ready" }
         healthy = false
     }
 
