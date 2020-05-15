@@ -27,7 +27,6 @@ class LøsningService(
     private val inntektHenter: InntektHenter,
     private val instrumentation: GrunnlagInstrumentation = GrunnlagInstrumentation()
 ) : River.PacketListener {
-    private val ulidGenerator = ULID()
 
     init {
         River(rapidsConnection).apply {
@@ -54,8 +53,7 @@ class LøsningService(
 
         withLoggingContext(
             "behovId" to packet["@id"].asText(),
-            "beregningsdato" to fakta.beregningsdato.toString(),
-            "lærling" to fakta.lærling.toString()
+            "vedtakId" to packet["vedtakId"].asText()
         ) {
             try {
                 val resultat = HovedBeregning().calculate(fakta)
