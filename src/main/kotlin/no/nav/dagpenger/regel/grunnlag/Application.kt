@@ -30,6 +30,7 @@ class Grunnlag(
 ) : River(config.behovTopic) {
     override val SERVICE_APP_ID: String = config.application.id
     override val HTTP_PORT: Int = config.application.httpPort
+    override val healthChecks: List<HealthCheck> = listOf(healthCheck)
     private val ulidGenerator = ULID()
     private val REGELIDENTIFIKATOR = "Grunnlag.v1"
     private val jsonAdapterInntektPeriodeInfo: JsonAdapter<List<InntektPeriodeInfo>> =
@@ -157,6 +158,11 @@ fun main(args: Array<String>) {
         serveraddress = config.application.inntektGprcAddress,
         apiKey = apiKey
     )
+
+    Runtime.getRuntime().addShutdownHook(Thread {
+        inntektClient.close()
+    })
+
     val service = Grunnlag(instrumentation = instrumentation, config = config, healthCheck = RapidHealthCheck as HealthCheck)
     service.start()
 
