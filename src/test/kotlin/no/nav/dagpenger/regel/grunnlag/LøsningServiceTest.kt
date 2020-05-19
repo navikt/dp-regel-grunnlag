@@ -57,7 +57,7 @@ class LøsningServiceTest {
                 "@behov": ["Grunnlag"],
                 "@id": "32",
                 "beregningsdato": "2020-03-01",
-                "InntektId": "${ULID().nextULID()}",
+                "inntektId": "${ULID().nextULID()}",
                 "vedtakId" : "1234"
             }
             """.trimIndent()

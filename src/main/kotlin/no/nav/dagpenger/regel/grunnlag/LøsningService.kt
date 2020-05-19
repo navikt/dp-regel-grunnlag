@@ -33,7 +33,7 @@ class LøsningService(
             validate { it.requireAll("@behov", listOf("Grunnlag")) }
             validate { it.rejectKey("@løsning") }
             validate { it.requireKey("@id", "vedtakId") }
-            validate { it.require("InntektId") { id -> id.asULID() } }
+            validate { it.require("inntektId") { id -> id.asULID() } }
             validate { it.requireKey("beregningsdato") }
             validate { it.interestedIn("lærling", "harAvtjentVerneplikt", "oppfyllerKravTilFangstOgFisk", "manueltGrunnlag") }
         }.register(this)
@@ -97,7 +97,7 @@ internal fun JsonMessage.toFakta(inntektHenter: InntektHenter): Fakta {
     }
 
     val verneplikt = this["harAvtjentVerneplikt"].asBoolean(false)
-    val inntekt = this["InntektId"].asULID().let { runBlocking { inntektHenter.hentKlassifisertInntekt(it.toString()) } }
+    val inntekt = this["inntektId"].asULID().let { runBlocking { inntektHenter.hentKlassifisertInntekt(it.toString()) } }
     val fangstOgFisk = this["oppfyllerKravTilFangstOgFisk"].asBoolean(false)
     val beregningsdato = this["beregningsdato"].asLocalDate()
     val manueltGrunnlag = this["manueltGrunnlag"].asInt()
