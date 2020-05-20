@@ -44,9 +44,7 @@ fun main(args: Array<String>) {
         instrumentation = instrumentation,
         config = config,
         healthCheck = RapidHealthCheck as HealthCheck
-    ).also {
-        it.start()
-    }
+    ).start()
 
     RapidApplication.create(
         Configuration().rapidApplication

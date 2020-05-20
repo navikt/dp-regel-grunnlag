@@ -8,8 +8,6 @@ import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
 import io.mockk.every
 import io.mockk.mockk
-import java.math.BigDecimal
-import java.time.YearMonth
 import kotlinx.coroutines.runBlocking
 import no.nav.dagpenger.events.inntekt.v1.Inntekt
 import no.nav.dagpenger.events.inntekt.v1.InntektKlasse
@@ -19,6 +17,8 @@ import no.nav.dagpenger.inntekt.rpc.InntektHenter
 import no.nav.helse.rapids_rivers.testsupport.TestRapid
 import org.intellij.lang.annotations.Language
 import org.junit.jupiter.api.Test
+import java.math.BigDecimal
+import java.time.YearMonth
 
 class LøsningServiceTest {
     private val instrumentation = mockk<GrunnlagInstrumentation>(relaxed = true)
@@ -45,7 +45,11 @@ class LøsningServiceTest {
     }
 
     private val rapid = TestRapid().apply {
-        LøsningService(rapidsConnection = this, inntektHenter = inntektHenter, instrumentation = instrumentation)
+        LøsningService(
+            rapidsConnection = this,
+            inntektHenter = inntektHenter,
+            instrumentation = instrumentation
+        )
     }
 
     @Test

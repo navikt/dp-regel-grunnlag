@@ -33,7 +33,7 @@ class LøsningService(
             validate { it.demandAll("@behov", listOf("Grunnlag")) }
             validate { it.rejectKey("@løsning") }
             validate { it.requireKey("@id", "vedtakId") }
-            validate { it.require("inntektId") { id -> id.asULID() } }
+            validate { it.require("inntektId", JsonNode::asULID) }
             validate { it.requireKey("beregningsdato") }
             validate {
                 it.interestedIn(
