@@ -23,10 +23,48 @@ import no.nav.helse.rapids_rivers.RapidApplication
 import no.nav.helse.rapids_rivers.RapidsConnection
 import org.apache.kafka.streams.kstream.Predicate
 
+private val config = Configuration()
+internal val features = Features(config.features)
+
+fun main(args: Array<String>) {
+    val instrumentation = GrunnlagInstrumentation()
+
+    val apiKeyVerifier = ApiKeyVerifier(config.application.inntektGprcApiSecret)
+    val apiKey = apiKeyVerifier.generate(config.application.inntektGprcApiKey)
+    val inntektClient = InntektHenterWrapper(
+        serveraddress = config.application.inntektGprcAddress,
+        apiKey = apiKey
+    ).also {
+        Runtime.getRuntime().addShutdownHook(Thread {
+            it.close()
+        })
+    }
+
+    Grunnlag(
+        instrumentation = instrumentation,
+        config = config,
+        healthCheck = RapidHealthCheck as HealthCheck
+    ).also {
+        it.start()
+    }
+
+    RapidApplication.create(
+        Configuration().rapidApplication
+    ).apply {
+        LøsningService(
+            rapidsConnection = this,
+            inntektHenter = inntektClient,
+            instrumentation = instrumentation
+        )
+    }.also {
+        it.register(RapidHealthCheck)
+    }.start()
+}
+
 class Grunnlag(
     private val config: Configuration,
     private val instrumentation: GrunnlagInstrumentation,
-    private val healthCheck: HealthCheck
+    healthCheck: HealthCheck
 ) : River(config.behovTopic) {
     override val SERVICE_APP_ID: String = config.application.id
     override val HTTP_PORT: Int = config.application.httpPort
@@ -146,45 +184,11 @@ fun createInntektPerioder(fakta: Fakta): List<InntektPeriodeInfo>? {
     }
 }
 
-private val config = Configuration()
-internal val features = Features(config.features)
-
-fun main(args: Array<String>) {
-    val instrumentation = GrunnlagInstrumentation()
-
-    val apiKeyVerifier = ApiKeyVerifier(config.application.inntektGprcApiSecret)
-    val apiKey = apiKeyVerifier.generate(config.application.inntektGprcApiKey)
-    val inntektClient = InntektHenterWrapper(
-        serveraddress = config.application.inntektGprcAddress,
-        apiKey = apiKey
-    )
-
-    Runtime.getRuntime().addShutdownHook(Thread {
-        inntektClient.close()
-    })
-
-    val service = Grunnlag(instrumentation = instrumentation, config = config, healthCheck = RapidHealthCheck as HealthCheck)
-    service.start()
-
-    RapidApplication.create(
-        Configuration().rapidApplication
-    ).apply {
-        LøsningService(
-            rapidsConnection = this,
-            inntektHenter = inntektClient,
-            instrumentation = instrumentation
-        )
-    }.also {
-        it.register(RapidHealthCheck)
-    }.start()
-}
-
 class NoResultException(message: String) : RuntimeException(message)
 
 class ManueltGrunnlagOgInntektException(message: String) : RuntimeException(message)
 
 object RapidHealthCheck : RapidsConnection.StatusListener, HealthCheck {
-
     private val log = KotlinLogging.logger {}
 
     var healthy: Boolean = false

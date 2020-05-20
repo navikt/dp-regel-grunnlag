@@ -1,7 +1,6 @@
 package no.nav.dagpenger.regel.grunnlag
 
 import com.fasterxml.jackson.databind.JsonNode
-import de.huxhorn.sulky.ulid.ULID
 import io.kotest.matchers.collections.shouldContain
 import io.kotest.matchers.ints.shouldBeExactly
 import io.kotest.matchers.ints.shouldBeGreaterThan
@@ -51,28 +50,52 @@ class LøsningServiceTest {
 
     @Test
     fun `skal fastsette dagpengegrunnlag`() {
-        @Language("json")
-        val json = """
-            {
-                "@behov": ["Grunnlag"],
-                "@id": "32",
-                "beregningsdato": "2020-03-01",
-                "inntektId": "${ULID().nextULID()}",
-                "vedtakId" : "1234"
-            }
-            """.trimIndent()
+        rapid.sendTestMessage(packet)
 
-        rapid.sendTestMessage(json)
+        with(rapid.inspektør) {
+            size shouldBeExactly 1
 
-        val inspektør = rapid.inspektør
-        println(inspektør.message(0))
-        inspektør.size shouldBeExactly 1
-        inspektør.field(0, "@behov").map(JsonNode::asText) shouldContain "Grunnlag"
-        inspektør.field(0, "@løsning").hasNonNull("Grunnlag") shouldBe true
-        inspektør.field(0, "@løsning")["Grunnlag"]["avkortet"].asInt() shouldBeGreaterThan 0
-        inspektør.field(0, "@løsning")["Grunnlag"]["uavkortet"].asInt() shouldBeGreaterThan 0
-        inspektør.field(0, "@løsning")["Grunnlag"]["harAvkortet"] shouldNotBe null
-        inspektør.field(0, "@løsning")["Grunnlag"]["grunnbeløp"].asInt() shouldBeGreaterThan 0
-        inspektør.field(0, "@løsning")["Grunnlag"]["inntektsperioder"] shouldNotBe null
+            field(0, "@behov").map(JsonNode::asText) shouldContain "Grunnlag"
+            field(0, "@løsning").hasNonNull("Grunnlag") shouldBe true
+            field(0, "@løsning")["Grunnlag"]["avkortet"].asInt() shouldBeGreaterThan 0
+            field(0, "@løsning")["Grunnlag"]["uavkortet"].asInt() shouldBeGreaterThan 0
+            field(0, "@løsning")["Grunnlag"]["harAvkortet"] shouldNotBe null
+            field(0, "@løsning")["Grunnlag"]["grunnbeløp"].asInt() shouldBeGreaterThan 0
+            field(0, "@løsning")["Grunnlag"]["inntektsperioder"] shouldNotBe null
+        }
     }
 }
+
+@Language("JSON")
+val packet = """{
+  "@event_name": "behov",
+  "@opprettet": "2020-05-20T13:36:05.114891",
+  "@id": "01E8RXX07TVAR8GE86WEWNCK70",
+  "@behov": [
+    "Grunnlag"
+  ],
+  "@forårsaket_av": {
+    "event_name": "behov",
+    "id": "01E8RXX03JMMB5G7DFX6CKYG51",
+    "opprettet": "2020-05-20T13:36:04.978438"
+  },
+  "fødselsnummer": "9999223837",
+  "aktørId": "1334014935246",
+  "sakId": "01E8RXWY80PX2GX8YCRBVFD8VP",
+  "vedtakId": "01E8RXWY819GVH1P3XNGBVAV1X",
+  "beregningsdato": "2020-04-21",
+  "rettighetstype": "Permittering",
+  "tilstand": "AvventerGrunnlag",
+  "inntektId": "01E8RXWZZQZR68M9ATANCR0E23",
+  "harAvtjentVerneplikt": false,
+  "lærling": false,
+  "oppFyllerKravTilFangstOgFisk": false,
+  "system_read_count": 0,
+  "system_participating_services": [
+    {
+      "service": "dp-saksbehandling",
+      "instance": "dp-saksbehandling-85cb9dd9c6-g7p8d",
+      "time": "2020-05-20T13:36:05.115012"
+    }
+  ]
+}"""

@@ -46,15 +46,6 @@ class LøsningService(
         }.register(this)
     }
 
-    companion object {
-        const val REGELIDENTIFIKATOR = "Grunnlag.v1"
-    }
-
-    override fun onError(problems: MessageProblems, context: RapidsConnection.MessageContext) {
-        log.info { problems.toString() }
-        sikkerLogg.info { problems.toExtendedReport() }
-    }
-
     override fun onPacket(packet: JsonMessage, context: RapidsConnection.MessageContext) {
         val fakta = packet.toFakta(inntektHenter)
 
@@ -82,7 +73,7 @@ class LøsningService(
                 )
 
                 instrumentation.grunnlagBeregnet(
-                    regelIdentifikator = REGELIDENTIFIKATOR,
+                    regelIdentifikator = "Grunnlag.v1",
                     fakta = fakta,
                     resultat = grunnlagResultat
                 )
@@ -94,6 +85,11 @@ class LøsningService(
                 log.error(err) { "feil ved beregning av grunnlag: ${err.message} for ${packet["@id"].asText()}" }
             }
         }
+    }
+
+    override fun onError(problems: MessageProblems, context: RapidsConnection.MessageContext) {
+        log.info { problems.toString() }
+        sikkerLogg.info { problems.toExtendedReport() }
     }
 }
 
