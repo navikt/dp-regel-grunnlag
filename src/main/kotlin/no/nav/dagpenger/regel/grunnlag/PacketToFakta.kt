@@ -43,7 +43,7 @@ internal fun isThisGjusteringTest(
     beregningsdato: LocalDate,
     verneplikt: Boolean
 ): Boolean {
-    val isBeregningsDatoAfterGjustering = beregningsdato.isAfter(LocalDate.of(2019, 8, 1).minusDays(1))
+    val isBeregningsDatoAfterGjustering = beregningsdato.isAfter(LocalDate.of(2020, 2, 1).minusDays(1))
     return features.isEnabled("gjustering") && (isBeregningsDatoAfterGjustering || verneplikt)
 }
 
