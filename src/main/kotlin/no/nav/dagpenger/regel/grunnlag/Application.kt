@@ -26,7 +26,11 @@ import org.apache.kafka.streams.kstream.Predicate
 private val config = Configuration()
 internal val features = Features(config.features)
 
+private val log = KotlinLogging.logger {}
+
 fun main(args: Array<String>) {
+
+    log.info { "Features: $features" }
     val instrumentation = GrunnlagInstrumentation()
 
     val apiKeyVerifier = ApiKeyVerifier(config.application.inntektGprcApiSecret)
@@ -113,8 +117,8 @@ class Grunnlag(
         createInntektPerioder(fakta)?.apply {
             packet.putValue(
                 GRUNNLAG_INNTEKTSPERIODER, checkNotNull(
-                    jsonAdapterInntektPeriodeInfo.toJsonValue(this)
-                )
+                jsonAdapterInntektPeriodeInfo.toJsonValue(this)
+            )
             )
         }
 
