@@ -3,9 +3,6 @@ package no.nav.dagpenger.regel.grunnlag.beregning
 import io.kotest.assertions.assertSoftly
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.types.shouldBeTypeOf
-import java.math.BigDecimal
-import java.time.LocalDate
-import java.time.YearMonth
 import no.nav.dagpenger.events.inntekt.v1.Inntekt
 import no.nav.dagpenger.events.inntekt.v1.InntektKlasse
 import no.nav.dagpenger.events.inntekt.v1.KlassifisertInntekt
@@ -13,6 +10,9 @@ import no.nav.dagpenger.events.inntekt.v1.KlassifisertInntektMåned
 import no.nav.dagpenger.grunnbelop.Grunnbeløp
 import no.nav.dagpenger.regel.grunnlag.Fakta
 import org.junit.jupiter.api.Test
+import java.math.BigDecimal
+import java.time.LocalDate
+import java.time.YearMonth
 
 internal class EtterLærlingForskriftTest() {
 
@@ -79,8 +79,10 @@ internal class EtterLærlingForskriftTest() {
             gjeldendeGrunnbeløpForDagensDato = Grunnbeløp.FastsattI2019
         )
 
-        when (val beregningsResultat =
-            LærlingForskriftSisteAvsluttendeKalenderMåned().calculate(fakta)) {
+        when (
+            val beregningsResultat =
+                LærlingForskriftSisteAvsluttendeKalenderMåned().calculate(fakta)
+        ) {
             is BeregningsResultat -> {
                 BigDecimal("12000.00000000000000000000") shouldBe beregningsResultat.uavkortet
                 BigDecimal("12000.00000000000000000000") shouldBe beregningsResultat.avkortet
@@ -104,8 +106,10 @@ internal class EtterLærlingForskriftTest() {
             gjeldendeGrunnbeløpForDagensDato = Grunnbeløp.FastsattI2019
         )
 
-        when (val beregningsResultat =
-            LærlingForskriftSiste3AvsluttendeKalenderMåned().calculate(fakta)) {
+        when (
+            val beregningsResultat =
+                LærlingForskriftSiste3AvsluttendeKalenderMåned().calculate(fakta)
+        ) {
             is BeregningsResultat -> {
                 BigDecimal("20000.00000000000000000000") shouldBe beregningsResultat.uavkortet
                 BigDecimal("20000.00000000000000000000") shouldBe beregningsResultat.avkortet
@@ -129,8 +133,10 @@ internal class EtterLærlingForskriftTest() {
             gjeldendeGrunnbeløpForDagensDato = Grunnbeløp.FastsattI2019
         )
 
-        when (val beregningsResultat =
-            LærlingForskriftSisteAvsluttendeKalenderMånedFangstOgFisk().calculate(fakta)) {
+        when (
+            val beregningsResultat =
+                LærlingForskriftSisteAvsluttendeKalenderMånedFangstOgFisk().calculate(fakta)
+        ) {
             is BeregningsResultat -> {
                 BigDecimal("36000.00000000000000000000") shouldBe beregningsResultat.uavkortet
                 BigDecimal("36000.00000000000000000000") shouldBe beregningsResultat.avkortet
@@ -154,8 +160,10 @@ internal class EtterLærlingForskriftTest() {
             gjeldendeGrunnbeløpForDagensDato = Grunnbeløp.FastsattI2019
         )
 
-        when (val beregningsResultat =
-            LærlingForskriftSiste3AvsluttendeKalenderMånedFangsOgFisk().calculate(fakta)) {
+        when (
+            val beregningsResultat =
+                LærlingForskriftSiste3AvsluttendeKalenderMånedFangsOgFisk().calculate(fakta)
+        ) {
             is BeregningsResultat -> {
                 BigDecimal("28000.00000000000000000000") shouldBe beregningsResultat.uavkortet
                 BigDecimal("28000.00000000000000000000") shouldBe beregningsResultat.avkortet

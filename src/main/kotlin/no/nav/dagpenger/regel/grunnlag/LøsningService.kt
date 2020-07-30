@@ -2,7 +2,6 @@ package no.nav.dagpenger.regel.grunnlag
 
 import com.fasterxml.jackson.databind.JsonNode
 import de.huxhorn.sulky.ulid.ULID
-import java.time.LocalDate
 import kotlinx.coroutines.runBlocking
 import mu.KotlinLogging
 import mu.withLoggingContext
@@ -18,6 +17,7 @@ import no.nav.helse.rapids_rivers.RapidsConnection
 import no.nav.helse.rapids_rivers.River
 import no.nav.helse.rapids_rivers.asLocalDate
 import no.nav.helse.rapids_rivers.isMissingOrNull
+import java.time.LocalDate
 
 private val log = KotlinLogging.logger {}
 private val sikkerLogg = KotlinLogging.logger("tjenestekall")

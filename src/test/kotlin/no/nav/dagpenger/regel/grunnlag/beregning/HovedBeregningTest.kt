@@ -4,15 +4,15 @@ import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.string.shouldNotStartWith
 import io.kotest.matchers.string.shouldStartWith
 import io.kotest.matchers.types.shouldBeInstanceOf
-import java.math.BigDecimal
-import java.time.LocalDate
-import java.time.YearMonth
 import no.nav.dagpenger.events.inntekt.v1.Inntekt
 import no.nav.dagpenger.events.inntekt.v1.InntektKlasse
 import no.nav.dagpenger.events.inntekt.v1.KlassifisertInntekt
 import no.nav.dagpenger.events.inntekt.v1.KlassifisertInntektMåned
 import no.nav.dagpenger.grunnbelop.Grunnbeløp
 import no.nav.dagpenger.regel.grunnlag.Fakta
+import java.math.BigDecimal
+import java.time.LocalDate
+import java.time.YearMonth
 
 private val koronatid = DateIterator(startDate = LocalDate.of(2020, 3, 20), endDateInclusive = LocalDate.of(2020, 12, 31))
 
@@ -75,7 +75,8 @@ private fun generateArbeidsinntekt(
 ): List<KlassifisertInntektMåned> {
     return (0 until numberOfMonths).toList().map {
         KlassifisertInntektMåned(
-            senesteMåned.minusMonths(it.toLong()), listOf(
+            senesteMåned.minusMonths(it.toLong()),
+            listOf(
                 KlassifisertInntekt(
                     beløpPerMnd, InntektKlasse.ARBEIDSINNTEKT
                 )

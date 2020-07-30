@@ -3,8 +3,6 @@ package no.nav.dagpenger.regel.grunnlag
 import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.Types
 import de.huxhorn.sulky.ulid.ULID
-import java.net.URI
-import java.util.Properties
 import mu.KotlinLogging
 import no.nav.dagpenger.events.Packet
 import no.nav.dagpenger.events.Problem
@@ -22,6 +20,8 @@ import no.nav.dagpenger.streams.streamConfig
 import no.nav.helse.rapids_rivers.RapidApplication
 import no.nav.helse.rapids_rivers.RapidsConnection
 import org.apache.kafka.streams.kstream.Predicate
+import java.net.URI
+import java.util.Properties
 
 private val config = Configuration()
 internal val features = Features(config.features)
@@ -39,9 +39,11 @@ fun main(args: Array<String>) {
         serveraddress = config.application.inntektGprcAddress,
         apiKey = apiKey
     ).also {
-        Runtime.getRuntime().addShutdownHook(Thread {
-            it.close()
-        })
+        Runtime.getRuntime().addShutdownHook(
+            Thread {
+                it.close()
+            }
+        )
     }
 
     Grunnlag(
@@ -116,9 +118,10 @@ class Grunnlag(
 
         createInntektPerioder(fakta)?.apply {
             packet.putValue(
-                GRUNNLAG_INNTEKTSPERIODER, checkNotNull(
-                jsonAdapterInntektPeriodeInfo.toJsonValue(this)
-            )
+                GRUNNLAG_INNTEKTSPERIODER,
+                checkNotNull(
+                    jsonAdapterInntektPeriodeInfo.toJsonValue(this)
+                )
             )
         }
 
