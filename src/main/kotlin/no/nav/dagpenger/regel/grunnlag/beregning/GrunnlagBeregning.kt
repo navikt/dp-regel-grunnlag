@@ -1,9 +1,9 @@
 package no.nav.dagpenger.regel.grunnlag.beregning
 
-import java.math.BigDecimal
-import java.time.LocalDate
 import no.nav.dagpenger.regel.grunnlag.Fakta
 import no.nav.dagpenger.regel.grunnlag.NoResultException
+import java.math.BigDecimal
+import java.time.LocalDate
 
 abstract class GrunnlagBeregning(val beregningsregel: String) {
     abstract fun isActive(fakta: Fakta): Boolean

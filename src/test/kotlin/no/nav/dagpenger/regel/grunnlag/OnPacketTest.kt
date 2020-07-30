@@ -2,16 +2,16 @@ package no.nav.dagpenger.regel.grunnlag
 
 import io.mockk.mockk
 import io.mockk.verify
-import java.math.BigDecimal
-import java.time.YearMonth
-import kotlin.test.assertEquals
-import kotlin.test.assertTrue
 import no.nav.dagpenger.events.Packet
 import no.nav.dagpenger.events.inntekt.v1.Inntekt
 import no.nav.dagpenger.events.inntekt.v1.InntektKlasse
 import no.nav.dagpenger.events.inntekt.v1.KlassifisertInntekt
 import no.nav.dagpenger.events.inntekt.v1.KlassifisertInntektMåned
 import org.junit.jupiter.api.Test
+import java.math.BigDecimal
+import java.time.YearMonth
+import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 
 class OnPacketTest {
     companion object {
@@ -28,7 +28,8 @@ class OnPacketTest {
 
         val inntekt = getInntekt((-1000).toBigDecimal())
 
-        val json = """
+        val json =
+            """
             {
                 "beregningsDato":"2018-08-10",
                 "harAvtjentVerneplikt": false,
@@ -51,7 +52,8 @@ class OnPacketTest {
 
         val inntekt = getInntekt((0).toBigDecimal())
 
-        val json = """
+        val json =
+            """
             {
                 "beregningsDato":"2018-08-10",
                 "harAvtjentVerneplikt": false,
@@ -74,7 +76,8 @@ class OnPacketTest {
 
         val inntekt = getInntekt(1000.toBigDecimal())
 
-        val json = """
+        val json =
+            """
             {
                 "beregningsDato":"2018-08-10",
                 "harAvtjentVerneplikt": false,
@@ -103,7 +106,8 @@ class OnPacketTest {
 
         val inntekt = getInntekt(1000.toBigDecimal())
 
-        val json = """
+        val json =
+            """
             {
                 "beregningsDato":"2018-08-10",
                 "harAvtjentVerneplikt": true,
@@ -132,7 +136,8 @@ class OnPacketTest {
 
         val inntekt = getInntekt(1000.toBigDecimal(), YearMonth.of(2020, 3))
 
-        val json = """
+        val json =
+            """
             {
                 "beregningsDato":"2020-03-20",
                 "oppfyllerKravTilFangstOgFisk": false,
@@ -160,7 +165,8 @@ class OnPacketTest {
 
         val inntekt = getInntekt(1000.toBigDecimal())
 
-        val json = """
+        val json =
+            """
             {
                 "beregningsDato":"2018-08-10",
                 "harAvtjentVerneplikt": true,

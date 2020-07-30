@@ -2,9 +2,6 @@ package no.nav.dagpenger.regel.grunnlag.beregning
 
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.types.shouldBeTypeOf
-import java.math.BigDecimal
-import java.time.LocalDate
-import java.time.YearMonth
 import no.nav.dagpenger.events.inntekt.v1.Inntekt
 import no.nav.dagpenger.events.inntekt.v1.InntektKlasse
 import no.nav.dagpenger.events.inntekt.v1.KlassifisertInntekt
@@ -12,6 +9,9 @@ import no.nav.dagpenger.events.inntekt.v1.KlassifisertInntektMåned
 import no.nav.dagpenger.grunnbelop.Grunnbeløp
 import no.nav.dagpenger.regel.grunnlag.Fakta
 import org.junit.jupiter.api.Test
+import java.math.BigDecimal
+import java.time.LocalDate
+import java.time.YearMonth
 
 class BruttoArbeidsinntektDeSiste36AvsluttedeKalendermånedeneBeregningsTest {
 
@@ -99,7 +99,7 @@ class BruttoArbeidsinntektDeSiste36AvsluttedeKalendermånedeneBeregningsTest {
         when (val beregningsResultat = beregning.calculate(fakta)) {
             is BeregningsResultat ->
                 beregningsResultat.uavkortet shouldBe
-                BigDecimal("1371.97393512841033163333")
+                    BigDecimal("1371.97393512841033163333")
             else -> beregningsResultat.shouldBeTypeOf<BeregningsResultat>()
         }
     }
@@ -157,7 +157,7 @@ class BruttoArbeidsinntektDeSiste36AvsluttedeKalendermånedeneBeregningsTest {
         when (val beregningsResultat = beregning.calculate(fakta)) {
             is BeregningsResultat ->
                 beregningsResultat.avkortet shouldBe
-                BigDecimal("387876.89964471595075862667")
+                    BigDecimal("387876.89964471595075862667")
             else -> beregningsResultat.shouldBeTypeOf<BeregningsResultat>()
         }
     }
@@ -225,7 +225,7 @@ class BruttoArbeidsinntektDeSiste36AvsluttedeKalendermånedeneBeregningsTest {
         when (val beregningsResultat = beregning.calculate(fakta)) {
             is BeregningsResultat ->
                 beregningsResultat.uavkortet shouldBe
-                BigDecimal("1371.97393512841033163333")
+                    BigDecimal("1371.97393512841033163333")
             else -> beregningsResultat.shouldBeTypeOf<BeregningsResultat>()
         }
     }
@@ -296,7 +296,7 @@ class BruttoArbeidsinntektDeSiste36AvsluttedeKalendermånedeneBeregningsTest {
         when (val beregningsResultat = beregning.calculate(fakta)) {
             is BeregningsResultat ->
                 beregningsResultat.uavkortet shouldBe
-                BigDecimal("355.49052694534036781667")
+                    BigDecimal("355.49052694534036781667")
             else -> beregningsResultat.shouldBeTypeOf<BeregningsResultat>()
         }
     }
@@ -367,7 +367,7 @@ class BruttoArbeidsinntektDeSiste36AvsluttedeKalendermånedeneBeregningsTest {
         when (val beregningsResultat = beregning.calculate(fakta)) {
             is BeregningsResultat ->
                 beregningsResultat.uavkortet shouldBe
-                BigDecimal("-355.49052694534036781667")
+                    BigDecimal("-355.49052694534036781667")
             else -> beregningsResultat.shouldBeTypeOf<BeregningsResultat>()
         }
     }
@@ -387,7 +387,7 @@ class BruttoArbeidsinntektDeSiste36AvsluttedeKalendermånedeneBeregningsTest {
         when (val beregningsResultat = beregning.calculate(fakta)) {
             is BeregningsResultat ->
                 beregningsResultat.uavkortet shouldBe
-                BigDecimal.ZERO.setScale(20)
+                    BigDecimal.ZERO.setScale(20)
             else -> beregningsResultat.shouldBeTypeOf<BeregningsResultat>()
         }
     }

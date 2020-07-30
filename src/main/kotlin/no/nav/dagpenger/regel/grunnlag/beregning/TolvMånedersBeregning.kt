@@ -1,9 +1,9 @@
 package no.nav.dagpenger.regel.grunnlag.beregning
 
-import java.math.BigDecimal
-import java.util.EnumSet
 import no.nav.dagpenger.events.inntekt.v1.InntektKlasse
 import no.nav.dagpenger.regel.grunnlag.Fakta
+import java.math.BigDecimal
+import java.util.EnumSet
 
 abstract class TolvMånedersBeregning(
     private val inntektKlasser: EnumSet<InntektKlasse>,

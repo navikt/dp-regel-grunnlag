@@ -2,12 +2,12 @@ package no.nav.dagpenger.regel.grunnlag.beregning
 
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.types.shouldBeTypeOf
-import java.time.LocalDate
-import java.time.YearMonth
 import no.nav.dagpenger.events.inntekt.v1.Inntekt
 import no.nav.dagpenger.grunnbelop.Grunnbeløp
 import no.nav.dagpenger.regel.grunnlag.Fakta
 import org.junit.jupiter.api.Test
+import java.time.LocalDate
+import java.time.YearMonth
 
 class DagpengerEtterAvtjentVernepliktBeregningsTest {
 

@@ -2,9 +2,6 @@ package no.nav.dagpenger.regel.grunnlag.beregning
 
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.types.shouldBeTypeOf
-import java.math.BigDecimal
-import java.time.LocalDate
-import java.time.YearMonth
 import no.nav.dagpenger.events.inntekt.v1.Inntekt
 import no.nav.dagpenger.events.inntekt.v1.InntektKlasse
 import no.nav.dagpenger.events.inntekt.v1.KlassifisertInntekt
@@ -12,6 +9,9 @@ import no.nav.dagpenger.events.inntekt.v1.KlassifisertInntektMåned
 import no.nav.dagpenger.grunnbelop.Grunnbeløp
 import no.nav.dagpenger.regel.grunnlag.Fakta
 import org.junit.jupiter.api.Test
+import java.math.BigDecimal
+import java.time.LocalDate
+import java.time.YearMonth
 
 class BruttoArbeidsinntektDeSiste12AvsluttedeKalendermånedeneBeregningsTest {
 
@@ -170,8 +170,9 @@ class BruttoArbeidsinntektDeSiste12AvsluttedeKalendermånedeneBeregningsTest {
         )
 
         when (val beregningsResultat = beregning.calculate(fakta)) {
-            is BeregningsResultat -> beregningsResultat.uavkortet shouldBe
-                BigDecimal("2034.69893414785227588000")
+            is BeregningsResultat ->
+                beregningsResultat.uavkortet shouldBe
+                    BigDecimal("2034.69893414785227588000")
             else -> beregningsResultat.shouldBeTypeOf<BeregningsResultat>()
         }
     }

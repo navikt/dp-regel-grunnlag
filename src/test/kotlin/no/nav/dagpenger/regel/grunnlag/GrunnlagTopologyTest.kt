@@ -1,12 +1,6 @@
 package no.nav.dagpenger.regel.grunnlag
 
 import io.mockk.mockk
-import java.math.BigDecimal
-import java.net.URI
-import java.time.YearMonth
-import java.util.Properties
-import kotlin.test.assertEquals
-import kotlin.test.assertTrue
 import no.nav.dagpenger.events.Packet
 import no.nav.dagpenger.events.inntekt.v1.Inntekt
 import no.nav.dagpenger.events.inntekt.v1.InntektKlasse
@@ -21,6 +15,12 @@ import org.apache.kafka.streams.test.ConsumerRecordFactory
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Test
+import java.math.BigDecimal
+import java.net.URI
+import java.time.YearMonth
+import java.util.Properties
+import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 
 private val jsonMapAdapter = moshiInstance.adapter(Map::class.java)
 
@@ -48,7 +48,8 @@ class GrunnlagTopologyTest {
 
     @Test
     fun ` Should add not process behov without inntekt eller manuelt grunnlag`() {
-        val json = """
+        val json =
+            """
             {
                 "beregningsDato": "2019-05-20"
             }
@@ -71,7 +72,8 @@ class GrunnlagTopologyTest {
     @Test
     fun ` Should add not process behov without beregningsDato `() {
 
-        val json = """
+        val json =
+            """
             {
                 "manueltGrunnlag":50000
             }
@@ -110,7 +112,8 @@ class GrunnlagTopologyTest {
             sisteAvsluttendeKalenderMåned = YearMonth.of(2018, 3)
         )
 
-        val json = """
+        val json =
+            """
             {
                 "beregningsDato":"2018-04-06",
                 "harAvtjentVerneplikt": true
@@ -140,7 +143,8 @@ class GrunnlagTopologyTest {
     @Test
     fun ` Should add GrunnlagSubsumsjon to subsumsjonsBehov with manueltGrunnlag `() {
 
-        val json = """
+        val json =
+            """
             {
                 "beregningsDato":"2018-04-06",
                 "harAvtjentVerneplikt": true,
@@ -189,7 +193,8 @@ class GrunnlagTopologyTest {
             sisteAvsluttendeKalenderMåned = YearMonth.of(2018, 3)
         )
 
-        val json = """
+        val json =
+            """
             {
                 "beregningsDato":"2018-04-06",
                 "harAvtjentVerneplikt": false,
@@ -222,7 +227,8 @@ class GrunnlagTopologyTest {
 
     @Test
     fun ` Should add problem on failure`() {
-        val json = """
+        val json =
+            """
             {
                 "beregningsDato": "2019-05-20"
             }

@@ -2,9 +2,6 @@ package no.nav.dagpenger.regel.grunnlag.beregning
 
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.types.shouldBeTypeOf
-import java.math.BigDecimal
-import java.time.LocalDate
-import java.time.YearMonth
 import no.nav.dagpenger.events.inntekt.v1.Inntekt
 import no.nav.dagpenger.events.inntekt.v1.InntektKlasse
 import no.nav.dagpenger.events.inntekt.v1.KlassifisertInntekt
@@ -12,6 +9,9 @@ import no.nav.dagpenger.events.inntekt.v1.KlassifisertInntektMåned
 import no.nav.dagpenger.grunnbelop.Grunnbeløp
 import no.nav.dagpenger.regel.grunnlag.Fakta
 import org.junit.jupiter.api.Test
+import java.math.BigDecimal
+import java.time.LocalDate
+import java.time.YearMonth
 
 class BruttoInntektMedFangstOgFiskDeSiste36KalendermånedeneBeregningsTest {
 
@@ -258,7 +258,7 @@ class BruttoInntektMedFangstOgFiskDeSiste36KalendermånedeneBeregningsTest {
         when (val beregningsResultat = beregning.calculate(fakta)) {
             is IngenBeregningsResultat ->
                 beregningsResultat.beskrivelse shouldBe
-                "FangstOgFiskSiste36"
+                    "FangstOgFiskSiste36"
             else -> beregningsResultat.shouldBeTypeOf<IngenBeregningsResultat>()
         }
     }

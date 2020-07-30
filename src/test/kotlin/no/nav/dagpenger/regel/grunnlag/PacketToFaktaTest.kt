@@ -1,13 +1,13 @@
 package no.nav.dagpenger.regel.grunnlag
 
 import io.kotest.matchers.shouldBe
-import java.time.LocalDate
-import java.time.YearMonth
-import kotlin.test.assertEquals
 import no.nav.dagpenger.events.Packet
 import no.nav.dagpenger.events.inntekt.v1.Inntekt
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
+import java.time.LocalDate
+import java.time.YearMonth
+import kotlin.test.assertEquals
 
 class PacketToFaktaTest {
 
@@ -17,10 +17,12 @@ class PacketToFaktaTest {
         sisteAvsluttendeKalenderMåned = YearMonth.of(2018, 3)
     )
 
-    private val simplePacketJson = """
+    private val simplePacketJson =
+        """
         {
             "beregningsDato":"2019-04-10"
-        }""".trimIndent()
+        }
+        """.trimIndent()
 
     @Test
     fun packetToFakta() {
@@ -29,11 +31,13 @@ class PacketToFaktaTest {
 
     @Test
     fun ` should map avtjent_verneplikt from packet to Fakta `() {
-        val json = """
+        val json =
+            """
         {
             "beregningsDato":"2019-04-10",
             "harAvtjentVerneplikt": true
-        }""".trimIndent()
+        }
+            """.trimIndent()
 
         val packet = Packet(json)
 
@@ -44,11 +48,13 @@ class PacketToFaktaTest {
 
     @Test
     fun ` should map fangst_og_fisk from packet to Fakta `() {
-        val json = """
+        val json =
+            """
         {
             "beregningsDato":"2019-04-10",
             "oppfyllerKravTilFangstOgFisk": true
-        }""".trimIndent()
+        }
+            """.trimIndent()
 
         val packet = Packet(json)
 
@@ -81,11 +87,13 @@ class PacketToFaktaTest {
 
     @Test
     fun ` should map manutelt_grunnlag from packet to Fakta`() {
-        val json = """
+        val json =
+            """
         {
             "beregningsDato":"2019-04-10",
             "manueltGrunnlag":"1000"
-        }""".trimIndent()
+        }
+            """.trimIndent()
 
         val packet = Packet(json)
 
@@ -96,11 +104,13 @@ class PacketToFaktaTest {
 
     @Test
     fun ` should map lærling from packet to Fakta `() {
-        val json = """
+        val json =
+            """
         {
             "beregningsDato":"2019-04-10",
             "lærling": true
-        }""".trimIndent()
+        }
+            """.trimIndent()
 
         val packet = Packet(json)
 

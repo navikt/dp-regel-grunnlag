@@ -2,9 +2,6 @@ package no.nav.dagpenger.regel.grunnlag.beregning
 
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.types.shouldBeTypeOf
-import java.math.BigDecimal
-import java.time.LocalDate
-import java.time.YearMonth
 import no.nav.dagpenger.events.inntekt.v1.Inntekt
 import no.nav.dagpenger.events.inntekt.v1.InntektKlasse
 import no.nav.dagpenger.events.inntekt.v1.KlassifisertInntekt
@@ -12,6 +9,9 @@ import no.nav.dagpenger.events.inntekt.v1.KlassifisertInntektMåned
 import no.nav.dagpenger.grunnbelop.Grunnbeløp
 import no.nav.dagpenger.regel.grunnlag.Fakta
 import org.junit.jupiter.api.Test
+import java.math.BigDecimal
+import java.time.LocalDate
+import java.time.YearMonth
 
 class BruttoInntektMedFangstOgFiskDeSisteTolvKalendermånedeneBeregningsTest {
 
@@ -55,7 +55,8 @@ class BruttoInntektMedFangstOgFiskDeSisteTolvKalendermånedeneBeregningsTest {
                     KlassifisertInntekt(
                         BigDecimal(500),
                         InntektKlasse.ARBEIDSINNTEKT
-                    ), KlassifisertInntekt(
+                    ),
+                    KlassifisertInntekt(
                         BigDecimal(500),
                         InntektKlasse.FANGST_FISKE
                     )
@@ -67,7 +68,8 @@ class BruttoInntektMedFangstOgFiskDeSisteTolvKalendermånedeneBeregningsTest {
                     KlassifisertInntekt(
                         BigDecimal(500),
                         InntektKlasse.ARBEIDSINNTEKT
-                    ), KlassifisertInntekt(
+                    ),
+                    KlassifisertInntekt(
                         BigDecimal(500),
                         InntektKlasse.SYKEPENGER_FANGST_FISKE
                     )
@@ -169,7 +171,8 @@ class BruttoInntektMedFangstOgFiskDeSisteTolvKalendermånedeneBeregningsTest {
             verneplikt = false,
             beregningsdato = LocalDate.of(2019, 2, 10),
             gjeldendeGrunnbeløpVedBeregningsdato = Grunnbeløp.FastsattI2018,
-            gjeldendeGrunnbeløpForDagensDato = Grunnbeløp.FastsattI2019)
+            gjeldendeGrunnbeløpForDagensDato = Grunnbeløp.FastsattI2019
+        )
 
         when (val beregningsResultat = beregning.calculate(fakta)) {
             is BeregningsResultat ->
@@ -207,7 +210,8 @@ class BruttoInntektMedFangstOgFiskDeSisteTolvKalendermånedeneBeregningsTest {
                     KlassifisertInntekt(
                         BigDecimal(500),
                         InntektKlasse.ARBEIDSINNTEKT
-                    ), KlassifisertInntekt(
+                    ),
+                    KlassifisertInntekt(
                         BigDecimal(500),
                         InntektKlasse.FANGST_FISKE
                     )
@@ -219,7 +223,8 @@ class BruttoInntektMedFangstOgFiskDeSisteTolvKalendermånedeneBeregningsTest {
                     KlassifisertInntekt(
                         BigDecimal(500),
                         InntektKlasse.ARBEIDSINNTEKT
-                    ), KlassifisertInntekt(
+                    ),
+                    KlassifisertInntekt(
                         BigDecimal(500),
                         InntektKlasse.SYKEPENGER_FANGST_FISKE
                     )
