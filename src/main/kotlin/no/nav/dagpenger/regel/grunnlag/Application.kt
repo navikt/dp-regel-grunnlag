@@ -27,6 +27,7 @@ private val config = Configuration()
 internal val features = Features(config.features)
 
 private val log = KotlinLogging.logger {}
+private val sikkerLogg = KotlinLogging.logger("tjenestekall")
 
 fun main(args: Array<String>) {
 
@@ -132,6 +133,8 @@ class Grunnlag(
             fakta = fakta,
             resultat = grunnlagResultat
         )
+
+        sikkerLogg.info { "Løste behov for grunnlag $grunnlagResultat" }
 
         return packet
     }
