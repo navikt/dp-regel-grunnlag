@@ -134,7 +134,7 @@ class Grunnlag(
             resultat = grunnlagResultat
         )
 
-        sikkerLogg.info { "Løste behov for grunnlag $grunnlagResultat" }
+        sikkerLogg.info { "Løste behov for grunnlag $grunnlagResultat med fakta $fakta" }
 
         return packet
     }
