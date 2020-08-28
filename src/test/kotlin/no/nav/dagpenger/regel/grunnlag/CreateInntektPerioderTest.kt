@@ -236,7 +236,8 @@ internal class CreateInntektPerioderTest {
                 senesteMåned.minusMonths(it.toLong()),
                 listOf(
                     KlassifisertInntekt(
-                        beløpPerMnd, arbeidsInntekt.random()
+                        beløpPerMnd,
+                        arbeidsInntekt.random()
                     )
                 )
             )
@@ -266,7 +267,8 @@ internal class CreateInntektPerioderTest {
                 senesteMåned.minusMonths(it.toLong()),
                 listOf(
                     KlassifisertInntekt(
-                        beløpPerMnd, medFangstOgFisk.random()
+                        beløpPerMnd,
+                        medFangstOgFisk.random()
                     )
                 )
             )

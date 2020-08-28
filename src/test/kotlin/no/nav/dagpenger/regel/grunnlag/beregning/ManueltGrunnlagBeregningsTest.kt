@@ -17,7 +17,8 @@ class ManueltGrunnlagBeregningsTest {
         val fakta = Fakta(
             Inntekt(
                 "123",
-                emptyList(), sisteAvsluttendeKalenderMåned = YearMonth.of(2019, 3)
+                emptyList(),
+                sisteAvsluttendeKalenderMåned = YearMonth.of(2019, 3)
             ),
             false,
             false,
@@ -42,7 +43,8 @@ class ManueltGrunnlagBeregningsTest {
         val fakta = Fakta(
             Inntekt(
                 "123",
-                emptyList(), sisteAvsluttendeKalenderMåned = YearMonth.of(2019, 3)
+                emptyList(),
+                sisteAvsluttendeKalenderMåned = YearMonth.of(2019, 3)
             ),
             false,
             false,
@@ -67,7 +69,8 @@ class ManueltGrunnlagBeregningsTest {
         val fakta = Fakta(
             Inntekt(
                 "123",
-                emptyList(), sisteAvsluttendeKalenderMåned = YearMonth.of(2019, 3)
+                emptyList(),
+                sisteAvsluttendeKalenderMåned = YearMonth.of(2019, 3)
             ),
             false,
             false,

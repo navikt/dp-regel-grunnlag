@@ -78,7 +78,8 @@ private fun generateArbeidsinntekt(
             senesteMåned.minusMonths(it.toLong()),
             listOf(
                 KlassifisertInntekt(
-                    beløpPerMnd, InntektKlasse.ARBEIDSINNTEKT
+                    beløpPerMnd,
+                    InntektKlasse.ARBEIDSINNTEKT
                 )
             )
         )
