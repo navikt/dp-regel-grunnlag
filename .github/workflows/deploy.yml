@@ -108,7 +108,7 @@ jobs:
           CLUSTER: dev-fss
           VAR: GITHUB_REPO=${{ steps.repo-name.outputs.name }}
           RESOURCE: nais/tests.yml
-        timeout-minutes: 5
+        timeout-minutes: 10
 
   deploy-prod:
     name: Deploy to Production
