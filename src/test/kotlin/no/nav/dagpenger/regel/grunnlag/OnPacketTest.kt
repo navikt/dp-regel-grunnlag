@@ -122,7 +122,8 @@ class OnPacketTest {
 
         assertTrue { resultPacket.hasField("grunnlagResultat") }
 
-        assertEquals(299574, Integer.parseInt(resultPacket.getMapValue("grunnlagResultat")["avkortet"].toString()))
+        // verneplikt bruker G ved dagens dato - denne testen vil feile hver gang G endres.
+        assertEquals(304053, Integer.parseInt(resultPacket.getMapValue("grunnlagResultat")["avkortet"].toString()))
         assertEquals(
             Integer.parseInt(resultPacket.getMapValue("grunnlagResultat")["avkortet"].toString()),
             Integer.parseInt(resultPacket.getMapValue("grunnlagResultat")["uavkortet"].toString())
