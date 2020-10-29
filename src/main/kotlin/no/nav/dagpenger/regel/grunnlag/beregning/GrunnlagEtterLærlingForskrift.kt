@@ -5,6 +5,8 @@ import no.nav.dagpenger.events.inntekt.v1.sumInntekt
 import no.nav.dagpenger.regel.grunnlag.Fakta
 import java.lang.RuntimeException
 import java.math.BigDecimal
+import java.time.LocalDate
+import java.time.Month
 import java.util.EnumSet
 
 abstract class GrunnlagEtterLærlingForskrift(
@@ -12,7 +14,17 @@ abstract class GrunnlagEtterLærlingForskrift(
     private val grunnlagUtvelgelse: GrunnlagUtvelgelse,
     private val inntektKlasser: EnumSet<InntektKlasse>
 ) : GrunnlagBeregning(regelIdentifikator) {
-    override fun isActive(fakta: Fakta): Boolean = fakta.lærling && fakta.beregningsdato.erKoronaPeriode() && fakta.manueltGrunnlag == null
+
+    companion object {
+        private val fom = LocalDate.of(2020, Month.MARCH, 20)
+        private val tom = LocalDate.of(2021, Month.DECEMBER, 31)
+        private val periode = fom..tom
+    }
+
+    override fun isActive(fakta: Fakta): Boolean {
+        val erInnenforBeregningsperiode = fakta.beregningsdato in periode
+        return fakta.lærling && erInnenforBeregningsperiode && fakta.manueltGrunnlag == null
+    }
 
     override fun calculate(fakta: Fakta): Resultat {
         return if (isActive(fakta)) {

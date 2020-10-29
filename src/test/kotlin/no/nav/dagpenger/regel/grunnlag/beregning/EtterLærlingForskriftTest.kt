@@ -9,10 +9,12 @@ import no.nav.dagpenger.events.inntekt.v1.KlassifisertInntekt
 import no.nav.dagpenger.events.inntekt.v1.KlassifisertInntektMåned
 import no.nav.dagpenger.grunnbelop.Grunnbeløp
 import no.nav.dagpenger.regel.grunnlag.Fakta
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import java.math.BigDecimal
 import java.time.LocalDate
 import java.time.YearMonth
+import kotlin.test.assertFalse
 
 internal class EtterLærlingForskriftTest() {
 
@@ -21,6 +23,25 @@ internal class EtterLærlingForskriftTest() {
         grunnlagUtvelgelse = SisteAvsluttendeMånedUtvelgelse(),
         inntektKlasser = inntektKlassifisertEtterFangstOgFisk
     ) {
+    }
+
+    @Test
+    fun ` Beregning er aktiv til fra 20 mars 2020 til 31 desember 2021`() {
+
+        val fakta = Fakta(
+            inntekt = null,
+            fangstOgFisk = false,
+            lærling = true,
+            verneplikt = false,
+            beregningsdato = LocalDate.of(2020, 3, 20),
+            gjeldendeGrunnbeløpVedBeregningsdato = Grunnbeløp.FastsattI2018,
+            gjeldendeGrunnbeløpForDagensDato = Grunnbeløp.FastsattI2019
+        )
+
+        assertTrue(beregning.isActive(fakta))
+        assertTrue(beregning.isActive(fakta.copy(beregningsdato = LocalDate.of(2021, 12, 31))))
+        assertFalse(beregning.isActive(fakta.copy(beregningsdato = LocalDate.of(2020, 2, 29))))
+        assertFalse(beregning.isActive(fakta.copy(beregningsdato = LocalDate.of(2022, 1, 1))))
     }
 
     @Test
