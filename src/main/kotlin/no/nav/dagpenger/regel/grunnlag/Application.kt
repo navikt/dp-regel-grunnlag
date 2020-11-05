@@ -17,7 +17,6 @@ import no.nav.dagpenger.streams.HealthCheck
 import no.nav.dagpenger.streams.HealthStatus
 import no.nav.dagpenger.streams.River
 import no.nav.dagpenger.streams.streamConfig
-import no.nav.helse.rapids_rivers.RapidApplication
 import no.nav.helse.rapids_rivers.RapidsConnection
 import org.apache.kafka.streams.kstream.Predicate
 import java.net.URI
@@ -49,31 +48,28 @@ fun main(args: Array<String>) {
 
     Grunnlag(
         instrumentation = instrumentation,
-        config = config,
-        healthCheck = RapidHealthCheck as HealthCheck
+        config = config
     ).start()
 
-    RapidApplication.create(
-        Configuration().rapidApplication
-    ).apply {
-        LøsningService(
-            rapidsConnection = this,
-            inntektHenter = inntektClient,
-            instrumentation = instrumentation
-        )
-    }.also {
-        it.register(RapidHealthCheck)
-    }.start()
+    // RapidApplication.create(
+    //     Configuration().rapidApplication
+    // ).apply {
+    //     LøsningService(
+    //         rapidsConnection = this,
+    //         inntektHenter = inntektClient,
+    //         instrumentation = instrumentation
+    //     )
+    // }.also {
+    //     it.register(RapidHealthCheck)
+    // }.start()
 }
 
 class Grunnlag(
     private val config: Configuration,
     private val instrumentation: GrunnlagInstrumentation,
-    healthCheck: HealthCheck
 ) : River(config.behovTopic) {
     override val SERVICE_APP_ID: String = config.application.id
     override val HTTP_PORT: Int = config.application.httpPort
-    override val healthChecks: List<HealthCheck> = listOf(healthCheck)
     private val ulidGenerator = ULID()
     private val REGELIDENTIFIKATOR = "Grunnlag.v1"
     private val jsonAdapterInntektPeriodeInfo: JsonAdapter<List<InntektPeriodeInfo>> =

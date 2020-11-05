@@ -41,8 +41,7 @@ class GrunnlagTopologyTest {
 
         val grunnlag = Grunnlag(
             Configuration(),
-            fakeGrunnlagInstrumentation,
-            mockk()
+            fakeGrunnlagInstrumentation
         )
     }
 

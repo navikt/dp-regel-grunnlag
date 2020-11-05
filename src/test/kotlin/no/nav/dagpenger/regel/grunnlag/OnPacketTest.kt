@@ -18,8 +18,7 @@ class OnPacketTest {
         val fakeGrunnlagInstrumentation = mockk<GrunnlagInstrumentation>(relaxed = true)
         val grunnlag = Grunnlag(
             Configuration(),
-            fakeGrunnlagInstrumentation,
-            mockk()
+            fakeGrunnlagInstrumentation
         )
     }
 
