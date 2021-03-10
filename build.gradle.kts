@@ -20,7 +20,6 @@ apply {
 
 repositories {
     mavenCentral()
-    jcenter()
     maven("http://packages.confluent.io/maven/")
     maven("https://jitpack.io")
 }
@@ -44,15 +43,9 @@ val jar by tasks.getting(Jar::class) {
 dependencies {
     implementation(kotlin("stdlib"))
 
-    // gPrc client and api key generation (ktorUtils)
-    implementation("com.github.navikt:dp-inntekt:2020.05.18-11.33.279ab2f32a2c")
-    implementation(Dagpenger.Biblioteker.ktorUtils)
-
     implementation(Dagpenger.Streams)
     implementation(Dagpenger.Events)
     implementation(Dagpenger.Biblioteker.grunnbeløp)
-
-    implementation(RapidAndRivers)
 
     implementation(Moshi.moshi)
     implementation(Moshi.moshiAdapters)
@@ -70,7 +63,10 @@ dependencies {
     implementation(Kafka.clients)
     implementation(Kafka.streams)
 
-    implementation("ch.qos.logback:logback-classic:1.2.3")
+    implementation(Log4j2.api)
+    implementation(Log4j2.core)
+    implementation(Log4j2.slf4j)
+    implementation(Log4j2.Logstash.logstashLayout)
 
     implementation(Kotlin.Logging.kotlinLogging)
     implementation(Konfig.konfig)
@@ -84,7 +80,6 @@ dependencies {
     testImplementation(KoTest.assertions)
     testImplementation(KoTest.runner)
     testImplementation(Kafka.streamTestUtils)
-    testImplementation(KafkaEmbedded.env)
     testImplementation(Wiremock.standalone)
     testImplementation(Mockk.mockk)
 }

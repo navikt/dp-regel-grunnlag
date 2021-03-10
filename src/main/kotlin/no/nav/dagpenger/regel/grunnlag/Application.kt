@@ -10,14 +10,9 @@ import no.nav.dagpenger.events.inntekt.v1.Inntekt
 import no.nav.dagpenger.events.inntekt.v1.InntektKlasse
 import no.nav.dagpenger.events.inntekt.v1.sumInntekt
 import no.nav.dagpenger.events.moshiInstance
-import no.nav.dagpenger.inntekt.rpc.InntektHenterWrapper
-import no.nav.dagpenger.ktor.auth.ApiKeyVerifier
 import no.nav.dagpenger.regel.grunnlag.beregning.HovedBeregning
-import no.nav.dagpenger.streams.HealthCheck
-import no.nav.dagpenger.streams.HealthStatus
 import no.nav.dagpenger.streams.River
 import no.nav.dagpenger.streams.streamConfig
-import no.nav.helse.rapids_rivers.RapidsConnection
 import org.apache.kafka.streams.kstream.Predicate
 import java.net.URI
 import java.util.Properties
@@ -28,40 +23,15 @@ internal val features = Features(config.features)
 private val log = KotlinLogging.logger {}
 private val sikkerLogg = KotlinLogging.logger("tjenestekall")
 
-fun main(args: Array<String>) {
+fun main() {
 
     log.info { "Features: $features" }
     val instrumentation = GrunnlagInstrumentation()
-
-    val apiKeyVerifier = ApiKeyVerifier(config.application.inntektGprcApiSecret)
-    val apiKey = apiKeyVerifier.generate(config.application.inntektGprcApiKey)
-    val inntektClient = InntektHenterWrapper(
-        serveraddress = config.application.inntektGprcAddress,
-        apiKey = apiKey
-    ).also {
-        Runtime.getRuntime().addShutdownHook(
-            Thread {
-                it.close()
-            }
-        )
-    }
 
     Grunnlag(
         instrumentation = instrumentation,
         config = config
     ).start()
-
-    // RapidApplication.create(
-    //     Configuration().rapidApplication
-    // ).apply {
-    //     LøsningService(
-    //         rapidsConnection = this,
-    //         inntektHenter = inntektClient,
-    //         instrumentation = instrumentation
-    //     )
-    // }.also {
-    //     it.register(RapidHealthCheck)
-    // }.start()
 }
 
 class Grunnlag(
@@ -191,32 +161,3 @@ fun createInntektPerioder(fakta: Fakta): List<InntektPeriodeInfo>? {
 class NoResultException(message: String) : RuntimeException(message)
 
 class ManueltGrunnlagOgInntektException(message: String) : RuntimeException(message)
-
-object RapidHealthCheck : RapidsConnection.StatusListener, HealthCheck {
-    private val log = KotlinLogging.logger {}
-
-    var healthy: Boolean = false
-
-    override fun onStartup(rapidsConnection: RapidsConnection) {
-        healthy = true
-    }
-
-    override fun onReady(rapidsConnection: RapidsConnection) {
-        log.info { "Rapid ready" }
-        healthy = true
-    }
-
-    override fun onNotReady(rapidsConnection: RapidsConnection) {
-        log.error { "Rapid not ready" }
-        healthy = false
-    }
-
-    override fun onShutdown(rapidsConnection: RapidsConnection) {
-        healthy = false
-    }
-
-    override fun status(): HealthStatus = when (healthy) {
-        true -> HealthStatus.UP
-        false -> HealthStatus.DOWN
-    }
-}
