@@ -161,6 +161,31 @@ class OnPacketTest {
     }
 
     @Test
+    fun ` Skal velge rett beregningsregel ved forrigeGrunnlag`() {
+
+        val json =
+            """
+            {
+                "beregningsDato":"2020-03-20",
+                "oppfyllerKravTilFangstOgFisk": false,
+                "lærling": false,
+                "forrigeGrunnlag": 10880
+            }
+            """.trimIndent()
+
+        val resultPacket = grunnlag.onPacket(Packet(json))
+
+        assertTrue { resultPacket.hasField("grunnlagResultat") }
+
+        assertEquals(
+            Integer.parseInt(resultPacket.getMapValue("grunnlagResultat")["avkortet"].toString()),
+            Integer.parseInt(resultPacket.getMapValue("grunnlagResultat")["uavkortet"].toString())
+        )
+        assertEquals("ForrigeGrunnlag", resultPacket.getMapValue("grunnlagResultat")["beregningsregel"])
+        assertEquals(false, resultPacket.getMapValue("grunnlagResultat")["harAvkortet"])
+    }
+
+    @Test
     fun ` Skal instrumentere beregninger`() {
 
         val inntekt = getInntekt(1000.toBigDecimal())

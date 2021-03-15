@@ -15,6 +15,7 @@ internal fun packetToFakta(packet: Packet): Fakta {
     val fangstOgFisk = packet.getNullableBoolean(Grunnlag.FANGST_OG_FISK) ?: false
     val beregningsdato = packet.getLocalDate(Grunnlag.BEREGNINGSDATO)
     val manueltGrunnlag = packet.getNullableIntValue(Grunnlag.MANUELT_GRUNNLAG)
+    val forrigeGrunnlag = packet.getNullableIntValue(Grunnlag.FORRIGE_GRUNNLAG)
     val lærling = packet.getNullableBoolean(Grunnlag.LÆRLING) == true
     val dagensDato = LocalDate.now()
 
@@ -33,6 +34,7 @@ internal fun packetToFakta(packet: Packet): Fakta {
         fangstOgFisk = fangstOgFisk,
         beregningsdato = beregningsdato,
         manueltGrunnlag = manueltGrunnlag,
+        forrigeGrunnlag = forrigeGrunnlag,
         lærling = lærling,
         gjeldendeGrunnbeløpVedBeregningsdato = grunnbeløpVedBeregningsdato,
         gjeldendeGrunnbeløpForDagensDato = grunnbeløpVedDagensDato
@@ -50,6 +52,8 @@ internal fun isThisGjusteringTest(
 private fun getInntekt(packet: Packet): Inntekt? =
     if (packet.hasField(Grunnlag.MANUELT_GRUNNLAG) && packet.hasField(Grunnlag.INNTEKT)) {
         throw ManueltGrunnlagOgInntektException("Har manuelt grunnlag og inntekt")
+    } else if (packet.hasField(Grunnlag.FORRIGE_GRUNNLAG) && packet.hasField(Grunnlag.INNTEKT)) {
+        throw ForrigeGrunnlagOgInntektException("Har forrige grunnlag og inntekt")
     } else if (packet.hasField(Grunnlag.INNTEKT)) {
         packet.getObjectValue(Grunnlag.INNTEKT) { requireNotNull(Grunnlag.inntektAdapter.fromJsonValue(it)) }
     } else {

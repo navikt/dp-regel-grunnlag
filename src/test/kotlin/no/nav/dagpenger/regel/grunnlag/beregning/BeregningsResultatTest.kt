@@ -46,7 +46,9 @@ class BeregningsResultatTest {
         val resultater = setOf(
             BeregningsResultat(100000.toBigDecimal(), 20000.toBigDecimal(), "Verneplikt", true),
             BeregningsResultat(1000.toBigDecimal(), 2000.toBigDecimal(), "Manuell", true),
-            BeregningsResultat(10000.toBigDecimal(), 10000.toBigDecimal(), "Ordinær", false)
+            BeregningsResultat(10000.toBigDecimal(), 10000.toBigDecimal(), "Ordinær", false),
+            BeregningsResultat(10000.toBigDecimal(), 10000.toBigDecimal(), "ForrigeGrunnlag", false)
+
         )
 
         resultater.finnHøyesteAvkortetVerdi()?.avkortet shouldBe 2000.toBigDecimal()

@@ -23,7 +23,8 @@ internal class HovedBeregning : GrunnlagBeregning("Hoved") {
             BruttoInntektMedFangstOgFiskDeSiste12AvsluttedeKalendermånedene(),
             BruttoInntektMedFangstOgFiskDeSiste36AvsluttedeKalendermånedene(),
             DagpengerEtterAvtjentVerneplikt(),
-            ManueltGrunnlagBeregning()
+            ManueltGrunnlagBeregning(),
+            ForrigeGrunnlagBeregning()
         )
     }
 

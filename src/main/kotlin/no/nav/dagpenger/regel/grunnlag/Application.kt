@@ -53,13 +53,16 @@ class Grunnlag(
         const val FANGST_OG_FISK = "oppfyllerKravTilFangstOgFisk"
         const val BEREGNINGSDATO = "beregningsDato"
         const val MANUELT_GRUNNLAG = "manueltGrunnlag"
+        const val FORRIGE_GRUNNLAG = "forrigeGrunnlag"
         const val GRUNNLAG_INNTEKTSPERIODER = "grunnlagInntektsPerioder"
         val inntektAdapter: JsonAdapter<Inntekt> = moshiInstance.adapter(Inntekt::class.java)
     }
 
     override fun filterPredicates(): List<Predicate<String, Packet>> {
         return listOf(
-            Predicate { _, packet -> packet.hasField(INNTEKT) || packet.hasField(MANUELT_GRUNNLAG) },
+            Predicate { _, packet ->
+                packet.hasField(INNTEKT) || packet.hasField(MANUELT_GRUNNLAG) || packet.hasField(FORRIGE_GRUNNLAG)
+            },
             Predicate { _, packet -> packet.hasField(BEREGNINGSDATO) },
             Predicate { _, packet -> !packet.hasField(GRUNNLAG_RESULTAT) }
         )
@@ -161,3 +164,4 @@ fun createInntektPerioder(fakta: Fakta): List<InntektPeriodeInfo>? {
 class NoResultException(message: String) : RuntimeException(message)
 
 class ManueltGrunnlagOgInntektException(message: String) : RuntimeException(message)
+class ForrigeGrunnlagOgInntektException(message: String) : RuntimeException(message)

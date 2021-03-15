@@ -20,6 +20,7 @@ data class Fakta(
     val fangstOgFisk: Boolean,
     val beregningsdato: LocalDate,
     val manueltGrunnlag: Int? = null,
+    val forrigeGrunnlag: Int? = null,
     val gjeldendeGrunnbeløpVedBeregningsdato: Grunnbeløp,
     val gjeldendeGrunnbeløpForDagensDato: Grunnbeløp,
     val lærling: Boolean = false
