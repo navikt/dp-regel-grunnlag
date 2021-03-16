@@ -22,7 +22,7 @@ data class Fakta(
     val manueltGrunnlag: Int? = null,
     val forrigeGrunnlag: Int? = null,
     val gjeldendeGrunnbeløpVedBeregningsdato: Grunnbeløp,
-    val gjeldendeGrunnbeløpForDagensDato: Grunnbeløp,
+    val gjeldendeGrunnbeløpForRegelverksdato: Grunnbeløp,
     val lærling: Boolean = false
 ) {
     val inntektsPerioder = inntekt?.splitIntoInntektsPerioder()

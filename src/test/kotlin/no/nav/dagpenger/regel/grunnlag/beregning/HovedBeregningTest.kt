@@ -34,7 +34,7 @@ internal class HovedBeregningTest : FreeSpec({
                 lærling = true,
                 beregningsdato = beregningsDato,
                 gjeldendeGrunnbeløpVedBeregningsdato = Grunnbeløp.FastsattI2019,
-                gjeldendeGrunnbeløpForDagensDato = Grunnbeløp.FastsattI2019
+                gjeldendeGrunnbeløpForRegelverksdato = Grunnbeløp.FastsattI2019
             )
 
             val beregningsResultat = HovedBeregning().calculate(fakta)
@@ -58,7 +58,7 @@ internal class HovedBeregningTest : FreeSpec({
                 lærling = true,
                 beregningsdato = beregningsDato,
                 gjeldendeGrunnbeløpVedBeregningsdato = Grunnbeløp.FastsattI2019,
-                gjeldendeGrunnbeløpForDagensDato = Grunnbeløp.FastsattI2019
+                gjeldendeGrunnbeløpForRegelverksdato = Grunnbeløp.FastsattI2019
             )
 
             val beregningsResultat = HovedBeregning().calculate(fakta)

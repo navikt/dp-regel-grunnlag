@@ -42,7 +42,7 @@ class GrunnlagInstrumentation {
             regelIdentifikator = regelIdentifikator,
             beregningsregel = resultat.beregningsregel,
             harAvkortet = resultat.harAvkortet,
-            klassifisering = fastsettArbeidstid(resultat.avkortetGrunnlag, fakta.gjeldendeGrunnbeløpForDagensDato.verdi)
+            klassifisering = fastsettArbeidstid(resultat.avkortetGrunnlag, fakta.gjeldendeGrunnbeløpForRegelverksdato.verdi)
         )
     }
 
@@ -61,7 +61,7 @@ class GrunnlagInstrumentation {
             regelIdentifikator = regelIdentifikator,
             beregningsregel = resultat.beregningsregel,
             harAvkortet = resultat.harAvkortet,
-            klassifisering = fastsettArbeidstid(resultat.avkortet, fakta.gjeldendeGrunnbeløpForDagensDato.verdi)
+            klassifisering = fastsettArbeidstid(resultat.avkortet, fakta.gjeldendeGrunnbeløpForRegelverksdato.verdi)
         )
     }
 

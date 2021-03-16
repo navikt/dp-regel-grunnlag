@@ -35,7 +35,7 @@ internal class EtterLærlingForskriftTest() {
             verneplikt = false,
             beregningsdato = LocalDate.of(2020, 3, 20),
             gjeldendeGrunnbeløpVedBeregningsdato = Grunnbeløp.FastsattI2018,
-            gjeldendeGrunnbeløpForDagensDato = Grunnbeløp.FastsattI2019
+            gjeldendeGrunnbeløpForRegelverksdato = Grunnbeløp.FastsattI2019
         )
 
         assertTrue(beregning.isActive(fakta))
@@ -53,7 +53,7 @@ internal class EtterLærlingForskriftTest() {
             verneplikt = false,
             beregningsdato = LocalDate.of(2020, 3, 20),
             gjeldendeGrunnbeløpVedBeregningsdato = Grunnbeløp.FastsattI2018,
-            gjeldendeGrunnbeløpForDagensDato = Grunnbeløp.FastsattI2019
+            gjeldendeGrunnbeløpForRegelverksdato = Grunnbeløp.FastsattI2019
         )
         true shouldBe beregning.isActive(fakta)
     }
@@ -67,7 +67,7 @@ internal class EtterLærlingForskriftTest() {
             verneplikt = false,
             beregningsdato = LocalDate.of(2020, 3, 1),
             gjeldendeGrunnbeløpVedBeregningsdato = Grunnbeløp.FastsattI2018,
-            gjeldendeGrunnbeløpForDagensDato = Grunnbeløp.FastsattI2019
+            gjeldendeGrunnbeløpForRegelverksdato = Grunnbeløp.FastsattI2019
         )
         false shouldBe beregning.isActive(fakta)
     }
@@ -82,7 +82,7 @@ internal class EtterLærlingForskriftTest() {
             verneplikt = false,
             beregningsdato = LocalDate.of(2020, 3, 21),
             gjeldendeGrunnbeløpVedBeregningsdato = Grunnbeløp.FastsattI2018,
-            gjeldendeGrunnbeløpForDagensDato = Grunnbeløp.FastsattI2019
+            gjeldendeGrunnbeløpForRegelverksdato = Grunnbeløp.FastsattI2019
         )
         false shouldBe beregning.isActive(fakta)
     }
@@ -97,7 +97,7 @@ internal class EtterLærlingForskriftTest() {
             lærling = true,
             beregningsdato = LocalDate.of(2020, 4, 1),
             gjeldendeGrunnbeløpVedBeregningsdato = Grunnbeløp.FastsattI2019,
-            gjeldendeGrunnbeløpForDagensDato = Grunnbeløp.FastsattI2019
+            gjeldendeGrunnbeløpForRegelverksdato = Grunnbeløp.FastsattI2019
         )
 
         when (
@@ -124,7 +124,7 @@ internal class EtterLærlingForskriftTest() {
             lærling = true,
             beregningsdato = LocalDate.of(2020, 4, 1),
             gjeldendeGrunnbeløpVedBeregningsdato = Grunnbeløp.FastsattI2019,
-            gjeldendeGrunnbeløpForDagensDato = Grunnbeløp.FastsattI2019
+            gjeldendeGrunnbeløpForRegelverksdato = Grunnbeløp.FastsattI2019
         )
 
         when (
@@ -151,7 +151,7 @@ internal class EtterLærlingForskriftTest() {
             lærling = true,
             beregningsdato = LocalDate.of(2020, 4, 1),
             gjeldendeGrunnbeløpVedBeregningsdato = Grunnbeløp.FastsattI2019,
-            gjeldendeGrunnbeløpForDagensDato = Grunnbeløp.FastsattI2019
+            gjeldendeGrunnbeløpForRegelverksdato = Grunnbeløp.FastsattI2019
         )
 
         when (
@@ -178,7 +178,7 @@ internal class EtterLærlingForskriftTest() {
             lærling = true,
             beregningsdato = LocalDate.of(2020, 4, 1),
             gjeldendeGrunnbeløpVedBeregningsdato = Grunnbeløp.FastsattI2019,
-            gjeldendeGrunnbeløpForDagensDato = Grunnbeløp.FastsattI2019
+            gjeldendeGrunnbeløpForRegelverksdato = Grunnbeløp.FastsattI2019
         )
 
         when (
@@ -206,7 +206,7 @@ internal class EtterLærlingForskriftTest() {
             lærling = true,
             beregningsdato = LocalDate.now(),
             gjeldendeGrunnbeløpVedBeregningsdato = Grunnbeløp.FastsattI2019,
-            gjeldendeGrunnbeløpForDagensDato = Grunnbeløp.FastsattI2019
+            gjeldendeGrunnbeløpForRegelverksdato = Grunnbeløp.FastsattI2019
         )
 
         LærlingForskriftSiste3AvsluttendeKalenderMånedFangsOgFisk().calculate(fakta).shouldBeTypeOf<IngenBeregningsResultat>()
@@ -225,7 +225,7 @@ internal class EtterLærlingForskriftTest() {
             lærling = true,
             beregningsdato = LocalDate.now(),
             gjeldendeGrunnbeløpVedBeregningsdato = Grunnbeløp.FastsattI2018,
-            gjeldendeGrunnbeløpForDagensDato = Grunnbeløp.FastsattI2019
+            gjeldendeGrunnbeløpForRegelverksdato = Grunnbeløp.FastsattI2019
         )
 
         assertSoftly {
@@ -250,7 +250,7 @@ internal class EtterLærlingForskriftTest() {
             lærling = true,
             beregningsdato = LocalDate.now(),
             gjeldendeGrunnbeløpVedBeregningsdato = Grunnbeløp.FastsattI2019,
-            gjeldendeGrunnbeløpForDagensDato = Grunnbeløp.FastsattI2019
+            gjeldendeGrunnbeløpForRegelverksdato = Grunnbeløp.FastsattI2019
         )
 
         assertSoftly {

@@ -7,6 +7,7 @@ import no.nav.dagpenger.events.inntekt.v1.Inntekt
 import no.nav.dagpenger.events.inntekt.v1.InntektKlasse
 import no.nav.dagpenger.events.inntekt.v1.KlassifisertInntekt
 import no.nav.dagpenger.events.inntekt.v1.KlassifisertInntektMåned
+import no.nav.dagpenger.grunnbelop.Grunnbeløp
 import org.junit.jupiter.api.Test
 import java.math.BigDecimal
 import java.time.YearMonth
@@ -110,7 +111,8 @@ class OnPacketTest {
             {
                 "beregningsDato":"2018-08-10",
                 "harAvtjentVerneplikt": true,
-                "oppfyllerKravTilFangstOgFisk": false
+                "oppfyllerKravTilFangstOgFisk": false,
+                "regelverksdato": "2021-03-16"
             }
             """.trimIndent()
 
@@ -121,8 +123,9 @@ class OnPacketTest {
 
         assertTrue { resultPacket.hasField("grunnlagResultat") }
 
-        // verneplikt bruker G ved dagens dato - denne testen vil feile hver gang G endres.
-        assertEquals(304053, Integer.parseInt(resultPacket.getMapValue("grunnlagResultat")["avkortet"].toString()))
+        val g2020 = (Grunnbeløp.FastsattI2020.verdi * BigDecimal(3)).toInt()
+
+        assertEquals(g2020, Integer.parseInt(resultPacket.getMapValue("grunnlagResultat")["avkortet"].toString()))
         assertEquals(
             Integer.parseInt(resultPacket.getMapValue("grunnlagResultat")["avkortet"].toString()),
             Integer.parseInt(resultPacket.getMapValue("grunnlagResultat")["uavkortet"].toString())

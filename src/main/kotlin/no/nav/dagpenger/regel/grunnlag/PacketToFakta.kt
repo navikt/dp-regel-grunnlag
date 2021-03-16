@@ -17,15 +17,15 @@ internal fun packetToFakta(packet: Packet): Fakta {
     val manueltGrunnlag = packet.getNullableIntValue(Grunnlag.MANUELT_GRUNNLAG)
     val forrigeGrunnlag = packet.getNullableIntValue(Grunnlag.FORRIGE_GRUNNLAG)
     val lærling = packet.getNullableBoolean(Grunnlag.LÆRLING) == true
-    val dagensDato = LocalDate.now()
+    val regelverksdato = packet.getNullableLocalDate(Grunnlag.REGELVERKSDATO) ?: beregningsdato
 
     val grunnbeløpVedBeregningsdato = when {
         isThisGjusteringTest(beregningsdato, verneplikt) -> Grunnbeløp.GjusteringsTest
         else -> getGrunnbeløpForRegel(Regel.Grunnlag).forDato(beregningsdato)
     }
-    val grunnbeløpVedDagensDato = when {
+    val grunnbeløpVedRegelverksdato = when {
         isThisGjusteringTest(beregningsdato, verneplikt) -> Grunnbeløp.GjusteringsTest
-        else -> getGrunnbeløpForRegel(Regel.Grunnlag).forDato(dagensDato)
+        else -> getGrunnbeløpForRegel(Regel.Grunnlag).forDato(regelverksdato)
     }
 
     return Fakta(
@@ -37,7 +37,7 @@ internal fun packetToFakta(packet: Packet): Fakta {
         forrigeGrunnlag = forrigeGrunnlag,
         lærling = lærling,
         gjeldendeGrunnbeløpVedBeregningsdato = grunnbeløpVedBeregningsdato,
-        gjeldendeGrunnbeløpForDagensDato = grunnbeløpVedDagensDato
+        gjeldendeGrunnbeløpForRegelverksdato = grunnbeløpVedRegelverksdato
     )
 }
 

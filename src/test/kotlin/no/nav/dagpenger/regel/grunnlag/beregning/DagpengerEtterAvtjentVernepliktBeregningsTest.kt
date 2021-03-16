@@ -22,7 +22,7 @@ class DagpengerEtterAvtjentVernepliktBeregningsTest {
             verneplikt = false,
             beregningsdato = LocalDate.of(2019, 4, 1),
             gjeldendeGrunnbeløpVedBeregningsdato = Grunnbeløp.FastsattI2018,
-            gjeldendeGrunnbeløpForDagensDato = Grunnbeløp.FastsattI2019
+            gjeldendeGrunnbeløpForRegelverksdato = Grunnbeløp.FastsattI2019
         )
         false shouldBe beregning.isActive(fakta)
     }
@@ -36,7 +36,7 @@ class DagpengerEtterAvtjentVernepliktBeregningsTest {
             fangstOgFisk = false,
             beregningsdato = LocalDate.of(2019, 4, 1),
             gjeldendeGrunnbeløpVedBeregningsdato = Grunnbeløp.FastsattI2019,
-            gjeldendeGrunnbeløpForDagensDato = Grunnbeløp.FastsattI2019
+            gjeldendeGrunnbeløpForRegelverksdato = Grunnbeløp.FastsattI2019
         )
 
         when (val beregningsResultat = beregning.calculate(fakta)) {
@@ -55,7 +55,7 @@ class DagpengerEtterAvtjentVernepliktBeregningsTest {
             fangstOgFisk = false,
             beregningsdato = LocalDate.of(2019, 4, 1),
             gjeldendeGrunnbeløpVedBeregningsdato = Grunnbeløp.FastsattI2019,
-            gjeldendeGrunnbeløpForDagensDato = Grunnbeløp.FastsattI2019
+            gjeldendeGrunnbeløpForRegelverksdato = Grunnbeløp.FastsattI2019
         )
 
         when (val beregningsResultat = beregning.calculate(fakta)) {

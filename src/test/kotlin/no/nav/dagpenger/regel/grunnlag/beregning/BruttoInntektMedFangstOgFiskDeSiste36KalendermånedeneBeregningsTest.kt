@@ -26,7 +26,7 @@ class BruttoInntektMedFangstOgFiskDeSiste36KalendermånedeneBeregningsTest {
             verneplikt = false,
             beregningsdato = LocalDate.of(2020, 3, 20),
             gjeldendeGrunnbeløpVedBeregningsdato = Grunnbeløp.FastsattI2018,
-            gjeldendeGrunnbeløpForDagensDato = Grunnbeløp.FastsattI2019
+            gjeldendeGrunnbeløpForRegelverksdato = Grunnbeløp.FastsattI2019
         )
         false shouldBe beregning.isActive(fakta)
     }
@@ -40,7 +40,7 @@ class BruttoInntektMedFangstOgFiskDeSiste36KalendermånedeneBeregningsTest {
             verneplikt = false,
             beregningsdato = LocalDate.of(2020, 3, 1),
             gjeldendeGrunnbeløpVedBeregningsdato = Grunnbeløp.FastsattI2018,
-            gjeldendeGrunnbeløpForDagensDato = Grunnbeløp.FastsattI2019
+            gjeldendeGrunnbeløpForRegelverksdato = Grunnbeløp.FastsattI2019
         )
         true shouldBe beregning.isActive(fakta)
     }
@@ -93,7 +93,7 @@ class BruttoInntektMedFangstOgFiskDeSiste36KalendermånedeneBeregningsTest {
             verneplikt = false,
             beregningsdato = LocalDate.of(2019, 4, 1),
             gjeldendeGrunnbeløpVedBeregningsdato = Grunnbeløp.FastsattI2018,
-            gjeldendeGrunnbeløpForDagensDato = Grunnbeløp.FastsattI2018
+            gjeldendeGrunnbeløpForRegelverksdato = Grunnbeløp.FastsattI2018
         )
 
         when (val beregningsResultat = beregning.calculate(fakta)) {
@@ -163,7 +163,7 @@ class BruttoInntektMedFangstOgFiskDeSiste36KalendermånedeneBeregningsTest {
             verneplikt = false,
             beregningsdato = LocalDate.of(2019, 2, 10),
             gjeldendeGrunnbeløpVedBeregningsdato = Grunnbeløp.FastsattI2019,
-            gjeldendeGrunnbeløpForDagensDato = Grunnbeløp.FastsattI2019
+            gjeldendeGrunnbeløpForRegelverksdato = Grunnbeløp.FastsattI2019
         )
 
         when (val beregningsResultat = beregning.calculate(fakta)) {
@@ -233,7 +233,7 @@ class BruttoInntektMedFangstOgFiskDeSiste36KalendermånedeneBeregningsTest {
             verneplikt = false,
             beregningsdato = LocalDate.of(2019, 2, 10),
             gjeldendeGrunnbeløpVedBeregningsdato = Grunnbeløp.FastsattI2019,
-            gjeldendeGrunnbeløpForDagensDato = Grunnbeløp.FastsattI2019
+            gjeldendeGrunnbeløpForRegelverksdato = Grunnbeløp.FastsattI2019
         )
 
         when (val beregningsResultat = beregning.calculate(fakta)) {
@@ -252,7 +252,7 @@ class BruttoInntektMedFangstOgFiskDeSiste36KalendermånedeneBeregningsTest {
             verneplikt = false,
             beregningsdato = LocalDate.of(2019, 4, 1),
             gjeldendeGrunnbeløpVedBeregningsdato = Grunnbeløp.FastsattI2018,
-            gjeldendeGrunnbeløpForDagensDato = Grunnbeløp.FastsattI2019
+            gjeldendeGrunnbeløpForRegelverksdato = Grunnbeløp.FastsattI2019
         )
 
         when (val beregningsResultat = beregning.calculate(fakta)) {

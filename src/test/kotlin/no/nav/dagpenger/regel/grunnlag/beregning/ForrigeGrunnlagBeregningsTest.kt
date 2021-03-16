@@ -25,7 +25,7 @@ class ForrigeGrunnlagBeregningsTest {
             LocalDate.of(2019, 4, 10),
             forrigeGrunnlag = 0,
             gjeldendeGrunnbeløpVedBeregningsdato = Grunnbeløp.FastsattI2019,
-            gjeldendeGrunnbeløpForDagensDato = Grunnbeløp.FastsattI2019
+            gjeldendeGrunnbeløpForRegelverksdato = Grunnbeløp.FastsattI2019
         )
 
         when (val beregningsResultat = ForrigeGrunnlagBeregning().calculate(fakta)) {
@@ -48,7 +48,7 @@ class ForrigeGrunnlagBeregningsTest {
             LocalDate.of(2019, 4, 10),
             forrigeGrunnlag = 50000,
             gjeldendeGrunnbeløpVedBeregningsdato = Grunnbeløp.FastsattI2018,
-            gjeldendeGrunnbeløpForDagensDato = Grunnbeløp.FastsattI2019
+            gjeldendeGrunnbeløpForRegelverksdato = Grunnbeløp.FastsattI2019
         )
 
         when (val beregningsResultat = ForrigeGrunnlagBeregning().calculate(fakta)) {

@@ -52,6 +52,7 @@ class Grunnlag(
         const val AVTJENT_VERNEPLIKT = "harAvtjentVerneplikt"
         const val FANGST_OG_FISK = "oppfyllerKravTilFangstOgFisk"
         const val BEREGNINGSDATO = "beregningsDato"
+        const val REGELVERKSDATO = "regelverksdato"
         const val MANUELT_GRUNNLAG = "manueltGrunnlag"
         const val FORRIGE_GRUNNLAG = "forrigeGrunnlag"
         const val GRUNNLAG_INNTEKTSPERIODER = "grunnlagInntektsPerioder"
@@ -81,7 +82,7 @@ class Grunnlag(
             beregningsregel = resultat.beregningsregel,
             harAvkortet = resultat.harAvkortet,
             grunnbeløpBrukt = when (fakta.verneplikt) {
-                true -> fakta.gjeldendeGrunnbeløpForDagensDato.verdi
+                true -> fakta.gjeldendeGrunnbeløpForRegelverksdato.verdi
                 false -> fakta.gjeldendeGrunnbeløpVedBeregningsdato.verdi
             }
         )
