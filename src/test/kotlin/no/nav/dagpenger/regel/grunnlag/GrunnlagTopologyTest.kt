@@ -8,7 +8,6 @@ import no.nav.dagpenger.events.inntekt.v1.KlassifisertInntekt
 import no.nav.dagpenger.events.inntekt.v1.KlassifisertInntektMåned
 import no.nav.dagpenger.events.moshiInstance
 import no.nav.dagpenger.regel.grunnlag.Grunnlag.Companion.inntektAdapter
-import no.nav.dagpenger.streams.Topics.DAGPENGER_BEHOV_PACKET_EVENT
 import org.apache.kafka.streams.StreamsConfig
 import org.apache.kafka.streams.TestInputTopic
 import org.apache.kafka.streams.TestOutputTopic
@@ -198,14 +197,14 @@ class GrunnlagTopologyTest {
 
 private fun TopologyTestDriver.behovInputTopic(): TestInputTopic<String, Packet> =
     this.createInputTopic(
-        DAGPENGER_BEHOV_PACKET_EVENT.name,
-        DAGPENGER_BEHOV_PACKET_EVENT.keySerde.serializer(),
-        DAGPENGER_BEHOV_PACKET_EVENT.valueSerde.serializer()
+        REGEL_TOPIC.name,
+        REGEL_TOPIC.keySerde.serializer(),
+        REGEL_TOPIC.valueSerde.serializer()
     )
 
 private fun TopologyTestDriver.behovOutputTopic(): TestOutputTopic<String, Packet> =
     this.createOutputTopic(
-        DAGPENGER_BEHOV_PACKET_EVENT.name,
-        DAGPENGER_BEHOV_PACKET_EVENT.keySerde.deserializer(),
-        DAGPENGER_BEHOV_PACKET_EVENT.valueSerde.deserializer()
+        REGEL_TOPIC.name,
+        REGEL_TOPIC.keySerde.deserializer(),
+        REGEL_TOPIC.valueSerde.deserializer()
     )

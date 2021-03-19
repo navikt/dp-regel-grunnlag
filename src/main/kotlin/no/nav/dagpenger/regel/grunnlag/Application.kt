@@ -13,8 +13,6 @@ import no.nav.dagpenger.events.moshiInstance
 import no.nav.dagpenger.regel.grunnlag.beregning.HovedBeregning
 import no.nav.dagpenger.streams.KafkaAivenCredentials
 import no.nav.dagpenger.streams.River
-import no.nav.dagpenger.streams.Topic
-import no.nav.dagpenger.streams.streamConfig
 import no.nav.dagpenger.streams.streamConfigAiven
 import org.apache.kafka.streams.kstream.Predicate
 import java.net.URI
@@ -35,18 +33,12 @@ fun main() {
         instrumentation = instrumentation,
         config = config
     ).start()
-
-    GrunnlagAiven(
-        instrumentation = instrumentation,
-        config = config
-    ).start()
 }
 
-open class Grunnlag(
+class Grunnlag(
     private val config: Configuration,
     private val instrumentation: GrunnlagInstrumentation,
-    topic: Topic<String, Packet> = config.behovTopic
-) : River(topic) {
+) : River(config.regelTopic) {
     override val SERVICE_APP_ID: String = config.application.id
     override val HTTP_PORT: Int = config.application.httpPort
     private val ulidGenerator = ULID()
@@ -119,10 +111,10 @@ open class Grunnlag(
     }
 
     override fun getConfig(): Properties {
-        return streamConfig(
+        return streamConfigAiven(
             appId = SERVICE_APP_ID,
-            bootStapServerUrl = config.kafka.onPremBrokers,
-            credential = config.kafka.credential()
+            bootStapServerUrl = config.kafka.aivenBrokers,
+            aivenCredentials = KafkaAivenCredentials()
         )
     }
 
@@ -136,19 +128,6 @@ open class Grunnlag(
             )
         )
         return packet
-    }
-}
-
-class GrunnlagAiven(config: Configuration, instrumentation: GrunnlagInstrumentation) : Grunnlag(config, instrumentation, config.regelTopic) {
-    override val withHealthChecks: Boolean
-        get() = false
-
-    override fun getConfig(): Properties {
-        return streamConfigAiven(
-            appId = SERVICE_APP_ID,
-            bootStapServerUrl = config.kafka.aivenBrokers,
-            aivenCredentials = KafkaAivenCredentials()
-        )
     }
 }
 
