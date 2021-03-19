@@ -29,8 +29,3 @@ spec:
     enabled: true
   kafka:
     pool: nav-prod
-  vault:
-    enabled: true
-    paths:
-      - kvPath: "serviceuser/data/prod/{{service_user}}"
-        mountPath: "/var/run/secrets/nais.io/service_user"
