@@ -18,6 +18,7 @@ private const val TOPIC = "privat-dagpenger-behov-v2"
 private val localProperties = ConfigurationMap(
     mapOf(
         "kafka.bootstrap.servers" to "localhost:9092",
+        "KAFKA_BROKERS" to "localhost:9092",
         "kafka.topic" to TOPIC,
         "kafka.reset.policy" to "earliest",
         "nav.truststore.path" to "",
@@ -69,6 +70,7 @@ data class Configuration(
     val behovTopic: Topic<String, Packet> = Topics.DAGPENGER_BEHOV_PACKET_EVENT.copy(
         name = config()[Key("behov.topic", stringType)]
     ),
+    val regelTopic: Topic<String, Packet> = behovTopic.copy(name = "teamdagpenger.regel.v1"),
     val rapidApplication: Map<String, String> = mapOf(
         "RAPID_APP_NAME" to application.id,
         "KAFKA_BOOTSTRAP_SERVERS" to config()[Key("kafka.bootstrap.servers", stringType)],
@@ -81,7 +83,8 @@ data class Configuration(
     ) + System.getenv().filter { it.key.startsWith("NAIS_") }
 ) {
     data class Kafka(
-        val brokers: String = config()[Key("kafka.bootstrap.servers", stringType)],
+        val onPremBrokers: String = config()[Key("kafka.bootstrap.servers", stringType)],
+        val aivenBrokers: String = config()[Key("KAFKA_BROKERS", stringType)],
         val user: String? = config().getOrNull(Key("srvdp.regel.grunnlag.username", stringType)),
         val password: String? = config().getOrNull(Key("srvdp.regel.grunnlag.password", stringType))
     ) {

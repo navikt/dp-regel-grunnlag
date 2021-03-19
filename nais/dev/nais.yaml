@@ -27,6 +27,8 @@ spec:
       memory: 256Mi
   secureLogs:
     enabled: true
+  kafka:
+    pool: nav-dev
   vault:
     enabled: true
     paths:

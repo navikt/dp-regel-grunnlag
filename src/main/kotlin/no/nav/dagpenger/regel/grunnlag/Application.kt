@@ -11,8 +11,11 @@ import no.nav.dagpenger.events.inntekt.v1.InntektKlasse
 import no.nav.dagpenger.events.inntekt.v1.sumInntekt
 import no.nav.dagpenger.events.moshiInstance
 import no.nav.dagpenger.regel.grunnlag.beregning.HovedBeregning
+import no.nav.dagpenger.streams.KafkaAivenCredentials
 import no.nav.dagpenger.streams.River
+import no.nav.dagpenger.streams.Topic
 import no.nav.dagpenger.streams.streamConfig
+import no.nav.dagpenger.streams.streamConfigAiven
 import org.apache.kafka.streams.kstream.Predicate
 import java.net.URI
 import java.util.Properties
@@ -32,12 +35,18 @@ fun main() {
         instrumentation = instrumentation,
         config = config
     ).start()
+
+    GrunnlagAiven(
+        instrumentation = instrumentation,
+        config = config
+    ).start()
 }
 
-class Grunnlag(
+open class Grunnlag(
     private val config: Configuration,
     private val instrumentation: GrunnlagInstrumentation,
-) : River(config.behovTopic) {
+    topic: Topic<String, Packet> = config.behovTopic
+) : River(topic) {
     override val SERVICE_APP_ID: String = config.application.id
     override val HTTP_PORT: Int = config.application.httpPort
     private val ulidGenerator = ULID()
@@ -112,7 +121,7 @@ class Grunnlag(
     override fun getConfig(): Properties {
         return streamConfig(
             appId = SERVICE_APP_ID,
-            bootStapServerUrl = config.kafka.brokers,
+            bootStapServerUrl = config.kafka.onPremBrokers,
             credential = config.kafka.credential()
         )
     }
@@ -127,6 +136,19 @@ class Grunnlag(
             )
         )
         return packet
+    }
+}
+
+class GrunnlagAiven(config: Configuration, instrumentation: GrunnlagInstrumentation) : Grunnlag(config, instrumentation, config.regelTopic) {
+    override val withHealthChecks: Boolean
+        get() = false
+
+    override fun getConfig(): Properties {
+        return streamConfigAiven(
+            appId = SERVICE_APP_ID,
+            bootStapServerUrl = config.kafka.aivenBrokers,
+            aivenCredentials = KafkaAivenCredentials()
+        )
     }
 }
 
