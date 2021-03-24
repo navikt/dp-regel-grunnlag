@@ -47,7 +47,7 @@ internal fun isThisGjusteringTest(
 ): Boolean {
     val gVirkning = LocalDate.of(2021, 3, 1)
     val isRegelverksdatoAfterGjustering = regelverksdato.isAfter(gVirkning.minusDays(1))
-    return features.isEnabled("gjustering") && (isRegelverksdatoAfterGjustering || verneplikt)
+    return features.isEnabled("gjustering") && (isRegelverksdatoAfterGjustering)
 }
 
 private fun getInntekt(packet: Packet): Inntekt? =
