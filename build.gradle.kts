@@ -70,6 +70,7 @@ dependencies {
 
     implementation(Kotlin.Logging.kotlinLogging)
     implementation(Konfig.konfig)
+    implementation("no.finn.unleash:unleash-client-java:3.2.9")
 
     testImplementation(kotlin("test"))
 

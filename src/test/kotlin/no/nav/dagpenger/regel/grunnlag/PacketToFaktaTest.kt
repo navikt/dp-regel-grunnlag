@@ -26,7 +26,7 @@ class PacketToFaktaTest {
 
     @Test
     fun packetToFakta() {
-        isThisGjusteringTest(LocalDate.now(), false) shouldBe false
+        isThisGjusteringTest(LocalDate.now()) shouldBe false
     }
 
     @Test

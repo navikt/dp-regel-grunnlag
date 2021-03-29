@@ -19,14 +19,12 @@ import java.net.URI
 import java.util.Properties
 
 private val config = Configuration()
-internal val features = Features(config.features)
 
 private val log = KotlinLogging.logger {}
 private val sikkerLogg = KotlinLogging.logger("tjenestekall")
 
 fun main() {
 
-    log.info { "Features: $features" }
     val instrumentation = GrunnlagInstrumentation()
 
     Grunnlag(
@@ -58,6 +56,7 @@ class Grunnlag(
         const val FORRIGE_GRUNNLAG = "forrigeGrunnlag"
         const val GRUNNLAG_INNTEKTSPERIODER = "grunnlagInntektsPerioder"
         val inntektAdapter: JsonAdapter<Inntekt> = moshiInstance.adapter(Inntekt::class.java)
+        val unleash = setupUnleash(config.application.unleashUrl)
     }
 
     override fun filterPredicates(): List<Predicate<String, Packet>> {

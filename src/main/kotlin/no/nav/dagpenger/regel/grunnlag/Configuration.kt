@@ -18,7 +18,8 @@ private val localProperties = ConfigurationMap(
     mapOf(
         "KAFKA_BROKERS" to "localhost:9092",
         "application.profile" to Profile.LOCAL.toString(),
-        "application.httpPort" to "8080"
+        "application.httpPort" to "8080",
+        "unleash.url" to "https://localhost"
     )
 )
 private val devProperties = ConfigurationMap(
@@ -26,12 +27,14 @@ private val devProperties = ConfigurationMap(
         "application.profile" to Profile.DEV.toString(),
         "application.httpPort" to "8080",
         "feature.gjustering" to false.toString(),
+        "unleash.url" to "https://unleash.nais.io/api/"
     )
 )
 private val prodProperties = ConfigurationMap(
     mapOf(
         "application.profile" to Profile.PROD.toString(),
         "application.httpPort" to "8080",
+        "unleash.url" to "https://unleash.nais.io/api/",
     )
 )
 
@@ -61,7 +64,8 @@ data class Configuration(
     data class Application(
         val id: String = config().getOrElse(Key("application.id", stringType), "dagpenger-regel-grunnlag"),
         val profile: Profile = config()[Key("application.profile", stringType)].let { Profile.valueOf(it) },
-        val httpPort: Int = config()[Key("application.httpPort", intType)]
+        val httpPort: Int = config()[Key("application.httpPort", intType)],
+        val unleashUrl: String = config()[Key("unleash.url", stringType)]
     )
 
     val features = mapOf(

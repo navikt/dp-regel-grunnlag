@@ -20,11 +20,11 @@ internal fun packetToFakta(packet: Packet): Fakta {
     val regelverksdato = packet.getNullableLocalDate(Grunnlag.REGELVERKSDATO) ?: beregningsdato
 
     val grunnbeløpVedBeregningsdato = when {
-        isThisGjusteringTest(regelverksdato, verneplikt) -> Grunnbeløp.GjusteringsTest
+        isThisGjusteringTest(regelverksdato) -> Grunnbeløp.GjusteringsTest
         else -> getGrunnbeløpForRegel(Regel.Grunnlag).forDato(beregningsdato)
     }
     val grunnbeløpVedRegelverksdato = when {
-        isThisGjusteringTest(regelverksdato, verneplikt) -> Grunnbeløp.GjusteringsTest
+        isThisGjusteringTest(regelverksdato) -> Grunnbeløp.GjusteringsTest
         else -> getGrunnbeløpForRegel(Regel.Grunnlag).forDato(regelverksdato)
     }
 
@@ -42,12 +42,11 @@ internal fun packetToFakta(packet: Packet): Fakta {
 }
 
 internal fun isThisGjusteringTest(
-    regelverksdato: LocalDate,
-    verneplikt: Boolean
+    regelverksdato: LocalDate
 ): Boolean {
     val gVirkning = LocalDate.of(2021, 3, 1)
     val isRegelverksdatoAfterGjustering = regelverksdato.isAfter(gVirkning.minusDays(1))
-    return features.isEnabled("gjustering") && (isRegelverksdatoAfterGjustering)
+    return Grunnlag.unleash.isEnabled(GJUSTERING_TEST) && isRegelverksdatoAfterGjustering
 }
 
 private fun getInntekt(packet: Packet): Inntekt? =
