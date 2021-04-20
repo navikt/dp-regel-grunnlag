@@ -42,9 +42,11 @@ class GrunnlagInstrumentation {
             regelIdentifikator = regelIdentifikator,
             beregningsregel = resultat.beregningsregel,
             harAvkortet = resultat.harAvkortet,
-            klassifisering = fastsettArbeidstid(resultat.avkortetGrunnlag, fakta.gjeldendeGrunnbeløpForRegelverksdato.verdi)
+            klassifisering = fastsettArbeidstid(resultat.avkortetGrunnlag, grunnbeløpVedRegelverksdato(fakta.regelverksdato).verdi)
         )
     }
+
+
 
     fun grunnlagBeregnet(
         regelIdentifikator: String,
@@ -61,7 +63,7 @@ class GrunnlagInstrumentation {
             regelIdentifikator = regelIdentifikator,
             beregningsregel = resultat.beregningsregel,
             harAvkortet = resultat.harAvkortet,
-            klassifisering = fastsettArbeidstid(resultat.avkortet, fakta.gjeldendeGrunnbeløpForRegelverksdato.verdi)
+            klassifisering = fastsettArbeidstid(resultat.avkortet, grunnbeløpVedRegelverksdato(fakta.regelverksdato).verdi)
         )
     }
 

@@ -56,8 +56,7 @@ internal class FaktaTest {
             verneplikt = false,
             fangstOgFisk = false,
             beregningsdato = LocalDate.of(2019, 4, 1),
-            gjeldendeGrunnbeløpVedBeregningsdato = Grunnbeløp.FastsattI2018,
-            gjeldendeGrunnbeløpForRegelverksdato = Grunnbeløp.FastsattI2019
+            regelverksdato = LocalDate.of(2019, 7, 1)
         )
 
         val expected = BigDecimal("5586.74733536963068970000")

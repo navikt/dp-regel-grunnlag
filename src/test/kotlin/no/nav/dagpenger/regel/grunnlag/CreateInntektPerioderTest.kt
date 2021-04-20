@@ -21,8 +21,8 @@ internal class CreateInntektPerioderTest {
             verneplikt = false,
             fangstOgFisk = false,
             beregningsdato = beregningsdato,
-            gjeldendeGrunnbeløpVedBeregningsdato = Grunnbeløp.FastsattI2019,
-            gjeldendeGrunnbeløpForRegelverksdato = Grunnbeløp.FastsattI2019
+            //gjeldendeGrunnbeløpVedBeregningsdato = Grunnbeløp.FastsattI2019,
+            //gjeldendeGrunnbeløpForRegelverksdato = Grunnbeløp.FastsattI2019
         )
 
         val inntektsPerioder = createInntektPerioder(fakta)
@@ -44,8 +44,8 @@ internal class CreateInntektPerioderTest {
             verneplikt = false,
             fangstOgFisk = false,
             beregningsdato = beregningsdato,
-            gjeldendeGrunnbeløpVedBeregningsdato = Grunnbeløp.FastsattI2019,
-            gjeldendeGrunnbeløpForRegelverksdato = Grunnbeløp.FastsattI2019
+            //gjeldendeGrunnbeløpVedBeregningsdato = Grunnbeløp.FastsattI2019,
+            //gjeldendeGrunnbeløpForRegelverksdato = Grunnbeløp.FastsattI2019
         )
 
         val inntektsPerioder = createInntektPerioder(fakta)!!

@@ -2,7 +2,13 @@ package no.nav.dagpenger.regel.grunnlag.beregning
 
 import no.nav.dagpenger.events.inntekt.v1.InntektKlasse
 import no.nav.dagpenger.events.inntekt.v1.sumInntekt
+import no.nav.dagpenger.grunnbelop.Grunnbeløp
+import no.nav.dagpenger.grunnbelop.Regel
+import no.nav.dagpenger.grunnbelop.forDato
+import no.nav.dagpenger.grunnbelop.getGrunnbeløpForRegel
 import no.nav.dagpenger.regel.grunnlag.Fakta
+import no.nav.dagpenger.regel.grunnlag.grunnbeløpVedBeregningsdato
+import no.nav.dagpenger.regel.grunnlag.isThisGjusteringTest
 import java.lang.RuntimeException
 import java.math.BigDecimal
 import java.time.LocalDate
@@ -39,7 +45,7 @@ abstract class GrunnlagEtterLærlingForskrift(
             val uavkortet =
                 sortertEtterInntektsmåned.take(grunnlagUtvelgelse.antallMåneder).sumInntekt(inntektKlasser.toList())
                     .multiply(grunnlagUtvelgelse.månedFaktor.toBigDecimal())
-            val seksGangerGrunnbeløp = fakta.gjeldendeGrunnbeløpVedBeregningsdato.verdi.multiply(BigDecimal(6))
+            val seksGangerGrunnbeløp = grunnbeløpVedBeregningsdato(fakta).verdi.multiply(BigDecimal(6))
             val avkortet = if (uavkortet > seksGangerGrunnbeløp) seksGangerGrunnbeløp else uavkortet
 
             BeregningsResultat(
