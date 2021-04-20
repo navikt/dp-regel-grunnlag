@@ -189,6 +189,25 @@ class OnPacketTest {
     }
 
     @Test
+    fun ` Skal velge rett beregningsregel ved lærling og forrige grunnlag `() {
+        val json =
+            """
+            {
+                "beregningsDato":"2020-03-20",
+                "oppfyllerKravTilFangstOgFisk": false,
+                "lærling": true,
+                "forrigeGrunnlag": 300000
+            }
+            """.trimIndent()
+
+        val packet = Packet(json)
+        val resultPacket = grunnlag.onPacket(packet)
+
+        assertTrue { resultPacket.hasField("grunnlagResultat") }
+        assertEquals("ForrigeGrunnlag", resultPacket.getMapValue("grunnlagResultat")["beregningsregel"])
+    }
+
+    @Test
     fun ` Skal instrumentere beregninger`() {
 
         val inntekt = getInntekt(1000.toBigDecimal())
