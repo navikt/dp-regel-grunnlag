@@ -28,17 +28,17 @@ internal class EtterLærlingForskriftTest() {
     fun ` Beregning er aktiv til fra 20 mars 2020 til 31 desember 2021`() {
 
         val fakta = Fakta(
-            inntekt = null,
-            fangstOgFisk = false,
-            lærling = true,
-            verneplikt = false,
-            beregningsdato = LocalDate.of(2020, 3, 20)
+                inntekt = null,
+                fangstOgFisk = false,
+                lærling = true,
+                verneplikt = false,
+                beregningsdato = LocalDate.of(2020, 3, 20)
         )
 
         assertTrue(beregning.isActive(fakta))
-        assertTrue(beregning.isActive(fakta.copy(beregningsdato = LocalDate.of(2021, 12, 31))))
-        assertFalse(beregning.isActive(fakta.copy(beregningsdato = LocalDate.of(2020, 2, 29))))
-        assertFalse(beregning.isActive(fakta.copy(beregningsdato = LocalDate.of(2022, 1, 1))))
+        assertTrue(beregning.isActive(fakta.copy(regelverksdato = LocalDate.of(2021, 12, 31))))
+        assertFalse(beregning.isActive(fakta.copy(regelverksdato = LocalDate.of(2020, 2, 29))))
+        assertFalse(beregning.isActive(fakta.copy(regelverksdato = LocalDate.of(2022, 1, 1))))
     }
 
     @Test
