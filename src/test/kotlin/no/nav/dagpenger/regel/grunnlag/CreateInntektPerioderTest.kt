@@ -63,7 +63,7 @@ internal class CreateInntektPerioderTest {
             inntekt,
             false,
             false,
-                beregningsdato
+            beregningsdato
         )
 
         val inntektsPerioder = createInntektPerioder(fakta)!!
