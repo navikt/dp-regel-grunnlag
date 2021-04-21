@@ -3,7 +3,6 @@ package no.nav.dagpenger.regel.grunnlag.beregning
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.types.shouldBeTypeOf
 import no.nav.dagpenger.events.inntekt.v1.Inntekt
-import no.nav.dagpenger.grunnbelop.Grunnbeløp
 import no.nav.dagpenger.regel.grunnlag.Fakta
 import org.junit.jupiter.api.Test
 import java.math.BigDecimal
@@ -23,9 +22,7 @@ class ManueltGrunnlagBeregningsTest {
             false,
             false,
             LocalDate.of(2019, 4, 10),
-            manueltGrunnlag = 50000,
-            gjeldendeGrunnbeløpVedBeregningsdato = Grunnbeløp.FastsattI2018,
-            gjeldendeGrunnbeløpForRegelverksdato = Grunnbeløp.FastsattI2019
+            manueltGrunnlag = 50000
         )
 
         when (val beregningsResultat = ManueltGrunnlagBeregning().calculate(fakta)) {
@@ -49,9 +46,7 @@ class ManueltGrunnlagBeregningsTest {
             false,
             false,
             LocalDate.of(2019, 4, 10),
-            manueltGrunnlag = 600000,
-            gjeldendeGrunnbeløpVedBeregningsdato = Grunnbeløp.FastsattI2018,
-            gjeldendeGrunnbeløpForRegelverksdato = Grunnbeløp.FastsattI2019
+                manueltGrunnlag = 600000
         )
 
         when (val beregningsResultat = ManueltGrunnlagBeregning().calculate(fakta)) {
@@ -75,9 +70,7 @@ class ManueltGrunnlagBeregningsTest {
             false,
             false,
             LocalDate.of(2019, 4, 10),
-            manueltGrunnlag = 0,
-            gjeldendeGrunnbeløpVedBeregningsdato = Grunnbeløp.FastsattI2019,
-            gjeldendeGrunnbeløpForRegelverksdato = Grunnbeløp.FastsattI2019
+                manueltGrunnlag = 0
         )
 
         when (val beregningsResultat = ManueltGrunnlagBeregning().calculate(fakta)) {

@@ -7,7 +7,6 @@ import no.nav.dagpenger.events.inntekt.v1.Inntekt
 import no.nav.dagpenger.events.inntekt.v1.InntektKlasse
 import no.nav.dagpenger.events.inntekt.v1.KlassifisertInntekt
 import no.nav.dagpenger.events.inntekt.v1.KlassifisertInntektMåned
-import no.nav.dagpenger.grunnbelop.Grunnbeløp
 import no.nav.dagpenger.regel.grunnlag.Fakta
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
@@ -33,9 +32,7 @@ internal class EtterLærlingForskriftTest() {
             fangstOgFisk = false,
             lærling = true,
             verneplikt = false,
-            beregningsdato = LocalDate.of(2020, 3, 20),
-            gjeldendeGrunnbeløpVedBeregningsdato = Grunnbeløp.FastsattI2018,
-            gjeldendeGrunnbeløpForRegelverksdato = Grunnbeløp.FastsattI2019
+            beregningsdato = LocalDate.of(2020, 3, 20)
         )
 
         assertTrue(beregning.isActive(fakta))
@@ -51,9 +48,7 @@ internal class EtterLærlingForskriftTest() {
             fangstOgFisk = false,
             lærling = true,
             verneplikt = false,
-            beregningsdato = LocalDate.of(2020, 3, 20),
-            gjeldendeGrunnbeløpVedBeregningsdato = Grunnbeløp.FastsattI2018,
-            gjeldendeGrunnbeløpForRegelverksdato = Grunnbeløp.FastsattI2019
+                beregningsdato = LocalDate.of(2020, 3, 20)
         )
         true shouldBe beregning.isActive(fakta)
     }
@@ -65,9 +60,7 @@ internal class EtterLærlingForskriftTest() {
             fangstOgFisk = false,
             lærling = true,
             verneplikt = false,
-            beregningsdato = LocalDate.of(2020, 3, 1),
-            gjeldendeGrunnbeløpVedBeregningsdato = Grunnbeløp.FastsattI2018,
-            gjeldendeGrunnbeløpForRegelverksdato = Grunnbeløp.FastsattI2019
+                beregningsdato = LocalDate.of(2020, 3, 1)
         )
         false shouldBe beregning.isActive(fakta)
     }
@@ -80,9 +73,7 @@ internal class EtterLærlingForskriftTest() {
             manueltGrunnlag = 1000,
             lærling = true,
             verneplikt = false,
-            beregningsdato = LocalDate.of(2020, 3, 21),
-            gjeldendeGrunnbeløpVedBeregningsdato = Grunnbeløp.FastsattI2018,
-            gjeldendeGrunnbeløpForRegelverksdato = Grunnbeløp.FastsattI2019
+                beregningsdato = LocalDate.of(2020, 3, 21)
         )
         false shouldBe beregning.isActive(fakta)
     }
@@ -95,9 +86,7 @@ internal class EtterLærlingForskriftTest() {
             verneplikt = false,
             fangstOgFisk = false,
             lærling = true,
-            beregningsdato = LocalDate.of(2020, 4, 1),
-            gjeldendeGrunnbeløpVedBeregningsdato = Grunnbeløp.FastsattI2019,
-            gjeldendeGrunnbeløpForRegelverksdato = Grunnbeløp.FastsattI2019
+                beregningsdato = LocalDate.of(2020, 4, 1)
         )
 
         when (
@@ -122,9 +111,7 @@ internal class EtterLærlingForskriftTest() {
             verneplikt = false,
             fangstOgFisk = false,
             lærling = true,
-            beregningsdato = LocalDate.of(2020, 4, 1),
-            gjeldendeGrunnbeløpVedBeregningsdato = Grunnbeløp.FastsattI2019,
-            gjeldendeGrunnbeløpForRegelverksdato = Grunnbeløp.FastsattI2019
+                beregningsdato = LocalDate.of(2020, 4, 1)
         )
 
         when (
@@ -149,9 +136,7 @@ internal class EtterLærlingForskriftTest() {
             verneplikt = false,
             fangstOgFisk = true,
             lærling = true,
-            beregningsdato = LocalDate.of(2020, 4, 1),
-            gjeldendeGrunnbeløpVedBeregningsdato = Grunnbeløp.FastsattI2019,
-            gjeldendeGrunnbeløpForRegelverksdato = Grunnbeløp.FastsattI2019
+                beregningsdato = LocalDate.of(2020, 4, 1)
         )
 
         when (
@@ -176,9 +161,7 @@ internal class EtterLærlingForskriftTest() {
             verneplikt = false,
             fangstOgFisk = true,
             lærling = true,
-            beregningsdato = LocalDate.of(2020, 4, 1),
-            gjeldendeGrunnbeløpVedBeregningsdato = Grunnbeløp.FastsattI2019,
-            gjeldendeGrunnbeløpForRegelverksdato = Grunnbeløp.FastsattI2019
+                beregningsdato = LocalDate.of(2020, 4, 1)
         )
 
         when (
@@ -204,9 +187,7 @@ internal class EtterLærlingForskriftTest() {
             verneplikt = false,
             fangstOgFisk = true,
             lærling = true,
-            beregningsdato = LocalDate.now(),
-            gjeldendeGrunnbeløpVedBeregningsdato = Grunnbeløp.FastsattI2019,
-            gjeldendeGrunnbeløpForRegelverksdato = Grunnbeløp.FastsattI2019
+                beregningsdato = LocalDate.now()
         )
 
         LærlingForskriftSiste3AvsluttendeKalenderMånedFangsOgFisk().calculate(fakta).shouldBeTypeOf<IngenBeregningsResultat>()
@@ -223,9 +204,7 @@ internal class EtterLærlingForskriftTest() {
             verneplikt = false,
             fangstOgFisk = true,
             lærling = true,
-            beregningsdato = LocalDate.now(),
-            gjeldendeGrunnbeløpVedBeregningsdato = Grunnbeløp.FastsattI2018,
-            gjeldendeGrunnbeløpForRegelverksdato = Grunnbeløp.FastsattI2019
+                beregningsdato = LocalDate.now()
         )
 
         assertSoftly {
@@ -248,9 +227,7 @@ internal class EtterLærlingForskriftTest() {
             verneplikt = false,
             fangstOgFisk = false,
             lærling = true,
-            beregningsdato = LocalDate.now(),
-            gjeldendeGrunnbeløpVedBeregningsdato = Grunnbeløp.FastsattI2019,
-            gjeldendeGrunnbeløpForRegelverksdato = Grunnbeløp.FastsattI2019
+                beregningsdato = LocalDate.now()
         )
 
         assertSoftly {

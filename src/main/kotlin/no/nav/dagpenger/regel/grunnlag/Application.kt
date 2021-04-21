@@ -10,7 +10,6 @@ import no.nav.dagpenger.events.inntekt.v1.Inntekt
 import no.nav.dagpenger.events.inntekt.v1.InntektKlasse
 import no.nav.dagpenger.events.inntekt.v1.sumInntekt
 import no.nav.dagpenger.events.moshiInstance
-import no.nav.dagpenger.grunnbelop.Grunnbeløp
 import no.nav.dagpenger.regel.grunnlag.beregning.HovedBeregning
 import no.nav.dagpenger.streams.KafkaAivenCredentials
 import no.nav.dagpenger.streams.River
@@ -83,8 +82,8 @@ class Grunnlag(
             beregningsregel = resultat.beregningsregel,
             harAvkortet = resultat.harAvkortet,
             grunnbeløpBrukt = when (fakta.verneplikt) {
-                true -> grunnbeløpVedRegelverksdato(fakta.regelverksdato).verdi
-                false -> grunnbeløpVedBeregningsdato(fakta).verdi
+                true -> fakta.grunnbeløpVedRegelverksdato().verdi
+                false -> fakta.grunnbeløpVedBeregningsdato().verdi
             }
         )
 

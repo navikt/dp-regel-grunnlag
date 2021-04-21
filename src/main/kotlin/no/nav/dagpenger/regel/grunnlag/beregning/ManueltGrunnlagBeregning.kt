@@ -1,7 +1,6 @@
 package no.nav.dagpenger.regel.grunnlag.beregning
 
 import no.nav.dagpenger.regel.grunnlag.Fakta
-import no.nav.dagpenger.regel.grunnlag.grunnbeløpVedBeregningsdato
 import java.math.BigDecimal
 
 class ManueltGrunnlagBeregning : GrunnlagBeregning("Manuell") {
@@ -10,7 +9,7 @@ class ManueltGrunnlagBeregning : GrunnlagBeregning("Manuell") {
     override fun calculate(fakta: Fakta): Resultat {
 
         val manueltGrunnlag = fakta.manueltGrunnlag ?: 0
-        val seksGangerGrunnbeløp = grunnbeløpVedBeregningsdato(fakta).verdi.multiply(BigDecimal(6))
+        val seksGangerGrunnbeløp = fakta.grunnbeløpVedBeregningsdato().verdi.multiply(BigDecimal(6))
 
         return if (manueltGrunnlag <= 0) {
             IngenBeregningsResultat(beregningsregel)

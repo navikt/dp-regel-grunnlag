@@ -8,7 +8,6 @@ import no.nav.dagpenger.events.inntekt.v1.Inntekt
 import no.nav.dagpenger.events.inntekt.v1.InntektKlasse
 import no.nav.dagpenger.events.inntekt.v1.KlassifisertInntekt
 import no.nav.dagpenger.events.inntekt.v1.KlassifisertInntektMåned
-import no.nav.dagpenger.grunnbelop.Grunnbeløp
 import no.nav.dagpenger.regel.grunnlag.Fakta
 import java.math.BigDecimal
 import java.time.LocalDate
@@ -32,9 +31,7 @@ internal class HovedBeregningTest : FreeSpec({
                 verneplikt = false,
                 fangstOgFisk = false,
                 lærling = true,
-                beregningsdato = beregningsDato,
-                gjeldendeGrunnbeløpVedBeregningsdato = Grunnbeløp.FastsattI2019,
-                gjeldendeGrunnbeløpForRegelverksdato = Grunnbeløp.FastsattI2019
+                beregningsdato = beregningsDato
             )
 
             val beregningsResultat = HovedBeregning().calculate(fakta)
@@ -56,9 +53,7 @@ internal class HovedBeregningTest : FreeSpec({
                 verneplikt = false,
                 fangstOgFisk = false,
                 lærling = true,
-                beregningsdato = beregningsDato,
-                gjeldendeGrunnbeløpVedBeregningsdato = Grunnbeløp.FastsattI2019,
-                gjeldendeGrunnbeløpForRegelverksdato = Grunnbeløp.FastsattI2019
+                    beregningsdato = beregningsDato
             )
 
             val beregningsResultat = HovedBeregning().calculate(fakta)

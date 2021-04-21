@@ -13,7 +13,7 @@ import no.nav.dagpenger.grunnbelop.forMåned
 import no.nav.dagpenger.grunnbelop.getGrunnbeløpForRegel
 import java.math.BigDecimal
 import java.time.LocalDate
-import java.util.*
+import java.util.EnumSet
 
 data class Fakta(
     val inntekt: Inntekt? = null,
@@ -29,23 +29,33 @@ data class Fakta(
 
     val inntektsPerioderOrEmpty = inntektsPerioder ?: InntektsPerioder(emptyList(), emptyList(), emptyList())
 
+    fun grunnbeløpVedBeregningsdato() = when {
+        isThisGjusteringTest(regelverksdato) -> Grunnbeløp.GjusteringsTest
+        else -> getGrunnbeløpForRegel(Regel.Grunnlag).forDato(beregningsdato)
+    }
+
+    fun grunnbeløpVedRegelverksdato() = when {
+        isThisGjusteringTest(regelverksdato) -> Grunnbeløp.GjusteringsTest
+        else -> getGrunnbeløpForRegel(Regel.Grunnlag).forDato(regelverksdato)
+    }
+
     fun oppjusterteInntekterFørstePeriode(inntektsKlasser: EnumSet<InntektKlasse>): BigDecimal =
-        inntektsPerioderOrEmpty.first.map(oppjusterTilGjeldendeGrunnbeløp(grunnbeløpVedBeregningsdato(this))).sumInntekt(
-            inntektsKlasser.toList()
-        )
+            inntektsPerioderOrEmpty.first.map(oppjusterTilGjeldendeGrunnbeløp(grunnbeløpVedBeregningsdato())).sumInntekt(
+                    inntektsKlasser.toList()
+            )
 
     fun oppjusterteInntekterAndrePeriode(inntektsKlasser: EnumSet<InntektKlasse>): BigDecimal =
-        inntektsPerioderOrEmpty.second.map(oppjusterTilGjeldendeGrunnbeløp(grunnbeløpVedBeregningsdato(this))).sumInntekt(
-            inntektsKlasser.toList()
-        )
+            inntektsPerioderOrEmpty.second.map(oppjusterTilGjeldendeGrunnbeløp(grunnbeløpVedBeregningsdato())).sumInntekt(
+                    inntektsKlasser.toList()
+            )
 
     fun oppjusterteInntekterTredjePeriode(inntektsKlasser: EnumSet<InntektKlasse>): BigDecimal =
-        inntektsPerioderOrEmpty.third.map(oppjusterTilGjeldendeGrunnbeløp(grunnbeløpVedBeregningsdato(this))).sumInntekt(
-            inntektsKlasser.toList()
-        )
+            inntektsPerioderOrEmpty.third.map(oppjusterTilGjeldendeGrunnbeløp(grunnbeløpVedBeregningsdato())).sumInntekt(
+                    inntektsKlasser.toList()
+            )
 
     fun oppjusterTilGjeldendeGrunnbeløp(): (KlassifisertInntektMåned) -> KlassifisertInntektMåned {
-        return oppjusterTilGjeldendeGrunnbeløp(grunnbeløpVedBeregningsdato(this))
+        return oppjusterTilGjeldendeGrunnbeløp(grunnbeløpVedBeregningsdato())
     }
 
     private fun oppjusterTilGjeldendeGrunnbeløp(gjeldendeGrunnbeløp: Grunnbeløp): (KlassifisertInntektMåned) -> KlassifisertInntektMåned {
@@ -61,16 +71,6 @@ data class Fakta(
             inntekt.copy(klassifiserteInntekter = oppjusterteinntekter)
         }
     }
-}
-
-internal fun grunnbeløpVedBeregningsdato(fakta: Fakta) = when {
-    isThisGjusteringTest(fakta.regelverksdato) -> Grunnbeløp.GjusteringsTest
-    else -> getGrunnbeløpForRegel(Regel.Grunnlag).forDato(fakta.beregningsdato)
-}
-
-internal fun grunnbeløpVedRegelverksdato(regelverksdato: LocalDate) = when {
-    isThisGjusteringTest(regelverksdato) -> Grunnbeløp.GjusteringsTest
-    else -> getGrunnbeløpForRegel(Regel.Grunnlag).forDato(regelverksdato)
 }
 
 internal fun isThisGjusteringTest(regelverksdato: LocalDate): Boolean {

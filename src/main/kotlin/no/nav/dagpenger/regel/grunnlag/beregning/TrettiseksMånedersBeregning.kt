@@ -2,7 +2,6 @@ package no.nav.dagpenger.regel.grunnlag.beregning
 
 import no.nav.dagpenger.events.inntekt.v1.InntektKlasse
 import no.nav.dagpenger.regel.grunnlag.Fakta
-import no.nav.dagpenger.regel.grunnlag.grunnbeløpVedBeregningsdato
 import java.math.BigDecimal
 import java.math.RoundingMode
 import java.util.EnumSet
@@ -24,7 +23,7 @@ abstract class TrettiseksMånedersBeregning(
 
         val uavkortet = (uavkortetFørstePeriode + uavkortetAndrePeriode + uavkortetTredjePeriode).divide(3.toBigDecimal(), antallDesimaler, RoundingMode.HALF_UP)
 
-        val seksGangerGrunnbeløp = grunnbeløpVedBeregningsdato(fakta).verdi.multiply(BigDecimal(6))
+        val seksGangerGrunnbeløp = fakta.grunnbeløpVedBeregningsdato().verdi.multiply(BigDecimal(6))
 
         val avkortetFørste = if (uavkortetFørstePeriode > seksGangerGrunnbeløp) seksGangerGrunnbeløp else uavkortetFørstePeriode
 

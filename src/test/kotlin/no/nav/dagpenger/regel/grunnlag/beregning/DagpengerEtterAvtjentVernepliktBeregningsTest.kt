@@ -3,7 +3,6 @@ package no.nav.dagpenger.regel.grunnlag.beregning
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.types.shouldBeTypeOf
 import no.nav.dagpenger.events.inntekt.v1.Inntekt
-import no.nav.dagpenger.grunnbelop.Grunnbeløp
 import no.nav.dagpenger.regel.grunnlag.Fakta
 import org.junit.jupiter.api.Test
 import java.time.LocalDate
@@ -20,9 +19,7 @@ class DagpengerEtterAvtjentVernepliktBeregningsTest {
             fangstOgFisk = false,
             lærling = true,
             verneplikt = false,
-            beregningsdato = LocalDate.of(2019, 4, 1),
-            gjeldendeGrunnbeløpVedBeregningsdato = Grunnbeløp.FastsattI2018,
-            gjeldendeGrunnbeløpForRegelverksdato = Grunnbeløp.FastsattI2019
+            beregningsdato = LocalDate.of(2019, 4, 1)
         )
         false shouldBe beregning.isActive(fakta)
     }
@@ -34,9 +31,7 @@ class DagpengerEtterAvtjentVernepliktBeregningsTest {
             inntekt = Inntekt("123", emptyList(), sisteAvsluttendeKalenderMåned = YearMonth.of(2019, 3)),
             verneplikt = true,
             fangstOgFisk = false,
-            beregningsdato = LocalDate.of(2019, 4, 1),
-            gjeldendeGrunnbeløpVedBeregningsdato = Grunnbeløp.FastsattI2019,
-            gjeldendeGrunnbeløpForRegelverksdato = Grunnbeløp.FastsattI2019
+                beregningsdato = LocalDate.of(2019, 5, 1)
         )
 
         when (val beregningsResultat = beregning.calculate(fakta)) {
@@ -53,9 +48,7 @@ class DagpengerEtterAvtjentVernepliktBeregningsTest {
             inntekt = Inntekt("123", emptyList(), sisteAvsluttendeKalenderMåned = YearMonth.of(2019, 3)),
             verneplikt = false,
             fangstOgFisk = false,
-            beregningsdato = LocalDate.of(2019, 4, 1),
-            gjeldendeGrunnbeløpVedBeregningsdato = Grunnbeløp.FastsattI2019,
-            gjeldendeGrunnbeløpForRegelverksdato = Grunnbeløp.FastsattI2019
+                beregningsdato = LocalDate.of(2019, 4, 1)
         )
 
         when (val beregningsResultat = beregning.calculate(fakta)) {
