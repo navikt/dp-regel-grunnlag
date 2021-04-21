@@ -40,19 +40,19 @@ data class Fakta(
     }
 
     fun oppjusterteInntekterFørstePeriode(inntektsKlasser: EnumSet<InntektKlasse>): BigDecimal =
-            inntektsPerioderOrEmpty.first.map(oppjusterTilGjeldendeGrunnbeløp(grunnbeløpVedBeregningsdato())).sumInntekt(
-                    inntektsKlasser.toList()
-            )
+        inntektsPerioderOrEmpty.first.map(oppjusterTilGjeldendeGrunnbeløp(grunnbeløpVedBeregningsdato())).sumInntekt(
+            inntektsKlasser.toList()
+        )
 
     fun oppjusterteInntekterAndrePeriode(inntektsKlasser: EnumSet<InntektKlasse>): BigDecimal =
-            inntektsPerioderOrEmpty.second.map(oppjusterTilGjeldendeGrunnbeløp(grunnbeløpVedBeregningsdato())).sumInntekt(
-                    inntektsKlasser.toList()
-            )
+        inntektsPerioderOrEmpty.second.map(oppjusterTilGjeldendeGrunnbeløp(grunnbeløpVedBeregningsdato())).sumInntekt(
+            inntektsKlasser.toList()
+        )
 
     fun oppjusterteInntekterTredjePeriode(inntektsKlasser: EnumSet<InntektKlasse>): BigDecimal =
-            inntektsPerioderOrEmpty.third.map(oppjusterTilGjeldendeGrunnbeløp(grunnbeløpVedBeregningsdato())).sumInntekt(
-                    inntektsKlasser.toList()
-            )
+        inntektsPerioderOrEmpty.third.map(oppjusterTilGjeldendeGrunnbeløp(grunnbeløpVedBeregningsdato())).sumInntekt(
+            inntektsKlasser.toList()
+        )
 
     fun oppjusterTilGjeldendeGrunnbeløp(): (KlassifisertInntektMåned) -> KlassifisertInntektMåned {
         return oppjusterTilGjeldendeGrunnbeløp(grunnbeløpVedBeregningsdato())

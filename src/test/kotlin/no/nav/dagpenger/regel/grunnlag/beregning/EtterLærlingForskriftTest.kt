@@ -28,11 +28,11 @@ internal class EtterLærlingForskriftTest() {
     fun ` Beregning er aktiv til fra 20 mars 2020 til 31 desember 2021`() {
 
         val fakta = Fakta(
-                inntekt = null,
-                fangstOgFisk = false,
-                lærling = true,
-                verneplikt = false,
-                beregningsdato = LocalDate.of(2020, 3, 20)
+            inntekt = null,
+            fangstOgFisk = false,
+            lærling = true,
+            verneplikt = false,
+            beregningsdato = LocalDate.of(2020, 3, 20)
         )
 
         assertTrue(beregning.isActive(fakta))
@@ -48,7 +48,7 @@ internal class EtterLærlingForskriftTest() {
             fangstOgFisk = false,
             lærling = true,
             verneplikt = false,
-                beregningsdato = LocalDate.of(2020, 3, 20)
+            beregningsdato = LocalDate.of(2020, 3, 20)
         )
         true shouldBe beregning.isActive(fakta)
     }
@@ -60,7 +60,7 @@ internal class EtterLærlingForskriftTest() {
             fangstOgFisk = false,
             lærling = true,
             verneplikt = false,
-                beregningsdato = LocalDate.of(2020, 3, 1)
+            beregningsdato = LocalDate.of(2020, 3, 1)
         )
         false shouldBe beregning.isActive(fakta)
     }
@@ -73,7 +73,7 @@ internal class EtterLærlingForskriftTest() {
             manueltGrunnlag = 1000,
             lærling = true,
             verneplikt = false,
-                beregningsdato = LocalDate.of(2020, 3, 21)
+            beregningsdato = LocalDate.of(2020, 3, 21)
         )
         false shouldBe beregning.isActive(fakta)
     }
@@ -86,7 +86,7 @@ internal class EtterLærlingForskriftTest() {
             verneplikt = false,
             fangstOgFisk = false,
             lærling = true,
-                beregningsdato = LocalDate.of(2020, 4, 1)
+            beregningsdato = LocalDate.of(2020, 4, 1)
         )
 
         when (
@@ -111,7 +111,7 @@ internal class EtterLærlingForskriftTest() {
             verneplikt = false,
             fangstOgFisk = false,
             lærling = true,
-                beregningsdato = LocalDate.of(2020, 4, 1)
+            beregningsdato = LocalDate.of(2020, 4, 1)
         )
 
         when (
@@ -136,7 +136,7 @@ internal class EtterLærlingForskriftTest() {
             verneplikt = false,
             fangstOgFisk = true,
             lærling = true,
-                beregningsdato = LocalDate.of(2020, 4, 1)
+            beregningsdato = LocalDate.of(2020, 4, 1)
         )
 
         when (
@@ -161,7 +161,7 @@ internal class EtterLærlingForskriftTest() {
             verneplikt = false,
             fangstOgFisk = true,
             lærling = true,
-                beregningsdato = LocalDate.of(2020, 4, 1)
+            beregningsdato = LocalDate.of(2020, 4, 1)
         )
 
         when (
@@ -187,7 +187,7 @@ internal class EtterLærlingForskriftTest() {
             verneplikt = false,
             fangstOgFisk = true,
             lærling = true,
-                beregningsdato = LocalDate.now()
+            beregningsdato = LocalDate.now()
         )
 
         LærlingForskriftSiste3AvsluttendeKalenderMånedFangsOgFisk().calculate(fakta).shouldBeTypeOf<IngenBeregningsResultat>()
@@ -204,7 +204,7 @@ internal class EtterLærlingForskriftTest() {
             verneplikt = false,
             fangstOgFisk = true,
             lærling = true,
-                beregningsdato = LocalDate.now()
+            beregningsdato = LocalDate.now()
         )
 
         assertSoftly {
@@ -227,7 +227,7 @@ internal class EtterLærlingForskriftTest() {
             verneplikt = false,
             fangstOgFisk = false,
             lærling = true,
-                beregningsdato = LocalDate.now()
+            beregningsdato = LocalDate.now()
         )
 
         assertSoftly {

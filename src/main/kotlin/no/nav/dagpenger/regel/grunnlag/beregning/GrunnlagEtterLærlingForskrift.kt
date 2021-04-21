@@ -37,8 +37,8 @@ abstract class GrunnlagEtterLærlingForskrift(
                     .sortedByDescending { it.årMåned }
 
             val uavkortet =
-                    sortertEtterInntektsmåned.take(grunnlagUtvelgelse.antallMåneder).sumInntekt(inntektKlasser.toList())
-                            .multiply(grunnlagUtvelgelse.månedFaktor.toBigDecimal())
+                sortertEtterInntektsmåned.take(grunnlagUtvelgelse.antallMåneder).sumInntekt(inntektKlasser.toList())
+                    .multiply(grunnlagUtvelgelse.månedFaktor.toBigDecimal())
             val seksGangerGrunnbeløp = fakta.grunnbeløpVedBeregningsdato().verdi.multiply(BigDecimal(6))
             val avkortet = if (uavkortet > seksGangerGrunnbeløp) seksGangerGrunnbeløp else uavkortet
 

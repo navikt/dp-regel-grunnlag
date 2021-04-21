@@ -90,7 +90,7 @@ internal class CreateInntektPerioderTest {
             ),
             verneplikt = false,
             fangstOgFisk = true,
-                beregningsdato = beregningsdato
+            beregningsdato = beregningsdato
         )
 
         val inntektsPerioder = createInntektPerioder(fakta)!!
@@ -111,7 +111,7 @@ internal class CreateInntektPerioderTest {
             ),
             verneplikt = false,
             fangstOgFisk = true,
-                beregningsdato = beregningsdato
+            beregningsdato = beregningsdato
         )
 
         val inntektsPerioder = createInntektPerioder(fakta)!!
@@ -134,7 +134,7 @@ internal class CreateInntektPerioderTest {
             ),
             verneplikt = false,
             fangstOgFisk = true,
-                beregningsdato = beregningsdato
+            beregningsdato = beregningsdato
         )
 
         val inntektsPerioder = createInntektPerioder(fakta)!!
@@ -170,7 +170,7 @@ internal class CreateInntektPerioderTest {
             ),
             verneplikt = false,
             fangstOgFisk = false,
-                beregningsdato = LocalDate.of(2019, 5, 20)
+            beregningsdato = LocalDate.of(2019, 5, 20)
         )
 
         val inntektsPerioder = createInntektPerioder(fakta)!!

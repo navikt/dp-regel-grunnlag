@@ -154,7 +154,7 @@ class BruttoInntektMedFangstOgFiskDeSiste36KalendermånedeneBeregningsTest {
             inntekt = Inntekt("123", inntektsListe, sisteAvsluttendeKalenderMåned = YearMonth.of(2019, 1)),
             fangstOgFisk = true,
             verneplikt = false,
-                beregningsdato = LocalDate.of(2019, 5, 10)
+            beregningsdato = LocalDate.of(2019, 5, 10)
         )
 
         when (val beregningsResultat = beregning.calculate(fakta)) {
@@ -222,7 +222,7 @@ class BruttoInntektMedFangstOgFiskDeSiste36KalendermånedeneBeregningsTest {
             inntekt = Inntekt("123", inntektsListe, sisteAvsluttendeKalenderMåned = YearMonth.of(2019, 1)),
             fangstOgFisk = true,
             verneplikt = false,
-                beregningsdato = LocalDate.of(2019, 5, 10)
+            beregningsdato = LocalDate.of(2019, 5, 10)
         )
 
         when (val beregningsResultat = beregning.calculate(fakta)) {
@@ -239,7 +239,7 @@ class BruttoInntektMedFangstOgFiskDeSiste36KalendermånedeneBeregningsTest {
             inntekt = Inntekt("123", emptyList(), sisteAvsluttendeKalenderMåned = YearMonth.of(2019, 3)),
             fangstOgFisk = false,
             verneplikt = false,
-                beregningsdato = LocalDate.of(2019, 4, 1)
+            beregningsdato = LocalDate.of(2019, 4, 1)
         )
 
         when (val beregningsResultat = beregning.calculate(fakta)) {
