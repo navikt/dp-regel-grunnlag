@@ -43,7 +43,7 @@ class ForrigeGrunnlagBeregningsTest {
             false,
             false,
             LocalDate.of(2019, 4, 10),
-                forrigeGrunnlag = 50000
+            forrigeGrunnlag = 50000
         )
 
         when (val beregningsResultat = ForrigeGrunnlagBeregning().calculate(fakta)) {

@@ -46,7 +46,7 @@ class ManueltGrunnlagBeregningsTest {
             false,
             false,
             LocalDate.of(2019, 4, 10),
-                manueltGrunnlag = 600000
+            manueltGrunnlag = 600000
         )
 
         when (val beregningsResultat = ManueltGrunnlagBeregning().calculate(fakta)) {

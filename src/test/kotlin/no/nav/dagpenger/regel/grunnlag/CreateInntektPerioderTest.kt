@@ -40,7 +40,7 @@ internal class CreateInntektPerioderTest {
             ),
             verneplikt = false,
             fangstOgFisk = false,
-                beregningsdato = beregningsdato
+            beregningsdato = beregningsdato
         )
 
         val inntektsPerioder = createInntektPerioder(fakta)!!

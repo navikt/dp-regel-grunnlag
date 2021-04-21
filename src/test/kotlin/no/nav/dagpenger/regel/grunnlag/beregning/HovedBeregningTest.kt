@@ -53,7 +53,7 @@ internal class HovedBeregningTest : FreeSpec({
                 verneplikt = false,
                 fangstOgFisk = false,
                 lærling = true,
-                    beregningsdato = beregningsDato
+                beregningsdato = beregningsDato
             )
 
             val beregningsResultat = HovedBeregning().calculate(fakta)

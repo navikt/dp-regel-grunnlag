@@ -35,7 +35,7 @@ class BruttoArbeidsinntektDeSiste12AvsluttedeKalendermånedeneBeregningsTest {
             fangstOgFisk = false,
             lærling = true,
             verneplikt = false,
-                beregningsdato = LocalDate.of(2020, 3, 1)
+            beregningsdato = LocalDate.of(2020, 3, 1)
         )
         true shouldBe beregning.isActive(fakta)
     }
