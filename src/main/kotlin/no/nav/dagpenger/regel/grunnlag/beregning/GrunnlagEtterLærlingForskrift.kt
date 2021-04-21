@@ -23,7 +23,7 @@ abstract class GrunnlagEtterLærlingForskrift(
 
     override fun isActive(fakta: Fakta): Boolean {
         val erInnenforRegelverksperiode = fakta.regelverksdato in periode
-        return fakta.lærling && erInnenforRegelverksperiode && fakta.manueltGrunnlag == null
+        return fakta.lærling && erInnenforRegelverksperiode && fakta.manueltGrunnlag == null && fakta.forrigeGrunnlag == null
     }
 
     override fun calculate(fakta: Fakta): Resultat {
