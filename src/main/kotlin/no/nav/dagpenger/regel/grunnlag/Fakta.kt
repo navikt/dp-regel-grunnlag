@@ -30,7 +30,7 @@ data class Fakta(
     val inntektsPerioderOrEmpty = inntektsPerioder ?: InntektsPerioder(emptyList(), emptyList(), emptyList())
 
     fun grunnbeløpVedBeregningsdato() = when {
-        isThisGjusteringTest(regelverksdato) -> Grunnbeløp.GjusteringsTest
+        isThisGjusteringTest(beregningsdato) -> Grunnbeløp.GjusteringsTest
         else -> getGrunnbeløpForRegel(Regel.Grunnlag).forDato(beregningsdato)
     }
 
