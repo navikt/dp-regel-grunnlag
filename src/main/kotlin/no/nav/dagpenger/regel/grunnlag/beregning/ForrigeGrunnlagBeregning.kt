@@ -3,7 +3,7 @@ package no.nav.dagpenger.regel.grunnlag.beregning
 import no.nav.dagpenger.regel.grunnlag.Fakta
 
 class ForrigeGrunnlagBeregning : GrunnlagBeregning("ForrigeGrunnlag") {
-    override fun isActive(fakta: Fakta): Boolean = fakta.forrigeGrunnlag != null
+    override fun isActive(fakta: Fakta): Boolean = fakta.forrigeGrunnlag != null && !fakta.verneplikt
 
     override fun calculate(fakta: Fakta): Resultat {
         val forrigeGrunnlag = fakta.forrigeGrunnlag ?: 0
