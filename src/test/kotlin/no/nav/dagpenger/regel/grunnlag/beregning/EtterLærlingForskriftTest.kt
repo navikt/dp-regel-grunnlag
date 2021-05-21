@@ -10,6 +10,8 @@ import no.nav.dagpenger.events.inntekt.v1.KlassifisertInntektMåned
 import no.nav.dagpenger.regel.grunnlag.Fakta
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.ValueSource
 import java.math.BigDecimal
 import java.time.LocalDate
 import java.time.YearMonth
@@ -94,8 +96,34 @@ internal class EtterLærlingForskriftTest() {
                 LærlingForskriftSisteAvsluttendeKalenderMåned().calculate(fakta)
         ) {
             is BeregningsResultat -> {
-                BigDecimal("12000.00000000000000000000") shouldBe beregningsResultat.uavkortet
-                BigDecimal("12000.00000000000000000000") shouldBe beregningsResultat.avkortet
+                BigDecimal("12000") shouldBe beregningsResultat.uavkortet
+                BigDecimal("12000") shouldBe beregningsResultat.avkortet
+                "LærlingArbeidsinntekt1x12" shouldBe beregningsResultat.beregningsregel
+            }
+
+            else -> beregningsResultat.shouldBeTypeOf<BeregningsResultat>()
+        }
+    }
+
+    @ParameterizedTest
+    @ValueSource(ints = [2020, 2021])
+    fun `Skal aldri oppjusteres med G faktor `(år: Int) {
+
+        val fakta = Fakta(
+            inntekt = Inntekt("123", inntektsListe, sisteAvsluttendeKalenderMåned = YearMonth.of(2020, 3)),
+            verneplikt = false,
+            fangstOgFisk = false,
+            lærling = true,
+            beregningsdato = LocalDate.of(år, 5, 31)
+        )
+
+        when (
+            val beregningsResultat =
+                LærlingForskriftSisteAvsluttendeKalenderMåned().calculate(fakta)
+        ) {
+            is BeregningsResultat -> {
+                BigDecimal("12000") shouldBe beregningsResultat.uavkortet
+                BigDecimal("12000") shouldBe beregningsResultat.avkortet
                 "LærlingArbeidsinntekt1x12" shouldBe beregningsResultat.beregningsregel
             }
 
@@ -119,8 +147,8 @@ internal class EtterLærlingForskriftTest() {
                 LærlingForskriftSiste3AvsluttendeKalenderMåned().calculate(fakta)
         ) {
             is BeregningsResultat -> {
-                BigDecimal("20000.00000000000000000000") shouldBe beregningsResultat.uavkortet
-                BigDecimal("20000.00000000000000000000") shouldBe beregningsResultat.avkortet
+                BigDecimal("20000") shouldBe beregningsResultat.uavkortet
+                BigDecimal("20000") shouldBe beregningsResultat.avkortet
                 "LærlingArbeidsinntekt3x4" shouldBe beregningsResultat.beregningsregel
             }
 
@@ -144,8 +172,8 @@ internal class EtterLærlingForskriftTest() {
                 LærlingForskriftSisteAvsluttendeKalenderMånedFangstOgFisk().calculate(fakta)
         ) {
             is BeregningsResultat -> {
-                BigDecimal("36000.00000000000000000000") shouldBe beregningsResultat.uavkortet
-                BigDecimal("36000.00000000000000000000") shouldBe beregningsResultat.avkortet
+                BigDecimal("36000") shouldBe beregningsResultat.uavkortet
+                BigDecimal("36000") shouldBe beregningsResultat.avkortet
                 "LærlingFangstOgFisk1x12" shouldBe beregningsResultat.beregningsregel
             }
 
@@ -169,8 +197,8 @@ internal class EtterLærlingForskriftTest() {
                 LærlingForskriftSiste3AvsluttendeKalenderMånedFangsOgFisk().calculate(fakta)
         ) {
             is BeregningsResultat -> {
-                BigDecimal("28000.00000000000000000000") shouldBe beregningsResultat.uavkortet
-                BigDecimal("28000.00000000000000000000") shouldBe beregningsResultat.avkortet
+                BigDecimal("28000") shouldBe beregningsResultat.uavkortet
+                BigDecimal("28000") shouldBe beregningsResultat.avkortet
                 "LærlingFangstOgFisk3x4" shouldBe beregningsResultat.beregningsregel
             }
 

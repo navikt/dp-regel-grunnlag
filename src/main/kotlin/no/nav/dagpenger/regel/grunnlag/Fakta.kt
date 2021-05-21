@@ -54,10 +54,6 @@ data class Fakta(
             inntektsKlasser.toList()
         )
 
-    fun oppjusterTilGjeldendeGrunnbeløp(): (KlassifisertInntektMåned) -> KlassifisertInntektMåned {
-        return oppjusterTilGjeldendeGrunnbeløp(grunnbeløpVedBeregningsdato())
-    }
-
     private fun oppjusterTilGjeldendeGrunnbeløp(gjeldendeGrunnbeløp: Grunnbeløp): (KlassifisertInntektMåned) -> KlassifisertInntektMåned {
         return { inntekt ->
             val oppjusterteinntekter = inntekt.klassifiserteInntekter.map { klassifisertInntekt ->

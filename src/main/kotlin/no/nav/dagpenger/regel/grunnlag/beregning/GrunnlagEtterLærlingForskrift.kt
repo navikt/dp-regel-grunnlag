@@ -32,7 +32,7 @@ abstract class GrunnlagEtterLærlingForskrift(
             val sisteAvsluttendeKalenderMåned = fakta.inntekt?.sisteAvsluttendeKalenderMåned ?: throw RuntimeException("GrunnlagEtterLærlingForskrift kan bare håndteres hvis inntekt er satt")
 
             val sortertEtterInntektsmåned =
-                fakta.inntektsPerioderOrEmpty.first.map(fakta.oppjusterTilGjeldendeGrunnbeløp())
+                fakta.inntektsPerioderOrEmpty.first
                     .filter { it.årMåned.isBefore(sisteAvsluttendeKalenderMåned) || it.årMåned == sisteAvsluttendeKalenderMåned }
                     .sortedByDescending { it.årMåned }
 
