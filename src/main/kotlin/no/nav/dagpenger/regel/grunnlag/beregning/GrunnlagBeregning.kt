@@ -44,7 +44,7 @@ internal class HovedBeregning : GrunnlagBeregning("Hoved") {
 fun LocalDate.erKoronaPeriode() = this in (LocalDate.of(2020, 3, 20)..LocalDate.of(2021, 3, 31))
 
 fun Collection<BeregningsResultat>.finnHøyesteAvkortetVerdi() =
-    this.maxWith(PresedensOverManueltGrunnlag() then PresedensOverVernepliktHvisAvkortertVerdiErLik())
+    this.maxWithOrNull(PresedensOverManueltGrunnlag() then PresedensOverVernepliktHvisAvkortertVerdiErLik())
 
 private class PresedensOverManueltGrunnlag : Comparator<BeregningsResultat> {
     override fun compare(resultat1: BeregningsResultat, resultat2: BeregningsResultat): Int {

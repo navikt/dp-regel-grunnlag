@@ -228,7 +228,7 @@ class BruttoInntektMedFangstOgFiskDeSisteTolvKalendermånedeneBeregningsTest {
 
         beregning.calculate(fakta).also {
             it.shouldBeTypeOf<IngenBeregningsResultat>()
-            val resultat = it as IngenBeregningsResultat
+            val resultat = it
             resultat.beskrivelse shouldBe "FangstOgFiskeSiste12"
         }
     }
