@@ -8,6 +8,8 @@ import no.nav.dagpenger.events.inntekt.v1.KlassifisertInntekt
 import no.nav.dagpenger.events.inntekt.v1.KlassifisertInntektMåned
 import no.nav.dagpenger.regel.grunnlag.Fakta
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.CsvSource
 import java.math.BigDecimal
 import java.time.LocalDate
 import java.time.YearMonth
@@ -16,28 +18,26 @@ class BruttoInntektMedFangstOgFiskDeSiste36KalendermånedeneBeregningsTest {
 
     private val beregning = BruttoInntektMedFangstOgFiskDeSiste36AvsluttedeKalendermånedene()
 
-    @Test
-    fun `Skal ikke behandle lærlinger der beregningsdato er definert innenfor korona periode (20 mars til 31 desember 2020)`() {
+    @ParameterizedTest
+    @CsvSource(
+        "2020-03-01, true",
+        "2020-03-20, false",
+        "2022-02-28, false",
+        "2022-03-01, true"
+    )
+    fun `Skal ikke behandle lærlinger der regelverksdato er definert innenfor en av korona periodene`(
+        regelverksdato: LocalDate,
+        lærlingSkalBehandles: Boolean
+    ) {
         val fakta = Fakta(
             inntekt = null,
-            fangstOgFisk = false,
+            fangstOgFisk = true,
             lærling = true,
             verneplikt = false,
-            beregningsdato = LocalDate.of(2020, 3, 20)
+            beregningsdato = regelverksdato,
+            regelverksdato = regelverksdato
         )
-        false shouldBe beregning.isActive(fakta)
-    }
-
-    @Test
-    fun `Skal ikke behandle lærlinger som ordinær der beregningsdato er definert utenfor korona periode (20 mars til 31 desember 2020)`() {
-        val fakta = Fakta(
-            inntekt = null,
-            fangstOgFisk = false,
-            lærling = true,
-            verneplikt = false,
-            beregningsdato = LocalDate.of(2020, 3, 1)
-        )
-        true shouldBe beregning.isActive(fakta)
+        beregning.isActive(fakta) shouldBe lærlingSkalBehandles
     }
 
     @Test
