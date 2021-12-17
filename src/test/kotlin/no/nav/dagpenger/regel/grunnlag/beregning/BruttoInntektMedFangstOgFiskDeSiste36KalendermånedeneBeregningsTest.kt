@@ -13,6 +13,7 @@ import org.junit.jupiter.params.provider.CsvSource
 import java.math.BigDecimal
 import java.time.LocalDate
 import java.time.YearMonth
+import kotlin.test.assertEquals
 
 class BruttoInntektMedFangstOgFiskDeSiste36KalendermånedeneBeregningsTest {
 
@@ -38,6 +39,29 @@ class BruttoInntektMedFangstOgFiskDeSiste36KalendermånedeneBeregningsTest {
             regelverksdato = regelverksdato
         )
         beregning.isActive(fakta) shouldBe lærlingSkalBehandles
+    }
+
+    @ParameterizedTest
+    @CsvSource(
+        "2021-12-31, true",
+        "2022-01-01, false",
+    )
+    fun `Regelverk for fangst og fisk skal avvikles 01-01-2022`(regelverksdato: LocalDate, skalInkludereFangstOgFisk: Boolean) {
+        val sisteAvsluttendeKalenderMåned = YearMonth.of(2021, 11)
+        val arbeidsInntektsListe = generateArbeidsinntekt(36, BigDecimal(1000), sisteAvsluttendeKalenderMåned)
+        val fiskOgFangstInntekt = generateFiskOgFangst(36, BigDecimal(1000), sisteAvsluttendeKalenderMåned)
+        val fakta = Fakta(
+            inntekt = Inntekt("123", arbeidsInntektsListe + fiskOgFangstInntekt, sisteAvsluttendeKalenderMåned = sisteAvsluttendeKalenderMåned),
+            fangstOgFisk = true,
+            lærling = false,
+            verneplikt = false,
+            beregningsdato = regelverksdato,
+            regelverksdato = regelverksdato
+        )
+
+        beregning.calculate(fakta).also {
+            assertEquals(skalInkludereFangstOgFisk, it is BeregningsResultat)
+        }
     }
 
     @Test
@@ -248,5 +272,23 @@ class BruttoInntektMedFangstOgFiskDeSiste36KalendermånedeneBeregningsTest {
                     "FangstOgFiskSiste36"
             else -> beregningsResultat.shouldBeTypeOf<IngenBeregningsResultat>()
         }
+    }
+}
+
+internal fun generateFiskOgFangst(
+    numberOfMonths: Int,
+    beløpPerMnd: BigDecimal,
+    senesteMåned: YearMonth = YearMonth.of(2019, 1)
+): List<KlassifisertInntektMåned> {
+    return (0 until numberOfMonths).toList().map {
+        KlassifisertInntektMåned(
+            senesteMåned.minusMonths(it.toLong()),
+            listOf(
+                KlassifisertInntekt(
+                    beløpPerMnd,
+                    InntektKlasse.FANGST_FISKE
+                )
+            )
+        )
     }
 }

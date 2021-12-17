@@ -8,13 +8,39 @@ import no.nav.dagpenger.events.inntekt.v1.KlassifisertInntekt
 import no.nav.dagpenger.events.inntekt.v1.KlassifisertInntektMåned
 import no.nav.dagpenger.regel.grunnlag.Fakta
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.CsvSource
 import java.math.BigDecimal
 import java.time.LocalDate
 import java.time.YearMonth
+import kotlin.test.assertEquals
 
 class BruttoInntektMedFangstOgFiskDeSisteTolvKalendermånedeneBeregningsTest {
 
     private val beregning = BruttoInntektMedFangstOgFiskDeSiste12AvsluttedeKalendermånedene()
+
+    @ParameterizedTest
+    @CsvSource(
+        "2021-12-31, true",
+        "2022-01-01, false",
+    )
+    fun `Regelverk for fangst og fisk skal avvikles 01-01-2022`(regelverksdato: LocalDate, skalInkludereFangstOgFisk: Boolean) {
+        val sisteAvsluttendeKalenderMåned = YearMonth.of(2021, 11)
+        val arbeidsInntektsListe = generateArbeidsinntekt(12, BigDecimal(1000), sisteAvsluttendeKalenderMåned)
+        val fiskOgFangstInntekt = generateFiskOgFangst(12, BigDecimal(1000), sisteAvsluttendeKalenderMåned)
+        val fakta = Fakta(
+            inntekt = Inntekt("123", arbeidsInntektsListe + fiskOgFangstInntekt, sisteAvsluttendeKalenderMåned = sisteAvsluttendeKalenderMåned),
+            fangstOgFisk = true,
+            lærling = false,
+            verneplikt = false,
+            beregningsdato = regelverksdato,
+            regelverksdato = regelverksdato
+        )
+
+        beregning.calculate(fakta).also {
+            assertEquals(skalInkludereFangstOgFisk, it is BeregningsResultat)
+        }
+    }
 
     @Test
     fun `Skal ikke behandle lærlinger der beregningsdato er definert innenfor korona periode (20 mars til 31 desember 2020)`() {

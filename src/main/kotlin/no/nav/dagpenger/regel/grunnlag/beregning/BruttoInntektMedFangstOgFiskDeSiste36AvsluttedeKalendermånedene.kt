@@ -1,13 +1,17 @@
 package no.nav.dagpenger.regel.grunnlag.beregning
 
 import no.nav.dagpenger.regel.grunnlag.Fakta
+import java.time.LocalDate
 
 class BruttoInntektMedFangstOgFiskDeSiste36AvsluttedeKalendermånedene : TrettiseksMånedersBeregning(
     inntektKlassifisertEtterFangstOgFisk,
     "FangstOgFiskSiste36"
 ) {
+    private val avviklingsDato = LocalDate.of(2022, 1, 1)
+    private fun skalInkludereFangstOgFisk(fakta: Fakta) = fakta.fangstOgFisk && fakta.regelverksdato < avviklingsDato
 
-    override fun calculate(fakta: Fakta): Resultat {
-        return if (fakta.fangstOgFisk) super.calculate(fakta) else IngenBeregningsResultat("FangstOgFiskSiste36")
-    }
+    override fun calculate(fakta: Fakta) =
+        if (skalInkludereFangstOgFisk(fakta)) {
+            super.calculate(fakta)
+        } else IngenBeregningsResultat("FangstOgFiskSiste36")
 }
