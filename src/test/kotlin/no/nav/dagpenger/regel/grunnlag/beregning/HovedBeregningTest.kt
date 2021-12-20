@@ -63,7 +63,7 @@ internal class HovedBeregningTest : FreeSpec({
     }
 })
 
-private fun generateArbeidsinntekt(
+internal fun generateArbeidsinntekt(
     numberOfMonths: Int,
     beløpPerMnd: BigDecimal,
     senesteMåned: YearMonth = YearMonth.of(2019, 1)
