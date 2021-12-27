@@ -110,7 +110,7 @@ tasks.withType<Test> {
 }
 
 tasks.withType<Wrapper> {
-    gradleVersion = "6.0.1"
+    gradleVersion = "7.3.1"
 }
 
 tasks.named("compileKotlin") {
