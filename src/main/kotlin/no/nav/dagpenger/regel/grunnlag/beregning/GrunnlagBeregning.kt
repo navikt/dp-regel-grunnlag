@@ -41,7 +41,7 @@ internal class HovedBeregning : GrunnlagBeregning("Hoved") {
     }
 }
 
-fun LocalDate.erKoronaPeriode() = this in (LocalDate.of(2020, 3, 20)..LocalDate.of(2022, 2, 28))
+fun LocalDate.erKoronaPeriode() = this in (LocalDate.of(2020, 3, 20)..LocalDate.of(2022, 3, 31))
 
 fun Collection<BeregningsResultat>.finnHøyesteAvkortetVerdi() =
     this.maxWithOrNull(PresedensOverManueltGrunnlag() then PresedensOverVernepliktHvisAvkortertVerdiErLik())

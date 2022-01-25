@@ -23,8 +23,8 @@ class BruttoInntektMedFangstOgFiskDeSiste36KalendermånedeneBeregningsTest {
     @CsvSource(
         "2020-03-01, true",
         "2020-03-20, false",
-        "2022-02-28, false",
-        "2022-03-01, true"
+        "2022-03-31, false",
+        "2022-04-01, true"
     )
     fun `Skal ikke behandle lærlinger der regelverksdato er definert innenfor en av korona periodene`(
         regelverksdato: LocalDate,
