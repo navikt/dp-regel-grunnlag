@@ -4,7 +4,6 @@ import com.natpryce.konfig.ConfigurationMap
 import com.natpryce.konfig.ConfigurationProperties.Companion.systemProperties
 import com.natpryce.konfig.EnvironmentVariables
 import com.natpryce.konfig.Key
-import com.natpryce.konfig.booleanType
 import com.natpryce.konfig.intType
 import com.natpryce.konfig.overriding
 import com.natpryce.konfig.stringType
@@ -26,7 +25,6 @@ private val devProperties = ConfigurationMap(
     mapOf(
         "application.profile" to Profile.DEV.toString(),
         "application.httpPort" to "8080",
-        "feature.gjustering" to false.toString(),
         "unleash.url" to "https://unleash.nais.io/api/"
     )
 )
@@ -66,10 +64,6 @@ data class Configuration(
         val profile: Profile = config()[Key("application.profile", stringType)].let { Profile.valueOf(it) },
         val httpPort: Int = config()[Key("application.httpPort", intType)],
         val unleashUrl: String = config()[Key("unleash.url", stringType)]
-    )
-
-    val features = mapOf(
-        "gjustering" to config().getOrElse(Key("feature.gjustering", booleanType), false)
     )
 }
 

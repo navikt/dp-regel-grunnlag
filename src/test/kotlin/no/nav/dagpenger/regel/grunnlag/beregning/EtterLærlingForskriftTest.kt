@@ -255,7 +255,7 @@ internal class EtterLærlingForskriftTest() {
             verneplikt = false,
             fangstOgFisk = false,
             lærling = true,
-            beregningsdato = LocalDate.now()
+            beregningsdato = LocalDate.of(2022, 3, 30)
         )
 
         assertSoftly {
