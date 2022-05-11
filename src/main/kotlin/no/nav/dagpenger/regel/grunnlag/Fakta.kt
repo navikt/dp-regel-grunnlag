@@ -70,7 +70,7 @@ data class Fakta(
 }
 
 internal fun isThisGjusteringTest(regelverksdato: LocalDate): Boolean {
-    val gVirkning = LocalDate.of(2022, 4, 3)
+    val gVirkning = LocalDate.of(2022, 4, 24)
     val isRegelverksdatoAfterGjustering = regelverksdato.isAfter(gVirkning.minusDays(1))
     return Grunnlag.unleash.isEnabled(GJUSTERING_TEST) && isRegelverksdatoAfterGjustering
 }
