@@ -43,16 +43,17 @@ object Dagpenger {
             const val client = "com.github.navikt.dp-biblioteker:soap-client:$version"
         }
     }
+
     const val Grunnbeløp = "com.github.navikt:dp-grunnbelop:2022.05.20-09.36.a361a7eb490e"
-    const val Streams = "com.github.navikt:dagpenger-streams:2021.12.29-13.08.7857ff52b457"
+    const val Streams = "com.github.navikt:dagpenger-streams:2022.06.19-20.52.d37841b711ec"
     const val Events = "com.github.navikt:dagpenger-events:2021.12.14-09.45.e24e8c813b27"
 }
 
 object Database {
-    const val Postgres = "org.postgresql:postgresql:42.2.22"
+    const val Postgres = "org.postgresql:postgresql:42.3.2"
     const val Kotlinquery = "com.github.seratch:kotliquery:1.6.1"
-    const val Flyway = "org.flywaydb:flyway-core:7.10.0"
-    const val HikariCP = "com.zaxxer:HikariCP:4.0.3"
+    const val Flyway = "org.flywaydb:flyway-core:8.5.11"
+    const val HikariCP = "com.zaxxer:HikariCP:5.0.1"
     const val VaultJdbc = "no.nav:vault-jdbc:1.3.7"
 }
 
@@ -117,16 +118,16 @@ object Konfig {
 }
 
 object Kotlin {
-    const val version = "1.6.0"
+    const val version = "1.7.0"
     const val stdlib = "org.jetbrains.kotlin:kotlin-stdlib:$version"
 
     object Coroutines {
-        const val version = "1.4.2"
+        const val version = "1.6.1"
         fun module(name: String) = "org.jetbrains.kotlinx:kotlinx-coroutines-$name:$version"
     }
 
     object Logging {
-        const val version = "2.0.11"
+        const val version = "2.1.21"
         const val kotlinLogging = "io.github.microutils:kotlin-logging:$version"
     }
 }
@@ -163,8 +164,18 @@ object Ktor {
     fun library(name: String) = "io.ktor:ktor-$name:$version"
 }
 
+object Ktor2 {
+    const val version = "2.0.2"
+    object Client {
+        fun library(name: String) = "io.ktor:ktor-client-$name:$version"
+    }
+    object Server {
+        fun library(name: String) = "io.ktor:ktor-server-$name:$version"
+    }
+}
+
 object Log4j2 {
-    const val version = "2.17.0"
+    const val version = "2.17.1"
     const val api = "org.apache.logging.log4j:log4j-api:$version"
     const val core = "org.apache.logging.log4j:log4j-core:$version"
     const val slf4j = "org.apache.logging.log4j:log4j-slf4j-impl:$version"
@@ -216,7 +227,8 @@ object Prometheus {
     }
 }
 
-const val RapidAndRivers = "com.github.navikt:rapids-and-rivers:2022.02.08-20.42.8e24a34a2ecd"
+const val RapidAndRivers = "com.github.navikt:rapids-and-rivers:2022.03.25-09.17.0628678a7192"
+const val RapidAndRiversKtor2 = "com.github.navikt:rapids-and-rivers:2022060808531654671206.908d671b7ae0"
 
 object Slf4j {
     const val version = "1.7.25"
@@ -238,7 +250,7 @@ object Shadow {
 }
 
 object TestContainers {
-    const val version = "1.16.2"
+    const val version = "1.17.1"
     const val postgresql = "org.testcontainers:postgresql:$version"
     const val kafka = "org.testcontainers:kafka:$version"
 }
