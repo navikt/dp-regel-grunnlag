@@ -53,6 +53,8 @@ class ForrigeGrunnlagBeregningsTest {
                 beregningsResultat.beregningsregel shouldBe "ForrigeGrunnlag"
                 beregningsResultat.harAvkortet shouldBe false
             }
+
+            is IngenBeregningsResultat -> TODO()
         }
     }
 }

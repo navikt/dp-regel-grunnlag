@@ -32,6 +32,8 @@ class ManueltGrunnlagBeregningsTest {
                 beregningsResultat.beregningsregel shouldBe "Manuell"
                 beregningsResultat.harAvkortet shouldBe false
             }
+
+            is IngenBeregningsResultat -> TODO()
         }
     }
 
@@ -56,6 +58,8 @@ class ManueltGrunnlagBeregningsTest {
                 beregningsResultat.beregningsregel shouldBe "Manuell"
                 beregningsResultat.harAvkortet shouldBe true
             }
+
+            is IngenBeregningsResultat -> TODO()
         }
     }
 
