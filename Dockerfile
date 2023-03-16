@@ -1,4 +1,4 @@
-FROM navikt/java:11
+FROM ghcr.io/navikt/baseimages/temurin:11
 
 ENV APPD_ENABLED=true \
     APPD_NAME=dp-regel-grunnlag
