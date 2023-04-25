@@ -98,10 +98,10 @@ class BruttoArbeidsinntektDeSiste36AvsluttedeKalendermånedeneBeregningsTest {
     }
 
     @Test
-    fun `Skal gi riktig avkortet grunnlag siste 36 kalendermåneder gitt mars 2019 inntekt`() {
+    fun `Skal gi riktig avkortet grunnlag siste 36 kalendermåneder gitt desember 2021 inntekt`() {
         val inntektsListe = listOf(
             KlassifisertInntektMåned(
-                YearMonth.of(2018, 4),
+                YearMonth.of(2021, 11),
                 listOf(
                     KlassifisertInntekt(
                         BigDecimal(500000),
@@ -110,7 +110,7 @@ class BruttoArbeidsinntektDeSiste36AvsluttedeKalendermånedeneBeregningsTest {
                 )
             ),
             KlassifisertInntektMåned(
-                YearMonth.of(2018, 5),
+                YearMonth.of(2021, 10),
                 listOf(
                     KlassifisertInntekt(
                         BigDecimal(500000),
@@ -119,19 +119,10 @@ class BruttoArbeidsinntektDeSiste36AvsluttedeKalendermånedeneBeregningsTest {
                 )
             ),
             KlassifisertInntektMåned(
-                YearMonth.of(2017, 5),
+                YearMonth.of(2019, 5),
                 listOf(
                     KlassifisertInntekt(
                         BigDecimal(1000),
-                        InntektKlasse.ARBEIDSINNTEKT
-                    )
-                )
-            ),
-            KlassifisertInntektMåned(
-                YearMonth.of(2016, 5),
-                listOf(
-                    KlassifisertInntekt(
-                        BigDecimal(600000),
                         InntektKlasse.ARBEIDSINNTEKT
                     )
                 )
@@ -139,18 +130,90 @@ class BruttoArbeidsinntektDeSiste36AvsluttedeKalendermånedeneBeregningsTest {
         )
 
         val fakta = Fakta(
-            inntekt = Inntekt("123", inntektsListe, sisteAvsluttendeKalenderMåned = YearMonth.of(2019, 3)),
+            inntekt = Inntekt("123", inntektsListe, sisteAvsluttendeKalenderMåned = YearMonth.of(2021, 12)),
             fangstOgFisk = false,
             verneplikt = false,
-            beregningsdato = LocalDate.of(2019, 4, 1)
+            beregningsdato = LocalDate.of(2021, 12, 18)
         )
 
         when (val beregningsResultat = beregning.calculate(fakta)) {
             is BeregningsResultat ->
                 beregningsResultat.avkortet shouldBe
-                    BigDecimal("387876.89964471595075862667")
+                    BigDecimal("213153.16767142675933158333")
             else -> beregningsResultat.shouldBeTypeOf<BeregningsResultat>()
         }
+    }
+
+    @Test
+    fun `Ulike beregningsregler brukes avhengig av beregningsdato`() {
+        val g = 106399.toBigDecimal()
+
+        val inntektsListe = listOf(
+            KlassifisertInntektMåned(
+                YearMonth.of(2022, 1),
+                listOf(
+                    KlassifisertInntekt(
+                        g.multiply(9.toBigDecimal()),
+                        InntektKlasse.ARBEIDSINNTEKT
+                    )
+                )
+            )
+        )
+
+        val fakta = Fakta(
+            inntekt = Inntekt("123", inntektsListe, sisteAvsluttendeKalenderMåned = YearMonth.of(2022, 1)),
+            fangstOgFisk = false,
+            verneplikt = false,
+            beregningsdato = LocalDate.of(2022, 4, 10)
+        )
+        val beregningsResultat = beregning.calculate(fakta)
+        require(beregningsResultat is BeregningsResultat)
+
+        val toG = g.multiply(2.toBigDecimal())
+        beregningsResultat.avkortet.toInt() shouldBe toG.toInt()
+
+        val fakta2 = fakta.copy(beregningsdato = LocalDate.of(2021, 12, 16))
+        val beregningsResultat2 = beregning.calculate(fakta2)
+        require(beregningsResultat2 is BeregningsResultat)
+
+        val treG = g.multiply(3.toBigDecimal())
+        beregningsResultat2.avkortet.toInt() shouldBe treG.toInt()
+    }
+
+    @Test
+    fun `Ulike beregningsregler brukes avhengig av beregningsdato - uavkortet overstiger 6g`() {
+        val g = 106399.toBigDecimal()
+
+        val inntektsListe = listOf(
+            KlassifisertInntektMåned(
+                YearMonth.of(2022, 1),
+                listOf(
+                    KlassifisertInntekt(
+                        g.multiply(21.toBigDecimal()),
+                        InntektKlasse.ARBEIDSINNTEKT
+                    )
+                )
+            )
+        )
+
+        val fakta = Fakta(
+            inntekt = Inntekt("123", inntektsListe, sisteAvsluttendeKalenderMåned = YearMonth.of(2022, 1)),
+            fangstOgFisk = false,
+            verneplikt = false,
+            beregningsdato = LocalDate.of(2022, 4, 10)
+        )
+        val beregningsResultat = beregning.calculate(fakta)
+        require(beregningsResultat is BeregningsResultat)
+
+        val toG = g.multiply(2.toBigDecimal())
+        beregningsResultat.avkortet.toInt() shouldBe toG.toInt()
+
+        val fakta2 = fakta.copy(beregningsdato = LocalDate.of(2021, 12, 16))
+        val beregningsResultat2 = beregning.calculate(fakta2)
+        require(beregningsResultat2 is BeregningsResultat)
+
+        val seksG = g.multiply(6.toBigDecimal())
+        beregningsResultat2.avkortet.toInt() shouldBe seksG.toInt()
     }
 
     @Test
