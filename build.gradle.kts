@@ -10,7 +10,7 @@ plugins {
 
 buildscript {
     repositories {
-        jcenter()
+        mavenCentral()
     }
 }
 
@@ -26,7 +26,7 @@ repositories {
 
 application {
     applicationName = "dp-regel-grunnlag"
-    mainClassName = "no.nav.dagpenger.regel.grunnlag.ApplicationKt"
+    mainClass.set("no.nav.dagpenger.regel.grunnlag.ApplicationKt")
 }
 
 java {
