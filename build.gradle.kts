@@ -58,8 +58,6 @@ dependencies {
     implementation(Prometheus.hotspot)
     implementation(Prometheus.log4j2)
 
-    implementation(Ktor.serverNetty)
-
     implementation(Kafka.clients)
     implementation(Kafka.streams)
 
@@ -70,7 +68,7 @@ dependencies {
 
     implementation(Kotlin.Logging.kotlinLogging)
     implementation(Konfig.konfig)
-    implementation("no.finn.unleash:unleash-client-java:3.2.9")
+    implementation("io.getunleash:unleash-client-java:8.0.0")
 
     testImplementation(kotlin("test"))
 
