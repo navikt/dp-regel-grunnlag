@@ -29,9 +29,8 @@ application {
     mainClass.set("no.nav.dagpenger.regel.grunnlag.ApplicationKt")
 }
 
-java {
-    sourceCompatibility = JavaVersion.VERSION_11
-    targetCompatibility = JavaVersion.VERSION_11
+kotlin {
+    jvmToolchain(11)
 }
 
 val jar by tasks.getting(Jar::class) {
@@ -93,8 +92,6 @@ spotless {
         ktlint(Ktlint.version)
     }
 }
-
-tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> { kotlinOptions.jvmTarget = "1.8" }
 
 tasks.withType<Test> {
     useJUnitPlatform()
