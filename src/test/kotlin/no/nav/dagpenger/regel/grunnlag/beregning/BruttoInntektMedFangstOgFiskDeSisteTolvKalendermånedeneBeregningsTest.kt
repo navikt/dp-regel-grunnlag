@@ -208,7 +208,7 @@ class BruttoInntektMedFangstOgFiskDeSisteTolvKalendermånedeneBeregningsTest {
 
         when (val beregningsResultat = beregning.calculate(fakta)) {
             is IngenBeregningsResultat ->
-                beregningsResultat.beskrivelse shouldBe "FangstOgFiskeSiste12"
+                beregningsResultat.beskrivelse shouldBe "FangstOgFiskeSiste12(2021)"
             else -> beregningsResultat.shouldBeTypeOf<IngenBeregningsResultat>()
         }
     }
@@ -255,7 +255,7 @@ class BruttoInntektMedFangstOgFiskDeSisteTolvKalendermånedeneBeregningsTest {
         beregning.calculate(fakta).also {
             it.shouldBeTypeOf<IngenBeregningsResultat>()
             val resultat = it
-            resultat.beskrivelse shouldBe "FangstOgFiskeSiste12"
+            resultat.beskrivelse shouldBe "FangstOgFiskeSiste12(2021)"
         }
     }
 }

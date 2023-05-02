@@ -168,16 +168,16 @@ class BruttoArbeidsinntektDeSiste36AvsluttedeKalendermånedeneBeregningsTest {
         )
         val beregningsResultat = beregning.calculate(fakta)
         require(beregningsResultat is BeregningsResultat)
-
         val toG = g.multiply(2.toBigDecimal())
         beregningsResultat.avkortet.toInt() shouldBe toG.toInt()
+        beregningsResultat.beregningsregel shouldBe "ArbeidsinntektSiste36(2021)"
 
         val fakta2 = fakta.copy(beregningsdato = LocalDate.of(2021, 12, 16))
         val beregningsResultat2 = beregning.calculate(fakta2)
         require(beregningsResultat2 is BeregningsResultat)
-
         val treG = g.multiply(3.toBigDecimal())
         beregningsResultat2.avkortet.toInt() shouldBe treG.toInt()
+        beregningsResultat2.beregningsregel shouldBe "ArbeidsinntektSiste36(2021)"
     }
 
     @Test

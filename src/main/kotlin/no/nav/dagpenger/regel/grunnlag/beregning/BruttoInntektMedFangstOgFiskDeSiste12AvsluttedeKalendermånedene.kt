@@ -5,7 +5,7 @@ import java.time.LocalDate
 
 class BruttoInntektMedFangstOgFiskDeSiste12AvsluttedeKalendermånedene : TolvMånedersBeregning(
     inntektKlassifisertEtterFangstOgFisk,
-    "FangstOgFiskSiste12"
+    "FangstOgFiskSiste12(2021)"
 ) {
     private val avviklingsDato = LocalDate.of(2022, 1, 1)
     private fun skalInkludereFangstOgFisk(fakta: Fakta) = fakta.fangstOgFisk && fakta.regelverksdato < avviklingsDato
@@ -13,5 +13,5 @@ class BruttoInntektMedFangstOgFiskDeSiste12AvsluttedeKalendermånedene : TolvMå
     override fun calculate(fakta: Fakta) =
         if (skalInkludereFangstOgFisk(fakta)) {
             super.calculate(fakta)
-        } else IngenBeregningsResultat("FangstOgFiskeSiste12")
+        } else IngenBeregningsResultat("FangstOgFiskeSiste12(2021)")
 }

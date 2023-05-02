@@ -44,7 +44,7 @@ class OnPacketTest {
 
         assertTrue { resultPacket.hasField("grunnlagResultat") }
 
-        assertEquals("ArbeidsinntektSiste36", resultPacket.getMapValue("grunnlagResultat")["beregningsregel"])
+        assertEquals("ArbeidsinntektSiste36(2021)", resultPacket.getMapValue("grunnlagResultat")["beregningsregel"])
     }
 
     @Test
@@ -68,7 +68,7 @@ class OnPacketTest {
 
         assertTrue { resultPacket.hasField("grunnlagResultat") }
 
-        assertEquals("ArbeidsinntektSiste12", resultPacket.getMapValue("grunnlagResultat")["beregningsregel"])
+        assertEquals("ArbeidsinntektSiste12(2021)", resultPacket.getMapValue("grunnlagResultat")["beregningsregel"])
     }
 
     @Test
@@ -97,7 +97,7 @@ class OnPacketTest {
             Integer.parseInt(resultPacket.getMapValue("grunnlagResultat")["avkortet"].toString()),
             Integer.parseInt(resultPacket.getMapValue("grunnlagResultat")["uavkortet"].toString())
         )
-        assertEquals("ArbeidsinntektSiste12", resultPacket.getMapValue("grunnlagResultat")["beregningsregel"])
+        assertEquals("ArbeidsinntektSiste12(2021)", resultPacket.getMapValue("grunnlagResultat")["beregningsregel"])
         assertEquals(false, resultPacket.getMapValue("grunnlagResultat")["harAvkortet"])
     }
 
