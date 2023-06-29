@@ -269,7 +269,7 @@ class BruttoInntektMedFangstOgFiskDeSiste36KalendermånedeneBeregningsTest {
         when (val beregningsResultat = beregning.calculate(fakta)) {
             is IngenBeregningsResultat ->
                 beregningsResultat.beskrivelse shouldBe
-                    "FangstOgFiskSiste36"
+                    "FangstOgFiskSiste36(2021)"
             else -> beregningsResultat.shouldBeTypeOf<IngenBeregningsResultat>()
         }
     }
