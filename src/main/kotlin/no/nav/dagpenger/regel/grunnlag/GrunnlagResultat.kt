@@ -11,7 +11,7 @@ data class GrunnlagResultat(
     val uavkortetGrunnlag: BigDecimal,
     val beregningsregel: String,
     val harAvkortet: Boolean,
-    val grunnbeløpBrukt: BigDecimal
+    val grunnbeløpBrukt: BigDecimal,
 ) {
 
     companion object {
@@ -34,7 +34,7 @@ data class GrunnlagResultat(
             UAVKORTET_GRUNNLAG to avrundetUavkortet,
             BEREGNINGSREGEL to beregningsregel,
             HAR_AVKORTET to harAvkortet,
-            GRUNNBELØP_BRUKT to grunnbeløpBrukt
+            GRUNNBELØP_BRUKT to grunnbeløpBrukt,
         )
     }
 

@@ -28,7 +28,10 @@ class ByClusterStrategy(private val currentCluster: Cluster) : Strategy {
 }
 
 enum class Cluster {
-    DEV_FSS, PROD_FSS, ANNET;
+    DEV_FSS,
+    PROD_FSS,
+    ANNET,
+    ;
 
     companion object {
         val current: Cluster by lazy {

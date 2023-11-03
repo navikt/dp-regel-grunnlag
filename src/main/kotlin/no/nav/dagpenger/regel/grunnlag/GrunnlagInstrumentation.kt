@@ -11,7 +11,7 @@ class GrunnlagInstrumentation {
         .labelNames(
             "regelIdentifikator",
             "beregningsregel",
-            "harAvkortet"
+            "harAvkortet",
         )
         .register()
 
@@ -23,57 +23,57 @@ class GrunnlagInstrumentation {
             "regelIdentifikator",
             "beregningsregel",
             "harAvkortet",
-            "arbeidstid"
+            "arbeidstid",
         )
         .register()
 
     fun grunnlagBeregnet(
         regelIdentifikator: String,
         fakta: Fakta,
-        resultat: GrunnlagResultat
+        resultat: GrunnlagResultat,
     ) {
         this.countGrunnlagBeregnet(
             regelIdentifikator = regelIdentifikator,
             beregningsregel = resultat.beregningsregel,
-            harAvkortet = resultat.harAvkortet
+            harAvkortet = resultat.harAvkortet,
         )
 
         this.beregnNormaltFastsattArbeidstid(
             regelIdentifikator = regelIdentifikator,
             beregningsregel = resultat.beregningsregel,
             harAvkortet = resultat.harAvkortet,
-            klassifisering = fastsettArbeidstid(resultat.avkortetGrunnlag, fakta.grunnbeløpVedRegelverksdato().verdi)
+            klassifisering = fastsettArbeidstid(resultat.avkortetGrunnlag, fakta.grunnbeløpVedRegelverksdato().verdi),
         )
     }
 
     fun grunnlagBeregnet(
         regelIdentifikator: String,
         fakta: Fakta,
-        resultat: RapidGrunnlagResultat
+        resultat: RapidGrunnlagResultat,
     ) {
         this.countGrunnlagBeregnet(
             regelIdentifikator = regelIdentifikator,
             beregningsregel = resultat.beregningsregel,
-            harAvkortet = resultat.harAvkortet
+            harAvkortet = resultat.harAvkortet,
         )
 
         this.beregnNormaltFastsattArbeidstid(
             regelIdentifikator = regelIdentifikator,
             beregningsregel = resultat.beregningsregel,
             harAvkortet = resultat.harAvkortet,
-            klassifisering = fastsettArbeidstid(resultat.avkortet, fakta.grunnbeløpVedRegelverksdato().verdi)
+            klassifisering = fastsettArbeidstid(resultat.avkortet, fakta.grunnbeløpVedRegelverksdato().verdi),
         )
     }
 
     private fun countGrunnlagBeregnet(
         regelIdentifikator: String,
         beregningsregel: String,
-        harAvkortet: Boolean
+        harAvkortet: Boolean,
     ) {
         regelBrukt.labels(
             regelIdentifikator,
             beregningsregel,
-            harAvkortet.toString()
+            harAvkortet.toString(),
         ).inc()
     }
 
@@ -81,13 +81,13 @@ class GrunnlagInstrumentation {
         regelIdentifikator: String,
         beregningsregel: String,
         harAvkortet: Boolean,
-        klassifisering: String
+        klassifisering: String,
     ) {
         fastsattArbeidstid.labels(
             regelIdentifikator,
             beregningsregel,
             harAvkortet.toString(),
-            klassifisering
+            klassifisering,
         ).inc()
     }
 

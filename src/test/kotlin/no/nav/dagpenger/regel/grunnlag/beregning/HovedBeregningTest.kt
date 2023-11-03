@@ -26,12 +26,12 @@ internal class HovedBeregningTest : FreeSpec({
                 inntekt = Inntekt(
                     "id",
                     inntekt,
-                    sisteAvsluttendeKalenderMåned = sisteAvsluttendeKalenderMåned
+                    sisteAvsluttendeKalenderMåned = sisteAvsluttendeKalenderMåned,
                 ),
                 verneplikt = false,
                 fangstOgFisk = false,
                 lærling = true,
-                beregningsdato = beregningsDato
+                beregningsdato = beregningsDato,
             )
 
             val beregningsResultat = HovedBeregning().calculate(fakta)
@@ -48,12 +48,12 @@ internal class HovedBeregningTest : FreeSpec({
                 inntekt = Inntekt(
                     "id",
                     inntekt,
-                    sisteAvsluttendeKalenderMåned = sisteAvsluttendeKalenderMåned
+                    sisteAvsluttendeKalenderMåned = sisteAvsluttendeKalenderMåned,
                 ),
                 verneplikt = false,
                 fangstOgFisk = false,
                 lærling = true,
-                beregningsdato = beregningsDato
+                beregningsdato = beregningsDato,
             )
 
             val beregningsResultat = HovedBeregning().calculate(fakta)
@@ -66,7 +66,7 @@ internal class HovedBeregningTest : FreeSpec({
 internal fun generateArbeidsinntekt(
     numberOfMonths: Int,
     beløpPerMnd: BigDecimal,
-    senesteMåned: YearMonth = YearMonth.of(2019, 1)
+    senesteMåned: YearMonth = YearMonth.of(2019, 1),
 ): List<KlassifisertInntektMåned> {
     return (0 until numberOfMonths).toList().map {
         KlassifisertInntektMåned(
@@ -74,9 +74,9 @@ internal fun generateArbeidsinntekt(
             listOf(
                 KlassifisertInntekt(
                     beløpPerMnd,
-                    InntektKlasse.ARBEIDSINNTEKT
-                )
-            )
+                    InntektKlasse.ARBEIDSINNTEKT,
+                ),
+            ),
         )
     }
 }
@@ -84,14 +84,13 @@ internal fun generateArbeidsinntekt(
 internal class DateIterator(
     startDate: LocalDate,
     val endDateInclusive: LocalDate,
-    val stepDays: Long = 1
+    val stepDays: Long = 1,
 ) : Iterator<LocalDate> {
     private var currentDate = startDate
 
     override fun hasNext() = currentDate <= endDateInclusive
 
     override fun next(): LocalDate {
-
         val next = currentDate
 
         currentDate = currentDate.plusDays(stepDays)

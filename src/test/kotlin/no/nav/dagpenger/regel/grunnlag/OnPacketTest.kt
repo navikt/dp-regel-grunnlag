@@ -19,13 +19,12 @@ class OnPacketTest {
         val fakeGrunnlagInstrumentation = mockk<GrunnlagInstrumentation>(relaxed = true)
         val grunnlag = Grunnlag(
             Configuration(),
-            fakeGrunnlagInstrumentation
+            fakeGrunnlagInstrumentation,
         )
     }
 
     @Test
     fun ` Skal legge på minus i grunnlag dersom det blir negativt i sum `() {
-
         val inntekt = getInntekt((-1000).toBigDecimal())
 
         val json =
@@ -49,7 +48,6 @@ class OnPacketTest {
 
     @Test
     fun ` Skal legge på 0 i grunnlag hvis det ikke er inntekt `() {
-
         val inntekt = getInntekt((0).toBigDecimal())
 
         val json =
@@ -73,7 +71,6 @@ class OnPacketTest {
 
     @Test
     fun ` Skal velge rett beregningsregel og gi rett resultat ved arbeidsinntekt `() {
-
         val inntekt = getInntekt(1000.toBigDecimal())
 
         val json =
@@ -95,7 +92,7 @@ class OnPacketTest {
         assertEquals(3035, Integer.parseInt(resultPacket.getMapValue("grunnlagResultat")["avkortet"].toString()))
         assertEquals(
             Integer.parseInt(resultPacket.getMapValue("grunnlagResultat")["avkortet"].toString()),
-            Integer.parseInt(resultPacket.getMapValue("grunnlagResultat")["uavkortet"].toString())
+            Integer.parseInt(resultPacket.getMapValue("grunnlagResultat")["uavkortet"].toString()),
         )
         assertEquals("ArbeidsinntektSiste12(2021)", resultPacket.getMapValue("grunnlagResultat")["beregningsregel"])
         assertEquals(false, resultPacket.getMapValue("grunnlagResultat")["harAvkortet"])
@@ -103,7 +100,6 @@ class OnPacketTest {
 
     @Test
     fun ` Skal velge rett beregningsregel og gi rett resultat ved verneplikt `() {
-
         val inntekt = getInntekt(1000.toBigDecimal())
 
         val json =
@@ -128,7 +124,7 @@ class OnPacketTest {
         assertEquals(g2020, Integer.parseInt(resultPacket.getMapValue("grunnlagResultat")["avkortet"].toString()))
         assertEquals(
             Integer.parseInt(resultPacket.getMapValue("grunnlagResultat")["avkortet"].toString()),
-            Integer.parseInt(resultPacket.getMapValue("grunnlagResultat")["uavkortet"].toString())
+            Integer.parseInt(resultPacket.getMapValue("grunnlagResultat")["uavkortet"].toString()),
         )
         assertEquals("Verneplikt", resultPacket.getMapValue("grunnlagResultat")["beregningsregel"])
         assertEquals(false, resultPacket.getMapValue("grunnlagResultat")["harAvkortet"])
@@ -136,7 +132,6 @@ class OnPacketTest {
 
     @Test
     fun ` Skal velge rett beregningsregel ved lærling `() {
-
         val inntekt = getInntekt(1000.toBigDecimal(), YearMonth.of(2020, 3))
 
         val json =
@@ -157,7 +152,7 @@ class OnPacketTest {
 
         assertEquals(
             Integer.parseInt(resultPacket.getMapValue("grunnlagResultat")["avkortet"].toString()),
-            Integer.parseInt(resultPacket.getMapValue("grunnlagResultat")["uavkortet"].toString())
+            Integer.parseInt(resultPacket.getMapValue("grunnlagResultat")["uavkortet"].toString()),
         )
         assertEquals("LærlingArbeidsinntekt1x12", resultPacket.getMapValue("grunnlagResultat")["beregningsregel"])
         assertEquals(false, resultPacket.getMapValue("grunnlagResultat")["harAvkortet"])
@@ -165,7 +160,6 @@ class OnPacketTest {
 
     @Test
     fun ` Skal velge rett beregningsregel ved forrigeGrunnlag`() {
-
         val json =
             """
             {
@@ -182,7 +176,7 @@ class OnPacketTest {
 
         assertEquals(
             Integer.parseInt(resultPacket.getMapValue("grunnlagResultat")["avkortet"].toString()),
-            Integer.parseInt(resultPacket.getMapValue("grunnlagResultat")["uavkortet"].toString())
+            Integer.parseInt(resultPacket.getMapValue("grunnlagResultat")["uavkortet"].toString()),
         )
         assertEquals("ForrigeGrunnlag", resultPacket.getMapValue("grunnlagResultat")["beregningsregel"])
         assertEquals(false, resultPacket.getMapValue("grunnlagResultat")["harAvkortet"])
@@ -209,7 +203,6 @@ class OnPacketTest {
 
     @Test
     fun ` Skal instrumentere beregninger`() {
-
         val inntekt = getInntekt(1000.toBigDecimal())
 
         val json =
@@ -230,7 +223,7 @@ class OnPacketTest {
             fakeGrunnlagInstrumentation.grunnlagBeregnet(
                 regelIdentifikator = ofType(String::class),
                 fakta = ofType(Fakta::class),
-                resultat = ofType(GrunnlagResultat::class)
+                resultat = ofType(GrunnlagResultat::class),
             )
         }
     }
@@ -244,25 +237,25 @@ class OnPacketTest {
                     klassifiserteInntekter = listOf(
                         KlassifisertInntekt(
                             beløp = månedsbeløp,
-                            inntektKlasse = InntektKlasse.ARBEIDSINNTEKT
-                        )
-                    )
+                            inntektKlasse = InntektKlasse.ARBEIDSINNTEKT,
+                        ),
+                    ),
                 ),
                 KlassifisertInntektMåned(
                     inntektsdatoStart?.plusMonths(1) ?: YearMonth.of(2018, 5),
                     listOf(
                         KlassifisertInntekt(
                             månedsbeløp,
-                            InntektKlasse.ARBEIDSINNTEKT
+                            InntektKlasse.ARBEIDSINNTEKT,
                         ),
                         KlassifisertInntekt(
                             månedsbeløp,
-                            InntektKlasse.ARBEIDSINNTEKT
-                        )
-                    )
-                )
+                            InntektKlasse.ARBEIDSINNTEKT,
+                        ),
+                    ),
+                ),
             ),
-            sisteAvsluttendeKalenderMåned = YearMonth.of(2018, 7)
+            sisteAvsluttendeKalenderMåned = YearMonth.of(2018, 7),
         )
     }
 }

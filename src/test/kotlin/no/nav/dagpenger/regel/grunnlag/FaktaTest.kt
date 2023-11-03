@@ -21,47 +21,46 @@ internal class FaktaTest {
                 listOf(
                     KlassifisertInntekt(
                         BigDecimal(1000),
-                        InntektKlasse.ARBEIDSINNTEKT
+                        InntektKlasse.ARBEIDSINNTEKT,
                     ),
                     KlassifisertInntekt(
                         BigDecimal(2000),
-                        InntektKlasse.DAGPENGER
-                    )
-                )
+                        InntektKlasse.DAGPENGER,
+                    ),
+                ),
             ),
             KlassifisertInntektMåned(
                 YearMonth.of(2018, 4),
                 listOf(
                     KlassifisertInntekt(
                         BigDecimal(500),
-                        InntektKlasse.ARBEIDSINNTEKT
+                        InntektKlasse.ARBEIDSINNTEKT,
                     ),
                     KlassifisertInntekt(
                         BigDecimal(2000),
-                        InntektKlasse.DAGPENGER
-                    )
-                )
-            )
+                        InntektKlasse.DAGPENGER,
+                    ),
+                ),
+            ),
 
         ),
-        sisteAvsluttendeKalenderMåned = YearMonth.of(2019, 3)
+        sisteAvsluttendeKalenderMåned = YearMonth.of(2019, 3),
     )
 
     @Test
     fun ` Skal returnere en liste over inntektene måned for måned når inntekt er satt `() {
-
         val fakta = Fakta(
             inntekt = inntekt,
             verneplikt = false,
             fangstOgFisk = false,
             beregningsdato = LocalDate.of(2019, 4, 1),
-            regelverksdato = LocalDate.of(2019, 7, 1)
+            regelverksdato = LocalDate.of(2019, 7, 1),
         )
 
         val expected = BigDecimal("5586.74733536963068970000")
         assertEquals(
             expected,
-            fakta.oppjusterteInntekterFørstePeriode(EnumSet.of(InntektKlasse.ARBEIDSINNTEKT, InntektKlasse.DAGPENGER))
+            fakta.oppjusterteInntekterFørstePeriode(EnumSet.of(InntektKlasse.ARBEIDSINNTEKT, InntektKlasse.DAGPENGER)),
         )
     }
 
@@ -71,13 +70,13 @@ internal class FaktaTest {
             inntekt = inntekt,
             verneplikt = false,
             fangstOgFisk = false,
-            beregningsdato = LocalDate.of(2019, 4, 1)
+            beregningsdato = LocalDate.of(2019, 4, 1),
         )
 
         val expected = 0.toBigDecimal()
         assertEquals(
             expected,
-            fakta.oppjusterteInntekterFørstePeriode(EnumSet.noneOf(InntektKlasse::class.java))
+            fakta.oppjusterteInntekterFørstePeriode(EnumSet.noneOf(InntektKlasse::class.java)),
         )
     }
 }

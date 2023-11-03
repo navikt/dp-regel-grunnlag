@@ -11,7 +11,7 @@ class DagpengerEtterAvtjentVerneplikt : GrunnlagBeregning("Verneplikt") {
             BeregningsResultat(
                 vernepliktGrunnlag,
                 vernepliktGrunnlag,
-                "Verneplikt"
+                "Verneplikt",
             )
         } else {
             IngenBeregningsResultat("Verneplikt")

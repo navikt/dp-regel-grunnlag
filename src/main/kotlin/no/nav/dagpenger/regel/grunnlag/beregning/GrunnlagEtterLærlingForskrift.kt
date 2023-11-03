@@ -9,7 +9,7 @@ import java.util.EnumSet
 abstract class GrunnlagEtterLærlingForskrift(
     private val regelIdentifikator: String,
     private val grunnlagUtvelgelse: GrunnlagUtvelgelse,
-    private val inntektKlasser: EnumSet<InntektKlasse>
+    private val inntektKlasser: EnumSet<InntektKlasse>,
 ) : GrunnlagBeregning(regelIdentifikator) {
 
     override fun isActive(fakta: Fakta): Boolean {
@@ -19,7 +19,6 @@ abstract class GrunnlagEtterLærlingForskrift(
 
     override fun calculate(fakta: Fakta): Resultat {
         return if (isActive(fakta)) {
-
             val sisteAvsluttendeKalenderMåned = fakta.inntekt?.sisteAvsluttendeKalenderMåned ?: throw RuntimeException("GrunnlagEtterLærlingForskrift kan bare håndteres hvis inntekt er satt")
 
             val sortertEtterInntektsmåned =
@@ -36,7 +35,7 @@ abstract class GrunnlagEtterLærlingForskrift(
             BeregningsResultat(
                 avkortet = avkortet,
                 uavkortet = uavkortet,
-                beregningsregel = regelIdentifikator
+                beregningsregel = regelIdentifikator,
             )
         } else {
             IngenBeregningsResultat(regelIdentifikator)
@@ -46,7 +45,7 @@ abstract class GrunnlagEtterLærlingForskrift(
 
 sealed class GrunnlagUtvelgelse(
     val antallMåneder: Int,
-    val månedFaktor: Int
+    val månedFaktor: Int,
 )
 
 class SisteAvsluttendeMånedUtvelgelse : GrunnlagUtvelgelse(antallMåneder = 1, månedFaktor = 12)
@@ -55,7 +54,7 @@ class Siste3AvsluttendeMånederUtvelgelse : GrunnlagUtvelgelse(antallMåneder = 
 class LærlingForskriftSisteAvsluttendeKalenderMånedFangstOgFisk : GrunnlagEtterLærlingForskrift(
     regelIdentifikator = "LærlingFangstOgFisk1x12",
     grunnlagUtvelgelse = SisteAvsluttendeMånedUtvelgelse(),
-    inntektKlasser = inntektKlassifisertEtterFangstOgFisk
+    inntektKlasser = inntektKlassifisertEtterFangstOgFisk,
 ) {
 
     override fun calculate(fakta: Fakta): Resultat {
@@ -66,7 +65,7 @@ class LærlingForskriftSisteAvsluttendeKalenderMånedFangstOgFisk : GrunnlagEtte
 class LærlingForskriftSiste3AvsluttendeKalenderMånedFangsOgFisk : GrunnlagEtterLærlingForskrift(
     regelIdentifikator = "LærlingFangstOgFisk3x4",
     grunnlagUtvelgelse = Siste3AvsluttendeMånederUtvelgelse(),
-    inntektKlasser = inntektKlassifisertEtterFangstOgFisk
+    inntektKlasser = inntektKlassifisertEtterFangstOgFisk,
 ) {
     override fun calculate(fakta: Fakta): Resultat {
         return if (fakta.fangstOgFisk) super.calculate(fakta) else IngenBeregningsResultat(this.beregningsregel)
@@ -76,11 +75,11 @@ class LærlingForskriftSiste3AvsluttendeKalenderMånedFangsOgFisk : GrunnlagEtte
 class LærlingForskriftSisteAvsluttendeKalenderMåned : GrunnlagEtterLærlingForskrift(
     regelIdentifikator = "LærlingArbeidsinntekt1x12",
     grunnlagUtvelgelse = SisteAvsluttendeMånedUtvelgelse(),
-    inntektKlasser = inntektKlassifisertEtterArbeidsInntekt
+    inntektKlasser = inntektKlassifisertEtterArbeidsInntekt,
 )
 
 class LærlingForskriftSiste3AvsluttendeKalenderMåned : GrunnlagEtterLærlingForskrift(
     regelIdentifikator = "LærlingArbeidsinntekt3x4",
     grunnlagUtvelgelse = Siste3AvsluttendeMånederUtvelgelse(),
-    inntektKlasser = inntektKlassifisertEtterArbeidsInntekt
+    inntektKlasser = inntektKlassifisertEtterArbeidsInntekt,
 )

@@ -34,7 +34,7 @@ class BruttoInntektMedFangstOgFiskDeSisteTolvKalendermånedeneBeregningsTest {
             lærling = false,
             verneplikt = false,
             beregningsdato = regelverksdato,
-            regelverksdato = regelverksdato
+            regelverksdato = regelverksdato,
         )
 
         beregning.calculate(fakta).also {
@@ -49,7 +49,7 @@ class BruttoInntektMedFangstOgFiskDeSisteTolvKalendermånedeneBeregningsTest {
             fangstOgFisk = false,
             lærling = true,
             verneplikt = false,
-            beregningsdato = LocalDate.of(2020, 3, 20)
+            beregningsdato = LocalDate.of(2020, 3, 20),
         )
         false shouldBe beregning.isActive(fakta)
     }
@@ -61,48 +61,47 @@ class BruttoInntektMedFangstOgFiskDeSisteTolvKalendermånedeneBeregningsTest {
             fangstOgFisk = false,
             lærling = true,
             verneplikt = false,
-            beregningsdato = LocalDate.of(2020, 3, 1)
+            beregningsdato = LocalDate.of(2020, 3, 1),
         )
         true shouldBe beregning.isActive(fakta)
     }
 
     @Test
     fun ` Skal gi grunnlag på 2034,699 siste 12 kalendermåned gitt mars 2019 `() {
-
         val inntektsListe = listOf(
             KlassifisertInntektMåned(
                 YearMonth.of(2018, 4),
                 listOf(
                     KlassifisertInntekt(
                         BigDecimal(500),
-                        InntektKlasse.ARBEIDSINNTEKT
+                        InntektKlasse.ARBEIDSINNTEKT,
                     ),
                     KlassifisertInntekt(
                         BigDecimal(500),
-                        InntektKlasse.FANGST_FISKE
-                    )
-                )
+                        InntektKlasse.FANGST_FISKE,
+                    ),
+                ),
             ),
             KlassifisertInntektMåned(
                 YearMonth.of(2018, 5),
                 listOf(
                     KlassifisertInntekt(
                         BigDecimal(500),
-                        InntektKlasse.ARBEIDSINNTEKT
+                        InntektKlasse.ARBEIDSINNTEKT,
                     ),
                     KlassifisertInntekt(
                         BigDecimal(500),
-                        InntektKlasse.SYKEPENGER_FANGST_FISKE
-                    )
-                )
-            )
+                        InntektKlasse.SYKEPENGER_FANGST_FISKE,
+                    ),
+                ),
+            ),
         )
 
         val fakta = Fakta(
             inntekt = Inntekt("123", inntektsListe, sisteAvsluttendeKalenderMåned = YearMonth.of(2019, 3)),
             verneplikt = false,
             fangstOgFisk = true,
-            beregningsdato = LocalDate.of(2019, 4, 1)
+            beregningsdato = LocalDate.of(2019, 4, 1),
         )
 
         when (val beregningsResultat = beregning.calculate(fakta)) {
@@ -114,37 +113,36 @@ class BruttoInntektMedFangstOgFiskDeSisteTolvKalendermånedeneBeregningsTest {
 
     @Test
     fun ` Skal gi riktig grunnlag med minusinntekt`() {
-
         val inntektsListe = listOf(
             KlassifisertInntektMåned(
                 YearMonth.of(2018, 4),
                 listOf(
                     KlassifisertInntekt(
                         BigDecimal(1000),
-                        InntektKlasse.FANGST_FISKE
-                    )
-                )
+                        InntektKlasse.FANGST_FISKE,
+                    ),
+                ),
             ),
             KlassifisertInntektMåned(
                 YearMonth.of(2018, 5),
                 listOf(
                     KlassifisertInntekt(
                         BigDecimal(1000),
-                        InntektKlasse.ARBEIDSINNTEKT
+                        InntektKlasse.ARBEIDSINNTEKT,
                     ),
                     KlassifisertInntekt(
                         BigDecimal(-1000),
-                        InntektKlasse.FANGST_FISKE
-                    )
-                )
-            )
+                        InntektKlasse.FANGST_FISKE,
+                    ),
+                ),
+            ),
         )
 
         val fakta = Fakta(
             inntekt = Inntekt("123", inntektsListe, sisteAvsluttendeKalenderMåned = YearMonth.of(2019, 1)),
             verneplikt = false,
             fangstOgFisk = true,
-            beregningsdato = LocalDate.of(2019, 4, 1)
+            beregningsdato = LocalDate.of(2019, 4, 1),
         )
 
         when (val beregningsResultat = beregning.calculate(fakta)) {
@@ -156,37 +154,36 @@ class BruttoInntektMedFangstOgFiskDeSisteTolvKalendermånedeneBeregningsTest {
 
     @Test
     fun ` Skal gi riktig grunnlag dersom summen av inntekter er minus`() {
-
         val inntektsListe = listOf(
             KlassifisertInntektMåned(
                 YearMonth.of(2018, 4),
                 listOf(
                     KlassifisertInntekt(
                         BigDecimal(-1000),
-                        InntektKlasse.FANGST_FISKE
-                    )
-                )
+                        InntektKlasse.FANGST_FISKE,
+                    ),
+                ),
             ),
             KlassifisertInntektMåned(
                 YearMonth.of(2018, 5),
                 listOf(
                     KlassifisertInntekt(
                         BigDecimal(1000),
-                        InntektKlasse.ARBEIDSINNTEKT
+                        InntektKlasse.ARBEIDSINNTEKT,
                     ),
                     KlassifisertInntekt(
                         BigDecimal(-1000),
-                        InntektKlasse.FANGST_FISKE
-                    )
-                )
-            )
+                        InntektKlasse.FANGST_FISKE,
+                    ),
+                ),
+            ),
         )
 
         val fakta = Fakta(
             inntekt = Inntekt("123", inntektsListe, sisteAvsluttendeKalenderMåned = YearMonth.of(2019, 1)),
             fangstOgFisk = true,
             verneplikt = false,
-            beregningsdato = LocalDate.of(2019, 2, 10)
+            beregningsdato = LocalDate.of(2019, 2, 10),
         )
 
         when (val beregningsResultat = beregning.calculate(fakta)) {
@@ -198,12 +195,11 @@ class BruttoInntektMedFangstOgFiskDeSisteTolvKalendermånedeneBeregningsTest {
 
     @Test
     fun `Skal returnere ingenBeregningsResultat når fangst og fisk er false`() {
-
         val fakta = Fakta(
             inntekt = Inntekt("123", emptyList(), sisteAvsluttendeKalenderMåned = YearMonth.of(2019, 3)),
             fangstOgFisk = false,
             verneplikt = false,
-            beregningsdato = LocalDate.of(2019, 4, 1)
+            beregningsdato = LocalDate.of(2019, 4, 1),
         )
 
         when (val beregningsResultat = beregning.calculate(fakta)) {
@@ -215,41 +211,40 @@ class BruttoInntektMedFangstOgFiskDeSisteTolvKalendermånedeneBeregningsTest {
 
     @Test
     fun ` Skal gi ingen beregningsresultat dersom fangst og fisk ikke er satt selv om det er inntekt`() {
-
         val inntektsListe = listOf(
             KlassifisertInntektMåned(
                 YearMonth.of(2018, 4),
                 listOf(
                     KlassifisertInntekt(
                         BigDecimal(500),
-                        InntektKlasse.ARBEIDSINNTEKT
+                        InntektKlasse.ARBEIDSINNTEKT,
                     ),
                     KlassifisertInntekt(
                         BigDecimal(500),
-                        InntektKlasse.FANGST_FISKE
-                    )
-                )
+                        InntektKlasse.FANGST_FISKE,
+                    ),
+                ),
             ),
             KlassifisertInntektMåned(
                 YearMonth.of(2018, 5),
                 listOf(
                     KlassifisertInntekt(
                         BigDecimal(500),
-                        InntektKlasse.ARBEIDSINNTEKT
+                        InntektKlasse.ARBEIDSINNTEKT,
                     ),
                     KlassifisertInntekt(
                         BigDecimal(500),
-                        InntektKlasse.SYKEPENGER_FANGST_FISKE
-                    )
-                )
-            )
+                        InntektKlasse.SYKEPENGER_FANGST_FISKE,
+                    ),
+                ),
+            ),
         )
 
         val fakta = Fakta(
             inntekt = Inntekt("123", inntektsListe, sisteAvsluttendeKalenderMåned = YearMonth.of(2019, 3)),
             verneplikt = false,
             fangstOgFisk = false,
-            beregningsdato = LocalDate.of(2019, 4, 1)
+            beregningsdato = LocalDate.of(2019, 4, 1),
         )
 
         beregning.calculate(fakta).also {

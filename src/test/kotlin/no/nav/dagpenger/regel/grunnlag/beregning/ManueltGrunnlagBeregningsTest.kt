@@ -17,12 +17,12 @@ class ManueltGrunnlagBeregningsTest {
             Inntekt(
                 "123",
                 emptyList(),
-                sisteAvsluttendeKalenderMåned = YearMonth.of(2019, 3)
+                sisteAvsluttendeKalenderMåned = YearMonth.of(2019, 3),
             ),
             false,
             false,
             LocalDate.of(2019, 4, 10),
-            manueltGrunnlag = 50000
+            manueltGrunnlag = 50000,
         )
 
         when (val beregningsResultat = ManueltGrunnlagBeregning().calculate(fakta)) {
@@ -43,12 +43,12 @@ class ManueltGrunnlagBeregningsTest {
             Inntekt(
                 "123",
                 emptyList(),
-                sisteAvsluttendeKalenderMåned = YearMonth.of(2019, 3)
+                sisteAvsluttendeKalenderMåned = YearMonth.of(2019, 3),
             ),
             false,
             false,
             LocalDate.of(2019, 4, 10),
-            manueltGrunnlag = 600000
+            manueltGrunnlag = 600000,
         )
 
         when (val beregningsResultat = ManueltGrunnlagBeregning().calculate(fakta)) {
@@ -69,12 +69,12 @@ class ManueltGrunnlagBeregningsTest {
             Inntekt(
                 "123",
                 emptyList(),
-                sisteAvsluttendeKalenderMåned = YearMonth.of(2019, 3)
+                sisteAvsluttendeKalenderMåned = YearMonth.of(2019, 3),
             ),
             false,
             false,
             LocalDate.of(2019, 4, 10),
-            manueltGrunnlag = 0
+            manueltGrunnlag = 0,
         )
 
         when (val beregningsResultat = ManueltGrunnlagBeregning().calculate(fakta)) {

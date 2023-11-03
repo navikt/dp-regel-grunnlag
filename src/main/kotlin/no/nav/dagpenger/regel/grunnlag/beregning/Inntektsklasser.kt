@@ -10,12 +10,12 @@ val inntektKlassifisertEtterFangstOgFisk = EnumSet.of(
     InntektKlasse.TILTAKSLØNN,
     InntektKlasse.FANGST_FISKE,
     InntektKlasse.DAGPENGER_FANGST_FISKE,
-    InntektKlasse.SYKEPENGER_FANGST_FISKE
+    InntektKlasse.SYKEPENGER_FANGST_FISKE,
 )
 
 val inntektKlassifisertEtterArbeidsInntekt = EnumSet.of(
     InntektKlasse.ARBEIDSINNTEKT,
     InntektKlasse.DAGPENGER,
     InntektKlasse.SYKEPENGER,
-    InntektKlasse.TILTAKSLØNN
+    InntektKlasse.TILTAKSLØNN,
 )

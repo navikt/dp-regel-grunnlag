@@ -1,10 +1,10 @@
 apiVersion: nais.io/v1alpha1
 kind: Application
 metadata:
-  name: {{app}}
-  namespace: {{namespace}}
+  name: dp-regel-grunnlag
+  namespace: teamdagpenger
   labels:
-    team: {{team}}
+    team: teamdagpenger
 spec:
   image: {{ image }}
   port: 8080
@@ -18,6 +18,8 @@ spec:
   replicas:
     min: 3
     max: 3
+  kafka:
+    pool: {{ kafka.pool }}
   resources:
     limits:
       cpu: 500m
@@ -27,5 +29,3 @@ spec:
       memory: 512Mi
   secureLogs:
     enabled: true
-  kafka:
-    pool: nav-prod

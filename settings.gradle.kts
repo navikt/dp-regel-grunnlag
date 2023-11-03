@@ -1,9 +1,12 @@
 rootProject.name = "dp-regel-grunnlag"
 
-pluginManagement {
+dependencyResolutionManagement {
     repositories {
-        gradlePluginPortal()
-        mavenCentral()
-        maven(url = "https://dl.bintray.com/gradle/gradle-plugins")
+        maven("https://github-package-registry-mirror.gc.nav.no/cached/maven-release")
+    }
+    versionCatalogs {
+        create("libs") {
+            from("no.nav.dagpenger:dp-version-catalog:20231016.46.3c4c02")
+        }
     }
 }
