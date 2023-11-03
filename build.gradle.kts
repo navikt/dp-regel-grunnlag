@@ -38,7 +38,6 @@ dependencies {
 
     implementation("de.huxhorn.sulky:de.huxhorn.sulky.ulid:8.3.0")
 
-    // prometheus
     implementation("io.prometheus:simpleclient_common:0.16.0")
     implementation("io.prometheus:simpleclient_hotspot:0.16.0")
     implementation("no.nav:nare-prometheus:0b41ab4")
@@ -57,18 +56,10 @@ dependencies {
     implementation("org.apache.logging.log4j:log4j-core:$log4j2Versjon")
 
     testImplementation(kotlin("test"))
-
     testImplementation("org.junit.jupiter:junit-jupiter-params:${libs.versions.junit.get()}")
-//    testImplementation(Junit5.api)
-//    testRuntimeOnly(Junit5.engine)
-//    testRuntimeOnly(Junit5.vintageEngine)
-
     testImplementation(libs.kotest.assertions.core)
-//    testImplementation(KoTest.assertions)
-//    testImplementation(KoTest.runner)
-
+    testImplementation("io.kotest:kotest-runner-junit5-jvm:${libs.versions.kotest.get()}")
     testImplementation("org.apache.kafka:kafka-streams-test-utils:3.3.1")
-
     testImplementation(libs.mockk)
 }
 
