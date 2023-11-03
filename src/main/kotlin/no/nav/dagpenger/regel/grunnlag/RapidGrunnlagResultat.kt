@@ -9,7 +9,7 @@ data class RapidGrunnlagResultat(
     val beregningsregel: String,
     val harAvkortet: Boolean,
     val grunnbeløp: BigDecimal,
-    val inntektsperioder: List<InntektPeriodeInfo>?
+    val inntektsperioder: List<InntektPeriodeInfo>?,
 ) {
     val avkortet = avkortetKandidat.setScale(0, RoundingMode.HALF_UP)
     val uavkortet = uavkortetKandidat.setScale(0, RoundingMode.HALF_UP)

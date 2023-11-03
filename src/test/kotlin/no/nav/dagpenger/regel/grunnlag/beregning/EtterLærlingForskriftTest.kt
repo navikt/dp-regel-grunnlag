@@ -22,19 +22,18 @@ internal class EtterLærlingForskriftTest() {
     val beregning = object : GrunnlagEtterLærlingForskrift(
         regelIdentifikator = "test",
         grunnlagUtvelgelse = SisteAvsluttendeMånedUtvelgelse(),
-        inntektKlasser = inntektKlassifisertEtterFangstOgFisk
+        inntektKlasser = inntektKlassifisertEtterFangstOgFisk,
     ) {
     }
 
     @Test
     fun ` Beregning er aktiv til fra 20 mars 2020 til 31 mars 2022`() {
-
         val fakta = Fakta(
             inntekt = null,
             fangstOgFisk = false,
             lærling = true,
             verneplikt = false,
-            beregningsdato = LocalDate.of(2020, 3, 20)
+            beregningsdato = LocalDate.of(2020, 3, 20),
         )
 
         assertTrue(beregning.isActive(fakta))
@@ -50,7 +49,7 @@ internal class EtterLærlingForskriftTest() {
             fangstOgFisk = false,
             lærling = true,
             verneplikt = false,
-            beregningsdato = LocalDate.of(2020, 3, 20)
+            beregningsdato = LocalDate.of(2020, 3, 20),
         )
         true shouldBe beregning.isActive(fakta)
     }
@@ -62,7 +61,7 @@ internal class EtterLærlingForskriftTest() {
             fangstOgFisk = false,
             lærling = true,
             verneplikt = false,
-            beregningsdato = LocalDate.of(2020, 3, 1)
+            beregningsdato = LocalDate.of(2020, 3, 1),
         )
         false shouldBe beregning.isActive(fakta)
     }
@@ -75,20 +74,19 @@ internal class EtterLærlingForskriftTest() {
             manueltGrunnlag = 1000,
             lærling = true,
             verneplikt = false,
-            beregningsdato = LocalDate.of(2020, 3, 21)
+            beregningsdato = LocalDate.of(2020, 3, 21),
         )
         false shouldBe beregning.isActive(fakta)
     }
 
     @Test
     fun `Skal bruke siste kalender måned og gange med 12 for å finne uavkortet grunnlag for arbeidsinntekt`() {
-
         val fakta = Fakta(
             inntekt = Inntekt("123", inntektsListe, sisteAvsluttendeKalenderMåned = YearMonth.of(2020, 3)),
             verneplikt = false,
             fangstOgFisk = false,
             lærling = true,
-            beregningsdato = LocalDate.of(2020, 4, 1)
+            beregningsdato = LocalDate.of(2020, 4, 1),
         )
 
         when (
@@ -108,13 +106,12 @@ internal class EtterLærlingForskriftTest() {
     @ParameterizedTest
     @ValueSource(ints = [2020, 2021])
     fun `Skal aldri oppjusteres med G faktor `(år: Int) {
-
         val fakta = Fakta(
             inntekt = Inntekt("123", inntektsListe, sisteAvsluttendeKalenderMåned = YearMonth.of(2020, 3)),
             verneplikt = false,
             fangstOgFisk = false,
             lærling = true,
-            beregningsdato = LocalDate.of(år, 5, 31)
+            beregningsdato = LocalDate.of(år, 5, 31),
         )
 
         when (
@@ -133,13 +130,12 @@ internal class EtterLærlingForskriftTest() {
 
     @Test
     fun `Skal bruke siste 3 kalendermånedene og gange med 4 for å finne uavkortet grunnlag for arbeidsinntekt `() {
-
         val fakta = Fakta(
             inntekt = Inntekt("123", inntektsListe, sisteAvsluttendeKalenderMåned = YearMonth.of(2020, 3)),
             verneplikt = false,
             fangstOgFisk = false,
             lærling = true,
-            beregningsdato = LocalDate.of(2020, 4, 1)
+            beregningsdato = LocalDate.of(2020, 4, 1),
         )
 
         when (
@@ -158,13 +154,12 @@ internal class EtterLærlingForskriftTest() {
 
     @Test
     fun `Skal bruke siste kalender måned og gange med 12 for å finne uavkortet grunnlag for fangst- og fiskeinntekt`() {
-
         val fakta = Fakta(
             inntekt = Inntekt("123", inntektsListe, sisteAvsluttendeKalenderMåned = YearMonth.of(2020, 3)),
             verneplikt = false,
             fangstOgFisk = true,
             lærling = true,
-            beregningsdato = LocalDate.of(2020, 4, 1)
+            beregningsdato = LocalDate.of(2020, 4, 1),
         )
 
         when (
@@ -183,13 +178,12 @@ internal class EtterLærlingForskriftTest() {
 
     @Test
     fun `Skal bruke siste 3 kalendermånedene og gange med 4 for å finne uavkortet grunnlag for fangst- og fiskeinntekt `() {
-
         val fakta = Fakta(
             inntekt = Inntekt("123", inntektsListe, sisteAvsluttendeKalenderMåned = YearMonth.of(2020, 3)),
             verneplikt = false,
             fangstOgFisk = true,
             lærling = true,
-            beregningsdato = LocalDate.of(2020, 4, 1)
+            beregningsdato = LocalDate.of(2020, 4, 1),
         )
 
         when (
@@ -208,14 +202,13 @@ internal class EtterLærlingForskriftTest() {
 
     @Test
     fun `Manuelt grunnlag skal ikke beregnes av lærling grunnlag `() {
-
         val fakta = Fakta(
             inntekt = null,
             manueltGrunnlag = 1000,
             verneplikt = false,
             fangstOgFisk = true,
             lærling = true,
-            beregningsdato = LocalDate.now()
+            beregningsdato = LocalDate.now(),
         )
 
         LærlingForskriftSiste3AvsluttendeKalenderMånedFangsOgFisk().calculate(fakta).shouldBeTypeOf<IngenBeregningsResultat>()
@@ -226,17 +219,15 @@ internal class EtterLærlingForskriftTest() {
 
     @Test
     fun `Ingen inntekt gir ingen grunnlag for fangst og fisk`() {
-
         val fakta = Fakta(
             inntekt = Inntekt("123", emptyList(), sisteAvsluttendeKalenderMåned = YearMonth.now()),
             verneplikt = false,
             fangstOgFisk = true,
             lærling = true,
-            beregningsdato = LocalDate.of(2021, 5, 1)
+            beregningsdato = LocalDate.of(2021, 5, 1),
         )
 
         assertSoftly {
-
             val resultatSiste3 = LærlingForskriftSiste3AvsluttendeKalenderMånedFangsOgFisk().calculate(fakta) as BeregningsResultat
             0.toBigDecimal() shouldBe resultatSiste3.avkortet
             0.toBigDecimal() shouldBe resultatSiste3.uavkortet
@@ -249,17 +240,15 @@ internal class EtterLærlingForskriftTest() {
 
     @Test
     fun `Ingen inntekt gir ingen grunnlag for arbeidsinntekt `() {
-
         val fakta = Fakta(
             inntekt = Inntekt("123", emptyList(), sisteAvsluttendeKalenderMåned = YearMonth.now()),
             verneplikt = false,
             fangstOgFisk = false,
             lærling = true,
-            beregningsdato = LocalDate.of(2022, 3, 30)
+            beregningsdato = LocalDate.of(2022, 3, 30),
         )
 
         assertSoftly {
-
             val resultatSiste3 = LærlingForskriftSisteAvsluttendeKalenderMåned().calculate(fakta) as BeregningsResultat
             0.toBigDecimal() shouldBe resultatSiste3.avkortet
             0.toBigDecimal() shouldBe resultatSiste3.uavkortet
@@ -276,40 +265,40 @@ internal class EtterLærlingForskriftTest() {
             listOf(
                 KlassifisertInntekt(
                     BigDecimal(1000),
-                    InntektKlasse.ARBEIDSINNTEKT
+                    InntektKlasse.ARBEIDSINNTEKT,
                 ),
                 KlassifisertInntekt(
                     BigDecimal(2000),
-                    InntektKlasse.FANGST_FISKE
-                )
-            )
+                    InntektKlasse.FANGST_FISKE,
+                ),
+            ),
         ),
         KlassifisertInntektMåned(
             YearMonth.of(2020, 2),
             listOf(
                 KlassifisertInntekt(
                     BigDecimal(2000),
-                    InntektKlasse.ARBEIDSINNTEKT
-                )
-            )
+                    InntektKlasse.ARBEIDSINNTEKT,
+                ),
+            ),
         ),
         KlassifisertInntektMåned(
             YearMonth.of(2020, 1),
             listOf(
                 KlassifisertInntekt(
                     BigDecimal(2000),
-                    InntektKlasse.ARBEIDSINNTEKT
-                )
-            )
+                    InntektKlasse.ARBEIDSINNTEKT,
+                ),
+            ),
         ),
         KlassifisertInntektMåned(
             YearMonth.of(2019, 12),
             listOf(
                 KlassifisertInntekt(
                     BigDecimal(2000),
-                    InntektKlasse.ARBEIDSINNTEKT
-                )
-            )
-        )
+                    InntektKlasse.ARBEIDSINNTEKT,
+                ),
+            ),
+        ),
     )
 }

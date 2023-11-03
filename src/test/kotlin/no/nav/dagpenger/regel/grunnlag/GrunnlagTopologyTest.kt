@@ -36,7 +36,7 @@ class GrunnlagTopologyTest {
 
         val grunnlag = Grunnlag(
             Configuration(),
-            fakeGrunnlagInstrumentation
+            fakeGrunnlagInstrumentation,
         )
     }
 
@@ -57,7 +57,6 @@ class GrunnlagTopologyTest {
 
     @Test
     fun ` Should add not process behov without beregningsDato `() {
-
         val json =
             """
             {
@@ -81,13 +80,13 @@ class GrunnlagTopologyTest {
                     klassifiserteInntekter = listOf(
                         KlassifisertInntekt(
                             beløp = BigDecimal(25000),
-                            inntektKlasse = InntektKlasse.ARBEIDSINNTEKT
-                        )
-                    )
+                            inntektKlasse = InntektKlasse.ARBEIDSINNTEKT,
+                        ),
+                    ),
 
-                )
+                ),
             ),
-            sisteAvsluttendeKalenderMåned = YearMonth.of(2018, 3)
+            sisteAvsluttendeKalenderMåned = YearMonth.of(2018, 3),
         )
 
         val json =
@@ -111,7 +110,6 @@ class GrunnlagTopologyTest {
 
     @Test
     fun ` Should add GrunnlagSubsumsjon to subsumsjonsBehov with manueltGrunnlag `() {
-
         val json =
             """
             {
@@ -134,7 +132,6 @@ class GrunnlagTopologyTest {
 
     @Test
     fun ` Should add GrunnlagSubsumsjon to subsumsjonsBehov with oppfyllerKravTilFangstOgFisk `() {
-
         val inntekt: Inntekt = Inntekt(
             inntektsId = "12345",
             inntektsListe = listOf(
@@ -143,13 +140,13 @@ class GrunnlagTopologyTest {
                     klassifiserteInntekter = listOf(
                         KlassifisertInntekt(
                             beløp = BigDecimal(99999),
-                            inntektKlasse = InntektKlasse.FANGST_FISKE
-                        )
-                    )
+                            inntektKlasse = InntektKlasse.FANGST_FISKE,
+                        ),
+                    ),
 
-                )
+                ),
             ),
-            sisteAvsluttendeKalenderMåned = YearMonth.of(2018, 3)
+            sisteAvsluttendeKalenderMåned = YearMonth.of(2018, 3),
         )
 
         val json =
@@ -199,12 +196,12 @@ private fun TopologyTestDriver.behovInputTopic(): TestInputTopic<String, Packet>
     this.createInputTopic(
         REGEL_TOPIC.name,
         REGEL_TOPIC.keySerde.serializer(),
-        REGEL_TOPIC.valueSerde.serializer()
+        REGEL_TOPIC.valueSerde.serializer(),
     )
 
 private fun TopologyTestDriver.behovOutputTopic(): TestOutputTopic<String, Packet> =
     this.createOutputTopic(
         REGEL_TOPIC.name,
         REGEL_TOPIC.keySerde.deserializer(),
-        REGEL_TOPIC.valueSerde.deserializer()
+        REGEL_TOPIC.valueSerde.deserializer(),
     )

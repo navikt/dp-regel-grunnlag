@@ -8,9 +8,9 @@ data class BeregningsResultat(
     val uavkortet: BigDecimal,
     val avkortet: BigDecimal,
     val beregningsregel: String,
-    val harAvkortet: Boolean = uavkortet != avkortet
+    val harAvkortet: Boolean = uavkortet != avkortet,
 ) : Resultat()
 
 data class IngenBeregningsResultat(
-    val beskrivelse: String
+    val beskrivelse: String,
 ) : Resultat()

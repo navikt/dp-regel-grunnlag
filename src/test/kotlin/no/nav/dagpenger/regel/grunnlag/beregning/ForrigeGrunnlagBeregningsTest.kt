@@ -17,12 +17,12 @@ class ForrigeGrunnlagBeregningsTest {
             Inntekt(
                 "123",
                 emptyList(),
-                sisteAvsluttendeKalenderMåned = YearMonth.of(2019, 3)
+                sisteAvsluttendeKalenderMåned = YearMonth.of(2019, 3),
             ),
             false,
             false,
             LocalDate.of(2019, 4, 10),
-            forrigeGrunnlag = 0
+            forrigeGrunnlag = 0,
         )
 
         when (val beregningsResultat = ForrigeGrunnlagBeregning().calculate(fakta)) {
@@ -38,12 +38,12 @@ class ForrigeGrunnlagBeregningsTest {
             Inntekt(
                 "123",
                 emptyList(),
-                sisteAvsluttendeKalenderMåned = YearMonth.of(2019, 3)
+                sisteAvsluttendeKalenderMåned = YearMonth.of(2019, 3),
             ),
             false,
             false,
             LocalDate.of(2019, 4, 10),
-            forrigeGrunnlag = 50000
+            forrigeGrunnlag = 50000,
         )
 
         when (val beregningsResultat = ForrigeGrunnlagBeregning().calculate(fakta)) {

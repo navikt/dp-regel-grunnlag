@@ -18,22 +18,22 @@ private val localProperties = ConfigurationMap(
         "KAFKA_BROKERS" to "localhost:9092",
         "application.profile" to Profile.LOCAL.toString(),
         "application.httpPort" to "8080",
-        "unleash.url" to "https://localhost"
-    )
+        "unleash.url" to "https://localhost",
+    ),
 )
 private val devProperties = ConfigurationMap(
     mapOf(
         "application.profile" to Profile.DEV.toString(),
         "application.httpPort" to "8080",
-        "unleash.url" to "https://unleash.nais.io/api/"
-    )
+        "unleash.url" to "https://unleash.nais.io/api/",
+    ),
 )
 private val prodProperties = ConfigurationMap(
     mapOf(
         "application.profile" to Profile.PROD.toString(),
         "application.httpPort" to "8080",
         "unleash.url" to "https://unleash.nais.io/api/",
-    )
+    ),
 )
 
 private fun config() = when (System.getenv("NAIS_CLUSTER_NAME") ?: System.getProperty("NAIS_CLUSTER_NAME")) {
@@ -47,13 +47,13 @@ private fun config() = when (System.getenv("NAIS_CLUSTER_NAME") ?: System.getPro
 val REGEL_TOPIC = Topic(
     "teamdagpenger.regel.v1",
     keySerde = Serdes.String(),
-    valueSerde = Serdes.serdeFrom(PacketSerializer(), PacketDeserializer())
+    valueSerde = Serdes.serdeFrom(PacketSerializer(), PacketDeserializer()),
 )
 
 data class Configuration(
     val kafka: Kafka = Kafka(),
     val application: Application = Application(),
-    val regelTopic: Topic<String, Packet> = REGEL_TOPIC
+    val regelTopic: Topic<String, Packet> = REGEL_TOPIC,
 ) {
     data class Kafka(
         val aivenBrokers: String = config()[Key("KAFKA_BROKERS", stringType)],
@@ -63,10 +63,12 @@ data class Configuration(
         val id: String = config().getOrElse(Key("application.id", stringType), "dagpenger-regel-grunnlag"),
         val profile: Profile = config()[Key("application.profile", stringType)].let { Profile.valueOf(it) },
         val httpPort: Int = config()[Key("application.httpPort", intType)],
-        val unleashUrl: String = config()[Key("unleash.url", stringType)]
+        val unleashUrl: String = config()[Key("unleash.url", stringType)],
     )
 }
 
 enum class Profile {
-    LOCAL, DEV, PROD
+    LOCAL,
+    DEV,
+    PROD,
 }

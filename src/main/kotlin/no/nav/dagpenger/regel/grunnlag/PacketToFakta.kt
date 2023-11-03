@@ -4,7 +4,6 @@ import no.nav.dagpenger.events.Packet
 import no.nav.dagpenger.events.inntekt.v1.Inntekt
 
 internal fun packetToFakta(packet: Packet): Fakta {
-
     val verneplikt = packet.getNullableBoolean(Grunnlag.AVTJENT_VERNEPLIKT) ?: false
     val inntekt: Inntekt? = getInntekt(packet)
     val fangstOgFisk = packet.getNullableBoolean(Grunnlag.FANGST_OG_FISK) ?: false
@@ -22,7 +21,7 @@ internal fun packetToFakta(packet: Packet): Fakta {
         regelverksdato = regelverksdato,
         manueltGrunnlag = manueltGrunnlag,
         forrigeGrunnlag = forrigeGrunnlag,
-        lærling = lærling
+        lærling = lærling,
     )
 }
 

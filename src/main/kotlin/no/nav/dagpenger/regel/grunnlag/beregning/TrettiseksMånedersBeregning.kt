@@ -25,37 +25,38 @@ abstract class TrettiseksMånedersBeregning(
         val inntekter = Triple(
             fakta.oppjusterteInntekterFørstePeriode(inntektKlasser),
             fakta.oppjusterteInntekterAndrePeriode(inntektKlasser),
-            fakta.oppjusterteInntekterTredjePeriode(inntektKlasser)
+            fakta.oppjusterteInntekterTredjePeriode(inntektKlasser),
         )
 
         val uavkortet = inntekter.toList().sumOf { it }.divide(
             3.toBigDecimal(),
             antallDesimaler,
-            roundingMode
+            roundingMode,
         )
 
         val avkortet = if (fakta.beregningsdato.isBefore(grensedato)) {
-            avkortetFør17_12_21(uavkortet)
+            `avkortet før 17-12-2021`(uavkortet)
         } else {
-            avkortetEtter17_12_21(inntekter)
+            `avkortet etter 17-12-2021`(inntekter)
         }
 
         return BeregningsResultat(uavkortet, avkortet, beregningsregel)
     }
 
-    private fun avkortetFør17_12_21(uavkortet: BigDecimal) =
+    @Suppress("ktlint:standard:function-naming")
+    private fun `avkortet før 17-12-2021`(uavkortet: BigDecimal) =
         if (uavkortet > seksGangerGrunnbeløp) seksGangerGrunnbeløp else uavkortet
 
-    private fun avkortetEtter17_12_21(
+    @Suppress("ktlint:standard:function-naming")
+    private fun `avkortet etter 17-12-2021`(
         inntekter: Triple<BigDecimal, BigDecimal, BigDecimal>,
     ): BigDecimal {
-
         return inntekter.toList().sumOf { inntekt ->
             if (inntekt > seksGangerGrunnbeløp) seksGangerGrunnbeløp else inntekt
         }.divide(
             3.toBigDecimal(),
             antallDesimaler,
-            RoundingMode.HALF_UP
+            RoundingMode.HALF_UP,
         )
     }
 }

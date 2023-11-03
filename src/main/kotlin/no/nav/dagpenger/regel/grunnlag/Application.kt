@@ -24,12 +24,11 @@ private val log = KotlinLogging.logger {}
 private val sikkerLogg = KotlinLogging.logger("tjenestekall")
 
 fun main() {
-
     val instrumentation = GrunnlagInstrumentation()
 
     Grunnlag(
         instrumentation = instrumentation,
-        config = config
+        config = config,
     ).start()
 }
 
@@ -37,10 +36,15 @@ class Grunnlag(
     private val config: Configuration,
     private val instrumentation: GrunnlagInstrumentation,
 ) : River(config.regelTopic) {
+
+    @Suppress("ktlint:standard:property-naming")
     override val SERVICE_APP_ID: String = config.application.id
+
+    @Suppress("ktlint:standard:property-naming")
     override val HTTP_PORT: Int = config.application.httpPort
     private val ulidGenerator = ULID()
-    private val REGELIDENTIFIKATOR = "Grunnlag.v1"
+
+    private val regelidentifikator = "Grunnlag.v1"
     private val jsonAdapterInntektPeriodeInfo: JsonAdapter<List<InntektPeriodeInfo>> =
         moshiInstance.adapter(Types.newParameterizedType(List::class.java, InntektPeriodeInfo::class.java))
 
@@ -65,7 +69,7 @@ class Grunnlag(
                 packet.hasField(INNTEKT) || packet.hasField(MANUELT_GRUNNLAG) || packet.hasField(FORRIGE_GRUNNLAG)
             },
             Predicate { _, packet -> packet.hasField(BEREGNINGSDATO) },
-            Predicate { _, packet -> !packet.hasField(GRUNNLAG_RESULTAT) }
+            Predicate { _, packet -> !packet.hasField(GRUNNLAG_RESULTAT) },
         )
     }
 
@@ -76,7 +80,7 @@ class Grunnlag(
         val grunnlagResultat = GrunnlagResultat(
             sporingsId = ulidGenerator.nextULID(),
             subsumsjonsId = ulidGenerator.nextULID(),
-            regelidentifikator = REGELIDENTIFIKATOR,
+            regelidentifikator = regelidentifikator,
             avkortetGrunnlag = resultat.avkortet,
             uavkortetGrunnlag = resultat.uavkortet,
             beregningsregel = resultat.beregningsregel,
@@ -84,7 +88,7 @@ class Grunnlag(
             grunnbeløpBrukt = when (fakta.verneplikt) {
                 true -> fakta.grunnbeløpVedRegelverksdato().verdi
                 false -> fakta.grunnbeløpVedBeregningsdato().verdi
-            }
+            },
         )
 
         log.info { "Brukte ${grunnlagResultat.grunnbeløpBrukt} som grunnlag for beregningsdato ${fakta.beregningsdato}" }
@@ -93,17 +97,17 @@ class Grunnlag(
             packet.putValue(
                 GRUNNLAG_INNTEKTSPERIODER,
                 checkNotNull(
-                    jsonAdapterInntektPeriodeInfo.toJsonValue(this)
-                )
+                    jsonAdapterInntektPeriodeInfo.toJsonValue(this),
+                ),
             )
         }
 
         packet.putValue(GRUNNLAG_RESULTAT, grunnlagResultat.toMap())
 
         instrumentation.grunnlagBeregnet(
-            regelIdentifikator = REGELIDENTIFIKATOR,
+            regelIdentifikator = regelidentifikator,
             fakta = fakta,
-            resultat = grunnlagResultat
+            resultat = grunnlagResultat,
         )
 
         sikkerLogg.info { "Løste behov for grunnlag $grunnlagResultat med fakta $fakta" }
@@ -115,18 +119,17 @@ class Grunnlag(
         return streamConfigAiven(
             appId = SERVICE_APP_ID,
             bootStapServerUrl = config.kafka.aivenBrokers,
-            aivenCredentials = KafkaAivenCredentials()
+            aivenCredentials = KafkaAivenCredentials(),
         )
     }
 
     override fun onFailure(packet: Packet, error: Throwable?): Packet {
-
         packet.addProblem(
             Problem(
                 type = URI("urn:dp:error:regel"),
                 title = "Ukjent feil ved bruk av grunnlagregel",
-                instance = URI("urn:dp:regel:grunnlag")
-            )
+                instance = URI("urn:dp:regel:grunnlag"),
+            ),
         )
         return packet
     }
@@ -137,29 +140,29 @@ fun createInntektPerioder(fakta: Fakta): List<InntektPeriodeInfo>? {
         InntektKlasse.ARBEIDSINNTEKT,
         InntektKlasse.DAGPENGER,
         InntektKlasse.SYKEPENGER,
-        InntektKlasse.TILTAKSLØNN
+        InntektKlasse.TILTAKSLØNN,
     )
     val medFangstOgFisk = listOf(
         InntektKlasse.FANGST_FISKE,
         InntektKlasse.DAGPENGER_FANGST_FISKE,
-        InntektKlasse.SYKEPENGER_FANGST_FISKE
+        InntektKlasse.SYKEPENGER_FANGST_FISKE,
     )
 
     return fakta.inntektsPerioder?.toList()?.mapIndexed { index, list ->
         InntektPeriodeInfo(
             inntektsPeriode = InntektsPeriode(
                 list.first().årMåned,
-                list.last().årMåned
+                list.last().årMåned,
             ),
             inntekt = list.sumInntekt(if (fakta.fangstOgFisk) medFangstOgFisk + arbeidsInntekt else arbeidsInntekt),
             periode = index + 1,
             inneholderFangstOgFisk = fakta.inntektsPerioder.toList()[index].any { klassifisertInntektMåned ->
                 klassifisertInntektMåned.klassifiserteInntekter.any {
                     medFangstOgFisk.contains(
-                        it.inntektKlasse
+                        it.inntektKlasse,
                     )
                 }
-            }
+            },
         )
     }
 }

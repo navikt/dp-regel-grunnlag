@@ -19,7 +19,7 @@ internal class CreateInntektPerioderTest {
         val fakta = Fakta(
             verneplikt = false,
             fangstOgFisk = false,
-            beregningsdato = beregningsdato
+            beregningsdato = beregningsdato,
         )
 
         val inntektsPerioder = createInntektPerioder(fakta)
@@ -36,11 +36,11 @@ internal class CreateInntektPerioderTest {
             inntekt = Inntekt(
                 "id",
                 inntektsListe,
-                sisteAvsluttendeKalenderMåned = sisteAvsluttendeKalenderMåned
+                sisteAvsluttendeKalenderMåned = sisteAvsluttendeKalenderMåned,
             ),
             verneplikt = false,
             fangstOgFisk = false,
-            beregningsdato = beregningsdato
+            beregningsdato = beregningsdato,
         )
 
         val inntektsPerioder = createInntektPerioder(fakta)!!
@@ -57,13 +57,13 @@ internal class CreateInntektPerioderTest {
         val inntekt = Inntekt(
             "id",
             generateArbeidsOgFangstOgFiskInntekt(36, BigDecimal(2000), BigDecimal(2000), sisteAvsluttendeKalenderMåned),
-            sisteAvsluttendeKalenderMåned = sisteAvsluttendeKalenderMåned
+            sisteAvsluttendeKalenderMåned = sisteAvsluttendeKalenderMåned,
         )
         val fakta = Fakta(
             inntekt,
             false,
             false,
-            beregningsdato
+            beregningsdato,
         )
 
         val inntektsPerioder = createInntektPerioder(fakta)!!
@@ -84,13 +84,13 @@ internal class CreateInntektPerioderTest {
                     36,
                     BigDecimal(2000),
                     BigDecimal(2000),
-                    sisteAvsluttendeKalenderMåned
+                    sisteAvsluttendeKalenderMåned,
                 ),
-                sisteAvsluttendeKalenderMåned = sisteAvsluttendeKalenderMåned
+                sisteAvsluttendeKalenderMåned = sisteAvsluttendeKalenderMåned,
             ),
             verneplikt = false,
             fangstOgFisk = true,
-            beregningsdato = beregningsdato
+            beregningsdato = beregningsdato,
         )
 
         val inntektsPerioder = createInntektPerioder(fakta)!!
@@ -107,11 +107,11 @@ internal class CreateInntektPerioderTest {
             Inntekt(
                 "id",
                 generateFangstOgFiskInntekt(36, BigDecimal(2000), sisteAvsluttendeKalenderMåned),
-                sisteAvsluttendeKalenderMåned = sisteAvsluttendeKalenderMåned
+                sisteAvsluttendeKalenderMåned = sisteAvsluttendeKalenderMåned,
             ),
             verneplikt = false,
             fangstOgFisk = true,
-            beregningsdato = beregningsdato
+            beregningsdato = beregningsdato,
         )
 
         val inntektsPerioder = createInntektPerioder(fakta)!!
@@ -123,18 +123,17 @@ internal class CreateInntektPerioderTest {
 
     @Test
     fun ` Skal bare ta med skal bare ta med Arbeidsinntekter selvom fangstOgFisk parameteret er satt til true men det ikke foreligger fangs og fiske inntekter`() {
-
         val sisteAvsluttendeKalenderMåned = YearMonth.of(2019, 1)
         val beregningsdato = LocalDate.of(2019, 2, 1)
         val fakta = Fakta(
             Inntekt(
                 "id",
                 generateArbeidsinntekt(36, BigDecimal(2000), sisteAvsluttendeKalenderMåned),
-                sisteAvsluttendeKalenderMåned = sisteAvsluttendeKalenderMåned
+                sisteAvsluttendeKalenderMåned = sisteAvsluttendeKalenderMåned,
             ),
             verneplikt = false,
             fangstOgFisk = true,
-            beregningsdato = beregningsdato
+            beregningsdato = beregningsdato,
         )
 
         val inntektsPerioder = createInntektPerioder(fakta)!!
@@ -150,27 +149,27 @@ internal class CreateInntektPerioderTest {
         val inntekt = listOf(
             KlassifisertInntektMåned(
                 YearMonth.of(2019, 3),
-                klassifiserteInntekter = getMinusInntekt()
+                klassifiserteInntekter = getMinusInntekt(),
             ),
             KlassifisertInntektMåned(
                 YearMonth.of(2018, 3),
-                klassifiserteInntekter = getMinusInntekt()
+                klassifiserteInntekter = getMinusInntekt(),
             ),
             KlassifisertInntektMåned(
                 YearMonth.of(2017, 3),
-                klassifiserteInntekter = getMinusInntekt()
-            )
+                klassifiserteInntekter = getMinusInntekt(),
+            ),
         )
 
         val fakta = Fakta(
             inntekt = Inntekt(
                 "123",
                 inntekt,
-                sisteAvsluttendeKalenderMåned = sisteAvsluttedeKalenderMåned
+                sisteAvsluttendeKalenderMåned = sisteAvsluttedeKalenderMåned,
             ),
             verneplikt = false,
             fangstOgFisk = false,
-            beregningsdato = LocalDate.of(2019, 5, 20)
+            beregningsdato = LocalDate.of(2019, 5, 20),
         )
 
         val inntektsPerioder = createInntektPerioder(fakta)!!
@@ -202,19 +201,19 @@ internal class CreateInntektPerioderTest {
         InntektKlasse.ARBEIDSINNTEKT,
         InntektKlasse.DAGPENGER,
         InntektKlasse.SYKEPENGER,
-        InntektKlasse.TILTAKSLØNN
+        InntektKlasse.TILTAKSLØNN,
     )
 
     private val medFangstOgFisk = listOf(
         InntektKlasse.FANGST_FISKE,
         InntektKlasse.DAGPENGER_FANGST_FISKE,
-        InntektKlasse.SYKEPENGER_FANGST_FISKE
+        InntektKlasse.SYKEPENGER_FANGST_FISKE,
     )
 
     fun generateArbeidsinntekt(
         numberOfMonths: Int,
         beløpPerMnd: BigDecimal,
-        senesteMåned: YearMonth = YearMonth.of(2019, 1)
+        senesteMåned: YearMonth = YearMonth.of(2019, 1),
     ): List<KlassifisertInntektMåned> {
         return (0 until numberOfMonths).toList().map {
             KlassifisertInntektMåned(
@@ -222,9 +221,9 @@ internal class CreateInntektPerioderTest {
                 listOf(
                     KlassifisertInntekt(
                         beløpPerMnd,
-                        arbeidsInntekt.random()
-                    )
-                )
+                        arbeidsInntekt.random(),
+                    ),
+                ),
             )
         }
     }
@@ -233,19 +232,19 @@ internal class CreateInntektPerioderTest {
         return listOf(
             KlassifisertInntekt(
                 beløp = BigDecimal(100),
-                inntektKlasse = InntektKlasse.ARBEIDSINNTEKT
+                inntektKlasse = InntektKlasse.ARBEIDSINNTEKT,
             ),
             KlassifisertInntekt(
                 beløp = BigDecimal(-200),
-                inntektKlasse = InntektKlasse.ARBEIDSINNTEKT
-            )
+                inntektKlasse = InntektKlasse.ARBEIDSINNTEKT,
+            ),
         )
     }
 
     fun generateFangstOgFiskInntekt(
         numberOfMonths: Int,
         beløpPerMnd: BigDecimal,
-        senesteMåned: YearMonth = YearMonth.of(2019, 1)
+        senesteMåned: YearMonth = YearMonth.of(2019, 1),
     ): List<KlassifisertInntektMåned> {
         return (0 until numberOfMonths).toList().map {
             KlassifisertInntektMåned(
@@ -253,9 +252,9 @@ internal class CreateInntektPerioderTest {
                 listOf(
                     KlassifisertInntekt(
                         beløpPerMnd,
-                        medFangstOgFisk.random()
-                    )
-                )
+                        medFangstOgFisk.random(),
+                    ),
+                ),
             )
         }
     }
@@ -264,15 +263,15 @@ internal class CreateInntektPerioderTest {
         numberOfMonths: Int,
         arbeidsInntektBeløpPerMnd: BigDecimal,
         fangstOgFiskeBeløpPerMnd: BigDecimal,
-        senesteMåned: YearMonth = YearMonth.of(2019, 1)
+        senesteMåned: YearMonth = YearMonth.of(2019, 1),
     ): List<KlassifisertInntektMåned> {
         return (0 until numberOfMonths).toList().map {
             KlassifisertInntektMåned(
                 senesteMåned.minusMonths(it.toLong()),
                 listOf(
                     KlassifisertInntekt(arbeidsInntektBeløpPerMnd, arbeidsInntekt.random()),
-                    KlassifisertInntekt(fangstOgFiskeBeløpPerMnd, medFangstOgFisk.random())
-                )
+                    KlassifisertInntekt(fangstOgFiskeBeløpPerMnd, medFangstOgFisk.random()),
+                ),
             )
         }
     }

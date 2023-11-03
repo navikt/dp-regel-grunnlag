@@ -15,7 +15,7 @@ class GrunnlagResultatTest {
             uavkortetGrunnlag = 1122.toBigDecimal(),
             beregningsregel = "ORDINÆR",
             harAvkortet = true,
-            grunnbeløpBrukt = 123.toBigDecimal()
+            grunnbeløpBrukt = 123.toBigDecimal(),
         )
 
         grunnlagResultat.sporingsId shouldBe "111"
@@ -37,7 +37,7 @@ class GrunnlagResultatTest {
             uavkortetGrunnlag = 100.499.toBigDecimal(),
             beregningsregel = "ORDINÆR",
             harAvkortet = false,
-            grunnbeløpBrukt = 123.toBigDecimal()
+            grunnbeløpBrukt = 123.toBigDecimal(),
         )
 
         grunnlagResultat.avrundetUavkortet shouldBe 100.toBigDecimal()
@@ -53,7 +53,7 @@ class GrunnlagResultatTest {
             uavkortetGrunnlag = 100.499.toBigDecimal(),
             beregningsregel = "ORDINÆR",
             harAvkortet = false,
-            grunnbeløpBrukt = 123.toBigDecimal()
+            grunnbeløpBrukt = 123.toBigDecimal(),
         )
 
         grunnlagResultat.avrundetAvkortet shouldBe 1235.toBigDecimal()

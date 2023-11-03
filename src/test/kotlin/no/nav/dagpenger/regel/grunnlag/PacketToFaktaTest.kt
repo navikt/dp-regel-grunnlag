@@ -14,7 +14,7 @@ class PacketToFaktaTest {
     private val emptyInntekt: Inntekt = Inntekt(
         inntektsId = "12345",
         inntektsListe = emptyList(),
-        sisteAvsluttendeKalenderMåned = YearMonth.of(2018, 3)
+        sisteAvsluttendeKalenderMåned = YearMonth.of(2018, 3),
     )
 
     private val simplePacketJson =
@@ -65,7 +65,6 @@ class PacketToFaktaTest {
 
     @Test
     fun ` should map inntekt from packet to Fakta `() {
-
         val packet = Packet(simplePacketJson)
 
         packet.putValue("inntektV1", Grunnlag.inntektAdapter.toJsonValue(emptyInntekt)!!)
@@ -77,7 +76,6 @@ class PacketToFaktaTest {
 
     @Test
     fun ` should map beregningsDato from packet to Fakta`() {
-
         val packet = Packet(simplePacketJson)
 
         val fakta = packetToFakta(packet)
