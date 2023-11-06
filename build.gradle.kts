@@ -47,7 +47,7 @@ dependencies {
 
     implementation(libs.konfig)
 
-    implementation("io.getunleash:unleash-client-java:8.4.0")
+    implementation("io.getunleash:unleash-client-java:9.0.0")
 
     implementation(libs.kotlin.logging)
     implementation("org.apache.logging.log4j:log4j-api:$log4j2Versjon")
