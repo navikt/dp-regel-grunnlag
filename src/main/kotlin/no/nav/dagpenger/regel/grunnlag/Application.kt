@@ -91,8 +91,6 @@ class Grunnlag(
             },
         )
 
-        log.info { "Brukte ${grunnlagResultat.grunnbeløpBrukt} som grunnlag for beregningsdato ${fakta.beregningsdato}" }
-
         createInntektPerioder(fakta)?.apply {
             packet.putValue(
                 GRUNNLAG_INNTEKTSPERIODER,
