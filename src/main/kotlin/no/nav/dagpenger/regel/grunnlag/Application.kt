@@ -60,7 +60,7 @@ class Grunnlag(
         const val FORRIGE_GRUNNLAG = "forrigeGrunnlag"
         const val GRUNNLAG_INNTEKTSPERIODER = "grunnlagInntektsPerioder"
         val inntektAdapter: JsonAdapter<Inntekt> = moshiInstance.adapter(Inntekt::class.java)
-        val unleash = setupUnleash(config.application.unleashUrl)
+        val unleash = config.unleash
     }
 
     override fun filterPredicates(): List<Predicate<String, Packet>> {
