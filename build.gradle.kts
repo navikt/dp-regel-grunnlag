@@ -59,7 +59,7 @@ dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter-params:${libs.versions.junit.get()}")
     testImplementation(libs.kotest.assertions.core)
     testImplementation("io.kotest:kotest-runner-junit5-jvm:${libs.versions.kotest.get()}")
-    testImplementation("org.apache.kafka:kafka-streams-test-utils:3.3.1")
+    testImplementation("org.apache.kafka:kafka-streams-test-utils:7.5.2-ce")
     testImplementation(libs.mockk)
 }
 
