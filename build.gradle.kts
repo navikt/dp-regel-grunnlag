@@ -43,7 +43,7 @@ dependencies {
     implementation("no.nav:nare-prometheus:0b41ab4")
 
     implementation("org.apache.kafka:kafka-streams:3.3.1")
-    implementation("org.apache.kafka:kafka-clients:3.3.1")
+    implementation("org.apache.kafka:kafka-clients:7.5.2-ce")
 
     implementation(libs.konfig)
 
