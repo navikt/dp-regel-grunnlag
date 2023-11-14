@@ -16,18 +16,12 @@ application {
     mainClass.set("no.nav.dagpenger.regel.grunnlag.ApplicationKt")
 }
 
-val moshiVersion = "1.15.0"
-
 dependencies {
     implementation(kotlin("stdlib"))
     implementation(libs.rapids.and.rivers)
 
     implementation("com.github.navikt:dagpenger-events:20230831.d11fdb")
     implementation("com.github.navikt:dp-grunnbelop:2023.05.24-15.26.f42064d9fdc8")
-
-    implementation("com.squareup.moshi:moshi:$moshiVersion")
-    implementation("com.squareup.moshi:moshi-adapters:$moshiVersion")
-    implementation("com.squareup.moshi:moshi-kotlin:$moshiVersion")
 
     implementation("de.huxhorn.sulky:de.huxhorn.sulky.ulid:8.3.0")
 
