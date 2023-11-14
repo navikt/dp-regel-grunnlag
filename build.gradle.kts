@@ -22,7 +22,7 @@ dependencies {
     implementation(kotlin("stdlib"))
     implementation(libs.rapids.and.rivers)
 
-    implementation("com.github.navikt:dagpenger-events:20230831.d11fdb")
+    implementation("com.github.navikt:dagpenger-events:2023081713361692272216.01ab7c590338")
     implementation("com.github.navikt:dp-grunnbelop:2023.05.24-15.26.f42064d9fdc8")
 
     implementation("com.squareup.moshi:moshi:$moshiVersion")
