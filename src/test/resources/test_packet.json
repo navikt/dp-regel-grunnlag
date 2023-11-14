@@ -1,0 +1,406 @@
+{
+  "system_read_count": 2,
+  "system_started": "2023-11-13T16:15:00.920602234",
+  "system_correlation_id": "01HF4M045RBV7D96GBREWQWTJV",
+  "behovId": "01HF4M045KKAHS8WW35M3F9KWB",
+  "aktørId": "2086662684060",
+  "kontekstId": "36980777",
+  "kontekstType": "vedtak",
+  "behandlingsId": "01F46GYDSP4PWWHW216H37MR7Q",
+  "beregningsDato": "2023-10-07",
+  "harAvtjentVerneplikt": false,
+  "oppfyllerKravTilFangstOgFisk": false,
+  "antallBarn": 0.0,
+  "lærling": false,
+  "regelverksdato": "2023-10-07",
+  "system_breadcrumbs": [
+    {
+      "appId": "dp-regel-api",
+      "dateTime": "2023-11-13T16:15:00.920638009",
+      "instance": "about:blank"
+    },
+    {
+      "appId": "dp-inntekt-klassifiserer",
+      "dateTime": "2023-11-13T16:15:01.03464364",
+      "instance": "about:blank"
+    }
+  ],
+  "inntektV1": {
+    "inntektsId": "01HF4BNZTR2F30GR0Q0TCH22KS",
+    "inntektsListe": [
+      {
+        "årMåned": "2020-10",
+        "klassifiserteInntekter": [
+          {
+            "beløp": "40000",
+            "inntektKlasse": "ARBEIDSINNTEKT"
+          }
+        ],
+        "harAvvik": false
+      },
+      {
+        "årMåned": "2020-11",
+        "klassifiserteInntekter": [
+          {
+            "beløp": "40000",
+            "inntektKlasse": "ARBEIDSINNTEKT"
+          }
+        ],
+        "harAvvik": false
+      },
+      {
+        "årMåned": "2020-12",
+        "klassifiserteInntekter": [
+          {
+            "beløp": "40000",
+            "inntektKlasse": "ARBEIDSINNTEKT"
+          }
+        ],
+        "harAvvik": false
+      },
+      {
+        "årMåned": "2021-07",
+        "klassifiserteInntekter": [
+          {
+            "beløp": "40000",
+            "inntektKlasse": "ARBEIDSINNTEKT"
+          }
+        ],
+        "harAvvik": false
+      },
+      {
+        "årMåned": "2021-04",
+        "klassifiserteInntekter": [
+          {
+            "beløp": "40000",
+            "inntektKlasse": "ARBEIDSINNTEKT"
+          }
+        ],
+        "harAvvik": false
+      },
+      {
+        "årMåned": "2021-01",
+        "klassifiserteInntekter": [
+          {
+            "beløp": "40000",
+            "inntektKlasse": "ARBEIDSINNTEKT"
+          }
+        ],
+        "harAvvik": false
+      },
+      {
+        "årMåned": "2021-10",
+        "klassifiserteInntekter": [
+          {
+            "beløp": "40000",
+            "inntektKlasse": "ARBEIDSINNTEKT"
+          }
+        ],
+        "harAvvik": false
+      },
+      {
+        "årMåned": "2021-02",
+        "klassifiserteInntekter": [
+          {
+            "beløp": "40000",
+            "inntektKlasse": "ARBEIDSINNTEKT"
+          }
+        ],
+        "harAvvik": false
+      },
+      {
+        "årMåned": "2021-05",
+        "klassifiserteInntekter": [
+          {
+            "beløp": "40000",
+            "inntektKlasse": "ARBEIDSINNTEKT"
+          }
+        ],
+        "harAvvik": false
+      },
+      {
+        "årMåned": "2021-06",
+        "klassifiserteInntekter": [
+          {
+            "beløp": "40000",
+            "inntektKlasse": "ARBEIDSINNTEKT"
+          }
+        ],
+        "harAvvik": false
+      },
+      {
+        "årMåned": "2021-08",
+        "klassifiserteInntekter": [
+          {
+            "beløp": "40000",
+            "inntektKlasse": "ARBEIDSINNTEKT"
+          }
+        ],
+        "harAvvik": false
+      },
+      {
+        "årMåned": "2021-09",
+        "klassifiserteInntekter": [
+          {
+            "beløp": "40000",
+            "inntektKlasse": "ARBEIDSINNTEKT"
+          }
+        ],
+        "harAvvik": false
+      },
+      {
+        "årMåned": "2021-11",
+        "klassifiserteInntekter": [
+          {
+            "beløp": "40000",
+            "inntektKlasse": "ARBEIDSINNTEKT"
+          }
+        ],
+        "harAvvik": false
+      },
+      {
+        "årMåned": "2021-12",
+        "klassifiserteInntekter": [
+          {
+            "beløp": "40000",
+            "inntektKlasse": "ARBEIDSINNTEKT"
+          }
+        ],
+        "harAvvik": false
+      },
+      {
+        "årMåned": "2021-03",
+        "klassifiserteInntekter": [
+          {
+            "beløp": "40000",
+            "inntektKlasse": "ARBEIDSINNTEKT"
+          }
+        ],
+        "harAvvik": false
+      },
+      {
+        "årMåned": "2022-07",
+        "klassifiserteInntekter": [
+          {
+            "beløp": "40000",
+            "inntektKlasse": "ARBEIDSINNTEKT"
+          }
+        ],
+        "harAvvik": false
+      },
+      {
+        "årMåned": "2022-09",
+        "klassifiserteInntekter": [
+          {
+            "beløp": "40000",
+            "inntektKlasse": "ARBEIDSINNTEKT"
+          }
+        ],
+        "harAvvik": false
+      },
+      {
+        "årMåned": "2022-12",
+        "klassifiserteInntekter": [
+          {
+            "beløp": "40000",
+            "inntektKlasse": "ARBEIDSINNTEKT"
+          }
+        ],
+        "harAvvik": false
+      },
+      {
+        "årMåned": "2022-01",
+        "klassifiserteInntekter": [
+          {
+            "beløp": "40000",
+            "inntektKlasse": "ARBEIDSINNTEKT"
+          }
+        ],
+        "harAvvik": false
+      },
+      {
+        "årMåned": "2022-04",
+        "klassifiserteInntekter": [
+          {
+            "beløp": "40000",
+            "inntektKlasse": "ARBEIDSINNTEKT"
+          }
+        ],
+        "harAvvik": false
+      },
+      {
+        "årMåned": "2022-10",
+        "klassifiserteInntekter": [
+          {
+            "beløp": "40000",
+            "inntektKlasse": "ARBEIDSINNTEKT"
+          }
+        ],
+        "harAvvik": false
+      },
+      {
+        "årMåned": "2022-11",
+        "klassifiserteInntekter": [
+          {
+            "beløp": "40000",
+            "inntektKlasse": "ARBEIDSINNTEKT"
+          }
+        ],
+        "harAvvik": false
+      },
+      {
+        "årMåned": "2022-02",
+        "klassifiserteInntekter": [
+          {
+            "beløp": "40000",
+            "inntektKlasse": "ARBEIDSINNTEKT"
+          }
+        ],
+        "harAvvik": false
+      },
+      {
+        "årMåned": "2022-03",
+        "klassifiserteInntekter": [
+          {
+            "beløp": "40000",
+            "inntektKlasse": "ARBEIDSINNTEKT"
+          }
+        ],
+        "harAvvik": false
+      },
+      {
+        "årMåned": "2022-05",
+        "klassifiserteInntekter": [
+          {
+            "beløp": "40000",
+            "inntektKlasse": "ARBEIDSINNTEKT"
+          }
+        ],
+        "harAvvik": false
+      },
+      {
+        "årMåned": "2022-06",
+        "klassifiserteInntekter": [
+          {
+            "beløp": "40000",
+            "inntektKlasse": "ARBEIDSINNTEKT"
+          }
+        ],
+        "harAvvik": false
+      },
+      {
+        "årMåned": "2022-08",
+        "klassifiserteInntekter": [
+          {
+            "beløp": "40000",
+            "inntektKlasse": "ARBEIDSINNTEKT"
+          }
+        ],
+        "harAvvik": false
+      },
+      {
+        "årMåned": "2023-06",
+        "klassifiserteInntekter": [
+          {
+            "beløp": "40000",
+            "inntektKlasse": "ARBEIDSINNTEKT"
+          }
+        ],
+        "harAvvik": false
+      },
+      {
+        "årMåned": "2023-09",
+        "klassifiserteInntekter": [
+          {
+            "beløp": "40000",
+            "inntektKlasse": "ARBEIDSINNTEKT"
+          }
+        ],
+        "harAvvik": false
+      },
+      {
+        "årMåned": "2023-01",
+        "klassifiserteInntekter": [
+          {
+            "beløp": "40000",
+            "inntektKlasse": "ARBEIDSINNTEKT"
+          }
+        ],
+        "harAvvik": false
+      },
+      {
+        "årMåned": "2023-04",
+        "klassifiserteInntekter": [
+          {
+            "beløp": "40000",
+            "inntektKlasse": "ARBEIDSINNTEKT"
+          }
+        ],
+        "harAvvik": false
+      },
+      {
+        "årMåned": "2023-07",
+        "klassifiserteInntekter": [
+          {
+            "beløp": "40000",
+            "inntektKlasse": "ARBEIDSINNTEKT"
+          }
+        ],
+        "harAvvik": false
+      },
+      {
+        "årMåned": "2023-02",
+        "klassifiserteInntekter": [
+          {
+            "beløp": "40000",
+            "inntektKlasse": "ARBEIDSINNTEKT"
+          }
+        ],
+        "harAvvik": false
+      },
+      {
+        "årMåned": "2023-05",
+        "klassifiserteInntekter": [
+          {
+            "beløp": "40000",
+            "inntektKlasse": "ARBEIDSINNTEKT"
+          }
+        ],
+        "harAvvik": false
+      },
+      {
+        "årMåned": "2023-08",
+        "klassifiserteInntekter": [
+          {
+            "beløp": "40000",
+            "inntektKlasse": "ARBEIDSINNTEKT"
+          }
+        ],
+        "harAvvik": false
+      },
+      {
+        "årMåned": "2023-03",
+        "klassifiserteInntekter": [
+          {
+            "beløp": "40000",
+            "inntektKlasse": "ARBEIDSINNTEKT"
+          }
+        ],
+        "harAvvik": false
+      }
+    ],
+    "manueltRedigert": false,
+    "sisteAvsluttendeKalenderMåned": "2023-09"
+  },
+  "@id": "32258df3-b609-4ca6-a9d2-7f897a2b806c",
+  "@opprettet": "2023-11-13T17:22:18.164895346",
+  "system_participating_services": [
+    {
+      "id": "32258df3-b609-4ca6-a9d2-7f897a2b806c",
+      "time": "2023-11-13T17:22:18.164895346",
+      "service": "dp-regel-grunnlag",
+      "instance": "dp-regel-grunnlag-799d4f6c6c-rcrmw",
+      "image": "europe-north1-docker.pkg.dev/nais-management-233d/teamdagpenger/dp-regel-grunnlag:2023.11.13-16.16-5a35045"
+    }
+  ]
+}

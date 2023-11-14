@@ -1,7 +1,6 @@
 package no.nav.dagpenger.regel.grunnlag.beregning
 
 import no.nav.dagpenger.regel.grunnlag.Fakta
-import no.nav.dagpenger.regel.grunnlag.NoResultException
 import java.math.BigDecimal
 import java.time.LocalDate
 
@@ -40,6 +39,8 @@ internal class HovedBeregning : GrunnlagBeregning("Hoved") {
             ?: throw NoResultException("Ingen resultat for grunnlagsberegning")
     }
 }
+
+class NoResultException(message: String) : RuntimeException(message)
 
 fun LocalDate.erKoronaPeriode() = this in (LocalDate.of(2020, 3, 20)..LocalDate.of(2022, 3, 31))
 

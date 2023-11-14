@@ -9,9 +9,9 @@ spec:
   image: {{ image }}
   port: 8080
   liveness:
-    path: /isAlive
+    path: /isalive
   readiness:
-    path: /isReady
+    path: /isready
   prometheus:
     enabled: true
     path: /metrics
