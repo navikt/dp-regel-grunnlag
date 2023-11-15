@@ -46,7 +46,7 @@ private fun JsonMessage.avtjentVerneplikt() =
 
 private fun JsonMessage.fangstOgFiske() =
     when (this.harVerdi(FANGST_OG_FISKE)) {
-        true -> this[AVTJENT_VERNEPLIKT].asBoolean()
+        true -> this[FANGST_OG_FISKE].asBoolean()
         false -> false
     }
 
