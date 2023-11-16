@@ -24,8 +24,6 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import java.time.LocalDate
 
-private val resourceRetriever = object {}.javaClass
-
 class FaktaMapperTest {
     private val testRapid = TestRapid()
 
