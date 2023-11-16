@@ -152,6 +152,51 @@ class FaktaMapperTest {
         testRapid.sendTestMessage("""{"$BEREGNINGSDATO": "${LocalDate.MAX}" }""")
         mapToFaktaFrom(behovløser.packet!!).regelverksdato shouldBe LocalDate.MAX
     }
+
+    @Test
+    fun `Parser inntekt riktig`() {
+        val behovløser = OnPacketTestListener(testRapid)
+        val inntektId = "01HF4BNZTR2F30GR0Q0TCH22KS"
+
+        testRapid.sendTestMessage("""{"$BEREGNINGSDATO": "${LocalDate.MAX}", "$INNTEKT": ${inntektJson(inntektId)} }""")
+
+        mapToFaktaFrom(behovløser.packet!!).inntekt.let { inntekt ->
+            requireNotNull(inntekt)
+            inntekt.inntektsId shouldBe inntektId
+            inntekt.inntektsListe.size shouldBe 2
+        }
+    }
+
+    @Language("JSON")
+    fun inntektJson(inntektId: String) = """
+          {
+            "inntektsId": "$inntektId",
+            "inntektsListe": [
+              {
+                "årMåned": "2020-10",
+                "klassifiserteInntekter": [
+                  {
+                    "beløp": "40000",
+                    "inntektKlasse": "ARBEIDSINNTEKT"
+                  }
+                ],
+                "harAvvik": false
+              },
+              {
+                "årMåned": "2020-11",
+                "klassifiserteInntekter": [
+                  {
+                    "beløp": "40000",
+                    "inntektKlasse": "ARBEIDSINNTEKT"
+                  }
+                ],
+                "harAvvik": false
+              }
+            ],
+            "manueltRedigert": false,
+            "sisteAvsluttendeKalenderMåned": "2023-09"
+          }
+    """.trimIndent()
 }
 
 private class OnPacketTestListener(rapidsConnection: RapidsConnection) : River.PacketListener {
