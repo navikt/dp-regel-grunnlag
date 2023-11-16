@@ -214,6 +214,23 @@ class FaktaMapperTest {
         testRapid.sendTestMessage("""{"$BEREGNINGSDATO": "${LocalDate.MAX}"} """)
         mapToFaktaFrom(behovløser.packet!!).manueltGrunnlag shouldBe null
     }
+
+    @Test
+    fun `Forrige grunnlag blir mappet riktig`() {
+        val behovløser = OnPacketTestListener(testRapid)
+
+        //language=JSON
+        testRapid.sendTestMessage("""{"$BEREGNINGSDATO": "${LocalDate.MAX}", "$FORRIGE_GRUNNLAG":${Int.MAX_VALUE}}""")
+        mapToFaktaFrom(behovløser.packet!!).forrigeGrunnlag shouldBe Int.MAX_VALUE
+
+        assertThrows<NumberFormatException> {
+            testRapid.sendTestMessage("""{"$BEREGNINGSDATO": "${LocalDate.MAX}", "$FORRIGE_GRUNNLAG":"hubba"}""")
+            mapToFaktaFrom(behovløser.packet!!)
+        }
+
+        testRapid.sendTestMessage("""{"$BEREGNINGSDATO": "${LocalDate.MAX}"} """)
+        mapToFaktaFrom(behovløser.packet!!).forrigeGrunnlag shouldBe null
+    }
 }
 
 private class OnPacketTestListener(rapidsConnection: RapidsConnection) : River.PacketListener {

@@ -71,7 +71,7 @@ private fun JsonMessage.manueltGrunnlag() =
 
 private fun JsonMessage.forrigeGrunnlag() =
     when (this.harVerdi(FORRIGE_GRUNNLAG)) {
-        true -> this[FORRIGE_GRUNNLAG].asInt()
+        true -> this[FORRIGE_GRUNNLAG].asText().toInt()
         false -> null
     }
 
