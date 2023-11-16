@@ -165,6 +165,11 @@ class FaktaMapperTest {
             inntekt.inntektsId shouldBe inntektId
             inntekt.inntektsListe.size shouldBe 2
         }
+
+        assertThrows<IllegalArgumentException> {
+            testRapid.sendTestMessage("""{"$BEREGNINGSDATO": "${LocalDate.MAX}", "$INNTEKT": {"hubba": "bubba"} }""")
+            mapToFaktaFrom(behovløser.packet!!)
+        }
     }
 
     @Language("JSON")
