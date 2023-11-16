@@ -65,7 +65,7 @@ private fun JsonMessage.regelverksdato() =
 
 private fun JsonMessage.manueltGrunnlag() =
     when (this.harVerdi(MANUELT_GRUNNLAG)) {
-        true -> this[MANUELT_GRUNNLAG].asInt()
+        true -> this[MANUELT_GRUNNLAG].asText().toInt()
         false -> null
     }
 

@@ -197,6 +197,23 @@ class FaktaMapperTest {
             "sisteAvsluttendeKalenderMåned": "2023-09"
           }
     """.trimIndent()
+
+    @Test
+    fun `Manuelt grunnlag blir mappet riktig`() {
+        val behovløser = OnPacketTestListener(testRapid)
+
+        //language=JSON
+        testRapid.sendTestMessage("""{"$BEREGNINGSDATO": "${LocalDate.MAX}", "$MANUELT_GRUNNLAG":${Int.MAX_VALUE}}""")
+        mapToFaktaFrom(behovløser.packet!!).manueltGrunnlag shouldBe Int.MAX_VALUE
+
+        assertThrows<NumberFormatException> {
+            testRapid.sendTestMessage("""{"$BEREGNINGSDATO": "${LocalDate.MAX}", "$MANUELT_GRUNNLAG":"hubba"}""")
+            mapToFaktaFrom(behovløser.packet!!)
+        }
+
+        testRapid.sendTestMessage("""{"$BEREGNINGSDATO": "${LocalDate.MAX}"} """)
+        mapToFaktaFrom(behovløser.packet!!).manueltGrunnlag shouldBe null
+    }
 }
 
 private class OnPacketTestListener(rapidsConnection: RapidsConnection) : River.PacketListener {
