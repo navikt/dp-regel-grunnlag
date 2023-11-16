@@ -43,7 +43,9 @@ class FaktaMapperTest {
     @Test
     fun `Tar imot packet med beregningsdato`() {
         val behovløser = OnPacketTestListener(testRapid)
-        val json = """{"$BEREGNINGSDATO":${LocalDate.now()}}"""
+
+        @Language("JSON")
+        val json = """{"$BEREGNINGSDATO":"${LocalDate.now()}"}}"""
         testRapid.sendTestMessage(json)
         behovløser.packet shouldNotBe null
     }
@@ -147,6 +149,5 @@ private class OnPacketTestListener(rapidsConnection: RapidsConnection) : River.P
 
     override fun onError(problems: MessageProblems, context: MessageContext) {
         this.problems = problems
-        println(problems.toExtendedReport())
     }
 }
