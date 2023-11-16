@@ -32,10 +32,8 @@ class GrunnlagsberegningBehovløser(
         const val GRUNNLAG_INNTEKTSPERIODER = "grunnlagInntektsPerioder"
         const val GRUNNLAG_RESULTAT = "grunnlagResultat"
         const val PROBLEM = "system_problem"
-    }
 
-    init {
-        River(rapidsConnection).apply {
+        val rapidFilter: River.() -> Unit = {
             validate { it.requireKey(BEREGNINGSDATO) }
             validate {
                 it.interestedIn(INNTEKT)
@@ -47,7 +45,11 @@ class GrunnlagsberegningBehovløser(
                 it.interestedIn(REGELVERKSDATO)
             }
             validate { it.rejectKey(GRUNNLAG_RESULTAT) }
-        }.register(this)
+        }
+    }
+
+    init {
+        River(rapidsConnection).apply(rapidFilter).register(this)
     }
 
     override fun onPacket(packet: JsonMessage, context: MessageContext) {
@@ -123,7 +125,7 @@ fun createInntektPerioder(fakta: Fakta): List<InntektPeriodeInfo>? {
                 list.first().årMåned,
                 list.last().årMåned,
             ),
-            inntekt = list.sumInntekt(if (fakta.fangstOgFisk) medFangstOgFisk + arbeidsInntekt else arbeidsInntekt),
+            inntekt = list.sumInntekt(if (fakta.fangstOgFiske) medFangstOgFisk + arbeidsInntekt else arbeidsInntekt),
             periode = index + 1,
             inneholderFangstOgFisk = fakta.inntektsPerioder.toList()[index].any { klassifisertInntektMåned ->
                 klassifisertInntektMåned.klassifiserteInntekter.any {

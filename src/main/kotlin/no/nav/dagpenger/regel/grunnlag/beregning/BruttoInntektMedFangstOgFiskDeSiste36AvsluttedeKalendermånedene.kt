@@ -8,7 +8,7 @@ class BruttoInntektMedFangstOgFiskDeSiste36AvsluttedeKalendermånedene : Trettis
     "FangstOgFiskSiste36(2021)",
 ) {
     private val avviklingsDato = LocalDate.of(2022, 1, 1)
-    private fun skalInkludereFangstOgFisk(fakta: Fakta) = fakta.fangstOgFisk && fakta.regelverksdato < avviklingsDato
+    private fun skalInkludereFangstOgFisk(fakta: Fakta) = fakta.fangstOgFiske && fakta.regelverksdato < avviklingsDato
 
     override fun calculate(fakta: Fakta) =
         if (skalInkludereFangstOgFisk(fakta)) {

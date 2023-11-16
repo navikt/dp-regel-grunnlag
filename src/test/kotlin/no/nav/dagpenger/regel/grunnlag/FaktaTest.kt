@@ -52,7 +52,7 @@ internal class FaktaTest {
         val fakta = Fakta(
             inntekt = inntekt,
             verneplikt = false,
-            fangstOgFisk = false,
+            fangstOgFiske = false,
             beregningsdato = LocalDate.of(2019, 4, 1),
             regelverksdato = LocalDate.of(2019, 7, 1),
         )
@@ -69,7 +69,7 @@ internal class FaktaTest {
         val fakta = Fakta(
             inntekt = inntekt,
             verneplikt = false,
-            fangstOgFisk = false,
+            fangstOgFiske = false,
             beregningsdato = LocalDate.of(2019, 4, 1),
         )
 

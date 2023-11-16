@@ -30,7 +30,7 @@ internal class EtterLærlingForskriftTest() {
     fun ` Beregning er aktiv til fra 20 mars 2020 til 31 mars 2022`() {
         val fakta = Fakta(
             inntekt = null,
-            fangstOgFisk = false,
+            fangstOgFiske = false,
             lærling = true,
             verneplikt = false,
             beregningsdato = LocalDate.of(2020, 3, 20),
@@ -46,7 +46,7 @@ internal class EtterLærlingForskriftTest() {
     fun `Skal behandle lærlinger der beregningsdato er definert innenfor korona periode (20 mars til 31 desember 2020)`() {
         val fakta = Fakta(
             inntekt = null,
-            fangstOgFisk = false,
+            fangstOgFiske = false,
             lærling = true,
             verneplikt = false,
             beregningsdato = LocalDate.of(2020, 3, 20),
@@ -58,7 +58,7 @@ internal class EtterLærlingForskriftTest() {
     fun `Skal ikke behandle lærlinger der beregningsdato er definert utenfor korona periode 20 mars til 31 desember 2020`() {
         val fakta = Fakta(
             inntekt = null,
-            fangstOgFisk = false,
+            fangstOgFiske = false,
             lærling = true,
             verneplikt = false,
             beregningsdato = LocalDate.of(2020, 3, 1),
@@ -70,7 +70,7 @@ internal class EtterLærlingForskriftTest() {
     fun `Skal ikke behandle lærlinger der manuelt grunnlag er satt`() {
         val fakta = Fakta(
             inntekt = null,
-            fangstOgFisk = false,
+            fangstOgFiske = false,
             manueltGrunnlag = 1000,
             lærling = true,
             verneplikt = false,
@@ -84,7 +84,7 @@ internal class EtterLærlingForskriftTest() {
         val fakta = Fakta(
             inntekt = Inntekt("123", inntektsListe, sisteAvsluttendeKalenderMåned = YearMonth.of(2020, 3)),
             verneplikt = false,
-            fangstOgFisk = false,
+            fangstOgFiske = false,
             lærling = true,
             beregningsdato = LocalDate.of(2020, 4, 1),
         )
@@ -109,7 +109,7 @@ internal class EtterLærlingForskriftTest() {
         val fakta = Fakta(
             inntekt = Inntekt("123", inntektsListe, sisteAvsluttendeKalenderMåned = YearMonth.of(2020, 3)),
             verneplikt = false,
-            fangstOgFisk = false,
+            fangstOgFiske = false,
             lærling = true,
             beregningsdato = LocalDate.of(år, 5, 31),
         )
@@ -133,7 +133,7 @@ internal class EtterLærlingForskriftTest() {
         val fakta = Fakta(
             inntekt = Inntekt("123", inntektsListe, sisteAvsluttendeKalenderMåned = YearMonth.of(2020, 3)),
             verneplikt = false,
-            fangstOgFisk = false,
+            fangstOgFiske = false,
             lærling = true,
             beregningsdato = LocalDate.of(2020, 4, 1),
         )
@@ -157,7 +157,7 @@ internal class EtterLærlingForskriftTest() {
         val fakta = Fakta(
             inntekt = Inntekt("123", inntektsListe, sisteAvsluttendeKalenderMåned = YearMonth.of(2020, 3)),
             verneplikt = false,
-            fangstOgFisk = true,
+            fangstOgFiske = true,
             lærling = true,
             beregningsdato = LocalDate.of(2020, 4, 1),
         )
@@ -181,7 +181,7 @@ internal class EtterLærlingForskriftTest() {
         val fakta = Fakta(
             inntekt = Inntekt("123", inntektsListe, sisteAvsluttendeKalenderMåned = YearMonth.of(2020, 3)),
             verneplikt = false,
-            fangstOgFisk = true,
+            fangstOgFiske = true,
             lærling = true,
             beregningsdato = LocalDate.of(2020, 4, 1),
         )
@@ -206,7 +206,7 @@ internal class EtterLærlingForskriftTest() {
             inntekt = null,
             manueltGrunnlag = 1000,
             verneplikt = false,
-            fangstOgFisk = true,
+            fangstOgFiske = true,
             lærling = true,
             beregningsdato = LocalDate.now(),
         )
@@ -222,7 +222,7 @@ internal class EtterLærlingForskriftTest() {
         val fakta = Fakta(
             inntekt = Inntekt("123", emptyList(), sisteAvsluttendeKalenderMåned = YearMonth.now()),
             verneplikt = false,
-            fangstOgFisk = true,
+            fangstOgFiske = true,
             lærling = true,
             beregningsdato = LocalDate.of(2021, 5, 1),
         )
@@ -243,7 +243,7 @@ internal class EtterLærlingForskriftTest() {
         val fakta = Fakta(
             inntekt = Inntekt("123", emptyList(), sisteAvsluttendeKalenderMåned = YearMonth.now()),
             verneplikt = false,
-            fangstOgFisk = false,
+            fangstOgFiske = false,
             lærling = true,
             beregningsdato = LocalDate.of(2022, 3, 30),
         )

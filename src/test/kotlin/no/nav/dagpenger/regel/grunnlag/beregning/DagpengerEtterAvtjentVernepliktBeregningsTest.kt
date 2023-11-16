@@ -16,7 +16,7 @@ class DagpengerEtterAvtjentVernepliktBeregningsTest {
     fun `Skal ikke behandle hvis ikke verneplikt parameter er satt`() {
         val fakta = Fakta(
             inntekt = null,
-            fangstOgFisk = false,
+            fangstOgFiske = false,
             lærling = true,
             verneplikt = false,
             beregningsdato = LocalDate.of(2019, 4, 1),
@@ -29,7 +29,7 @@ class DagpengerEtterAvtjentVernepliktBeregningsTest {
         val fakta = Fakta(
             inntekt = Inntekt("123", emptyList(), sisteAvsluttendeKalenderMåned = YearMonth.of(2019, 3)),
             verneplikt = true,
-            fangstOgFisk = false,
+            fangstOgFiske = false,
             beregningsdato = LocalDate.of(2019, 5, 1),
         )
 
@@ -45,7 +45,7 @@ class DagpengerEtterAvtjentVernepliktBeregningsTest {
         val fakta = Fakta(
             inntekt = Inntekt("123", emptyList(), sisteAvsluttendeKalenderMåned = YearMonth.of(2019, 3)),
             verneplikt = false,
-            fangstOgFisk = false,
+            fangstOgFiske = false,
             beregningsdato = LocalDate.of(2019, 4, 1),
         )
 

@@ -18,7 +18,7 @@ import java.util.EnumSet
 data class Fakta(
     val inntekt: Inntekt? = null,
     val verneplikt: Boolean,
-    val fangstOgFisk: Boolean,
+    val fangstOgFiske: Boolean,
     val beregningsdato: LocalDate,
     val regelverksdato: LocalDate = beregningsdato,
     val manueltGrunnlag: Int? = null,

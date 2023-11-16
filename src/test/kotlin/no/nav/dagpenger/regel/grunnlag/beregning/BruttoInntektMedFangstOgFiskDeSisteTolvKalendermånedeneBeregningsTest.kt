@@ -30,7 +30,7 @@ class BruttoInntektMedFangstOgFiskDeSisteTolvKalendermånedeneBeregningsTest {
         val fiskOgFangstInntekt = generateFiskOgFangst(12, BigDecimal(1000), sisteAvsluttendeKalenderMåned)
         val fakta = Fakta(
             inntekt = Inntekt("123", arbeidsInntektsListe + fiskOgFangstInntekt, sisteAvsluttendeKalenderMåned = sisteAvsluttendeKalenderMåned),
-            fangstOgFisk = true,
+            fangstOgFiske = true,
             lærling = false,
             verneplikt = false,
             beregningsdato = regelverksdato,
@@ -46,7 +46,7 @@ class BruttoInntektMedFangstOgFiskDeSisteTolvKalendermånedeneBeregningsTest {
     fun `Skal ikke behandle lærlinger der beregningsdato er definert innenfor korona periode (20 mars til 31 desember 2020)`() {
         val fakta = Fakta(
             inntekt = null,
-            fangstOgFisk = false,
+            fangstOgFiske = false,
             lærling = true,
             verneplikt = false,
             beregningsdato = LocalDate.of(2020, 3, 20),
@@ -58,7 +58,7 @@ class BruttoInntektMedFangstOgFiskDeSisteTolvKalendermånedeneBeregningsTest {
     fun `Skal ikke behandle lærlinger som ordinær der beregningsdato er definert utenfor korona periode (20 mars til 31 desember 2020)`() {
         val fakta = Fakta(
             inntekt = null,
-            fangstOgFisk = false,
+            fangstOgFiske = false,
             lærling = true,
             verneplikt = false,
             beregningsdato = LocalDate.of(2020, 3, 1),
@@ -100,7 +100,7 @@ class BruttoInntektMedFangstOgFiskDeSisteTolvKalendermånedeneBeregningsTest {
         val fakta = Fakta(
             inntekt = Inntekt("123", inntektsListe, sisteAvsluttendeKalenderMåned = YearMonth.of(2019, 3)),
             verneplikt = false,
-            fangstOgFisk = true,
+            fangstOgFiske = true,
             beregningsdato = LocalDate.of(2019, 4, 1),
         )
 
@@ -141,7 +141,7 @@ class BruttoInntektMedFangstOgFiskDeSisteTolvKalendermånedeneBeregningsTest {
         val fakta = Fakta(
             inntekt = Inntekt("123", inntektsListe, sisteAvsluttendeKalenderMåned = YearMonth.of(2019, 1)),
             verneplikt = false,
-            fangstOgFisk = true,
+            fangstOgFiske = true,
             beregningsdato = LocalDate.of(2019, 4, 1),
         )
 
@@ -181,7 +181,7 @@ class BruttoInntektMedFangstOgFiskDeSisteTolvKalendermånedeneBeregningsTest {
 
         val fakta = Fakta(
             inntekt = Inntekt("123", inntektsListe, sisteAvsluttendeKalenderMåned = YearMonth.of(2019, 1)),
-            fangstOgFisk = true,
+            fangstOgFiske = true,
             verneplikt = false,
             beregningsdato = LocalDate.of(2019, 2, 10),
         )
@@ -197,7 +197,7 @@ class BruttoInntektMedFangstOgFiskDeSisteTolvKalendermånedeneBeregningsTest {
     fun `Skal returnere ingenBeregningsResultat når fangst og fisk er false`() {
         val fakta = Fakta(
             inntekt = Inntekt("123", emptyList(), sisteAvsluttendeKalenderMåned = YearMonth.of(2019, 3)),
-            fangstOgFisk = false,
+            fangstOgFiske = false,
             verneplikt = false,
             beregningsdato = LocalDate.of(2019, 4, 1),
         )
@@ -243,7 +243,7 @@ class BruttoInntektMedFangstOgFiskDeSisteTolvKalendermånedeneBeregningsTest {
         val fakta = Fakta(
             inntekt = Inntekt("123", inntektsListe, sisteAvsluttendeKalenderMåned = YearMonth.of(2019, 3)),
             verneplikt = false,
-            fangstOgFisk = false,
+            fangstOgFiske = false,
             beregningsdato = LocalDate.of(2019, 4, 1),
         )
 

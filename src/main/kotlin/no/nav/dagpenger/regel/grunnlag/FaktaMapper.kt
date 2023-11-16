@@ -16,6 +16,7 @@ import no.nav.helse.rapids_rivers.isMissingOrNull
 import java.time.LocalDate
 
 private val sikkerLogg = KotlinLogging.logger("tjenestekall")
+
 fun mapToFaktaFrom(packet: JsonMessage): Fakta {
     val avtjentVerneplikt: Boolean = packet.avtjentVerneplikt()
     val fangstOgFisk: Boolean = packet.fangstOgFiske()
@@ -29,7 +30,7 @@ fun mapToFaktaFrom(packet: JsonMessage): Fakta {
     return Fakta(
         inntekt = inntekt,
         verneplikt = avtjentVerneplikt,
-        fangstOgFisk = fangstOgFisk,
+        fangstOgFiske = fangstOgFisk,
         beregningsdato = beregningsdato,
         regelverksdato = regelverksdato,
         manueltGrunnlag = manueltGrunnlag,

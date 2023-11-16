@@ -18,7 +18,7 @@ internal class CreateInntektPerioderTest {
         val beregningsdato = LocalDate.of(2019, 2, 1)
         val fakta = Fakta(
             verneplikt = false,
-            fangstOgFisk = false,
+            fangstOgFiske = false,
             beregningsdato = beregningsdato,
         )
 
@@ -39,7 +39,7 @@ internal class CreateInntektPerioderTest {
                 sisteAvsluttendeKalenderMåned = sisteAvsluttendeKalenderMåned,
             ),
             verneplikt = false,
-            fangstOgFisk = false,
+            fangstOgFiske = false,
             beregningsdato = beregningsdato,
         )
 
@@ -89,7 +89,7 @@ internal class CreateInntektPerioderTest {
                 sisteAvsluttendeKalenderMåned = sisteAvsluttendeKalenderMåned,
             ),
             verneplikt = false,
-            fangstOgFisk = true,
+            fangstOgFiske = true,
             beregningsdato = beregningsdato,
         )
 
@@ -110,7 +110,7 @@ internal class CreateInntektPerioderTest {
                 sisteAvsluttendeKalenderMåned = sisteAvsluttendeKalenderMåned,
             ),
             verneplikt = false,
-            fangstOgFisk = true,
+            fangstOgFiske = true,
             beregningsdato = beregningsdato,
         )
 
@@ -132,7 +132,7 @@ internal class CreateInntektPerioderTest {
                 sisteAvsluttendeKalenderMåned = sisteAvsluttendeKalenderMåned,
             ),
             verneplikt = false,
-            fangstOgFisk = true,
+            fangstOgFiske = true,
             beregningsdato = beregningsdato,
         )
 
@@ -168,7 +168,7 @@ internal class CreateInntektPerioderTest {
                 sisteAvsluttendeKalenderMåned = sisteAvsluttedeKalenderMåned,
             ),
             verneplikt = false,
-            fangstOgFisk = false,
+            fangstOgFiske = false,
             beregningsdato = LocalDate.of(2019, 5, 20),
         )
 

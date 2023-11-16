@@ -58,7 +58,7 @@ class LærlingForskriftSisteAvsluttendeKalenderMånedFangstOgFisk : GrunnlagEtte
 ) {
 
     override fun calculate(fakta: Fakta): Resultat {
-        return if (fakta.fangstOgFisk) super.calculate(fakta) else IngenBeregningsResultat(this.beregningsregel)
+        return if (fakta.fangstOgFiske) super.calculate(fakta) else IngenBeregningsResultat(this.beregningsregel)
     }
 }
 
@@ -68,7 +68,7 @@ class LærlingForskriftSiste3AvsluttendeKalenderMånedFangsOgFisk : GrunnlagEtte
     inntektKlasser = inntektKlassifisertEtterFangstOgFisk,
 ) {
     override fun calculate(fakta: Fakta): Resultat {
-        return if (fakta.fangstOgFisk) super.calculate(fakta) else IngenBeregningsResultat(this.beregningsregel)
+        return if (fakta.fangstOgFiske) super.calculate(fakta) else IngenBeregningsResultat(this.beregningsregel)
     }
 }
 

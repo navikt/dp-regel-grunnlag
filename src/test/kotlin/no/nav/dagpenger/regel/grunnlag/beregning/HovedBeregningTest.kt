@@ -29,7 +29,7 @@ internal class HovedBeregningTest : FreeSpec({
                     sisteAvsluttendeKalenderMåned = sisteAvsluttendeKalenderMåned,
                 ),
                 verneplikt = false,
-                fangstOgFisk = false,
+                fangstOgFiske = false,
                 lærling = true,
                 beregningsdato = beregningsDato,
             )
@@ -51,7 +51,7 @@ internal class HovedBeregningTest : FreeSpec({
                     sisteAvsluttendeKalenderMåned = sisteAvsluttendeKalenderMåned,
                 ),
                 verneplikt = false,
-                fangstOgFisk = false,
+                fangstOgFiske = false,
                 lærling = true,
                 beregningsdato = beregningsDato,
             )
