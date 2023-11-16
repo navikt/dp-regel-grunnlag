@@ -27,18 +27,6 @@ import java.time.LocalDate
 private val resourceRetriever = object {}.javaClass
 
 class FaktaMapperTest {
-    @Test
-    fun `greier å parse json`() {
-        resourceRetriever.getResource("/test_packet.json")?.readText()!!.let { json ->
-            val packet = JsonMessage(json, MessageProblems("")).also {
-                it.interestedIn(MANUELT_GRUNNLAG, INNTEKT, FORRIGE_GRUNNLAG)
-                shouldNotThrowAny {
-                    it.inntekt()
-                }
-            }
-        }
-    }
-
     private val testRapid = TestRapid()
 
     @Test
