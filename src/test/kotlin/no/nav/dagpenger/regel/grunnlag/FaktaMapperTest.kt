@@ -12,6 +12,7 @@ import no.nav.dagpenger.regel.grunnlag.GrunnlagsberegningBehovløser.Companion.G
 import no.nav.dagpenger.regel.grunnlag.GrunnlagsberegningBehovløser.Companion.INNTEKT
 import no.nav.dagpenger.regel.grunnlag.GrunnlagsberegningBehovløser.Companion.LÆRLING
 import no.nav.dagpenger.regel.grunnlag.GrunnlagsberegningBehovløser.Companion.MANUELT_GRUNNLAG
+import no.nav.dagpenger.regel.grunnlag.GrunnlagsberegningBehovløser.Companion.REGELVERKSDATO
 import no.nav.helse.rapids_rivers.JsonMessage
 import no.nav.helse.rapids_rivers.MessageContext
 import no.nav.helse.rapids_rivers.MessageProblems
@@ -130,6 +131,26 @@ class FaktaMapperTest {
 
         testRapid.sendTestMessage("""{"$BEREGNINGSDATO":"fqasfas"}""")
         assertThrows<Exception> { mapToFaktaFrom(behovløser.packet!!) }
+    }
+
+    @Test
+    fun `Regelverksdato blir mappet riktig`() {
+        val behovløser = OnPacketTestListener(testRapid)
+
+        //language=JSON
+        testRapid.sendTestMessage("""{"$BEREGNINGSDATO": "${LocalDate.MAX}", "$REGELVERKSDATO":"${LocalDate.MIN}"}""")
+        mapToFaktaFrom(behovløser.packet!!).regelverksdato shouldBe LocalDate.MIN
+
+        testRapid.sendTestMessage("""{"$BEREGNINGSDATO": "${LocalDate.MAX}", "$REGELVERKSDATO":"s"}""")
+        assertThrows<Exception> { mapToFaktaFrom(behovløser.packet!!) }
+    }
+
+    @Test
+    fun `Dersom regelverksdato mangler brukes beregningsdato`() {
+        val behovløser = OnPacketTestListener(testRapid)
+        //language=JSON
+        testRapid.sendTestMessage("""{"$BEREGNINGSDATO": "${LocalDate.MAX}" }""")
+        mapToFaktaFrom(behovløser.packet!!).regelverksdato shouldBe LocalDate.MAX
     }
 }
 
