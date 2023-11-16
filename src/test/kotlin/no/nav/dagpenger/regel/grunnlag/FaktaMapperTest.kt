@@ -1,6 +1,6 @@
 package no.nav.dagpenger.regel.grunnlag
 
-import io.kotest.assertions.throwables.shouldNotThrowAny
+import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
 import io.kotest.matchers.string.shouldContain
@@ -23,6 +23,7 @@ import org.intellij.lang.annotations.Language
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import java.time.LocalDate
+import java.time.format.DateTimeParseException
 
 class FaktaMapperTest {
     private val testRapid = TestRapid()
@@ -78,6 +79,11 @@ class FaktaMapperTest {
 
         testRapid.sendTestMessage("""{"$BEREGNINGSDATO":"${LocalDate.now()}"}""")
         mapToFaktaFrom(behovløser.packet!!).fangstOgFiske shouldBe false
+
+        shouldThrow<IllegalArgumentException> {
+            testRapid.sendTestMessage("""{"$BEREGNINGSDATO":"${LocalDate.now()}","$FANGST_OG_FISKE":1}""")
+            mapToFaktaFrom(behovløser.packet!!)
+        }
     }
 
     @Test
@@ -92,6 +98,11 @@ class FaktaMapperTest {
 
         testRapid.sendTestMessage("""{"$BEREGNINGSDATO":"${LocalDate.now()}"}""")
         mapToFaktaFrom(behovløser.packet!!).verneplikt shouldBe false
+
+        shouldThrow<IllegalArgumentException> {
+            testRapid.sendTestMessage("""{"$BEREGNINGSDATO":"${LocalDate.now()}","$AVTJENT_VERNEPLIKT":1}""")
+            mapToFaktaFrom(behovløser.packet!!)
+        }
     }
 
     @Test
@@ -106,6 +117,11 @@ class FaktaMapperTest {
 
         testRapid.sendTestMessage("""{"$BEREGNINGSDATO":"${LocalDate.now()}"}""")
         mapToFaktaFrom(behovløser.packet!!).lærling shouldBe false
+
+        shouldThrow<IllegalArgumentException> {
+            testRapid.sendTestMessage("""{"$BEREGNINGSDATO":"${LocalDate.now()}","$LÆRLING":1}""")
+            mapToFaktaFrom(behovløser.packet!!)
+        }
     }
 
     @Test
@@ -116,7 +132,9 @@ class FaktaMapperTest {
         mapToFaktaFrom(behovløser.packet!!).beregningsdato shouldBe LocalDate.MAX
 
         testRapid.sendTestMessage("""{"$BEREGNINGSDATO":"fqasfas"}""")
-        assertThrows<Exception> { mapToFaktaFrom(behovløser.packet!!) }
+        shouldThrow<DateTimeParseException> {
+            mapToFaktaFrom(behovløser.packet!!)
+        }
     }
 
     @Test
@@ -128,7 +146,7 @@ class FaktaMapperTest {
         mapToFaktaFrom(behovløser.packet!!).regelverksdato shouldBe LocalDate.MIN
 
         testRapid.sendTestMessage("""{"$BEREGNINGSDATO": "${LocalDate.MAX}", "$REGELVERKSDATO":"s"}""")
-        assertThrows<Exception> { mapToFaktaFrom(behovløser.packet!!) }
+        shouldThrow<DateTimeParseException> { mapToFaktaFrom(behovløser.packet!!) }
     }
 
     @Test

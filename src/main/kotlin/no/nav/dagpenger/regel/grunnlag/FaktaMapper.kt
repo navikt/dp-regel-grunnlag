@@ -1,5 +1,6 @@
 package no.nav.dagpenger.regel.grunnlag
 
+import com.fasterxml.jackson.databind.JsonNode
 import mu.KotlinLogging
 import no.nav.dagpenger.events.inntekt.v1.Inntekt
 import no.nav.dagpenger.regel.grunnlag.GrunnlagsberegningBehovløser.Companion.AVTJENT_VERNEPLIKT
@@ -39,21 +40,24 @@ fun mapToFaktaFrom(packet: JsonMessage): Fakta {
     )
 }
 
+private fun JsonNode.asBooleanStrict(): Boolean =
+    asText().toBooleanStrict()
+
 private fun JsonMessage.avtjentVerneplikt() =
     when (this.harVerdi(AVTJENT_VERNEPLIKT)) {
-        true -> this[AVTJENT_VERNEPLIKT].asBoolean()
+        true -> this[AVTJENT_VERNEPLIKT].asBooleanStrict()
         false -> false
     }
 
 private fun JsonMessage.fangstOgFiske() =
     when (this.harVerdi(FANGST_OG_FISKE)) {
-        true -> this[FANGST_OG_FISKE].asBoolean()
+        true -> this[FANGST_OG_FISKE].asBooleanStrict()
         false -> false
     }
 
 private fun JsonMessage.lærling() =
     when (this.harVerdi(LÆRLING)) {
-        true -> this[LÆRLING].asBoolean()
+        true -> this[LÆRLING].asBooleanStrict()
         false -> false
     }
 
