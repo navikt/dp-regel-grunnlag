@@ -215,6 +215,9 @@ class FaktaMapperTest {
         testRapid.sendTestMessage("""{"$BEREGNINGSDATO": "${LocalDate.MAX}", "$MANUELT_GRUNNLAG":${Int.MAX_VALUE}}""")
         mapToFaktaFrom(behovløser.packet!!).manueltGrunnlag shouldBe Int.MAX_VALUE
 
+        testRapid.sendTestMessage("""{"$BEREGNINGSDATO": "${LocalDate.MAX}", "$MANUELT_GRUNNLAG":100.0}""")
+        mapToFaktaFrom(behovløser.packet!!).manueltGrunnlag shouldBe 100
+
         assertThrows<NumberFormatException> {
             testRapid.sendTestMessage("""{"$BEREGNINGSDATO": "${LocalDate.MAX}", "$MANUELT_GRUNNLAG":"hubba"}""")
             mapToFaktaFrom(behovløser.packet!!)
@@ -231,6 +234,9 @@ class FaktaMapperTest {
         //language=JSON
         testRapid.sendTestMessage("""{"$BEREGNINGSDATO": "${LocalDate.MAX}", "$FORRIGE_GRUNNLAG":${Int.MAX_VALUE}}""")
         mapToFaktaFrom(behovløser.packet!!).forrigeGrunnlag shouldBe Int.MAX_VALUE
+
+        testRapid.sendTestMessage("""{"$BEREGNINGSDATO": "${LocalDate.MAX}", "$FORRIGE_GRUNNLAG":100.0}""")
+        mapToFaktaFrom(behovløser.packet!!).forrigeGrunnlag shouldBe 100
 
         assertThrows<NumberFormatException> {
             testRapid.sendTestMessage("""{"$BEREGNINGSDATO": "${LocalDate.MAX}", "$FORRIGE_GRUNNLAG":"hubba"}""")
