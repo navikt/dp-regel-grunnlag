@@ -14,7 +14,7 @@ data class InntektPeriodeInfo(
 ) {
     fun toMap() = mapOf(
         "inntektsPeriode" to inntektsPeriode.toMap(),
-        "inntekt" to inntekt,
+        "inntekt" to inntekt.toString(),
         "periode" to periode,
         "inneholderFangstOgFisk" to inneholderFangstOgFisk,
     )

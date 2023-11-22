@@ -34,7 +34,7 @@ internal class InntektsPeriodeInfoTest {
                     "førsteMåned" to "2022-01",
                     "sisteMåned" to "2023-12",
                 ),
-                "inntekt" to 10.toBigDecimal(),
+                "inntekt" to "${10.toBigDecimal()}",
                 "periode" to 1,
                 "inneholderFangstOgFisk" to false,
 
@@ -44,7 +44,7 @@ internal class InntektsPeriodeInfoTest {
                     "førsteMåned" to "2022-01",
                     "sisteMåned" to "2023-02",
                 ),
-                "inntekt" to 123.3.toBigDecimal(),
+                "inntekt" to "${123.3.toBigDecimal()}",
                 "periode" to 10,
                 "inneholderFangstOgFisk" to true,
             ),
