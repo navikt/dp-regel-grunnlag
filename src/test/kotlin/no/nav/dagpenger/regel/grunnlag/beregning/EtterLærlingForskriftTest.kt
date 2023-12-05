@@ -22,7 +22,7 @@ internal class EtterLærlingForskriftTest() {
     val beregning = object : GrunnlagEtterLærlingForskrift(
         regelIdentifikator = "test",
         grunnlagUtvelgelse = SisteAvsluttendeMånedUtvelgelse(),
-        inntektKlasser = inntektKlassifisertEtterFangstOgFisk,
+        inntektKlasser = inntektsklasserMedFangstOgFiske,
     ) {
     }
 

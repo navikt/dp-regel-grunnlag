@@ -4,10 +4,13 @@ import no.nav.dagpenger.events.inntekt.v1.Inntekt
 import no.nav.dagpenger.events.inntekt.v1.InntektKlasse
 import no.nav.dagpenger.events.inntekt.v1.KlassifisertInntekt
 import no.nav.dagpenger.events.inntekt.v1.KlassifisertInntektMåned
-import no.nav.dagpenger.regel.grunnlag.beregning.inntektKlassifisertEtterArbeidsInntekt
-import no.nav.dagpenger.regel.grunnlag.beregning.inntektKlassifisertEtterFangstOgFisk
-import org.junit.jupiter.api.Assertions
+import no.nav.dagpenger.regel.grunnlag.beregning.inntektsklasserMedFangstOgFiske
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertFalse
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.CsvSource
 import java.math.BigDecimal
 import java.time.LocalDate
 import java.time.YearMonth
@@ -48,8 +51,8 @@ internal class CreateInntektPerioderTest {
         val inntektsPerioder = createInntektPerioder(fakta)!!
         assertThreeCorrectPeriods(inntektsPerioder, sisteAvsluttendeKalenderMåned)
 
-        Assertions.assertTrue(inntektsPerioder.all { it.inntekt == BigDecimal(12000) })
-        Assertions.assertTrue(inntektsPerioder.none { it.inneholderFangstOgFisk })
+        assertTrue(inntektsPerioder.all { it.inntekt == BigDecimal(12000) })
+        assertTrue(inntektsPerioder.none { it.inneholderFangstOgFisk })
     }
 
     @Test
@@ -71,8 +74,42 @@ internal class CreateInntektPerioderTest {
         val inntektsPerioder = createInntektPerioder(fakta)!!
         assertThreeCorrectPeriods(inntektsPerioder, sisteAvsluttendeKalenderMåned)
 
-        Assertions.assertTrue(inntektsPerioder.all { it.inntekt == BigDecimal(24000) })
-        Assertions.assertTrue(inntektsPerioder.all { it.inneholderFangstOgFisk })
+        assertTrue(inntektsPerioder.all { it.inntekt == BigDecimal(24000) })
+        assertTrue(inntektsPerioder.all { it.inneholderFangstOgFisk })
+    }
+
+    @ParameterizedTest
+    @CsvSource(
+        "PLEIEPENGER",
+        "OMSORGSPENGER",
+        "OPPLÆRINGSPENGER",
+    )
+    fun `Summer inntekter fra ulike inntektsklasser`(
+        inntektKlasse: InntektKlasse,
+    ) {
+        val sisteAvsluttendeKalenderMåned = YearMonth.of(2019, 1)
+        val beregningsdato = LocalDate.of(2019, 2, 1)
+
+        val fakta = Fakta(
+            inntekt = Inntekt(
+                inntektsId = "ID",
+                inntektsListe = generateInntektMed(
+                    inntektKlasse = inntektKlasse,
+                    numberOfMonths = 36,
+                    beløpPerMnd = BigDecimal(4000),
+                    senesteMåned = sisteAvsluttendeKalenderMåned,
+                ),
+                sisteAvsluttendeKalenderMåned = sisteAvsluttendeKalenderMåned,
+            ),
+            verneplikt = false,
+            fangstOgFiske = true,
+            beregningsdato = beregningsdato,
+        )
+
+        val inntektsPerioder = createInntektPerioder(fakta)!!
+        assertThreeCorrectPeriods(inntektsPerioder, sisteAvsluttendeKalenderMåned)
+        assertTrue(inntektsPerioder.all { it.inntekt == BigDecimal(48000) })
+        assertFalse(inntektsPerioder.all { it.inneholderFangstOgFisk })
     }
 
     @Test
@@ -97,8 +134,7 @@ internal class CreateInntektPerioderTest {
 
         val inntektsPerioder = createInntektPerioder(fakta)!!
         assertThreeCorrectPeriods(inntektsPerioder, sisteAvsluttendeKalenderMåned)
-        Assertions.assertTrue(inntektsPerioder.all { it.inntekt == BigDecimal(48000) })
-        Assertions.assertTrue(inntektsPerioder.all { it.inneholderFangstOgFisk })
+        assertTrue(inntektsPerioder.all { it.inntekt == BigDecimal(48000) })
     }
 
     @Test
@@ -119,8 +155,8 @@ internal class CreateInntektPerioderTest {
         val inntektsPerioder = createInntektPerioder(fakta)!!
         assertThreeCorrectPeriods(inntektsPerioder, sisteAvsluttendeKalenderMåned)
 
-        Assertions.assertTrue(inntektsPerioder.all { it.inntekt == BigDecimal(24000) })
-        Assertions.assertTrue(inntektsPerioder.all { it.inneholderFangstOgFisk })
+        assertTrue(inntektsPerioder.all { it.inntekt == BigDecimal(24000) })
+        assertTrue(inntektsPerioder.all { it.inneholderFangstOgFisk })
     }
 
     @Test
@@ -141,8 +177,8 @@ internal class CreateInntektPerioderTest {
         val inntektsPerioder = createInntektPerioder(fakta)!!
         assertThreeCorrectPeriods(inntektsPerioder, sisteAvsluttendeKalenderMåned)
 
-        Assertions.assertTrue(inntektsPerioder.all { it.inntekt == BigDecimal(24000) })
-        Assertions.assertFalse(inntektsPerioder.all { it.inneholderFangstOgFisk })
+        assertTrue(inntektsPerioder.all { it.inntekt == BigDecimal(24000) })
+        assertFalse(inntektsPerioder.all { it.inneholderFangstOgFisk })
     }
 
     @Test
@@ -177,11 +213,11 @@ internal class CreateInntektPerioderTest {
         val inntektsPerioder = createInntektPerioder(fakta)!!
         assertThreeCorrectPeriods(inntektsPerioder, sisteAvsluttedeKalenderMåned)
 
-        Assertions.assertTrue(inntektsPerioder.all { it.inntekt == BigDecimal(-100) })
+        assertTrue(inntektsPerioder.all { it.inntekt == BigDecimal(-100) })
     }
 
     fun assertThreeCorrectPeriods(inntektsInfoListe: List<InntektPeriodeInfo>?, senesteMåned: YearMonth) {
-        Assertions.assertEquals(3, inntektsInfoListe?.size)
+        assertEquals(3, inntektsInfoListe?.size)
 
         val førstePeriode = inntektsInfoListe?.find { it.periode == 1 }
         val andrePeriode = inntektsInfoListe?.find { it.periode == 2 }
@@ -191,29 +227,17 @@ internal class CreateInntektPerioderTest {
         assertNotNull(andrePeriode)
         assertNotNull(tredjePeriode)
 
-        Assertions.assertEquals(senesteMåned, førstePeriode.inntektsPeriode.sisteMåned)
-        Assertions.assertEquals(senesteMåned.minusYears(1).plusMonths(1), førstePeriode.inntektsPeriode.førsteMåned)
-        Assertions.assertEquals(senesteMåned.minusYears(1), andrePeriode.inntektsPeriode.sisteMåned)
-        Assertions.assertEquals(senesteMåned.minusYears(2).plusMonths(1), andrePeriode.inntektsPeriode.førsteMåned)
-        Assertions.assertEquals(senesteMåned.minusYears(2), tredjePeriode.inntektsPeriode.sisteMåned)
-        Assertions.assertEquals(senesteMåned.minusYears(3).plusMonths(1), tredjePeriode.inntektsPeriode.førsteMåned)
+        assertEquals(senesteMåned, førstePeriode.inntektsPeriode.sisteMåned)
+        assertEquals(senesteMåned.minusYears(1).plusMonths(1), førstePeriode.inntektsPeriode.førsteMåned)
+        assertEquals(senesteMåned.minusYears(1), andrePeriode.inntektsPeriode.sisteMåned)
+        assertEquals(senesteMåned.minusYears(2).plusMonths(1), andrePeriode.inntektsPeriode.førsteMåned)
+        assertEquals(senesteMåned.minusYears(2), tredjePeriode.inntektsPeriode.sisteMåned)
+        assertEquals(senesteMåned.minusYears(3).plusMonths(1), tredjePeriode.inntektsPeriode.førsteMåned)
     }
 
-//    private val arbeidsInntekt = listOf(
-//        InntektKlasse.ARBEIDSINNTEKT,
-//        InntektKlasse.DAGPENGER,
-//        InntektKlasse.SYKEPENGER,
-//        InntektKlasse.TILTAKSLØNN,
-//    )
-//
-//    private val medFangstOgFisk = listOf(
-//        InntektKlasse.FANGST_FISKE,
-//        InntektKlasse.DAGPENGER_FANGST_FISKE,
-//        InntektKlasse.SYKEPENGER_FANGST_FISKE,
-//    )
-
-    private val arbeidsinntektKlasser = inntektKlassifisertEtterArbeidsInntekt.toList()
-    private val fangstOgFiskeKlasser = inntektKlassifisertEtterFangstOgFisk.toList().filterNot { inntektKlassifisertEtterArbeidsInntekt.toList().contains(it) }
+    private val inntektsklasser = no.nav.dagpenger.regel.grunnlag.beregning.inntektsklasser.toList()
+    private val inntektsklasserFangstOgFiske = inntektsklasserMedFangstOgFiske.toList()
+        .filterNot { no.nav.dagpenger.regel.grunnlag.beregning.inntektsklasser.toList().contains(it) }
 
     fun generateArbeidsinntekt(
         numberOfMonths: Int,
@@ -226,8 +250,26 @@ internal class CreateInntektPerioderTest {
                 listOf(
                     KlassifisertInntekt(
                         beløpPerMnd,
-                        arbeidsinntektKlasser.random(),
-//                        arbeidsInntekt.random(),
+                        inntektsklasser.random(),
+                    ),
+                ),
+            )
+        }
+    }
+
+    fun generateInntektMed(
+        inntektKlasse: InntektKlasse,
+        numberOfMonths: Int,
+        beløpPerMnd: BigDecimal,
+        senesteMåned: YearMonth = YearMonth.of(2019, 1),
+    ): List<KlassifisertInntektMåned> {
+        return (0 until numberOfMonths).toList().map {
+            KlassifisertInntektMåned(
+                senesteMåned.minusMonths(it.toLong()),
+                listOf(
+                    KlassifisertInntekt(
+                        beløpPerMnd,
+                        inntektKlasse,
                     ),
                 ),
             )
@@ -258,8 +300,7 @@ internal class CreateInntektPerioderTest {
                 listOf(
                     KlassifisertInntekt(
                         beløpPerMnd,
-//                        medFangstOgFisk.random(),
-                        fangstOgFiskeKlasser.random(),
+                        inntektsklasserFangstOgFiske.random(),
                     ),
                 ),
             )
@@ -276,10 +317,8 @@ internal class CreateInntektPerioderTest {
             KlassifisertInntektMåned(
                 senesteMåned.minusMonths(it.toLong()),
                 listOf(
-                    KlassifisertInntekt(arbeidsInntektBeløpPerMnd, arbeidsinntektKlasser.random()),
-                    KlassifisertInntekt(fangstOgFiskeBeløpPerMnd, fangstOgFiskeKlasser.random()),
-//                    KlassifisertInntekt(arbeidsInntektBeløpPerMnd, arbeidsInntekt.random()),
-//                    KlassifisertInntekt(fangstOgFiskeBeløpPerMnd, medFangstOgFisk.random()),
+                    KlassifisertInntekt(arbeidsInntektBeløpPerMnd, inntektsklasser.random()),
+                    KlassifisertInntekt(fangstOgFiskeBeløpPerMnd, inntektsklasserFangstOgFiske.random()),
                 ),
             )
         }

@@ -4,7 +4,7 @@ import no.nav.dagpenger.regel.grunnlag.Fakta
 import java.time.LocalDate
 
 class BruttoInntektMedFangstOgFiskDeSiste36AvsluttedeKalendermånedene : TrettiseksMånedersBeregning(
-    inntektKlassifisertEtterFangstOgFisk,
+    inntektsklasserMedFangstOgFiske,
     "FangstOgFiskSiste36(2021)",
 ) {
     private val avviklingsDato = LocalDate.of(2022, 1, 1)

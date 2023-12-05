@@ -54,7 +54,7 @@ class Siste3AvsluttendeMånederUtvelgelse : GrunnlagUtvelgelse(antallMåneder = 
 class LærlingForskriftSisteAvsluttendeKalenderMånedFangstOgFisk : GrunnlagEtterLærlingForskrift(
     regelIdentifikator = "LærlingFangstOgFisk1x12",
     grunnlagUtvelgelse = SisteAvsluttendeMånedUtvelgelse(),
-    inntektKlasser = inntektKlassifisertEtterFangstOgFisk,
+    inntektKlasser = inntektsklasserMedFangstOgFiske,
 ) {
 
     override fun calculate(fakta: Fakta): Resultat {
@@ -65,7 +65,7 @@ class LærlingForskriftSisteAvsluttendeKalenderMånedFangstOgFisk : GrunnlagEtte
 class LærlingForskriftSiste3AvsluttendeKalenderMånedFangsOgFisk : GrunnlagEtterLærlingForskrift(
     regelIdentifikator = "LærlingFangstOgFisk3x4",
     grunnlagUtvelgelse = Siste3AvsluttendeMånederUtvelgelse(),
-    inntektKlasser = inntektKlassifisertEtterFangstOgFisk,
+    inntektKlasser = inntektsklasserMedFangstOgFiske,
 ) {
     override fun calculate(fakta: Fakta): Resultat {
         return if (fakta.fangstOgFiske) super.calculate(fakta) else IngenBeregningsResultat(this.beregningsregel)
@@ -75,11 +75,11 @@ class LærlingForskriftSiste3AvsluttendeKalenderMånedFangsOgFisk : GrunnlagEtte
 class LærlingForskriftSisteAvsluttendeKalenderMåned : GrunnlagEtterLærlingForskrift(
     regelIdentifikator = "LærlingArbeidsinntekt1x12",
     grunnlagUtvelgelse = SisteAvsluttendeMånedUtvelgelse(),
-    inntektKlasser = inntektKlassifisertEtterArbeidsInntekt,
+    inntektKlasser = inntektsklasser,
 )
 
 class LærlingForskriftSiste3AvsluttendeKalenderMåned : GrunnlagEtterLærlingForskrift(
     regelIdentifikator = "LærlingArbeidsinntekt3x4",
     grunnlagUtvelgelse = Siste3AvsluttendeMånederUtvelgelse(),
-    inntektKlasser = inntektKlassifisertEtterArbeidsInntekt,
+    inntektKlasser = inntektsklasser,
 )

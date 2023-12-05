@@ -1,6 +1,6 @@
 package no.nav.dagpenger.regel.grunnlag.beregning
 
 class BruttoArbeidsinntektDeSiste36AvsluttedeKalendermånedene : TrettiseksMånedersBeregning(
-    inntektKlassifisertEtterArbeidsInntekt,
+    inntektsklasser,
     "ArbeidsinntektSiste36(2021)",
 )
