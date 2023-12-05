@@ -2,9 +2,10 @@ package no.nav.dagpenger.regel.grunnlag
 
 import de.huxhorn.sulky.ulid.ULID
 import mu.KotlinLogging
-import no.nav.dagpenger.events.inntekt.v1.InntektKlasse
 import no.nav.dagpenger.events.inntekt.v1.sumInntekt
 import no.nav.dagpenger.regel.grunnlag.beregning.HovedBeregning
+import no.nav.dagpenger.regel.grunnlag.beregning.inntektKlassifisertEtterArbeidsInntekt
+import no.nav.dagpenger.regel.grunnlag.beregning.inntektKlassifisertEtterFangstOgFisk
 import no.nav.helse.rapids_rivers.JsonMessage
 import no.nav.helse.rapids_rivers.MessageContext
 import no.nav.helse.rapids_rivers.RapidsConnection
@@ -107,17 +108,23 @@ class GrunnlagsberegningBehovløser(
 }
 
 fun createInntektPerioder(fakta: Fakta): List<InntektPeriodeInfo>? {
-    val arbeidsInntekt = listOf(
-        InntektKlasse.ARBEIDSINNTEKT,
-        InntektKlasse.DAGPENGER,
-        InntektKlasse.SYKEPENGER,
-        InntektKlasse.TILTAKSLØNN,
-    )
-    val medFangstOgFisk = listOf(
-        InntektKlasse.FANGST_FISKE,
-        InntektKlasse.DAGPENGER_FANGST_FISKE,
-        InntektKlasse.SYKEPENGER_FANGST_FISKE,
-    )
+//    val arbeidsInntekt = listOf(
+//        InntektKlasse.ARBEIDSINNTEKT,
+//        InntektKlasse.DAGPENGER,
+//        InntektKlasse.SYKEPENGER,
+//        InntektKlasse.TILTAKSLØNN,
+//    )
+//
+//    val medFangstOgFisk = listOf(
+//        InntektKlasse.FANGST_FISKE,
+//        InntektKlasse.DAGPENGER_FANGST_FISKE,
+//        InntektKlasse.SYKEPENGER_FANGST_FISKE,
+//    )
+
+    val arbeidsinntektKlasser = inntektKlassifisertEtterArbeidsInntekt.toList()
+    val fangstOgFiskeKlasser = inntektKlassifisertEtterFangstOgFisk.toList().filterNot {
+        inntektKlassifisertEtterArbeidsInntekt.toList().contains(it)
+    }
 
     return fakta.inntektsPerioder?.toList()?.mapIndexed { index, list ->
         InntektPeriodeInfo(
@@ -125,13 +132,14 @@ fun createInntektPerioder(fakta: Fakta): List<InntektPeriodeInfo>? {
                 list.first().årMåned,
                 list.last().årMåned,
             ),
-            inntekt = list.sumInntekt(if (fakta.fangstOgFiske) medFangstOgFisk + arbeidsInntekt else arbeidsInntekt),
+            inntekt = list.sumInntekt(if (fakta.fangstOgFiske) arbeidsinntektKlasser + fangstOgFiskeKlasser
+            else arbeidsinntektKlasser),
+            // inntekt = list.sumInntekt(if (fakta.fangstOgFiske) medFangstOgFisk + arbeidsInntekt else arbeidsInntekt),
             periode = index + 1,
             inneholderFangstOgFisk = fakta.inntektsPerioder.toList()[index].any { klassifisertInntektMåned ->
                 klassifisertInntektMåned.klassifiserteInntekter.any {
-                    medFangstOgFisk.contains(
-                        it.inntektKlasse,
-                    )
+                    fangstOgFiskeKlasser.contains(it.inntektKlasse)
+                    // medFangstOgFisk.contains(it.inntektKlasse)
                 }
             },
         )

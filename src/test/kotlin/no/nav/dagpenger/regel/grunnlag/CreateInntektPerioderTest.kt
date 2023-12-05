@@ -4,6 +4,8 @@ import no.nav.dagpenger.events.inntekt.v1.Inntekt
 import no.nav.dagpenger.events.inntekt.v1.InntektKlasse
 import no.nav.dagpenger.events.inntekt.v1.KlassifisertInntekt
 import no.nav.dagpenger.events.inntekt.v1.KlassifisertInntektMåned
+import no.nav.dagpenger.regel.grunnlag.beregning.inntektKlassifisertEtterArbeidsInntekt
+import no.nav.dagpenger.regel.grunnlag.beregning.inntektKlassifisertEtterFangstOgFisk
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 import java.math.BigDecimal
@@ -197,18 +199,21 @@ internal class CreateInntektPerioderTest {
         Assertions.assertEquals(senesteMåned.minusYears(3).plusMonths(1), tredjePeriode.inntektsPeriode.førsteMåned)
     }
 
-    private val arbeidsInntekt = listOf(
-        InntektKlasse.ARBEIDSINNTEKT,
-        InntektKlasse.DAGPENGER,
-        InntektKlasse.SYKEPENGER,
-        InntektKlasse.TILTAKSLØNN,
-    )
+//    private val arbeidsInntekt = listOf(
+//        InntektKlasse.ARBEIDSINNTEKT,
+//        InntektKlasse.DAGPENGER,
+//        InntektKlasse.SYKEPENGER,
+//        InntektKlasse.TILTAKSLØNN,
+//    )
+//
+//    private val medFangstOgFisk = listOf(
+//        InntektKlasse.FANGST_FISKE,
+//        InntektKlasse.DAGPENGER_FANGST_FISKE,
+//        InntektKlasse.SYKEPENGER_FANGST_FISKE,
+//    )
 
-    private val medFangstOgFisk = listOf(
-        InntektKlasse.FANGST_FISKE,
-        InntektKlasse.DAGPENGER_FANGST_FISKE,
-        InntektKlasse.SYKEPENGER_FANGST_FISKE,
-    )
+    private val arbeidsinntektKlasser = inntektKlassifisertEtterArbeidsInntekt.toList()
+    private val fangstOgFiskeKlasser = inntektKlassifisertEtterFangstOgFisk.toList().filterNot { inntektKlassifisertEtterArbeidsInntekt.toList().contains(it) }
 
     fun generateArbeidsinntekt(
         numberOfMonths: Int,
@@ -221,7 +226,8 @@ internal class CreateInntektPerioderTest {
                 listOf(
                     KlassifisertInntekt(
                         beløpPerMnd,
-                        arbeidsInntekt.random(),
+                        arbeidsinntektKlasser.random(),
+//                        arbeidsInntekt.random(),
                     ),
                 ),
             )
@@ -252,7 +258,8 @@ internal class CreateInntektPerioderTest {
                 listOf(
                     KlassifisertInntekt(
                         beløpPerMnd,
-                        medFangstOgFisk.random(),
+//                        medFangstOgFisk.random(),
+                        fangstOgFiskeKlasser.random(),
                     ),
                 ),
             )
@@ -269,8 +276,10 @@ internal class CreateInntektPerioderTest {
             KlassifisertInntektMåned(
                 senesteMåned.minusMonths(it.toLong()),
                 listOf(
-                    KlassifisertInntekt(arbeidsInntektBeløpPerMnd, arbeidsInntekt.random()),
-                    KlassifisertInntekt(fangstOgFiskeBeløpPerMnd, medFangstOgFisk.random()),
+                    KlassifisertInntekt(arbeidsInntektBeløpPerMnd, arbeidsinntektKlasser.random()),
+                    KlassifisertInntekt(fangstOgFiskeBeløpPerMnd, fangstOgFiskeKlasser.random()),
+//                    KlassifisertInntekt(arbeidsInntektBeløpPerMnd, arbeidsInntekt.random()),
+//                    KlassifisertInntekt(fangstOgFiskeBeløpPerMnd, medFangstOgFisk.random()),
                 ),
             )
         }
