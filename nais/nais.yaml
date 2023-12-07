@@ -22,10 +22,9 @@ spec:
     pool: {{ kafka.pool }}
   resources:
     limits:
-      cpu: 500m
       memory: 1024Mi
     requests:
-      cpu: 300m
+      cpu: 30m
       memory: 512Mi
   secureLogs:
     enabled: true
