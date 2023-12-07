@@ -5,6 +5,7 @@ import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
 import io.kotest.matchers.string.shouldContain
 import no.nav.dagpenger.regel.grunnlag.GrunnlagsberegningBehovløser.Companion.AVTJENT_VERNEPLIKT
+import no.nav.dagpenger.regel.grunnlag.GrunnlagsberegningBehovløser.Companion.BEHOV_ID
 import no.nav.dagpenger.regel.grunnlag.GrunnlagsberegningBehovløser.Companion.BEREGNINGSDATO
 import no.nav.dagpenger.regel.grunnlag.GrunnlagsberegningBehovløser.Companion.FANGST_OG_FISKE
 import no.nav.dagpenger.regel.grunnlag.GrunnlagsberegningBehovløser.Companion.FORRIGE_GRUNNLAG
@@ -29,20 +30,25 @@ class FaktaMapperTest {
     private val testRapid = TestRapid()
 
     @Test
-    fun `Tar imot packet med beregningsdato`() {
+    fun `Tar imot packet med requiredKeys`() {
         val behovløser = OnPacketTestListener(testRapid)
 
         @Language("JSON")
-        val json = """{"$BEREGNINGSDATO":"${LocalDate.now()}"}}"""
+        val json = """{"$BEHOV_ID":"behovId","$BEREGNINGSDATO":"${LocalDate.now()}"}}"""
         testRapid.sendTestMessage(json)
         behovløser.packet shouldNotBe null
     }
 
     @Test
-    fun `Tar ikke imot packet som mangler beregningsdato`() {
+    fun `Tar ikke imot packet som mangler requiredKeys`() {
         val behovløser = OnPacketTestListener(testRapid)
-        val json = """{}"""
-        testRapid.sendTestMessage(json)
+        val jsonUtenBehovId = """{"$BEREGNINGSDATO":"${LocalDate.now()}"}"""
+        testRapid.sendTestMessage(jsonUtenBehovId)
+        behovløser.packet shouldBe null
+        behovløser.problems!!.toExtendedReport() shouldContain BEHOV_ID
+
+        val jsonUtenBeregningsdato = """{"$BEHOV_ID":"1234"}"""
+        testRapid.sendTestMessage(jsonUtenBeregningsdato)
         behovløser.packet shouldBe null
         behovløser.problems!!.toExtendedReport() shouldContain BEREGNINGSDATO
     }
@@ -61,7 +67,7 @@ class FaktaMapperTest {
         val behovløser = OnPacketTestListener(testRapid)
 
         @Language("JSON")
-        val json = """{"$BEREGNINGSDATO":"${LocalDate.now()}","$GRUNNLAG_RESULTAT":"hubba"}"""
+        val json = """{"$BEHOV_ID":"behovId","$BEREGNINGSDATO":"${LocalDate.now()}","$GRUNNLAG_RESULTAT":"hubba"}"""
         testRapid.sendTestMessage(json)
         behovløser.packet shouldBe null
         behovløser.problems shouldBe null
@@ -71,17 +77,17 @@ class FaktaMapperTest {
     fun `Fangst og fiske blir mappet riktig`() {
         val behovløser = OnPacketTestListener(testRapid)
 
-        testRapid.sendTestMessage("""{"$BEREGNINGSDATO":"${LocalDate.now()}","$FANGST_OG_FISKE":true}""")
+        testRapid.sendTestMessage("""{"$BEHOV_ID":"behovId","$BEREGNINGSDATO":"${LocalDate.now()}","$FANGST_OG_FISKE":true}""")
         mapToFaktaFrom(behovløser.packet!!).fangstOgFiske shouldBe true
 
-        testRapid.sendTestMessage("""{"$BEREGNINGSDATO":"${LocalDate.now()}","$FANGST_OG_FISKE":false}""")
+        testRapid.sendTestMessage("""{"$BEHOV_ID":"behovId","$BEREGNINGSDATO":"${LocalDate.now()}","$FANGST_OG_FISKE":false}""")
         mapToFaktaFrom(behovløser.packet!!).fangstOgFiske shouldBe false
 
-        testRapid.sendTestMessage("""{"$BEREGNINGSDATO":"${LocalDate.now()}"}""")
+        testRapid.sendTestMessage("""{"$BEHOV_ID":"behovId","$BEREGNINGSDATO":"${LocalDate.now()}"}""")
         mapToFaktaFrom(behovløser.packet!!).fangstOgFiske shouldBe false
 
         shouldThrow<IllegalArgumentException> {
-            testRapid.sendTestMessage("""{"$BEREGNINGSDATO":"${LocalDate.now()}","$FANGST_OG_FISKE":1}""")
+            testRapid.sendTestMessage("""{"$BEHOV_ID":"behovId","$BEREGNINGSDATO":"${LocalDate.now()}","$FANGST_OG_FISKE":1}""")
             mapToFaktaFrom(behovløser.packet!!)
         }
     }
@@ -90,17 +96,17 @@ class FaktaMapperTest {
     fun `Avtjent verneplikt blir mappet riktig`() {
         val behovløser = OnPacketTestListener(testRapid)
 
-        testRapid.sendTestMessage("""{"$BEREGNINGSDATO":"${LocalDate.now()}","$AVTJENT_VERNEPLIKT":true}""")
+        testRapid.sendTestMessage("""{"$BEHOV_ID":"behovId","$BEREGNINGSDATO":"${LocalDate.now()}","$AVTJENT_VERNEPLIKT":true}""")
         mapToFaktaFrom(behovløser.packet!!).verneplikt shouldBe true
 
-        testRapid.sendTestMessage("""{"$BEREGNINGSDATO":"${LocalDate.now()}","$AVTJENT_VERNEPLIKT":false}""")
+        testRapid.sendTestMessage("""{"$BEHOV_ID":"behovId","$BEREGNINGSDATO":"${LocalDate.now()}","$AVTJENT_VERNEPLIKT":false}""")
         mapToFaktaFrom(behovløser.packet!!).verneplikt shouldBe false
 
-        testRapid.sendTestMessage("""{"$BEREGNINGSDATO":"${LocalDate.now()}"}""")
+        testRapid.sendTestMessage("""{"$BEHOV_ID":"behovId","$BEREGNINGSDATO":"${LocalDate.now()}"}""")
         mapToFaktaFrom(behovløser.packet!!).verneplikt shouldBe false
 
         shouldThrow<IllegalArgumentException> {
-            testRapid.sendTestMessage("""{"$BEREGNINGSDATO":"${LocalDate.now()}","$AVTJENT_VERNEPLIKT":1}""")
+            testRapid.sendTestMessage("""{"$BEHOV_ID":"behovId","$BEREGNINGSDATO":"${LocalDate.now()}","$AVTJENT_VERNEPLIKT":1}""")
             mapToFaktaFrom(behovløser.packet!!)
         }
     }
@@ -109,17 +115,17 @@ class FaktaMapperTest {
     fun `Lærling blir mappet riktig`() {
         val behovløser = OnPacketTestListener(testRapid)
 
-        testRapid.sendTestMessage("""{"$BEREGNINGSDATO":"${LocalDate.now()}","$LÆRLING":true}""")
+        testRapid.sendTestMessage("""{"$BEHOV_ID":"behovId","$BEREGNINGSDATO":"${LocalDate.now()}","$LÆRLING":true}""")
         mapToFaktaFrom(behovløser.packet!!).lærling shouldBe true
 
-        testRapid.sendTestMessage("""{"$BEREGNINGSDATO":"${LocalDate.now()}","$LÆRLING":false}""")
+        testRapid.sendTestMessage("""{"$BEHOV_ID":"behovId","$BEREGNINGSDATO":"${LocalDate.now()}","$LÆRLING":false}""")
         mapToFaktaFrom(behovløser.packet!!).lærling shouldBe false
 
-        testRapid.sendTestMessage("""{"$BEREGNINGSDATO":"${LocalDate.now()}"}""")
+        testRapid.sendTestMessage("""{"$BEHOV_ID":"behovId","$BEREGNINGSDATO":"${LocalDate.now()}"}""")
         mapToFaktaFrom(behovløser.packet!!).lærling shouldBe false
 
         shouldThrow<IllegalArgumentException> {
-            testRapid.sendTestMessage("""{"$BEREGNINGSDATO":"${LocalDate.now()}","$LÆRLING":1}""")
+            testRapid.sendTestMessage("""{"$BEHOV_ID":"behovId","$BEREGNINGSDATO":"${LocalDate.now()}","$LÆRLING":1}""")
             mapToFaktaFrom(behovløser.packet!!)
         }
     }
@@ -128,10 +134,10 @@ class FaktaMapperTest {
     fun `Beregningsdato blir mappet riktig`() {
         val behovløser = OnPacketTestListener(testRapid)
 
-        testRapid.sendTestMessage("""{"$BEREGNINGSDATO":"${LocalDate.MAX}"}""")
+        testRapid.sendTestMessage("""{"$BEHOV_ID":"behovId","$BEREGNINGSDATO":"${LocalDate.MAX}"}""")
         mapToFaktaFrom(behovløser.packet!!).beregningsdato shouldBe LocalDate.MAX
 
-        testRapid.sendTestMessage("""{"$BEREGNINGSDATO":"fqasfas"}""")
+        testRapid.sendTestMessage("""{"$BEHOV_ID":"behovId","$BEREGNINGSDATO":"fqasfas"}""")
         shouldThrow<DateTimeParseException> {
             mapToFaktaFrom(behovløser.packet!!)
         }
@@ -142,10 +148,10 @@ class FaktaMapperTest {
         val behovløser = OnPacketTestListener(testRapid)
 
         //language=JSON
-        testRapid.sendTestMessage("""{"$BEREGNINGSDATO": "${LocalDate.MAX}", "$REGELVERKSDATO":"${LocalDate.MIN}"}""")
+        testRapid.sendTestMessage("""{"$BEHOV_ID":"behovId","$BEREGNINGSDATO": "${LocalDate.MAX}", "$REGELVERKSDATO":"${LocalDate.MIN}"}""")
         mapToFaktaFrom(behovløser.packet!!).regelverksdato shouldBe LocalDate.MIN
 
-        testRapid.sendTestMessage("""{"$BEREGNINGSDATO": "${LocalDate.MAX}", "$REGELVERKSDATO":"s"}""")
+        testRapid.sendTestMessage("""{"$BEHOV_ID":"behovId","$BEREGNINGSDATO": "${LocalDate.MAX}", "$REGELVERKSDATO":"s"}""")
         shouldThrow<DateTimeParseException> { mapToFaktaFrom(behovløser.packet!!) }
     }
 
@@ -153,7 +159,7 @@ class FaktaMapperTest {
     fun `Dersom regelverksdato mangler brukes beregningsdato`() {
         val behovløser = OnPacketTestListener(testRapid)
         //language=JSON
-        testRapid.sendTestMessage("""{"$BEREGNINGSDATO": "${LocalDate.MAX}" }""")
+        testRapid.sendTestMessage("""{"$BEHOV_ID":"behovId","$BEREGNINGSDATO": "${LocalDate.MAX}" }""")
         mapToFaktaFrom(behovløser.packet!!).regelverksdato shouldBe LocalDate.MAX
     }
 
@@ -162,7 +168,7 @@ class FaktaMapperTest {
         val behovløser = OnPacketTestListener(testRapid)
         val inntektId = "01HF4BNZTR2F30GR0Q0TCH22KS"
 
-        testRapid.sendTestMessage("""{"$BEREGNINGSDATO": "${LocalDate.MAX}", "$INNTEKT": ${inntektJson(inntektId)} }""")
+        testRapid.sendTestMessage("""{"$BEHOV_ID":"behovId","$BEREGNINGSDATO": "${LocalDate.MAX}", "$INNTEKT": ${inntektJson(inntektId)} }""")
 
         mapToFaktaFrom(behovløser.packet!!).inntekt.let { inntekt ->
             requireNotNull(inntekt)
@@ -171,7 +177,7 @@ class FaktaMapperTest {
         }
 
         assertThrows<IllegalArgumentException> {
-            testRapid.sendTestMessage("""{"$BEREGNINGSDATO": "${LocalDate.MAX}", "$INNTEKT": {"hubba": "bubba"} }""")
+            testRapid.sendTestMessage("""{"$BEHOV_ID":"behovId","$BEREGNINGSDATO": "${LocalDate.MAX}", "$INNTEKT": {"hubba": "bubba"} }""")
             mapToFaktaFrom(behovløser.packet!!)
         }
     }
@@ -212,18 +218,18 @@ class FaktaMapperTest {
         val behovløser = OnPacketTestListener(testRapid)
 
         //language=JSON
-        testRapid.sendTestMessage("""{"$BEREGNINGSDATO": "${LocalDate.MAX}", "$MANUELT_GRUNNLAG":${Int.MAX_VALUE}}""")
+        testRapid.sendTestMessage("""{"$BEHOV_ID":"behovId","$BEREGNINGSDATO": "${LocalDate.MAX}", "$MANUELT_GRUNNLAG":${Int.MAX_VALUE}}""")
         mapToFaktaFrom(behovløser.packet!!).manueltGrunnlag shouldBe Int.MAX_VALUE
 
-        testRapid.sendTestMessage("""{"$BEREGNINGSDATO": "${LocalDate.MAX}", "$MANUELT_GRUNNLAG":100.0}""")
+        testRapid.sendTestMessage("""{"$BEHOV_ID":"behovId","$BEREGNINGSDATO": "${LocalDate.MAX}", "$MANUELT_GRUNNLAG":100.0}""")
         mapToFaktaFrom(behovløser.packet!!).manueltGrunnlag shouldBe 100
 
         assertThrows<NumberFormatException> {
-            testRapid.sendTestMessage("""{"$BEREGNINGSDATO": "${LocalDate.MAX}", "$MANUELT_GRUNNLAG":"hubba"}""")
+            testRapid.sendTestMessage("""{"$BEHOV_ID":"behovId","$BEREGNINGSDATO": "${LocalDate.MAX}", "$MANUELT_GRUNNLAG":"hubba"}""")
             mapToFaktaFrom(behovløser.packet!!)
         }
 
-        testRapid.sendTestMessage("""{"$BEREGNINGSDATO": "${LocalDate.MAX}"} """)
+        testRapid.sendTestMessage("""{"$BEHOV_ID":"behovId","$BEREGNINGSDATO": "${LocalDate.MAX}"} """)
         mapToFaktaFrom(behovløser.packet!!).manueltGrunnlag shouldBe null
     }
 
@@ -232,18 +238,18 @@ class FaktaMapperTest {
         val behovløser = OnPacketTestListener(testRapid)
 
         //language=JSON
-        testRapid.sendTestMessage("""{"$BEREGNINGSDATO": "${LocalDate.MAX}", "$FORRIGE_GRUNNLAG":${Int.MAX_VALUE}}""")
+        testRapid.sendTestMessage("""{"$BEHOV_ID":"behovId","$BEREGNINGSDATO": "${LocalDate.MAX}", "$FORRIGE_GRUNNLAG":${Int.MAX_VALUE}}""")
         mapToFaktaFrom(behovløser.packet!!).forrigeGrunnlag shouldBe Int.MAX_VALUE
 
-        testRapid.sendTestMessage("""{"$BEREGNINGSDATO": "${LocalDate.MAX}", "$FORRIGE_GRUNNLAG":100.0}""")
+        testRapid.sendTestMessage("""{"$BEHOV_ID":"behovId","$BEREGNINGSDATO": "${LocalDate.MAX}", "$FORRIGE_GRUNNLAG":100.0}""")
         mapToFaktaFrom(behovløser.packet!!).forrigeGrunnlag shouldBe 100
 
         assertThrows<NumberFormatException> {
-            testRapid.sendTestMessage("""{"$BEREGNINGSDATO": "${LocalDate.MAX}", "$FORRIGE_GRUNNLAG":"hubba"}""")
+            testRapid.sendTestMessage("""{"$BEHOV_ID":"behovId","$BEREGNINGSDATO": "${LocalDate.MAX}", "$FORRIGE_GRUNNLAG":"hubba"}""")
             mapToFaktaFrom(behovløser.packet!!)
         }
 
-        testRapid.sendTestMessage("""{"$BEREGNINGSDATO": "${LocalDate.MAX}"} """)
+        testRapid.sendTestMessage("""{"$BEHOV_ID":"behovId","$BEREGNINGSDATO": "${LocalDate.MAX}"} """)
         mapToFaktaFrom(behovløser.packet!!).forrigeGrunnlag shouldBe null
     }
 }

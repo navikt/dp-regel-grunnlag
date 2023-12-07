@@ -11,12 +11,17 @@ import no.nav.dagpenger.events.inntekt.v1.InntektKlasse
 import no.nav.dagpenger.events.inntekt.v1.KlassifisertInntekt
 import no.nav.dagpenger.events.inntekt.v1.KlassifisertInntektMåned
 import no.nav.dagpenger.grunnbelop.Grunnbeløp
+import no.nav.dagpenger.regel.grunnlag.GrunnlagsberegningBehovløser.Companion.AVTJENT_VERNEPLIKT
+import no.nav.dagpenger.regel.grunnlag.GrunnlagsberegningBehovløser.Companion.BEHOV_ID
 import no.nav.dagpenger.regel.grunnlag.GrunnlagsberegningBehovløser.Companion.BEREGNINGSDATO
+import no.nav.dagpenger.regel.grunnlag.GrunnlagsberegningBehovløser.Companion.FANGST_OG_FISKE
 import no.nav.dagpenger.regel.grunnlag.GrunnlagsberegningBehovløser.Companion.FORRIGE_GRUNNLAG
 import no.nav.dagpenger.regel.grunnlag.GrunnlagsberegningBehovløser.Companion.GRUNNLAG_RESULTAT
 import no.nav.dagpenger.regel.grunnlag.GrunnlagsberegningBehovløser.Companion.INNTEKT
+import no.nav.dagpenger.regel.grunnlag.GrunnlagsberegningBehovløser.Companion.LÆRLING
 import no.nav.dagpenger.regel.grunnlag.GrunnlagsberegningBehovløser.Companion.MANUELT_GRUNNLAG
 import no.nav.dagpenger.regel.grunnlag.GrunnlagsberegningBehovløser.Companion.PROBLEM
+import no.nav.dagpenger.regel.grunnlag.GrunnlagsberegningBehovløser.Companion.REGELVERKSDATO
 import no.nav.helse.rapids_rivers.JsonMessage
 import no.nav.helse.rapids_rivers.testsupport.TestRapid
 import org.junit.jupiter.api.Test
@@ -38,10 +43,11 @@ class GrunnlagsberegningBehovløserTest {
         val inntekt = getInntekt((-1000).toBigDecimal())
         val testMessage = JsonMessage.newMessage(
             map = mapOf(
-                "beregningsDato" to "2018-08-10",
-                "harAvtjentVerneplikt" to false,
-                "oppfyllerKravTilFangstOgFisk" to false,
-                "inntektV1" to inntekt.toMap(),
+                BEHOV_ID to "behovId",
+                BEREGNINGSDATO to "2018-08-10",
+                AVTJENT_VERNEPLIKT to false,
+                FANGST_OG_FISKE to false,
+                INNTEKT to inntekt.toMap(),
             ),
         ).toJson()
 
@@ -58,10 +64,11 @@ class GrunnlagsberegningBehovløserTest {
         val inntekt = getInntekt((0).toBigDecimal())
         val testMessage = JsonMessage.newMessage(
             map = mapOf(
-                "beregningsDato" to "2018-08-10",
-                "harAvtjentVerneplikt" to false,
-                "oppfyllerKravTilFangstOgFisk" to false,
-                "inntektV1" to inntekt.toMap(),
+                BEHOV_ID to "behovId",
+                BEREGNINGSDATO to "2018-08-10",
+                AVTJENT_VERNEPLIKT to false,
+                FANGST_OG_FISKE to false,
+                INNTEKT to inntekt.toMap(),
             ),
         ).toJson()
 
@@ -78,11 +85,12 @@ class GrunnlagsberegningBehovløserTest {
         val inntekt = getInntekt(1000.toBigDecimal())
 
         val testMessage = JsonMessage.newMessage(
-            map = mapOf<String, Any>(
-                "beregningsDato" to "2018-08-10",
-                "harAvtjentVerneplikt" to false,
-                "oppfyllerKravTilFangstOgFisk" to false,
-                "inntektV1" to inntekt.toMap(),
+            map = mapOf(
+                BEHOV_ID to "behovId",
+                BEREGNINGSDATO to "2018-08-10",
+                AVTJENT_VERNEPLIKT to false,
+                FANGST_OG_FISKE to false,
+                INNTEKT to inntekt.toMap(),
             ),
         ).toJson()
 
@@ -101,10 +109,11 @@ class GrunnlagsberegningBehovløserTest {
         val inntekt = getInntekt((1000).toBigDecimal())
         val testMessage = JsonMessage.newMessage(
             map = mapOf(
-                "beregningsDato" to "2018-08-10",
-                "regelverksdato" to "2021-03-16",
-                "harAvtjentVerneplikt" to true,
-                "inntektV1" to inntekt.toMap(),
+                BEHOV_ID to "behovId",
+                BEREGNINGSDATO to "2018-08-10",
+                REGELVERKSDATO to "2021-03-16",
+                AVTJENT_VERNEPLIKT to true,
+                INNTEKT to inntekt.toMap(),
             ),
         )
 
@@ -124,10 +133,11 @@ class GrunnlagsberegningBehovløserTest {
         val forrigeGrunnlag = 290000
         val testMessage = JsonMessage.newMessage(
             map = mapOf(
-                "beregningsDato" to "2020-03-20",
-                "oppfyllerKravTilFangstOgFisk" to false,
-                "lærling" to false,
-                "forrigeGrunnlag" to forrigeGrunnlag,
+                BEHOV_ID to "behovId",
+                BEREGNINGSDATO to "2020-03-20",
+                FANGST_OG_FISKE to false,
+                LÆRLING to false,
+                FORRIGE_GRUNNLAG to forrigeGrunnlag,
             ),
         )
 
@@ -147,9 +157,10 @@ class GrunnlagsberegningBehovløserTest {
 
         val testMessage = JsonMessage.newMessage(
             map = mapOf(
-                "beregningsDato" to "2020-03-20",
-                "lærling" to true,
-                "inntektV1" to inntekt.toMap(),
+                BEHOV_ID to "behovId",
+                BEREGNINGSDATO to "2020-03-20",
+                LÆRLING to true,
+                INNTEKT to inntekt.toMap(),
             ),
         ).toJson()
 
@@ -168,9 +179,10 @@ class GrunnlagsberegningBehovløserTest {
         val forrigeGrunnlag = 300000
         val testMessage = JsonMessage.newMessage(
             map = mapOf(
-                "beregningsDato" to "2020-03-20",
-                "lærling" to true,
-                "forrigeGrunnlag" to forrigeGrunnlag,
+                BEHOV_ID to "behovId",
+                BEREGNINGSDATO to "2020-03-20",
+                LÆRLING to true,
+                FORRIGE_GRUNNLAG to forrigeGrunnlag,
             ),
         ).toJson()
 
@@ -188,6 +200,7 @@ class GrunnlagsberegningBehovløserTest {
         val manueltGrunnlag = 300000
         val testMessage = JsonMessage.newMessage(
             map = mapOf(
+                BEHOV_ID to "behovId",
                 BEREGNINGSDATO to "2020-03-20",
                 MANUELT_GRUNNLAG to manueltGrunnlag,
             ),
@@ -207,6 +220,7 @@ class GrunnlagsberegningBehovløserTest {
         val manueltGrunnlag = 900000
         val testMessage = JsonMessage.newMessage(
             map = mapOf(
+                BEHOV_ID to "behovId",
                 BEREGNINGSDATO to "2020-03-20",
                 MANUELT_GRUNNLAG to manueltGrunnlag,
             ),
@@ -227,9 +241,10 @@ class GrunnlagsberegningBehovløserTest {
         val inntekt = getInntekt(1000.toBigDecimal())
         val testMessage = JsonMessage.newMessage(
             map = mapOf(
-                "beregningsDato" to "2018-08-10",
-                "harAvtjentVerneplikt" to true,
-                "inntektV1" to inntekt.toMap(),
+                BEHOV_ID to "behovId",
+                BEREGNINGSDATO to "2018-08-10",
+                AVTJENT_VERNEPLIKT to true,
+                INNTEKT to inntekt.toMap(),
             ),
         ).toJson()
 
@@ -246,7 +261,14 @@ class GrunnlagsberegningBehovløserTest {
 
     @Test
     fun `Packet fører ikke til løsning ved mangel av inntekt, manuelt grunnlag og forrige grunnlag`() {
-        testRapid.sendTestMessage(JsonMessage.newMessage(mapOf("beregningsDato" to "2018-08-10")).toJson())
+        testRapid.sendTestMessage(
+            JsonMessage.newMessage(
+                mapOf(
+                    BEHOV_ID to "behovId",
+                    BEREGNINGSDATO to "2018-08-10",
+                ),
+            ).toJson(),
+        )
         testRapid.inspektør.size shouldBe 0
     }
 
@@ -256,6 +278,7 @@ class GrunnlagsberegningBehovløserTest {
         testRapid.sendTestMessage(
             JsonMessage.newMessage(
                 mapOf(
+                    BEHOV_ID to "behovId",
                     BEREGNINGSDATO to "2018-08-10",
                     MANUELT_GRUNNLAG to "200000",
                     FORRIGE_GRUNNLAG to "700000",
@@ -271,6 +294,7 @@ class GrunnlagsberegningBehovløserTest {
             testRapid.sendTestMessage(
                 JsonMessage.newMessage(
                     mapOf(
+                        BEHOV_ID to "behovId",
                         BEREGNINGSDATO to "2018-08-10",
                         MANUELT_GRUNNLAG to "600000",
                         INNTEKT to getInntekt(1000.toBigDecimal()),
@@ -289,6 +313,7 @@ class GrunnlagsberegningBehovløserTest {
             testRapid.sendTestMessage(
                 JsonMessage.newMessage(
                     mapOf(
+                        BEHOV_ID to "behovId",
                         BEREGNINGSDATO to "2018-08-10",
                         MANUELT_GRUNNLAG to "600000",
                         FORRIGE_GRUNNLAG to "600000",
@@ -308,6 +333,7 @@ class GrunnlagsberegningBehovløserTest {
             testRapid.sendTestMessage(
                 JsonMessage.newMessage(
                     mapOf(
+                        BEHOV_ID to "behovId",
                         BEREGNINGSDATO to "2018-08-10",
                         FORRIGE_GRUNNLAG to "600000",
                         INNTEKT to getInntekt(1000.toBigDecimal()),
