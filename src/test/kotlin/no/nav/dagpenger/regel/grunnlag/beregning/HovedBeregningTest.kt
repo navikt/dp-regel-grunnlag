@@ -4,10 +4,10 @@ import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.string.shouldNotStartWith
 import io.kotest.matchers.string.shouldStartWith
 import io.kotest.matchers.types.shouldBeInstanceOf
-import no.nav.dagpenger.events.inntekt.v1.Inntekt
-import no.nav.dagpenger.events.inntekt.v1.InntektKlasse
-import no.nav.dagpenger.events.inntekt.v1.KlassifisertInntekt
-import no.nav.dagpenger.events.inntekt.v1.KlassifisertInntektMåned
+import no.nav.dagpenger.inntekt.v1.Inntekt
+import no.nav.dagpenger.inntekt.v1.InntektKlasse
+import no.nav.dagpenger.inntekt.v1.KlassifisertInntekt
+import no.nav.dagpenger.inntekt.v1.KlassifisertInntektMåned
 import no.nav.dagpenger.regel.grunnlag.Fakta
 import java.math.BigDecimal
 import java.time.LocalDate
@@ -22,17 +22,19 @@ internal class HovedBeregningTest : FreeSpec({
         koronatid.forEach { beregningsDato ->
             val sisteAvsluttendeKalenderMåned = YearMonth.of(2020, 3)
             val inntekt = generateArbeidsinntekt(12, 2000.toBigDecimal(), sisteAvsluttendeKalenderMåned)
-            val fakta = Fakta(
-                inntekt = Inntekt(
-                    "id",
-                    inntekt,
-                    sisteAvsluttendeKalenderMåned = sisteAvsluttendeKalenderMåned,
-                ),
-                verneplikt = false,
-                fangstOgFiske = false,
-                lærling = true,
-                beregningsdato = beregningsDato,
-            )
+            val fakta =
+                Fakta(
+                    inntekt =
+                    Inntekt(
+                        "id",
+                        inntekt,
+                        sisteAvsluttendeKalenderMåned = sisteAvsluttendeKalenderMåned,
+                    ),
+                    verneplikt = false,
+                    fangstOgFiske = false,
+                    lærling = true,
+                    beregningsdato = beregningsDato,
+                )
 
             val beregningsResultat = HovedBeregning().calculate(fakta)
             beregningsResultat.shouldBeInstanceOf<BeregningsResultat>()
@@ -44,17 +46,19 @@ internal class HovedBeregningTest : FreeSpec({
         koronatid.forEach { beregningsDato ->
             val sisteAvsluttendeKalenderMåned = YearMonth.of(2020, 3)
             val inntekt = generateArbeidsinntekt(12, 2000.toBigDecimal(), sisteAvsluttendeKalenderMåned)
-            val fakta = Fakta(
-                inntekt = Inntekt(
-                    "id",
-                    inntekt,
-                    sisteAvsluttendeKalenderMåned = sisteAvsluttendeKalenderMåned,
-                ),
-                verneplikt = false,
-                fangstOgFiske = false,
-                lærling = true,
-                beregningsdato = beregningsDato,
-            )
+            val fakta =
+                Fakta(
+                    inntekt =
+                    Inntekt(
+                        "id",
+                        inntekt,
+                        sisteAvsluttendeKalenderMåned = sisteAvsluttendeKalenderMåned,
+                    ),
+                    verneplikt = false,
+                    fangstOgFiske = false,
+                    lærling = true,
+                    beregningsdato = beregningsDato,
+                )
 
             val beregningsResultat = HovedBeregning().calculate(fakta)
             beregningsResultat.shouldBeInstanceOf<BeregningsResultat>()

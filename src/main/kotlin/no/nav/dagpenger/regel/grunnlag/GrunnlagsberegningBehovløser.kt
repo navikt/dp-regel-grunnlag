@@ -3,7 +3,7 @@ package no.nav.dagpenger.regel.grunnlag
 import de.huxhorn.sulky.ulid.ULID
 import mu.KotlinLogging
 import mu.withLoggingContext
-import no.nav.dagpenger.events.inntekt.v1.sumInntekt
+import no.nav.dagpenger.inntekt.v1.sumInntekt
 import no.nav.dagpenger.regel.grunnlag.beregning.HovedBeregning
 import no.nav.dagpenger.regel.grunnlag.beregning.inntektsklasser
 import no.nav.dagpenger.regel.grunnlag.beregning.inntektsklasserMedFangstOgFiske
@@ -56,7 +56,10 @@ class GrunnlagsberegningBehovløser(
         River(rapidsConnection).apply(rapidFilter).register(this)
     }
 
-    override fun onPacket(packet: JsonMessage, context: MessageContext) {
+    override fun onPacket(
+        packet: JsonMessage,
+        context: MessageContext,
+    ) {
         withLoggingContext("behovId" to packet[BEHOV_ID].asText()) {
             try {
                 sikkerLogg.info("Mottok pakke: ${packet.toJson()}")
@@ -66,19 +69,21 @@ class GrunnlagsberegningBehovløser(
                 val resultat = HovedBeregning().calculate(fakta)
                 val ulidGenerator = ULID()
 
-                val grunnlagResultat = GrunnlagResultat(
-                    sporingsId = ulidGenerator.nextULID(),
-                    subsumsjonsId = ulidGenerator.nextULID(),
-                    regelidentifikator = regelidentifikator,
-                    avkortetGrunnlag = resultat.avkortet,
-                    uavkortetGrunnlag = resultat.uavkortet,
-                    beregningsregel = resultat.beregningsregel,
-                    harAvkortet = resultat.harAvkortet,
-                    grunnbeløpBrukt = when (fakta.verneplikt) {
-                        true -> fakta.grunnbeløpVedRegelverksdato().verdi
-                        false -> fakta.grunnbeløpVedBeregningsdato().verdi
-                    },
-                )
+                val grunnlagResultat =
+                    GrunnlagResultat(
+                        sporingsId = ulidGenerator.nextULID(),
+                        subsumsjonsId = ulidGenerator.nextULID(),
+                        regelidentifikator = regelidentifikator,
+                        avkortetGrunnlag = resultat.avkortet,
+                        uavkortetGrunnlag = resultat.uavkortet,
+                        beregningsregel = resultat.beregningsregel,
+                        harAvkortet = resultat.harAvkortet,
+                        grunnbeløpBrukt =
+                        when (fakta.verneplikt) {
+                            true -> fakta.grunnbeløpVedRegelverksdato().verdi
+                            false -> fakta.grunnbeløpVedBeregningsdato().verdi
+                        },
+                    )
                 createInntektPerioder(fakta)?.let { inntektPerioder ->
                     packet[GRUNNLAG_INNTEKTSPERIODER] = inntektPerioder.toMaps()
                 }
@@ -94,11 +99,12 @@ class GrunnlagsberegningBehovløser(
                 context.publish(packet.toJson())
                 sikkerLogg.info { "Løste behov for grunnlag $grunnlagResultat med fakta $fakta" }
             } catch (e: Exception) {
-                val problem = Problem(
-                    type = URI("urn:dp:error:regel"),
-                    title = "Ukjent feil ved bruk av grunnlagregel",
-                    instance = URI("urn:dp:regel:grunnlag"),
-                )
+                val problem =
+                    Problem(
+                        type = URI("urn:dp:error:regel"),
+                        title = "Ukjent feil ved bruk av grunnlagregel",
+                        instance = URI("urn:dp:regel:grunnlag"),
+                    )
                 packet[PROBLEM] = problem.toMap
                 context.publish(packet.toJson())
                 throw e
@@ -114,17 +120,20 @@ class GrunnlagsberegningBehovløser(
 
 fun createInntektPerioder(fakta: Fakta): List<InntektPeriodeInfo>? {
     val arbeidsinntektKlasser = inntektsklasser.toList()
-    val fangstOgFiskeKlasser = inntektsklasserMedFangstOgFiske.toList().filterNot {
-        inntektsklasser.toList().contains(it)
-    }
+    val fangstOgFiskeKlasser =
+        inntektsklasserMedFangstOgFiske.toList().filterNot {
+            inntektsklasser.toList().contains(it)
+        }
 
     return fakta.inntektsPerioder?.toList()?.mapIndexed { index, list ->
         InntektPeriodeInfo(
-            inntektsPeriode = InntektsPeriode(
+            inntektsPeriode =
+            InntektsPeriode(
                 list.first().årMåned,
                 list.last().årMåned,
             ),
-            inntekt = list.sumInntekt(
+            inntekt =
+            list.sumInntekt(
                 if (fakta.fangstOgFiske) {
                     arbeidsinntektKlasser + fangstOgFiskeKlasser
                 } else {
@@ -132,7 +141,8 @@ fun createInntektPerioder(fakta: Fakta): List<InntektPeriodeInfo>? {
                 },
             ),
             periode = index + 1,
-            inneholderFangstOgFisk = fakta.inntektsPerioder.toList()[index].any { klassifisertInntektMåned ->
+            inneholderFangstOgFisk =
+            fakta.inntektsPerioder.toList()[index].any { klassifisertInntektMåned ->
                 klassifisertInntektMåned.klassifiserteInntekter.any {
                     fangstOgFiskeKlasser.contains(it.inntektKlasse)
                 }

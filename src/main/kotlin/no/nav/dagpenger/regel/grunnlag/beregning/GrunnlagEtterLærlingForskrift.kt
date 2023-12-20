@@ -1,7 +1,7 @@
 package no.nav.dagpenger.regel.grunnlag.beregning
 
-import no.nav.dagpenger.events.inntekt.v1.InntektKlasse
-import no.nav.dagpenger.events.inntekt.v1.sumInntekt
+import no.nav.dagpenger.inntekt.v1.InntektKlasse
+import no.nav.dagpenger.inntekt.v1.sumInntekt
 import no.nav.dagpenger.regel.grunnlag.Fakta
 import java.math.BigDecimal
 import java.util.EnumSet
@@ -11,7 +11,6 @@ abstract class GrunnlagEtterLærlingForskrift(
     private val grunnlagUtvelgelse: GrunnlagUtvelgelse,
     private val inntektKlasser: EnumSet<InntektKlasse>,
 ) : GrunnlagBeregning(regelIdentifikator) {
-
     override fun isActive(fakta: Fakta): Boolean {
         val erInnenforRegelverksperiode = fakta.regelverksdato.erKoronaPeriode()
         return fakta.lærling && erInnenforRegelverksperiode && fakta.manueltGrunnlag == null && fakta.forrigeGrunnlag == null
@@ -49,6 +48,7 @@ sealed class GrunnlagUtvelgelse(
 )
 
 class SisteAvsluttendeMånedUtvelgelse : GrunnlagUtvelgelse(antallMåneder = 1, månedFaktor = 12)
+
 class Siste3AvsluttendeMånederUtvelgelse : GrunnlagUtvelgelse(antallMåneder = 3, månedFaktor = 4)
 
 class LærlingForskriftSisteAvsluttendeKalenderMånedFangstOgFisk : GrunnlagEtterLærlingForskrift(
@@ -56,7 +56,6 @@ class LærlingForskriftSisteAvsluttendeKalenderMånedFangstOgFisk : GrunnlagEtte
     grunnlagUtvelgelse = SisteAvsluttendeMånedUtvelgelse(),
     inntektKlasser = inntektsklasserMedFangstOgFiske,
 ) {
-
     override fun calculate(fakta: Fakta): Resultat {
         return if (fakta.fangstOgFiske) super.calculate(fakta) else IngenBeregningsResultat(this.beregningsregel)
     }

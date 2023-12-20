@@ -1,6 +1,6 @@
 package no.nav.dagpenger.regel.grunnlag.beregning
 
-import no.nav.dagpenger.events.inntekt.v1.InntektKlasse
+import no.nav.dagpenger.inntekt.v1.InntektKlasse
 import no.nav.dagpenger.regel.grunnlag.Fakta
 import java.math.BigDecimal
 import java.util.EnumSet

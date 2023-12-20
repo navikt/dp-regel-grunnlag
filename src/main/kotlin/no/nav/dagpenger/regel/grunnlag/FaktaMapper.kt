@@ -2,7 +2,7 @@ package no.nav.dagpenger.regel.grunnlag
 
 import com.fasterxml.jackson.databind.JsonNode
 import mu.KotlinLogging
-import no.nav.dagpenger.events.inntekt.v1.Inntekt
+import no.nav.dagpenger.inntekt.v1.Inntekt
 import no.nav.dagpenger.regel.grunnlag.GrunnlagsberegningBehovløser.Companion.AVTJENT_VERNEPLIKT
 import no.nav.dagpenger.regel.grunnlag.GrunnlagsberegningBehovløser.Companion.BEREGNINGSDATO
 import no.nav.dagpenger.regel.grunnlag.GrunnlagsberegningBehovløser.Companion.FANGST_OG_FISKE
@@ -40,8 +40,7 @@ fun mapToFaktaFrom(packet: JsonMessage): Fakta {
     )
 }
 
-private fun JsonNode.asBooleanStrict(): Boolean =
-    asText().toBooleanStrict()
+private fun JsonNode.asBooleanStrict(): Boolean = asText().toBooleanStrict()
 
 private fun JsonMessage.avtjentVerneplikt() =
     when (this.harVerdi(AVTJENT_VERNEPLIKT)) {
@@ -79,26 +78,28 @@ private fun JsonMessage.forrigeGrunnlag() =
         false -> null
     }
 
-internal fun JsonMessage.inntekt(): Inntekt? = when {
-    this.harVerdi(MANUELT_GRUNNLAG) && this.harVerdi(INNTEKT) ->
-        throw ManueltGrunnlagOgInntektException("Har manuelt grunnlag og inntekt")
+internal fun JsonMessage.inntekt(): Inntekt? =
+    when {
+        this.harVerdi(MANUELT_GRUNNLAG) && this.harVerdi(INNTEKT) ->
+            throw ManueltGrunnlagOgInntektException("Har manuelt grunnlag og inntekt")
 
-    this.harVerdi(FORRIGE_GRUNNLAG) && this.harVerdi(INNTEKT) ->
-        throw ForrigeGrunnlagOgInntektException("Har forrige grunnlag og inntekt")
+        this.harVerdi(FORRIGE_GRUNNLAG) && this.harVerdi(INNTEKT) ->
+            throw ForrigeGrunnlagOgInntektException("Har forrige grunnlag og inntekt")
 
-    this.harVerdi(INNTEKT) -> {
-        val inntektJson = this[INNTEKT]
-        runCatching {
-            objectMapper.convertValue(inntektJson, Inntekt::class.java)
-        }.onFailure {
-            sikkerLogg.error("Feilet å parse inntekt: $inntektJson")
-        }.getOrThrow()
+        this.harVerdi(INNTEKT) -> {
+            val inntektJson = this[INNTEKT]
+            runCatching {
+                objectMapper.convertValue(inntektJson, Inntekt::class.java)
+            }.onFailure {
+                sikkerLogg.error("Feilet å parse inntekt: $inntektJson")
+            }.getOrThrow()
+        }
+
+        else -> null
     }
-
-    else -> null
-}
 
 private fun JsonMessage.harVerdi(field: String) = !this[field].isMissingOrNull()
 
 class ManueltGrunnlagOgInntektException(message: String) : RuntimeException(message)
+
 class ForrigeGrunnlagOgInntektException(message: String) : RuntimeException(message)

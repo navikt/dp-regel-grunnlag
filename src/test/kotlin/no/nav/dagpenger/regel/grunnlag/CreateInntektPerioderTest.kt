@@ -1,9 +1,9 @@
 package no.nav.dagpenger.regel.grunnlag
 
-import no.nav.dagpenger.events.inntekt.v1.Inntekt
-import no.nav.dagpenger.events.inntekt.v1.InntektKlasse
-import no.nav.dagpenger.events.inntekt.v1.KlassifisertInntekt
-import no.nav.dagpenger.events.inntekt.v1.KlassifisertInntektMåned
+import no.nav.dagpenger.inntekt.v1.Inntekt
+import no.nav.dagpenger.inntekt.v1.InntektKlasse
+import no.nav.dagpenger.inntekt.v1.KlassifisertInntekt
+import no.nav.dagpenger.inntekt.v1.KlassifisertInntektMåned
 import no.nav.dagpenger.regel.grunnlag.beregning.inntektsklasserMedFangstOgFiske
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
@@ -21,11 +21,12 @@ internal class CreateInntektPerioderTest {
     @Test
     fun `Skal ha perioder med 0 inntekt hvis det ikke er inntekt`() {
         val beregningsdato = LocalDate.of(2019, 2, 1)
-        val fakta = Fakta(
-            verneplikt = false,
-            fangstOgFiske = false,
-            beregningsdato = beregningsdato,
-        )
+        val fakta =
+            Fakta(
+                verneplikt = false,
+                fangstOgFiske = false,
+                beregningsdato = beregningsdato,
+            )
 
         val inntektsPerioder = createInntektPerioder(fakta)
 
@@ -37,16 +38,18 @@ internal class CreateInntektPerioderTest {
         val sisteAvsluttendeKalenderMåned = YearMonth.of(2019, 1)
         val beregningsdato = LocalDate.of(2019, 2, 1)
         val inntektsListe = generateArbeidsinntekt(36, BigDecimal(1000), sisteAvsluttendeKalenderMåned)
-        val fakta = Fakta(
-            inntekt = Inntekt(
-                "id",
-                inntektsListe,
-                sisteAvsluttendeKalenderMåned = sisteAvsluttendeKalenderMåned,
-            ),
-            verneplikt = false,
-            fangstOgFiske = false,
-            beregningsdato = beregningsdato,
-        )
+        val fakta =
+            Fakta(
+                inntekt =
+                Inntekt(
+                    "id",
+                    inntektsListe,
+                    sisteAvsluttendeKalenderMåned = sisteAvsluttendeKalenderMåned,
+                ),
+                verneplikt = false,
+                fangstOgFiske = false,
+                beregningsdato = beregningsdato,
+            )
 
         val inntektsPerioder = createInntektPerioder(fakta)!!
         assertThreeCorrectPeriods(inntektsPerioder, sisteAvsluttendeKalenderMåned)
@@ -59,17 +62,19 @@ internal class CreateInntektPerioderTest {
     fun ` Skal indikere at fangst og fisk er med men ikke summere opp fangst og fisk sammen med arbeidsinntekt hvis ikke parameteret fangstOgFisk er satt til true `() {
         val sisteAvsluttendeKalenderMåned = YearMonth.of(2019, 1)
         val beregningsdato = LocalDate.of(2019, 2, 1)
-        val inntekt = Inntekt(
-            "id",
-            generateArbeidsOgFangstOgFiskInntekt(36, BigDecimal(2000), BigDecimal(2000), sisteAvsluttendeKalenderMåned),
-            sisteAvsluttendeKalenderMåned = sisteAvsluttendeKalenderMåned,
-        )
-        val fakta = Fakta(
-            inntekt,
-            false,
-            false,
-            beregningsdato,
-        )
+        val inntekt =
+            Inntekt(
+                "id",
+                generateArbeidsOgFangstOgFiskInntekt(36, BigDecimal(2000), BigDecimal(2000), sisteAvsluttendeKalenderMåned),
+                sisteAvsluttendeKalenderMåned = sisteAvsluttendeKalenderMåned,
+            )
+        val fakta =
+            Fakta(
+                inntekt,
+                false,
+                false,
+                beregningsdato,
+            )
 
         val inntektsPerioder = createInntektPerioder(fakta)!!
         assertThreeCorrectPeriods(inntektsPerioder, sisteAvsluttendeKalenderMåned)
@@ -84,27 +89,28 @@ internal class CreateInntektPerioderTest {
         "OMSORGSPENGER",
         "OPPLÆRINGSPENGER",
     )
-    fun `Summer inntekter fra ulike inntektsklasser`(
-        inntektKlasse: InntektKlasse,
-    ) {
+    fun `Summer inntekter fra ulike inntektsklasser`(inntektKlasse: InntektKlasse) {
         val sisteAvsluttendeKalenderMåned = YearMonth.of(2019, 1)
         val beregningsdato = LocalDate.of(2019, 2, 1)
 
-        val fakta = Fakta(
-            inntekt = Inntekt(
-                inntektsId = "ID",
-                inntektsListe = generateInntektMed(
-                    inntektKlasse = inntektKlasse,
-                    numberOfMonths = 36,
-                    beløpPerMnd = BigDecimal(4000),
-                    senesteMåned = sisteAvsluttendeKalenderMåned,
+        val fakta =
+            Fakta(
+                inntekt =
+                Inntekt(
+                    inntektsId = "ID",
+                    inntektsListe =
+                    generateInntektMed(
+                        inntektKlasse = inntektKlasse,
+                        numberOfMonths = 36,
+                        beløpPerMnd = BigDecimal(4000),
+                        senesteMåned = sisteAvsluttendeKalenderMåned,
+                    ),
+                    sisteAvsluttendeKalenderMåned = sisteAvsluttendeKalenderMåned,
                 ),
-                sisteAvsluttendeKalenderMåned = sisteAvsluttendeKalenderMåned,
-            ),
-            verneplikt = false,
-            fangstOgFiske = true,
-            beregningsdato = beregningsdato,
-        )
+                verneplikt = false,
+                fangstOgFiske = true,
+                beregningsdato = beregningsdato,
+            )
 
         val inntektsPerioder = createInntektPerioder(fakta)!!
         assertThreeCorrectPeriods(inntektsPerioder, sisteAvsluttendeKalenderMåned)
@@ -116,21 +122,22 @@ internal class CreateInntektPerioderTest {
     fun ` Skal summere opp med fangst og fisk hvis paremeteret er satt til true`() {
         val sisteAvsluttendeKalenderMåned = YearMonth.of(2019, 1)
         val beregningsdato = LocalDate.of(2019, 2, 1)
-        val fakta = Fakta(
-            Inntekt(
-                "id",
-                generateArbeidsOgFangstOgFiskInntekt(
-                    36,
-                    BigDecimal(2000),
-                    BigDecimal(2000),
-                    sisteAvsluttendeKalenderMåned,
+        val fakta =
+            Fakta(
+                Inntekt(
+                    "id",
+                    generateArbeidsOgFangstOgFiskInntekt(
+                        36,
+                        BigDecimal(2000),
+                        BigDecimal(2000),
+                        sisteAvsluttendeKalenderMåned,
+                    ),
+                    sisteAvsluttendeKalenderMåned = sisteAvsluttendeKalenderMåned,
                 ),
-                sisteAvsluttendeKalenderMåned = sisteAvsluttendeKalenderMåned,
-            ),
-            verneplikt = false,
-            fangstOgFiske = true,
-            beregningsdato = beregningsdato,
-        )
+                verneplikt = false,
+                fangstOgFiske = true,
+                beregningsdato = beregningsdato,
+            )
 
         val inntektsPerioder = createInntektPerioder(fakta)!!
         assertThreeCorrectPeriods(inntektsPerioder, sisteAvsluttendeKalenderMåned)
@@ -141,16 +148,17 @@ internal class CreateInntektPerioderTest {
     fun `Skal bare ta med fangst og fisk hvis paremeteret fangstOgFisk er satt til true og det bare finnes fangst og fiske inntekter`() {
         val sisteAvsluttendeKalenderMåned = YearMonth.of(2019, 1)
         val beregningsdato = LocalDate.of(2019, 2, 1)
-        val fakta = Fakta(
-            Inntekt(
-                "id",
-                generateFangstOgFiskInntekt(36, BigDecimal(2000), sisteAvsluttendeKalenderMåned),
-                sisteAvsluttendeKalenderMåned = sisteAvsluttendeKalenderMåned,
-            ),
-            verneplikt = false,
-            fangstOgFiske = true,
-            beregningsdato = beregningsdato,
-        )
+        val fakta =
+            Fakta(
+                Inntekt(
+                    "id",
+                    generateFangstOgFiskInntekt(36, BigDecimal(2000), sisteAvsluttendeKalenderMåned),
+                    sisteAvsluttendeKalenderMåned = sisteAvsluttendeKalenderMåned,
+                ),
+                verneplikt = false,
+                fangstOgFiske = true,
+                beregningsdato = beregningsdato,
+            )
 
         val inntektsPerioder = createInntektPerioder(fakta)!!
         assertThreeCorrectPeriods(inntektsPerioder, sisteAvsluttendeKalenderMåned)
@@ -163,16 +171,17 @@ internal class CreateInntektPerioderTest {
     fun ` Skal bare ta med skal bare ta med Arbeidsinntekter selvom fangstOgFisk parameteret er satt til true men det ikke foreligger fangs og fiske inntekter`() {
         val sisteAvsluttendeKalenderMåned = YearMonth.of(2019, 1)
         val beregningsdato = LocalDate.of(2019, 2, 1)
-        val fakta = Fakta(
-            Inntekt(
-                "id",
-                generateArbeidsinntekt(36, BigDecimal(2000), sisteAvsluttendeKalenderMåned),
-                sisteAvsluttendeKalenderMåned = sisteAvsluttendeKalenderMåned,
-            ),
-            verneplikt = false,
-            fangstOgFiske = true,
-            beregningsdato = beregningsdato,
-        )
+        val fakta =
+            Fakta(
+                Inntekt(
+                    "id",
+                    generateArbeidsinntekt(36, BigDecimal(2000), sisteAvsluttendeKalenderMåned),
+                    sisteAvsluttendeKalenderMåned = sisteAvsluttendeKalenderMåned,
+                ),
+                verneplikt = false,
+                fangstOgFiske = true,
+                beregningsdato = beregningsdato,
+            )
 
         val inntektsPerioder = createInntektPerioder(fakta)!!
         assertThreeCorrectPeriods(inntektsPerioder, sisteAvsluttendeKalenderMåned)
@@ -184,31 +193,34 @@ internal class CreateInntektPerioderTest {
     @Test
     fun ` Skal ta med minus-inntekt `() {
         val sisteAvsluttedeKalenderMåned = YearMonth.of(2019, 4)
-        val inntekt = listOf(
-            KlassifisertInntektMåned(
-                YearMonth.of(2019, 3),
-                klassifiserteInntekter = getMinusInntekt(),
-            ),
-            KlassifisertInntektMåned(
-                YearMonth.of(2018, 3),
-                klassifiserteInntekter = getMinusInntekt(),
-            ),
-            KlassifisertInntektMåned(
-                YearMonth.of(2017, 3),
-                klassifiserteInntekter = getMinusInntekt(),
-            ),
-        )
+        val inntekt =
+            listOf(
+                KlassifisertInntektMåned(
+                    YearMonth.of(2019, 3),
+                    klassifiserteInntekter = getMinusInntekt(),
+                ),
+                KlassifisertInntektMåned(
+                    YearMonth.of(2018, 3),
+                    klassifiserteInntekter = getMinusInntekt(),
+                ),
+                KlassifisertInntektMåned(
+                    YearMonth.of(2017, 3),
+                    klassifiserteInntekter = getMinusInntekt(),
+                ),
+            )
 
-        val fakta = Fakta(
-            inntekt = Inntekt(
-                "123",
-                inntekt,
-                sisteAvsluttendeKalenderMåned = sisteAvsluttedeKalenderMåned,
-            ),
-            verneplikt = false,
-            fangstOgFiske = false,
-            beregningsdato = LocalDate.of(2019, 5, 20),
-        )
+        val fakta =
+            Fakta(
+                inntekt =
+                Inntekt(
+                    "123",
+                    inntekt,
+                    sisteAvsluttendeKalenderMåned = sisteAvsluttedeKalenderMåned,
+                ),
+                verneplikt = false,
+                fangstOgFiske = false,
+                beregningsdato = LocalDate.of(2019, 5, 20),
+            )
 
         val inntektsPerioder = createInntektPerioder(fakta)!!
         assertThreeCorrectPeriods(inntektsPerioder, sisteAvsluttedeKalenderMåned)
@@ -216,7 +228,10 @@ internal class CreateInntektPerioderTest {
         assertTrue(inntektsPerioder.all { it.inntekt == BigDecimal(-100) })
     }
 
-    fun assertThreeCorrectPeriods(inntektsInfoListe: List<InntektPeriodeInfo>?, senesteMåned: YearMonth) {
+    fun assertThreeCorrectPeriods(
+        inntektsInfoListe: List<InntektPeriodeInfo>?,
+        senesteMåned: YearMonth,
+    ) {
         assertEquals(3, inntektsInfoListe?.size)
 
         val førstePeriode = inntektsInfoListe?.find { it.periode == 1 }
@@ -236,8 +251,9 @@ internal class CreateInntektPerioderTest {
     }
 
     private val inntektsklasser = no.nav.dagpenger.regel.grunnlag.beregning.inntektsklasser.toList()
-    private val inntektsklasserFangstOgFiske = inntektsklasserMedFangstOgFiske.toList()
-        .filterNot { no.nav.dagpenger.regel.grunnlag.beregning.inntektsklasser.toList().contains(it) }
+    private val inntektsklasserFangstOgFiske =
+        inntektsklasserMedFangstOgFiske.toList()
+            .filterNot { no.nav.dagpenger.regel.grunnlag.beregning.inntektsklasser.toList().contains(it) }
 
     fun generateArbeidsinntekt(
         numberOfMonths: Int,
