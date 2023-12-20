@@ -21,7 +21,7 @@ dependencies {
     implementation(libs.rapids.and.rivers)
 
     implementation("com.github.navikt:dp-inntekt-kontrakter:1_20231220.55a8a9")
-    implementation("com.github.navikt:dagpenger-events:20231220.3050bf")
+    implementation("com.github.navikt:dagpenger-events:2023081713361692272216.01ab7c590338")
     implementation("com.github.navikt:dp-grunnbelop:2023.05.24-15.26.f42064d9fdc8")
 
     implementation("de.huxhorn.sulky:de.huxhorn.sulky.ulid:8.3.0")
@@ -32,7 +32,7 @@ dependencies {
 
     implementation(libs.konfig)
 
-    implementation("io.getunleash:unleash-client-java:9.1.1")
+    implementation("io.getunleash:unleash-client-java:9.2.0")
 
     implementation(libs.kotlin.logging)
 
