@@ -49,6 +49,7 @@ class GrunnlagsberegningBehovløser(
                 it.interestedIn(REGELVERKSDATO)
             }
             validate { it.rejectKey(GRUNNLAG_RESULTAT) }
+            validate { it.rejectKey(PROBLEM) }
         }
     }
 
