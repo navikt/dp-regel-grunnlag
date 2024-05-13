@@ -74,6 +74,7 @@ data class Fakta(
 }
 
 internal fun isThisGjusteringTest(regelverksdato: LocalDate): Boolean {
+    // Dette er G
     val gVirkning = LocalDate.of(2024, 4, 3)
     val isRegelverksdatoAfterGjustering = regelverksdato.isAfter(gVirkning.minusDays(1))
     return Configuration.unleash.isEnabled("dp-g-justeringstest") && isRegelverksdatoAfterGjustering
