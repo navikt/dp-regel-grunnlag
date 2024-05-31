@@ -13,7 +13,6 @@ data class GrunnlagResultat(
     val harAvkortet: Boolean,
     val grunnbeløpBrukt: BigDecimal,
 ) {
-
     companion object {
         const val SPORINGSID = "sporingsId"
         const val SUBSUMSJONSID = "subsumsjonsId"

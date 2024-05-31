@@ -33,11 +33,11 @@ class BruttoInntektMedFangstOgFiskDeSisteTolvKalendermånedeneBeregningsTest {
         val fakta =
             Fakta(
                 inntekt =
-                Inntekt(
-                    "123",
-                    arbeidsInntektsListe + fiskOgFangstInntekt,
-                    sisteAvsluttendeKalenderMåned = sisteAvsluttendeKalenderMåned,
-                ),
+                    Inntekt(
+                        "123",
+                        arbeidsInntektsListe + fiskOgFangstInntekt,
+                        sisteAvsluttendeKalenderMåned = sisteAvsluttendeKalenderMåned,
+                    ),
                 fangstOgFiske = true,
                 lærling = false,
                 verneplikt = false,

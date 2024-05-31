@@ -43,13 +43,13 @@ class GrunnlagsberegningBehovløserTest {
         val testMessage =
             JsonMessage.newMessage(
                 map =
-                mapOf(
-                    BEHOV_ID to "behovId",
-                    BEREGNINGSDATO to "2018-08-10",
-                    AVTJENT_VERNEPLIKT to false,
-                    FANGST_OG_FISKE to false,
-                    INNTEKT to inntekt.toMap(),
-                ),
+                    mapOf(
+                        BEHOV_ID to "behovId",
+                        BEREGNINGSDATO to "2018-08-10",
+                        AVTJENT_VERNEPLIKT to false,
+                        FANGST_OG_FISKE to false,
+                        INNTEKT to inntekt.toMap(),
+                    ),
             ).toJson()
 
         testRapid.sendTestMessage(testMessage)
@@ -66,13 +66,13 @@ class GrunnlagsberegningBehovløserTest {
         val testMessage =
             JsonMessage.newMessage(
                 map =
-                mapOf(
-                    BEHOV_ID to "behovId",
-                    BEREGNINGSDATO to "2018-08-10",
-                    AVTJENT_VERNEPLIKT to false,
-                    FANGST_OG_FISKE to false,
-                    INNTEKT to inntekt.toMap(),
-                ),
+                    mapOf(
+                        BEHOV_ID to "behovId",
+                        BEREGNINGSDATO to "2018-08-10",
+                        AVTJENT_VERNEPLIKT to false,
+                        FANGST_OG_FISKE to false,
+                        INNTEKT to inntekt.toMap(),
+                    ),
             ).toJson()
 
         testRapid.sendTestMessage(testMessage)
@@ -90,13 +90,13 @@ class GrunnlagsberegningBehovløserTest {
         val testMessage =
             JsonMessage.newMessage(
                 map =
-                mapOf(
-                    BEHOV_ID to "behovId",
-                    BEREGNINGSDATO to "2018-08-10",
-                    AVTJENT_VERNEPLIKT to false,
-                    FANGST_OG_FISKE to false,
-                    INNTEKT to inntekt.toMap(),
-                ),
+                    mapOf(
+                        BEHOV_ID to "behovId",
+                        BEREGNINGSDATO to "2018-08-10",
+                        AVTJENT_VERNEPLIKT to false,
+                        FANGST_OG_FISKE to false,
+                        INNTEKT to inntekt.toMap(),
+                    ),
             ).toJson()
 
         testRapid.sendTestMessage(testMessage)
@@ -109,19 +109,20 @@ class GrunnlagsberegningBehovløserTest {
         resultat[GRUNNLAG_RESULTAT]["harAvkortet"].asBoolean() shouldBe false
     }
 
+    @Suppress("ktlint:standard:max-line-length")
     @Test
     fun `Skal beregne med Verneplikt-regel dersom bruker har avtjent verneplikt siste 12 måneder og det ikke lønner seg å velge annen beregningsregel`() {
         val inntekt = getInntekt((1000).toBigDecimal())
         val testMessage =
             JsonMessage.newMessage(
                 map =
-                mapOf(
-                    BEHOV_ID to "behovId",
-                    BEREGNINGSDATO to "2018-08-10",
-                    REGELVERKSDATO to "2021-03-16",
-                    AVTJENT_VERNEPLIKT to true,
-                    INNTEKT to inntekt.toMap(),
-                ),
+                    mapOf(
+                        BEHOV_ID to "behovId",
+                        BEREGNINGSDATO to "2018-08-10",
+                        REGELVERKSDATO to "2021-03-16",
+                        AVTJENT_VERNEPLIKT to true,
+                        INNTEKT to inntekt.toMap(),
+                    ),
             )
 
         testRapid.sendTestMessage(testMessage.toJson())
@@ -141,13 +142,13 @@ class GrunnlagsberegningBehovløserTest {
         val testMessage =
             JsonMessage.newMessage(
                 map =
-                mapOf(
-                    BEHOV_ID to "behovId",
-                    BEREGNINGSDATO to "2020-03-20",
-                    FANGST_OG_FISKE to false,
-                    LÆRLING to false,
-                    FORRIGE_GRUNNLAG to forrigeGrunnlag,
-                ),
+                    mapOf(
+                        BEHOV_ID to "behovId",
+                        BEREGNINGSDATO to "2020-03-20",
+                        FANGST_OG_FISKE to false,
+                        LÆRLING to false,
+                        FORRIGE_GRUNNLAG to forrigeGrunnlag,
+                    ),
             )
 
         testRapid.sendTestMessage(testMessage.toJson())
@@ -167,12 +168,12 @@ class GrunnlagsberegningBehovløserTest {
         val testMessage =
             JsonMessage.newMessage(
                 map =
-                mapOf(
-                    BEHOV_ID to "behovId",
-                    BEREGNINGSDATO to "2020-03-20",
-                    LÆRLING to true,
-                    INNTEKT to inntekt.toMap(),
-                ),
+                    mapOf(
+                        BEHOV_ID to "behovId",
+                        BEREGNINGSDATO to "2020-03-20",
+                        LÆRLING to true,
+                        INNTEKT to inntekt.toMap(),
+                    ),
             ).toJson()
 
         testRapid.sendTestMessage(testMessage)
@@ -191,12 +192,12 @@ class GrunnlagsberegningBehovløserTest {
         val testMessage =
             JsonMessage.newMessage(
                 map =
-                mapOf(
-                    BEHOV_ID to "behovId",
-                    BEREGNINGSDATO to "2020-03-20",
-                    LÆRLING to true,
-                    FORRIGE_GRUNNLAG to forrigeGrunnlag,
-                ),
+                    mapOf(
+                        BEHOV_ID to "behovId",
+                        BEREGNINGSDATO to "2020-03-20",
+                        LÆRLING to true,
+                        FORRIGE_GRUNNLAG to forrigeGrunnlag,
+                    ),
             ).toJson()
 
         testRapid.sendTestMessage(testMessage)
@@ -214,11 +215,11 @@ class GrunnlagsberegningBehovløserTest {
         val testMessage =
             JsonMessage.newMessage(
                 map =
-                mapOf(
-                    BEHOV_ID to "behovId",
-                    BEREGNINGSDATO to "2020-03-20",
-                    MANUELT_GRUNNLAG to manueltGrunnlag,
-                ),
+                    mapOf(
+                        BEHOV_ID to "behovId",
+                        BEREGNINGSDATO to "2020-03-20",
+                        MANUELT_GRUNNLAG to manueltGrunnlag,
+                    ),
             ).toJson()
 
         testRapid.sendTestMessage(testMessage)
@@ -236,11 +237,11 @@ class GrunnlagsberegningBehovløserTest {
         val testMessage =
             JsonMessage.newMessage(
                 map =
-                mapOf(
-                    BEHOV_ID to "behovId",
-                    BEREGNINGSDATO to "2020-03-20",
-                    MANUELT_GRUNNLAG to manueltGrunnlag,
-                ),
+                    mapOf(
+                        BEHOV_ID to "behovId",
+                        BEREGNINGSDATO to "2020-03-20",
+                        MANUELT_GRUNNLAG to manueltGrunnlag,
+                    ),
             ).toJson()
 
         testRapid.sendTestMessage(testMessage)
@@ -259,12 +260,12 @@ class GrunnlagsberegningBehovløserTest {
         val testMessage =
             JsonMessage.newMessage(
                 map =
-                mapOf(
-                    BEHOV_ID to "behovId",
-                    BEREGNINGSDATO to "2018-08-10",
-                    AVTJENT_VERNEPLIKT to true,
-                    INNTEKT to inntekt.toMap(),
-                ),
+                    mapOf(
+                        BEHOV_ID to "behovId",
+                        BEREGNINGSDATO to "2018-08-10",
+                        AVTJENT_VERNEPLIKT to true,
+                        INNTEKT to inntekt.toMap(),
+                    ),
             ).toJson()
 
         testRapid.sendTestMessage(testMessage)
@@ -372,31 +373,31 @@ class GrunnlagsberegningBehovløserTest {
         return Inntekt(
             inntektsId = "12345",
             inntektsListe =
-            listOf(
-                KlassifisertInntektMåned(
-                    årMåned = inntektsdatoStart ?: YearMonth.of(2018, 4),
-                    klassifiserteInntekter =
-                    listOf(
-                        KlassifisertInntekt(
-                            beløp = månedsbeløp,
-                            inntektKlasse = InntektKlasse.ARBEIDSINNTEKT,
+                listOf(
+                    KlassifisertInntektMåned(
+                        årMåned = inntektsdatoStart ?: YearMonth.of(2018, 4),
+                        klassifiserteInntekter =
+                            listOf(
+                                KlassifisertInntekt(
+                                    beløp = månedsbeløp,
+                                    inntektKlasse = InntektKlasse.ARBEIDSINNTEKT,
+                                ),
+                            ),
+                    ),
+                    KlassifisertInntektMåned(
+                        inntektsdatoStart?.plusMonths(1) ?: YearMonth.of(2018, 5),
+                        listOf(
+                            KlassifisertInntekt(
+                                månedsbeløp,
+                                InntektKlasse.ARBEIDSINNTEKT,
+                            ),
+                            KlassifisertInntekt(
+                                månedsbeløp,
+                                InntektKlasse.ARBEIDSINNTEKT,
+                            ),
                         ),
                     ),
                 ),
-                KlassifisertInntektMåned(
-                    inntektsdatoStart?.plusMonths(1) ?: YearMonth.of(2018, 5),
-                    listOf(
-                        KlassifisertInntekt(
-                            månedsbeløp,
-                            InntektKlasse.ARBEIDSINNTEKT,
-                        ),
-                        KlassifisertInntekt(
-                            månedsbeløp,
-                            InntektKlasse.ARBEIDSINNTEKT,
-                        ),
-                    ),
-                ),
-            ),
             sisteAvsluttendeKalenderMåned = YearMonth.of(2018, 7),
         )
     }

@@ -41,11 +41,11 @@ internal class CreateInntektPerioderTest {
         val fakta =
             Fakta(
                 inntekt =
-                Inntekt(
-                    "id",
-                    inntektsListe,
-                    sisteAvsluttendeKalenderMåned = sisteAvsluttendeKalenderMåned,
-                ),
+                    Inntekt(
+                        "id",
+                        inntektsListe,
+                        sisteAvsluttendeKalenderMåned = sisteAvsluttendeKalenderMåned,
+                    ),
                 verneplikt = false,
                 fangstOgFiske = false,
                 beregningsdato = beregningsdato,
@@ -58,14 +58,20 @@ internal class CreateInntektPerioderTest {
         assertTrue(inntektsPerioder.none { it.inneholderFangstOgFisk })
     }
 
+    @Suppress("ktlint:standard:max-line-length")
     @Test
-    fun ` Skal indikere at fangst og fisk er med men ikke summere opp fangst og fisk sammen med arbeidsinntekt hvis ikke parameteret fangstOgFisk er satt til true `() {
+    fun `Skal indikere at fangst og fisk er med men ikke summere opp fangst og fisk sammen med arbeidsinntekt hvis ikke parameteret fangstOgFisk er satt til true `() {
         val sisteAvsluttendeKalenderMåned = YearMonth.of(2019, 1)
         val beregningsdato = LocalDate.of(2019, 2, 1)
         val inntekt =
             Inntekt(
                 "id",
-                generateArbeidsOgFangstOgFiskInntekt(36, BigDecimal(2000), BigDecimal(2000), sisteAvsluttendeKalenderMåned),
+                generateArbeidsOgFangstOgFiskInntekt(
+                    36,
+                    BigDecimal(2000),
+                    BigDecimal(2000),
+                    sisteAvsluttendeKalenderMåned,
+                ),
                 sisteAvsluttendeKalenderMåned = sisteAvsluttendeKalenderMåned,
             )
         val fakta =
@@ -96,17 +102,17 @@ internal class CreateInntektPerioderTest {
         val fakta =
             Fakta(
                 inntekt =
-                Inntekt(
-                    inntektsId = "ID",
-                    inntektsListe =
-                    generateInntektMed(
-                        inntektKlasse = inntektKlasse,
-                        numberOfMonths = 36,
-                        beløpPerMnd = BigDecimal(4000),
-                        senesteMåned = sisteAvsluttendeKalenderMåned,
+                    Inntekt(
+                        inntektsId = "ID",
+                        inntektsListe =
+                            generateInntektMed(
+                                inntektKlasse = inntektKlasse,
+                                numberOfMonths = 36,
+                                beløpPerMnd = BigDecimal(4000),
+                                senesteMåned = sisteAvsluttendeKalenderMåned,
+                            ),
+                        sisteAvsluttendeKalenderMåned = sisteAvsluttendeKalenderMåned,
                     ),
-                    sisteAvsluttendeKalenderMåned = sisteAvsluttendeKalenderMåned,
-                ),
                 verneplikt = false,
                 fangstOgFiske = true,
                 beregningsdato = beregningsdato,
@@ -167,6 +173,7 @@ internal class CreateInntektPerioderTest {
         assertTrue(inntektsPerioder.all { it.inneholderFangstOgFisk })
     }
 
+    @Suppress("ktlint:standard:max-line-length")
     @Test
     fun ` Skal bare ta med skal bare ta med Arbeidsinntekter selvom fangstOgFisk parameteret er satt til true men det ikke foreligger fangs og fiske inntekter`() {
         val sisteAvsluttendeKalenderMåned = YearMonth.of(2019, 1)
@@ -212,11 +219,11 @@ internal class CreateInntektPerioderTest {
         val fakta =
             Fakta(
                 inntekt =
-                Inntekt(
-                    "123",
-                    inntekt,
-                    sisteAvsluttendeKalenderMåned = sisteAvsluttedeKalenderMåned,
-                ),
+                    Inntekt(
+                        "123",
+                        inntekt,
+                        sisteAvsluttendeKalenderMåned = sisteAvsluttedeKalenderMåned,
+                    ),
                 verneplikt = false,
                 fangstOgFiske = false,
                 beregningsdato = LocalDate.of(2019, 5, 20),

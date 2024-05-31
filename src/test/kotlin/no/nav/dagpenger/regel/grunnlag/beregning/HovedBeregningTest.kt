@@ -25,11 +25,11 @@ internal class HovedBeregningTest : FreeSpec({
             val fakta =
                 Fakta(
                     inntekt =
-                    Inntekt(
-                        "id",
-                        inntekt,
-                        sisteAvsluttendeKalenderMåned = sisteAvsluttendeKalenderMåned,
-                    ),
+                        Inntekt(
+                            "id",
+                            inntekt,
+                            sisteAvsluttendeKalenderMåned = sisteAvsluttendeKalenderMåned,
+                        ),
                     verneplikt = false,
                     fangstOgFiske = false,
                     lærling = true,
@@ -49,11 +49,11 @@ internal class HovedBeregningTest : FreeSpec({
             val fakta =
                 Fakta(
                     inntekt =
-                    Inntekt(
-                        "id",
-                        inntekt,
-                        sisteAvsluttendeKalenderMåned = sisteAvsluttendeKalenderMåned,
-                    ),
+                        Inntekt(
+                            "id",
+                            inntekt,
+                            sisteAvsluttendeKalenderMåned = sisteAvsluttendeKalenderMåned,
+                        ),
                     verneplikt = false,
                     fangstOgFiske = false,
                     lærling = true,

@@ -80,10 +80,10 @@ class GrunnlagsberegningBehovløser(
                         beregningsregel = resultat.beregningsregel,
                         harAvkortet = resultat.harAvkortet,
                         grunnbeløpBrukt =
-                        when (fakta.verneplikt) {
-                            true -> fakta.grunnbeløpVedRegelverksdato().verdi
-                            false -> fakta.grunnbeløpVedBeregningsdato().verdi
-                        },
+                            when (fakta.verneplikt) {
+                                true -> fakta.grunnbeløpVedRegelverksdato().verdi
+                                false -> fakta.grunnbeløpVedBeregningsdato().verdi
+                            },
                     )
                 createInntektPerioder(fakta)?.let { inntektPerioder ->
                     packet[GRUNNLAG_INNTEKTSPERIODER] = inntektPerioder.toMaps()
@@ -129,25 +129,25 @@ fun createInntektPerioder(fakta: Fakta): List<InntektPeriodeInfo>? {
     return fakta.inntektsPerioder?.toList()?.mapIndexed { index, list ->
         InntektPeriodeInfo(
             inntektsPeriode =
-            InntektsPeriode(
-                list.first().årMåned,
-                list.last().årMåned,
-            ),
+                InntektsPeriode(
+                    list.first().årMåned,
+                    list.last().årMåned,
+                ),
             inntekt =
-            list.sumInntekt(
-                if (fakta.fangstOgFiske) {
-                    arbeidsinntektKlasser + fangstOgFiskeKlasser
-                } else {
-                    arbeidsinntektKlasser
-                },
-            ),
+                list.sumInntekt(
+                    if (fakta.fangstOgFiske) {
+                        arbeidsinntektKlasser + fangstOgFiskeKlasser
+                    } else {
+                        arbeidsinntektKlasser
+                    },
+                ),
             periode = index + 1,
             inneholderFangstOgFisk =
-            fakta.inntektsPerioder.toList()[index].any { klassifisertInntektMåned ->
-                klassifisertInntektMåned.klassifiserteInntekter.any {
-                    fangstOgFiskeKlasser.contains(it.inntektKlasse)
-                }
-            },
+                fakta.inntektsPerioder.toList()[index].any { klassifisertInntektMåned ->
+                    klassifisertInntektMåned.klassifiserteInntekter.any {
+                        fangstOgFiskeKlasser.contains(it.inntektKlasse)
+                    }
+                },
         )
     }
 }

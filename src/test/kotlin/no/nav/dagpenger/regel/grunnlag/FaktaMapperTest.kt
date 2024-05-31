@@ -168,7 +168,9 @@ class FaktaMapperTest {
         val behovløser = OnPacketTestListener(testRapid)
         val inntektId = "01HF4BNZTR2F30GR0Q0TCH22KS"
 
-        testRapid.sendTestMessage("""{"$BEHOV_ID":"behovId","$BEREGNINGSDATO": "${LocalDate.MAX}", "$INNTEKT": ${inntektJson(inntektId)} }""")
+        testRapid.sendTestMessage(
+            """{"$BEHOV_ID":"behovId","$BEREGNINGSDATO": "${LocalDate.MAX}", "$INNTEKT": ${inntektJson(inntektId)} }""",
+        )
 
         mapToFaktaFrom(behovløser.packet!!).inntekt.let { inntekt ->
             requireNotNull(inntekt)
@@ -183,35 +185,36 @@ class FaktaMapperTest {
     }
 
     @Language("JSON")
-    fun inntektJson(inntektId: String) = """
-          {
-            "inntektsId": "$inntektId",
-            "inntektsListe": [
-              {
-                "årMåned": "2020-10",
-                "klassifiserteInntekter": [
-                  {
-                    "beløp": "40000",
-                    "inntektKlasse": "ARBEIDSINNTEKT"
-                  }
-                ],
-                "harAvvik": false
-              },
-              {
-                "årMåned": "2020-11",
-                "klassifiserteInntekter": [
-                  {
-                    "beløp": "40000",
-                    "inntektKlasse": "ARBEIDSINNTEKT"
-                  }
-                ],
-                "harAvvik": false
-              }
-            ],
-            "manueltRedigert": false,
-            "sisteAvsluttendeKalenderMåned": "2023-09"
-          }
-    """.trimIndent()
+    fun inntektJson(inntektId: String) =
+        """
+        {
+          "inntektsId": "$inntektId",
+          "inntektsListe": [
+            {
+              "årMåned": "2020-10",
+              "klassifiserteInntekter": [
+                {
+                  "beløp": "40000",
+                  "inntektKlasse": "ARBEIDSINNTEKT"
+                }
+              ],
+              "harAvvik": false
+            },
+            {
+              "årMåned": "2020-11",
+              "klassifiserteInntekter": [
+                {
+                  "beløp": "40000",
+                  "inntektKlasse": "ARBEIDSINNTEKT"
+                }
+              ],
+              "harAvvik": false
+            }
+          ],
+          "manueltRedigert": false,
+          "sisteAvsluttendeKalenderMåned": "2023-09"
+        }
+        """.trimIndent()
 
     @Test
     fun `Manuelt grunnlag blir mappet riktig`() {
@@ -264,11 +267,17 @@ private class OnPacketTestListener(rapidsConnection: RapidsConnection) : River.P
         ).register(this)
     }
 
-    override fun onPacket(packet: JsonMessage, context: MessageContext) {
+    override fun onPacket(
+        packet: JsonMessage,
+        context: MessageContext,
+    ) {
         this.packet = packet
     }
 
-    override fun onError(problems: MessageProblems, context: MessageContext) {
+    override fun onError(
+        problems: MessageProblems,
+        context: MessageContext,
+    ) {
         this.problems = problems
     }
 }

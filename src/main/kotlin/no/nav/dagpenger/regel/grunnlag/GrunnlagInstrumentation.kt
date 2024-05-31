@@ -4,28 +4,30 @@ import io.prometheus.client.Counter
 import java.math.BigDecimal
 
 class GrunnlagInstrumentation {
-    private val regelBrukt = Counter.build()
-        .namespace("dagpenger")
-        .name("grunnlag_regel_brukt")
-        .help("Antall ganger regel")
-        .labelNames(
-            "regelIdentifikator",
-            "beregningsregel",
-            "harAvkortet",
-        )
-        .register()
+    private val regelBrukt =
+        Counter.build()
+            .namespace("dagpenger")
+            .name("grunnlag_regel_brukt")
+            .help("Antall ganger regel")
+            .labelNames(
+                "regelIdentifikator",
+                "beregningsregel",
+                "harAvkortet",
+            )
+            .register()
 
-    private val fastsattArbeidstid = Counter.build()
-        .namespace("dagpenger")
-        .name("fastsatt_arbeidstid")
-        .help("Grupper arbeidstid")
-        .labelNames(
-            "regelIdentifikator",
-            "beregningsregel",
-            "harAvkortet",
-            "arbeidstid",
-        )
-        .register()
+    private val fastsattArbeidstid =
+        Counter.build()
+            .namespace("dagpenger")
+            .name("fastsatt_arbeidstid")
+            .help("Grupper arbeidstid")
+            .labelNames(
+                "regelIdentifikator",
+                "beregningsregel",
+                "harAvkortet",
+                "arbeidstid",
+            )
+            .register()
 
     fun grunnlagBeregnet(
         regelIdentifikator: String,
@@ -91,9 +93,13 @@ class GrunnlagInstrumentation {
         ).inc()
     }
 
-    private fun fastsettArbeidstid(grunnlag: BigDecimal, grunnbelop: BigDecimal): String = when (grunnlag) {
-        in BigDecimal(0)..grunnbelop -> "Null"
-        in grunnbelop..grunnbelop.times(BigDecimal(3)) -> "Middels"
-        else -> "Maks"
-    }
+    private fun fastsettArbeidstid(
+        grunnlag: BigDecimal,
+        grunnbelop: BigDecimal,
+    ): String =
+        when (grunnlag) {
+            in BigDecimal(0)..grunnbelop -> "Null"
+            in grunnbelop..grunnbelop.times(BigDecimal(3)) -> "Middels"
+            else -> "Maks"
+        }
 }

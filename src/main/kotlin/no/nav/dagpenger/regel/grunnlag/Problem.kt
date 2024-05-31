@@ -10,7 +10,6 @@ data class Problem(
     val instance: URI = URI.create("about:blank"),
 ) {
     companion object {
-
         fun fromJson(json: Map<String, Any>): Problem {
             return Problem(
                 URI.create(json["type"] as String),
@@ -22,10 +21,11 @@ data class Problem(
     }
 
     val toMap: Map<String, Any>
-        get() = mapOf(
-            "type" to type as Any,
-            "title" to title as Any,
-            "status" to status as Any,
-            "instance" to instance as Any,
-        )
+        get() =
+            mapOf(
+                "type" to type as Any,
+                "title" to title as Any,
+                "status" to status as Any,
+                "instance" to instance as Any,
+            )
 }

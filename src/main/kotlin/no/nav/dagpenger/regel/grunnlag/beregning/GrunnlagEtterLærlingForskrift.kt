@@ -18,7 +18,9 @@ abstract class GrunnlagEtterLærlingForskrift(
 
     override fun calculate(fakta: Fakta): Resultat {
         return if (isActive(fakta)) {
-            val sisteAvsluttendeKalenderMåned = fakta.inntekt?.sisteAvsluttendeKalenderMåned ?: throw RuntimeException("GrunnlagEtterLærlingForskrift kan bare håndteres hvis inntekt er satt")
+            val sisteAvsluttendeKalenderMåned =
+                fakta.inntekt?.sisteAvsluttendeKalenderMåned
+                    ?: throw RuntimeException("GrunnlagEtterLærlingForskrift kan bare håndteres hvis inntekt er satt")
 
             val sortertEtterInntektsmåned =
                 fakta.inntektsPerioderOrEmpty.first
