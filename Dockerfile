@@ -1,6 +1,7 @@
-FROM ghcr.io/navikt/baseimages/temurin:17
+FROM cgr.dev/chainguard/jre-lts:latest
 
-ENV APPD_ENABLED=true \
-    APPD_NAME=dp-regel-grunnlag
+ENV LANG='nb_NO.UTF-8' LANGUAGE='nb_NO:nb' LC_ALL='nb:NO.UTF-8' TZ="Europe/Oslo"
 
-COPY build/libs/*-all.jar app.jar
+COPY build/libs/*-all.jar /app.jar
+
+ENTRYPOINT ["java", "-jar", "/app.jar"]
