@@ -40,6 +40,7 @@ dependencies {
     testImplementation(libs.kotest.assertions.core)
     testImplementation("io.kotest:kotest-runner-junit5-jvm:${libs.versions.kotest.get()}")
     testImplementation(libs.mockk)
+    testImplementation(libs.rapids.and.rivers.test)
 }
 
 tasks.withType<com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar> {

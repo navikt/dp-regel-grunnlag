@@ -1,5 +1,9 @@
 package no.nav.dagpenger.regel.grunnlag
 
+import com.github.navikt.tbd_libs.rapids_and_rivers.JsonMessage
+import com.github.navikt.tbd_libs.rapids_and_rivers.River
+import com.github.navikt.tbd_libs.rapids_and_rivers_api.MessageContext
+import com.github.navikt.tbd_libs.rapids_and_rivers_api.RapidsConnection
 import de.huxhorn.sulky.ulid.ULID
 import mu.KotlinLogging
 import mu.withLoggingContext
@@ -7,10 +11,6 @@ import no.nav.dagpenger.inntekt.v1.sumInntekt
 import no.nav.dagpenger.regel.grunnlag.beregning.HovedBeregning
 import no.nav.dagpenger.regel.grunnlag.beregning.inntektsklasser
 import no.nav.dagpenger.regel.grunnlag.beregning.inntektsklasserMedFangstOgFiske
-import no.nav.helse.rapids_rivers.JsonMessage
-import no.nav.helse.rapids_rivers.MessageContext
-import no.nav.helse.rapids_rivers.RapidsConnection
-import no.nav.helse.rapids_rivers.River
 import java.net.URI
 
 private val log = KotlinLogging.logger {}

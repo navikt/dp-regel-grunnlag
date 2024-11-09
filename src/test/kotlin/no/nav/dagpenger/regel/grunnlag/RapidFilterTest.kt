@@ -1,14 +1,14 @@
 package no.nav.dagpenger.regel.grunnlag
 
+import com.github.navikt.tbd_libs.rapids_and_rivers.JsonMessage
+import com.github.navikt.tbd_libs.rapids_and_rivers.River
+import com.github.navikt.tbd_libs.rapids_and_rivers.test_support.TestRapid
+import com.github.navikt.tbd_libs.rapids_and_rivers_api.MessageContext
+import com.github.navikt.tbd_libs.rapids_and_rivers_api.MessageProblems
+import com.github.navikt.tbd_libs.rapids_and_rivers_api.RapidsConnection
 import io.kotest.matchers.shouldBe
 import no.nav.dagpenger.regel.grunnlag.GrunnlagsberegningBehovløser.Companion.BEREGNINGSDATO
 import no.nav.dagpenger.regel.grunnlag.GrunnlagsberegningBehovløser.Companion.PROBLEM
-import no.nav.helse.rapids_rivers.JsonMessage
-import no.nav.helse.rapids_rivers.MessageContext
-import no.nav.helse.rapids_rivers.MessageProblems
-import no.nav.helse.rapids_rivers.RapidsConnection
-import no.nav.helse.rapids_rivers.River
-import no.nav.helse.rapids_rivers.testsupport.TestRapid
 import org.junit.jupiter.api.Test
 
 class RapidFilterTest {
@@ -18,23 +18,27 @@ class RapidFilterTest {
     fun `Skal ikke behandle pakker med problem`() {
         val testListener = TestListener(testRapid)
         testRapid.sendTestMessage(
-            JsonMessage.newMessage(
-                mapOf(
-                    BEREGNINGSDATO to "2020-04-30",
-                    PROBLEM to "Det er et problem",
-                ),
-            ).toJson(),
+            JsonMessage
+                .newMessage(
+                    mapOf(
+                        BEREGNINGSDATO to "2020-04-30",
+                        PROBLEM to "Det er et problem",
+                    ),
+                ).toJson(),
         )
         testListener.onPacketCalled shouldBe false
     }
 
-    private class TestListener(rapidsConnection: RapidsConnection) : River.PacketListener {
+    private class TestListener(
+        rapidsConnection: RapidsConnection,
+    ) : River.PacketListener {
         var onPacketCalled = false
 
         init {
-            River(rapidsConnection).apply(
-                GrunnlagsberegningBehovløser.rapidFilter,
-            ).register(this)
+            River(rapidsConnection)
+                .apply(
+                    GrunnlagsberegningBehovløser.rapidFilter,
+                ).register(this)
         }
 
         override fun onPacket(

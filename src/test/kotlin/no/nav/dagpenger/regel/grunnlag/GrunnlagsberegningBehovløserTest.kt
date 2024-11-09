@@ -1,5 +1,7 @@
 package no.nav.dagpenger.regel.grunnlag
 
+import com.github.navikt.tbd_libs.rapids_and_rivers.JsonMessage
+import com.github.navikt.tbd_libs.rapids_and_rivers.test_support.TestRapid
 import io.kotest.matchers.ints.shouldBeLessThan
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
@@ -22,8 +24,6 @@ import no.nav.dagpenger.regel.grunnlag.GrunnlagsberegningBehovløser.Companion.L
 import no.nav.dagpenger.regel.grunnlag.GrunnlagsberegningBehovløser.Companion.MANUELT_GRUNNLAG
 import no.nav.dagpenger.regel.grunnlag.GrunnlagsberegningBehovløser.Companion.PROBLEM
 import no.nav.dagpenger.regel.grunnlag.GrunnlagsberegningBehovløser.Companion.REGELVERKSDATO
-import no.nav.helse.rapids_rivers.JsonMessage
-import no.nav.helse.rapids_rivers.testsupport.TestRapid
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import java.math.BigDecimal
@@ -41,16 +41,17 @@ class GrunnlagsberegningBehovløserTest {
     fun `Beregnet grunnlag skal være negativt dersom summerte inntekter er negativt`() {
         val inntekt = getInntekt((-1000).toBigDecimal())
         val testMessage =
-            JsonMessage.newMessage(
-                map =
-                    mapOf(
-                        BEHOV_ID to "behovId",
-                        BEREGNINGSDATO to "2018-08-10",
-                        AVTJENT_VERNEPLIKT to false,
-                        FANGST_OG_FISKE to false,
-                        INNTEKT to inntekt.toMap(),
-                    ),
-            ).toJson()
+            JsonMessage
+                .newMessage(
+                    map =
+                        mapOf(
+                            BEHOV_ID to "behovId",
+                            BEREGNINGSDATO to "2018-08-10",
+                            AVTJENT_VERNEPLIKT to false,
+                            FANGST_OG_FISKE to false,
+                            INNTEKT to inntekt.toMap(),
+                        ),
+                ).toJson()
 
         testRapid.sendTestMessage(testMessage)
         val resultat = testRapid.inspektør.message(0)
@@ -64,16 +65,17 @@ class GrunnlagsberegningBehovløserTest {
     fun `Beregnet grunnlag skal være 0 dersom summerte inntekter er 0`() {
         val inntekt = getInntekt((0).toBigDecimal())
         val testMessage =
-            JsonMessage.newMessage(
-                map =
-                    mapOf(
-                        BEHOV_ID to "behovId",
-                        BEREGNINGSDATO to "2018-08-10",
-                        AVTJENT_VERNEPLIKT to false,
-                        FANGST_OG_FISKE to false,
-                        INNTEKT to inntekt.toMap(),
-                    ),
-            ).toJson()
+            JsonMessage
+                .newMessage(
+                    map =
+                        mapOf(
+                            BEHOV_ID to "behovId",
+                            BEREGNINGSDATO to "2018-08-10",
+                            AVTJENT_VERNEPLIKT to false,
+                            FANGST_OG_FISKE to false,
+                            INNTEKT to inntekt.toMap(),
+                        ),
+                ).toJson()
 
         testRapid.sendTestMessage(testMessage)
         val resultat = testRapid.inspektør.message(0)
@@ -88,16 +90,17 @@ class GrunnlagsberegningBehovløserTest {
         val inntekt = getInntekt(1000.toBigDecimal())
 
         val testMessage =
-            JsonMessage.newMessage(
-                map =
-                    mapOf(
-                        BEHOV_ID to "behovId",
-                        BEREGNINGSDATO to "2018-08-10",
-                        AVTJENT_VERNEPLIKT to false,
-                        FANGST_OG_FISKE to false,
-                        INNTEKT to inntekt.toMap(),
-                    ),
-            ).toJson()
+            JsonMessage
+                .newMessage(
+                    map =
+                        mapOf(
+                            BEHOV_ID to "behovId",
+                            BEREGNINGSDATO to "2018-08-10",
+                            AVTJENT_VERNEPLIKT to false,
+                            FANGST_OG_FISKE to false,
+                            INNTEKT to inntekt.toMap(),
+                        ),
+                ).toJson()
 
         testRapid.sendTestMessage(testMessage)
         val resultat = testRapid.inspektør.message(0)
@@ -166,15 +169,16 @@ class GrunnlagsberegningBehovløserTest {
         val inntekt = getInntekt(1000.toBigDecimal(), YearMonth.of(2020, 3))
 
         val testMessage =
-            JsonMessage.newMessage(
-                map =
-                    mapOf(
-                        BEHOV_ID to "behovId",
-                        BEREGNINGSDATO to "2020-03-20",
-                        LÆRLING to true,
-                        INNTEKT to inntekt.toMap(),
-                    ),
-            ).toJson()
+            JsonMessage
+                .newMessage(
+                    map =
+                        mapOf(
+                            BEHOV_ID to "behovId",
+                            BEREGNINGSDATO to "2020-03-20",
+                            LÆRLING to true,
+                            INNTEKT to inntekt.toMap(),
+                        ),
+                ).toJson()
 
         testRapid.sendTestMessage(testMessage)
 
@@ -190,15 +194,16 @@ class GrunnlagsberegningBehovløserTest {
     fun `Skal velge beregningsregel ForrigeGrunnlag når man har angitt forrige grunnlag for lærling`() {
         val forrigeGrunnlag = 300000
         val testMessage =
-            JsonMessage.newMessage(
-                map =
-                    mapOf(
-                        BEHOV_ID to "behovId",
-                        BEREGNINGSDATO to "2020-03-20",
-                        LÆRLING to true,
-                        FORRIGE_GRUNNLAG to forrigeGrunnlag,
-                    ),
-            ).toJson()
+            JsonMessage
+                .newMessage(
+                    map =
+                        mapOf(
+                            BEHOV_ID to "behovId",
+                            BEREGNINGSDATO to "2020-03-20",
+                            LÆRLING to true,
+                            FORRIGE_GRUNNLAG to forrigeGrunnlag,
+                        ),
+                ).toJson()
 
         testRapid.sendTestMessage(testMessage)
         val resultat = testRapid.inspektør.message(0)
@@ -213,14 +218,15 @@ class GrunnlagsberegningBehovløserTest {
     fun `Skal velge beregningsregel Manuell`() {
         val manueltGrunnlag = 300000
         val testMessage =
-            JsonMessage.newMessage(
-                map =
-                    mapOf(
-                        BEHOV_ID to "behovId",
-                        BEREGNINGSDATO to "2020-03-20",
-                        MANUELT_GRUNNLAG to manueltGrunnlag,
-                    ),
-            ).toJson()
+            JsonMessage
+                .newMessage(
+                    map =
+                        mapOf(
+                            BEHOV_ID to "behovId",
+                            BEREGNINGSDATO to "2020-03-20",
+                            MANUELT_GRUNNLAG to manueltGrunnlag,
+                        ),
+                ).toJson()
 
         testRapid.sendTestMessage(testMessage)
         val resultat = testRapid.inspektør.message(0)
@@ -235,14 +241,15 @@ class GrunnlagsberegningBehovløserTest {
     fun `Skal velge beregningsregel Manuell og harAvkortet ved manuelt grunnlag over 6G`() {
         val manueltGrunnlag = 900000
         val testMessage =
-            JsonMessage.newMessage(
-                map =
-                    mapOf(
-                        BEHOV_ID to "behovId",
-                        BEREGNINGSDATO to "2020-03-20",
-                        MANUELT_GRUNNLAG to manueltGrunnlag,
-                    ),
-            ).toJson()
+            JsonMessage
+                .newMessage(
+                    map =
+                        mapOf(
+                            BEHOV_ID to "behovId",
+                            BEREGNINGSDATO to "2020-03-20",
+                            MANUELT_GRUNNLAG to manueltGrunnlag,
+                        ),
+                ).toJson()
 
         testRapid.sendTestMessage(testMessage)
         val resultat = testRapid.inspektør.message(0)
@@ -258,15 +265,16 @@ class GrunnlagsberegningBehovløserTest {
     fun `Skal instrumentere beregninger`() {
         val inntekt = getInntekt(1000.toBigDecimal())
         val testMessage =
-            JsonMessage.newMessage(
-                map =
-                    mapOf(
-                        BEHOV_ID to "behovId",
-                        BEREGNINGSDATO to "2018-08-10",
-                        AVTJENT_VERNEPLIKT to true,
-                        INNTEKT to inntekt.toMap(),
-                    ),
-            ).toJson()
+            JsonMessage
+                .newMessage(
+                    map =
+                        mapOf(
+                            BEHOV_ID to "behovId",
+                            BEREGNINGSDATO to "2018-08-10",
+                            AVTJENT_VERNEPLIKT to true,
+                            INNTEKT to inntekt.toMap(),
+                        ),
+                ).toJson()
 
         testRapid.sendTestMessage(testMessage)
 
@@ -282,12 +290,13 @@ class GrunnlagsberegningBehovløserTest {
     @Test
     fun `Packet fører ikke til løsning ved mangel av inntekt, manuelt grunnlag og forrige grunnlag`() {
         testRapid.sendTestMessage(
-            JsonMessage.newMessage(
-                mapOf(
-                    BEHOV_ID to "behovId",
-                    BEREGNINGSDATO to "2018-08-10",
-                ),
-            ).toJson(),
+            JsonMessage
+                .newMessage(
+                    mapOf(
+                        BEHOV_ID to "behovId",
+                        BEREGNINGSDATO to "2018-08-10",
+                    ),
+                ).toJson(),
         )
         testRapid.inspektør.size shouldBe 0
     }
@@ -296,14 +305,15 @@ class GrunnlagsberegningBehovløserTest {
     fun `Packet fører ikke til løsning ved både manuelt og forrige grunnlag`() {
         // TODO: Burde dette kaste en exception?
         testRapid.sendTestMessage(
-            JsonMessage.newMessage(
-                mapOf(
-                    BEHOV_ID to "behovId",
-                    BEREGNINGSDATO to "2018-08-10",
-                    MANUELT_GRUNNLAG to "200000",
-                    FORRIGE_GRUNNLAG to "700000",
-                ),
-            ).toJson(),
+            JsonMessage
+                .newMessage(
+                    mapOf(
+                        BEHOV_ID to "behovId",
+                        BEREGNINGSDATO to "2018-08-10",
+                        MANUELT_GRUNNLAG to "200000",
+                        FORRIGE_GRUNNLAG to "700000",
+                    ),
+                ).toJson(),
         )
         val resultatPacket = testRapid.inspektør.message(0)
     }
@@ -312,14 +322,15 @@ class GrunnlagsberegningBehovløserTest {
     fun `Kaster exception når packet inneholder både inntekt og manuelt grunnlag`() {
         assertThrows<ManueltGrunnlagOgInntektException> {
             testRapid.sendTestMessage(
-                JsonMessage.newMessage(
-                    mapOf(
-                        BEHOV_ID to "behovId",
-                        BEREGNINGSDATO to "2018-08-10",
-                        MANUELT_GRUNNLAG to "600000",
-                        INNTEKT to getInntekt(1000.toBigDecimal()),
-                    ),
-                ).toJson(),
+                JsonMessage
+                    .newMessage(
+                        mapOf(
+                            BEHOV_ID to "behovId",
+                            BEREGNINGSDATO to "2018-08-10",
+                            MANUELT_GRUNNLAG to "600000",
+                            INNTEKT to getInntekt(1000.toBigDecimal()),
+                        ),
+                    ).toJson(),
             )
         }
         val resultatPacket = testRapid.inspektør.message(0)
@@ -331,15 +342,16 @@ class GrunnlagsberegningBehovløserTest {
     fun `Kaster exception når packet inneholder både inntekt, manuelt grunnlag og forrige grunnlag`() {
         assertThrows<ManueltGrunnlagOgInntektException> {
             testRapid.sendTestMessage(
-                JsonMessage.newMessage(
-                    mapOf(
-                        BEHOV_ID to "behovId",
-                        BEREGNINGSDATO to "2018-08-10",
-                        MANUELT_GRUNNLAG to "600000",
-                        FORRIGE_GRUNNLAG to "600000",
-                        INNTEKT to getInntekt(1000.toBigDecimal()),
-                    ),
-                ).toJson(),
+                JsonMessage
+                    .newMessage(
+                        mapOf(
+                            BEHOV_ID to "behovId",
+                            BEREGNINGSDATO to "2018-08-10",
+                            MANUELT_GRUNNLAG to "600000",
+                            FORRIGE_GRUNNLAG to "600000",
+                            INNTEKT to getInntekt(1000.toBigDecimal()),
+                        ),
+                    ).toJson(),
             )
         }
         val resultatPacket = testRapid.inspektør.message(0)
@@ -351,14 +363,15 @@ class GrunnlagsberegningBehovløserTest {
     fun `Kaster exception når packet inneholder både inntekt og forrige grunnlag`() {
         assertThrows<ForrigeGrunnlagOgInntektException> {
             testRapid.sendTestMessage(
-                JsonMessage.newMessage(
-                    mapOf(
-                        BEHOV_ID to "behovId",
-                        BEREGNINGSDATO to "2018-08-10",
-                        FORRIGE_GRUNNLAG to "600000",
-                        INNTEKT to getInntekt(1000.toBigDecimal()),
-                    ),
-                ).toJson(),
+                JsonMessage
+                    .newMessage(
+                        mapOf(
+                            BEHOV_ID to "behovId",
+                            BEREGNINGSDATO to "2018-08-10",
+                            FORRIGE_GRUNNLAG to "600000",
+                            INNTEKT to getInntekt(1000.toBigDecimal()),
+                        ),
+                    ).toJson(),
             )
         }
         val resultatPacket = testRapid.inspektør.message(0)
@@ -369,8 +382,8 @@ class GrunnlagsberegningBehovløserTest {
     private fun getInntekt(
         månedsbeløp: BigDecimal,
         inntektsdatoStart: YearMonth? = null,
-    ): Inntekt {
-        return Inntekt(
+    ): Inntekt =
+        Inntekt(
             inntektsId = "12345",
             inntektsListe =
                 listOf(
@@ -400,9 +413,6 @@ class GrunnlagsberegningBehovløserTest {
                 ),
             sisteAvsluttendeKalenderMåned = YearMonth.of(2018, 7),
         )
-    }
 
-    private fun Inntekt.toMap(): Map<*, *> {
-        return objectMapper.convertValue(this, Map::class.java)
-    }
+    private fun Inntekt.toMap(): Map<*, *> = objectMapper.convertValue(this, Map::class.java)
 }

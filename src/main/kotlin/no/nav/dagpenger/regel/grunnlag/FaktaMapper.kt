@@ -1,6 +1,9 @@
 package no.nav.dagpenger.regel.grunnlag
 
 import com.fasterxml.jackson.databind.JsonNode
+import com.github.navikt.tbd_libs.rapids_and_rivers.JsonMessage
+import com.github.navikt.tbd_libs.rapids_and_rivers.asLocalDate
+import com.github.navikt.tbd_libs.rapids_and_rivers.isMissingOrNull
 import mu.KotlinLogging
 import no.nav.dagpenger.inntekt.v1.Inntekt
 import no.nav.dagpenger.regel.grunnlag.GrunnlagsberegningBehovløser.Companion.AVTJENT_VERNEPLIKT
@@ -11,9 +14,6 @@ import no.nav.dagpenger.regel.grunnlag.GrunnlagsberegningBehovløser.Companion.I
 import no.nav.dagpenger.regel.grunnlag.GrunnlagsberegningBehovløser.Companion.LÆRLING
 import no.nav.dagpenger.regel.grunnlag.GrunnlagsberegningBehovløser.Companion.MANUELT_GRUNNLAG
 import no.nav.dagpenger.regel.grunnlag.GrunnlagsberegningBehovløser.Companion.REGELVERKSDATO
-import no.nav.helse.rapids_rivers.JsonMessage
-import no.nav.helse.rapids_rivers.asLocalDate
-import no.nav.helse.rapids_rivers.isMissingOrNull
 import java.time.LocalDate
 
 private val sikkerLogg = KotlinLogging.logger("tjenestekall")
@@ -100,6 +100,10 @@ internal fun JsonMessage.inntekt(): Inntekt? =
 
 private fun JsonMessage.harVerdi(field: String) = !this[field].isMissingOrNull()
 
-class ManueltGrunnlagOgInntektException(message: String) : RuntimeException(message)
+class ManueltGrunnlagOgInntektException(
+    message: String,
+) : RuntimeException(message)
 
-class ForrigeGrunnlagOgInntektException(message: String) : RuntimeException(message)
+class ForrigeGrunnlagOgInntektException(
+    message: String,
+) : RuntimeException(message)

@@ -1,5 +1,11 @@
 package no.nav.dagpenger.regel.grunnlag
 
+import com.github.navikt.tbd_libs.rapids_and_rivers.JsonMessage
+import com.github.navikt.tbd_libs.rapids_and_rivers.River
+import com.github.navikt.tbd_libs.rapids_and_rivers.test_support.TestRapid
+import com.github.navikt.tbd_libs.rapids_and_rivers_api.MessageContext
+import com.github.navikt.tbd_libs.rapids_and_rivers_api.MessageProblems
+import com.github.navikt.tbd_libs.rapids_and_rivers_api.RapidsConnection
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
@@ -14,12 +20,6 @@ import no.nav.dagpenger.regel.grunnlag.GrunnlagsberegningBehovløser.Companion.I
 import no.nav.dagpenger.regel.grunnlag.GrunnlagsberegningBehovløser.Companion.LÆRLING
 import no.nav.dagpenger.regel.grunnlag.GrunnlagsberegningBehovløser.Companion.MANUELT_GRUNNLAG
 import no.nav.dagpenger.regel.grunnlag.GrunnlagsberegningBehovløser.Companion.REGELVERKSDATO
-import no.nav.helse.rapids_rivers.JsonMessage
-import no.nav.helse.rapids_rivers.MessageContext
-import no.nav.helse.rapids_rivers.MessageProblems
-import no.nav.helse.rapids_rivers.RapidsConnection
-import no.nav.helse.rapids_rivers.River
-import no.nav.helse.rapids_rivers.testsupport.TestRapid
 import org.intellij.lang.annotations.Language
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
@@ -257,14 +257,17 @@ class FaktaMapperTest {
     }
 }
 
-private class OnPacketTestListener(rapidsConnection: RapidsConnection) : River.PacketListener {
+private class OnPacketTestListener(
+    rapidsConnection: RapidsConnection,
+) : River.PacketListener {
     var problems: MessageProblems? = null
     var packet: JsonMessage? = null
 
     init {
-        River(rapidsConnection).apply(
-            GrunnlagsberegningBehovløser.rapidFilter,
-        ).register(this)
+        River(rapidsConnection)
+            .apply(
+                GrunnlagsberegningBehovløser.rapidFilter,
+            ).register(this)
     }
 
     override fun onPacket(
