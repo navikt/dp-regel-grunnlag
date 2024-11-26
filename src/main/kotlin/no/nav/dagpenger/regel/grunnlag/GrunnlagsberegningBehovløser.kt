@@ -3,8 +3,10 @@ package no.nav.dagpenger.regel.grunnlag
 import com.github.navikt.tbd_libs.rapids_and_rivers.JsonMessage
 import com.github.navikt.tbd_libs.rapids_and_rivers.River
 import com.github.navikt.tbd_libs.rapids_and_rivers_api.MessageContext
+import com.github.navikt.tbd_libs.rapids_and_rivers_api.MessageMetadata
 import com.github.navikt.tbd_libs.rapids_and_rivers_api.RapidsConnection
 import de.huxhorn.sulky.ulid.ULID
+import io.micrometer.core.instrument.MeterRegistry
 import mu.KotlinLogging
 import mu.withLoggingContext
 import no.nav.dagpenger.inntekt.v1.sumInntekt
@@ -37,8 +39,10 @@ class GrunnlagsberegningBehovløser(
         const val PROBLEM = "system_problem"
 
         val rapidFilter: River.() -> Unit = {
-            validate { it.requireKey(BEHOV_ID) }
-            validate { it.requireKey(BEREGNINGSDATO) }
+            precondition {
+                it.forbid(PROBLEM)
+                it.forbid(GRUNNLAG_RESULTAT)
+            }
             validate {
                 it.interestedIn(INNTEKT)
                 it.interestedIn(MANUELT_GRUNNLAG)
@@ -47,9 +51,9 @@ class GrunnlagsberegningBehovløser(
                 it.interestedIn(FANGST_OG_FISKE)
                 it.interestedIn(LÆRLING)
                 it.interestedIn(REGELVERKSDATO)
+                it.requireKey(BEHOV_ID)
+                it.requireKey(BEREGNINGSDATO)
             }
-            validate { it.rejectKey(GRUNNLAG_RESULTAT) }
-            validate { it.rejectKey(PROBLEM) }
         }
     }
 
@@ -60,6 +64,8 @@ class GrunnlagsberegningBehovløser(
     override fun onPacket(
         packet: JsonMessage,
         context: MessageContext,
+        metadata: MessageMetadata,
+        meterRegistry: MeterRegistry,
     ) {
         withLoggingContext("behovId" to packet[BEHOV_ID].asText()) {
             try {
