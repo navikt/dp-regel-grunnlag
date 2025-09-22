@@ -10,8 +10,7 @@ import java.util.EnumSet
 abstract class TrettiseksMånedersBeregning(
     val inntektKlasser: EnumSet<InntektKlasse>,
     beregningsregel: String,
-) :
-    GrunnlagBeregning(beregningsregel) {
+) : GrunnlagBeregning(beregningsregel) {
     private val antallDesimaler = 20
     private val roundingMode = RoundingMode.HALF_UP
     private val grensedato =
@@ -55,13 +54,14 @@ abstract class TrettiseksMånedersBeregning(
     private fun `avkortet før 17-12-2021`(uavkortet: BigDecimal) = if (uavkortet > seksGangerGrunnbeløp) seksGangerGrunnbeløp else uavkortet
 
     @Suppress("ktlint:standard:function-naming")
-    private fun `avkortet etter 17-12-2021`(inntekter: Triple<BigDecimal, BigDecimal, BigDecimal>): BigDecimal {
-        return inntekter.toList().sumOf { inntekt ->
-            if (inntekt > seksGangerGrunnbeløp) seksGangerGrunnbeløp else inntekt
-        }.divide(
-            3.toBigDecimal(),
-            antallDesimaler,
-            RoundingMode.HALF_UP,
-        )
-    }
+    private fun `avkortet etter 17-12-2021`(inntekter: Triple<BigDecimal, BigDecimal, BigDecimal>): BigDecimal =
+        inntekter
+            .toList()
+            .sumOf { inntekt ->
+                if (inntekt > seksGangerGrunnbeløp) seksGangerGrunnbeløp else inntekt
+            }.divide(
+                3.toBigDecimal(),
+                antallDesimaler,
+                RoundingMode.HALF_UP,
+            )
 }

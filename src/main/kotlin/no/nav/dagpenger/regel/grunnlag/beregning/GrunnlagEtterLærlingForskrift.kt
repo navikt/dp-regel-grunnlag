@@ -16,8 +16,8 @@ abstract class GrunnlagEtterLærlingForskrift(
         return fakta.lærling && erInnenforRegelverksperiode && fakta.manueltGrunnlag == null && fakta.forrigeGrunnlag == null
     }
 
-    override fun calculate(fakta: Fakta): Resultat {
-        return if (isActive(fakta)) {
+    override fun calculate(fakta: Fakta): Resultat =
+        if (isActive(fakta)) {
             val sisteAvsluttendeKalenderMåned =
                 fakta.inntekt?.sisteAvsluttendeKalenderMåned
                     ?: throw RuntimeException("GrunnlagEtterLærlingForskrift kan bare håndteres hvis inntekt er satt")
@@ -28,7 +28,9 @@ abstract class GrunnlagEtterLærlingForskrift(
                     .sortedByDescending { it.årMåned }
 
             val uavkortet =
-                sortertEtterInntektsmåned.take(grunnlagUtvelgelse.antallMåneder).sumInntekt(inntektKlasser.toList())
+                sortertEtterInntektsmåned
+                    .take(grunnlagUtvelgelse.antallMåneder)
+                    .sumInntekt(inntektKlasser.toList())
                     .multiply(grunnlagUtvelgelse.månedFaktor.toBigDecimal())
             val seksGangerGrunnbeløp = fakta.grunnbeløpVedBeregningsdato().verdi.multiply(BigDecimal(6))
             val avkortet = if (uavkortet > seksGangerGrunnbeløp) seksGangerGrunnbeløp else uavkortet
@@ -41,7 +43,6 @@ abstract class GrunnlagEtterLærlingForskrift(
         } else {
             IngenBeregningsResultat(regelIdentifikator)
         }
-    }
 }
 
 sealed class GrunnlagUtvelgelse(
@@ -53,34 +54,36 @@ class SisteAvsluttendeMånedUtvelgelse : GrunnlagUtvelgelse(antallMåneder = 1, 
 
 class Siste3AvsluttendeMånederUtvelgelse : GrunnlagUtvelgelse(antallMåneder = 3, månedFaktor = 4)
 
-class LærlingForskriftSisteAvsluttendeKalenderMånedFangstOgFisk : GrunnlagEtterLærlingForskrift(
-    regelIdentifikator = "LærlingFangstOgFisk1x12",
-    grunnlagUtvelgelse = SisteAvsluttendeMånedUtvelgelse(),
-    inntektKlasser = inntektsklasserMedFangstOgFiske,
-) {
-    override fun calculate(fakta: Fakta): Resultat {
-        return if (fakta.fangstOgFiske) super.calculate(fakta) else IngenBeregningsResultat(this.beregningsregel)
-    }
+class LærlingForskriftSisteAvsluttendeKalenderMånedFangstOgFisk :
+    GrunnlagEtterLærlingForskrift(
+        regelIdentifikator = "LærlingFangstOgFisk1x12",
+        grunnlagUtvelgelse = SisteAvsluttendeMånedUtvelgelse(),
+        inntektKlasser = inntektsklasserMedFangstOgFiske,
+    ) {
+    override fun calculate(fakta: Fakta): Resultat =
+        if (fakta.fangstOgFiske) super.calculate(fakta) else IngenBeregningsResultat(this.beregningsregel)
 }
 
-class LærlingForskriftSiste3AvsluttendeKalenderMånedFangsOgFisk : GrunnlagEtterLærlingForskrift(
-    regelIdentifikator = "LærlingFangstOgFisk3x4",
-    grunnlagUtvelgelse = Siste3AvsluttendeMånederUtvelgelse(),
-    inntektKlasser = inntektsklasserMedFangstOgFiske,
-) {
-    override fun calculate(fakta: Fakta): Resultat {
-        return if (fakta.fangstOgFiske) super.calculate(fakta) else IngenBeregningsResultat(this.beregningsregel)
-    }
+class LærlingForskriftSiste3AvsluttendeKalenderMånedFangsOgFisk :
+    GrunnlagEtterLærlingForskrift(
+        regelIdentifikator = "LærlingFangstOgFisk3x4",
+        grunnlagUtvelgelse = Siste3AvsluttendeMånederUtvelgelse(),
+        inntektKlasser = inntektsklasserMedFangstOgFiske,
+    ) {
+    override fun calculate(fakta: Fakta): Resultat =
+        if (fakta.fangstOgFiske) super.calculate(fakta) else IngenBeregningsResultat(this.beregningsregel)
 }
 
-class LærlingForskriftSisteAvsluttendeKalenderMåned : GrunnlagEtterLærlingForskrift(
-    regelIdentifikator = "LærlingArbeidsinntekt1x12",
-    grunnlagUtvelgelse = SisteAvsluttendeMånedUtvelgelse(),
-    inntektKlasser = inntektsklasser,
-)
+class LærlingForskriftSisteAvsluttendeKalenderMåned :
+    GrunnlagEtterLærlingForskrift(
+        regelIdentifikator = "LærlingArbeidsinntekt1x12",
+        grunnlagUtvelgelse = SisteAvsluttendeMånedUtvelgelse(),
+        inntektKlasser = inntektsklasser,
+    )
 
-class LærlingForskriftSiste3AvsluttendeKalenderMåned : GrunnlagEtterLærlingForskrift(
-    regelIdentifikator = "LærlingArbeidsinntekt3x4",
-    grunnlagUtvelgelse = Siste3AvsluttendeMånederUtvelgelse(),
-    inntektKlasser = inntektsklasser,
-)
+class LærlingForskriftSiste3AvsluttendeKalenderMåned :
+    GrunnlagEtterLærlingForskrift(
+        regelIdentifikator = "LærlingArbeidsinntekt3x4",
+        grunnlagUtvelgelse = Siste3AvsluttendeMånederUtvelgelse(),
+        inntektKlasser = inntektsklasser,
+    )

@@ -24,8 +24,8 @@ data class GrunnlagResultat(
         const val GRUNNBELØP_BRUKT = "grunnbeløpBrukt"
     }
 
-    fun toMap(): Map<String, Any> {
-        return mapOf(
+    fun toMap(): Map<String, Any> =
+        mapOf(
             SPORINGSID to sporingsId,
             SUBSUMSJONSID to subsumsjonsId,
             REGELIDENTIFIKATOR to regelidentifikator,
@@ -35,7 +35,6 @@ data class GrunnlagResultat(
             HAR_AVKORTET to harAvkortet,
             GRUNNBELØP_BRUKT to grunnbeløpBrukt,
         )
-    }
 
     val avrundetUavkortet: BigDecimal = uavkortetGrunnlag.setScale(0, RoundingMode.HALF_UP)
     val avrundetAvkortet: BigDecimal = avkortetGrunnlag.setScale(0, RoundingMode.HALF_UP)

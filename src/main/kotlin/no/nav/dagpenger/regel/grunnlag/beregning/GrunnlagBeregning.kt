@@ -4,7 +4,9 @@ import no.nav.dagpenger.regel.grunnlag.Fakta
 import java.math.BigDecimal
 import java.time.LocalDate
 
-abstract class GrunnlagBeregning(val beregningsregel: String) {
+abstract class GrunnlagBeregning(
+    val beregningsregel: String,
+) {
     abstract fun isActive(fakta: Fakta): Boolean
 
     abstract fun calculate(fakta: Fakta): Resultat
@@ -30,18 +32,19 @@ internal class HovedBeregning : GrunnlagBeregning("Hoved") {
 
     override fun isActive(fakta: Fakta): Boolean = true
 
-    override fun calculate(fakta: Fakta): BeregningsResultat {
-        return grunnlagsBeregninger
+    override fun calculate(fakta: Fakta): BeregningsResultat =
+        grunnlagsBeregninger
             .filter { it.isActive(fakta) }
             .map { it.calculate(fakta) }
             .filterIsInstance<BeregningsResultat>()
             .toSet()
             .finnHøyesteAvkortetVerdi()
             ?: throw NoResultException("Ingen resultat for grunnlagsberegning")
-    }
 }
 
-class NoResultException(message: String) : RuntimeException(message)
+class NoResultException(
+    message: String,
+) : RuntimeException(message)
 
 fun LocalDate.erKoronaPeriode() = this in (LocalDate.of(2020, 3, 20)..LocalDate.of(2022, 3, 31))
 
@@ -52,24 +55,22 @@ private class PresedensOverManueltGrunnlag : Comparator<BeregningsResultat> {
     override fun compare(
         resultat1: BeregningsResultat,
         resultat2: BeregningsResultat,
-    ): Int {
-        return when {
+    ): Int =
+        when {
             isManuellBeregningsRegel(resultat1.beregningsregel) && resultat1.avkortet > BigDecimal.ZERO -> 1
             isManuellBeregningsRegel(resultat2.beregningsregel) && resultat2.avkortet > BigDecimal.ZERO -> -1
             else -> 0
         }
-    }
 }
 
 private class PresedensOverVernepliktHvisAvkortertVerdiErLik : Comparator<BeregningsResultat> {
     override fun compare(
         resultat1: BeregningsResultat,
         resultat2: BeregningsResultat,
-    ): Int {
-        return if (resultat1.avkortet == resultat2.avkortet) {
+    ): Int =
+        if (resultat1.avkortet == resultat2.avkortet) {
             if (resultat1.beregningsregel != "Verneplikt") resultat1.avkortet.compareTo(resultat2.avkortet) else -1
         } else {
             resultat1.avkortet.compareTo(resultat2.avkortet)
         }
-    }
 }
