@@ -5,8 +5,8 @@ import no.nav.dagpenger.regel.grunnlag.Fakta
 class DagpengerEtterAvtjentVerneplikt : GrunnlagBeregning("Verneplikt") {
     override fun isActive(fakta: Fakta): Boolean = fakta.verneplikt
 
-    override fun calculate(fakta: Fakta): Resultat {
-        return if (isActive(fakta)) {
+    override fun calculate(fakta: Fakta): Resultat =
+        if (isActive(fakta)) {
             val vernepliktGrunnlag = fakta.grunnbeløpVedRegelverksdato().verdi * 3.toBigDecimal()
             BeregningsResultat(
                 vernepliktGrunnlag,
@@ -16,5 +16,4 @@ class DagpengerEtterAvtjentVerneplikt : GrunnlagBeregning("Verneplikt") {
         } else {
             IngenBeregningsResultat("Verneplikt")
         }
-    }
 }

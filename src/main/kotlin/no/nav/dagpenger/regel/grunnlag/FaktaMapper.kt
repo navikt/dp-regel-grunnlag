@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.JsonNode
 import com.github.navikt.tbd_libs.rapids_and_rivers.JsonMessage
 import com.github.navikt.tbd_libs.rapids_and_rivers.asLocalDate
 import com.github.navikt.tbd_libs.rapids_and_rivers.isMissingOrNull
-import mu.KotlinLogging
+import io.github.oshai.kotlinlogging.KotlinLogging
 import no.nav.dagpenger.inntekt.v1.Inntekt
 import no.nav.dagpenger.regel.grunnlag.GrunnlagsberegningBehovløser.Companion.AVTJENT_VERNEPLIKT
 import no.nav.dagpenger.regel.grunnlag.GrunnlagsberegningBehovløser.Companion.BEREGNINGSDATO
@@ -91,7 +91,7 @@ internal fun JsonMessage.inntekt(): Inntekt? =
             runCatching {
                 objectMapper.convertValue(inntektJson, Inntekt::class.java)
             }.onFailure {
-                sikkerLogg.error("Feilet å parse inntekt: $inntektJson")
+                sikkerLogg.error { "Feilet å parse inntekt: $inntektJson" }
             }.getOrThrow()
         }
 

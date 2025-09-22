@@ -56,8 +56,8 @@ data class Fakta(
             inntektsKlasser.toList(),
         )
 
-    private fun oppjusterTilGjeldendeGrunnbeløp(gjeldendeGrunnbeløp: Grunnbeløp): (KlassifisertInntektMåned) -> KlassifisertInntektMåned {
-        return { inntekt ->
+    private fun oppjusterTilGjeldendeGrunnbeløp(gjeldendeGrunnbeløp: Grunnbeløp): (KlassifisertInntektMåned) -> KlassifisertInntektMåned =
+        { inntekt ->
             val oppjusterteinntekter =
                 inntekt.klassifiserteInntekter.map { klassifisertInntekt ->
                     val oppjustert =
@@ -70,7 +70,6 @@ data class Fakta(
                 }
             inntekt.copy(klassifiserteInntekter = oppjusterteinntekter)
         }
-    }
 }
 
 internal fun isThisGjusteringTest(regelverksdato: LocalDate): Boolean {

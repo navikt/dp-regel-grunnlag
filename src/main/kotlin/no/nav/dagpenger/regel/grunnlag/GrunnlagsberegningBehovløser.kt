@@ -6,9 +6,9 @@ import com.github.navikt.tbd_libs.rapids_and_rivers_api.MessageContext
 import com.github.navikt.tbd_libs.rapids_and_rivers_api.MessageMetadata
 import com.github.navikt.tbd_libs.rapids_and_rivers_api.RapidsConnection
 import de.huxhorn.sulky.ulid.ULID
+import io.github.oshai.kotlinlogging.KotlinLogging
+import io.github.oshai.kotlinlogging.withLoggingContext
 import io.micrometer.core.instrument.MeterRegistry
-import mu.KotlinLogging
-import mu.withLoggingContext
 import no.nav.dagpenger.inntekt.v1.sumInntekt
 import no.nav.dagpenger.regel.grunnlag.beregning.HovedBeregning
 import no.nav.dagpenger.regel.grunnlag.beregning.inntektsklasser
@@ -69,7 +69,7 @@ class GrunnlagsberegningBehovløser(
     ) {
         withLoggingContext("behovId" to packet[BEHOV_ID].asText()) {
             try {
-                sikkerLogg.info("Mottok pakke: ${packet.toJson()}")
+                sikkerLogg.info { "Mottok pakke: ${packet.toJson()}" }
                 if (manglendePacketNøkler(packet)) return
 
                 val fakta = mapToFaktaFrom(packet)

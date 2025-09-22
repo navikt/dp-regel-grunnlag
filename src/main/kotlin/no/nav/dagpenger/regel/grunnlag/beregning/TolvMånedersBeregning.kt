@@ -8,8 +8,7 @@ import java.util.EnumSet
 abstract class TolvMånedersBeregning(
     private val inntektKlasser: EnumSet<InntektKlasse>,
     beregningsregel: String,
-) :
-    GrunnlagBeregning(beregningsregel) {
+) : GrunnlagBeregning(beregningsregel) {
     override fun isActive(fakta: Fakta): Boolean = !(fakta.lærling && fakta.beregningsdato.erKoronaPeriode())
 
     override fun calculate(fakta: Fakta): Resultat {
