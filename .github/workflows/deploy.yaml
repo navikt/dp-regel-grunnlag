@@ -70,7 +70,6 @@ jobs:
       - uses: actions/checkout@v6
       - uses: nais/deploy/actions/deploy@v2
         env:
-          APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
           CLUSTER: prod-gcp
           RESOURCE: .nais/unleash-apitoken.yaml,.nais/nais.yaml
           VAR: image=${{ needs.build.outputs.image }}
