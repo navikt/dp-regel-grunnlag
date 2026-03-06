@@ -26,8 +26,6 @@ spec:
     requests:
       cpu: 30m
       memory: 512Mi
-  secureLogs:
-    enabled: true
   env:
     - name: JAVA_OPTS
       value: -XX:+UseParallelGC -XX:MaxRAMPercentage=50.0 -XX:ActiveProcessorCount=4
