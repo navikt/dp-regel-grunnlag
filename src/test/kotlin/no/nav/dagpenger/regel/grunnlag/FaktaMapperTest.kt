@@ -25,6 +25,7 @@ import no.nav.dagpenger.regel.grunnlag.GrunnlagsberegningBehovløser.Companion.R
 import org.intellij.lang.annotations.Language
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
+import tools.jackson.module.kotlin.KotlinInvalidNullException
 import java.time.LocalDate
 import java.time.format.DateTimeParseException
 
@@ -36,7 +37,7 @@ class FaktaMapperTest {
         val behovløser = OnPacketTestListener(testRapid)
 
         @Language("JSON")
-        val json = """{"$BEHOV_ID":"behovId","$BEREGNINGSDATO":"${LocalDate.now()}"}}"""
+        val json = """{"$BEHOV_ID":"behovId","$BEREGNINGSDATO":"${LocalDate.now()}"}"""
         testRapid.sendTestMessage(json)
         behovløser.packet shouldNotBe null
     }
@@ -61,7 +62,7 @@ class FaktaMapperTest {
         val json = """{"$GRUNNLAG_RESULTAT":"hubba"}"""
         testRapid.sendTestMessage(json)
         behovløser.packet shouldBe null
-        behovløser.problems shouldBe null
+        behovløser.problems shouldNotBe null
     }
 
     @Test
@@ -72,7 +73,7 @@ class FaktaMapperTest {
         val json = """{"$BEHOV_ID":"behovId","$BEREGNINGSDATO":"${LocalDate.now()}","$GRUNNLAG_RESULTAT":"hubba"}"""
         testRapid.sendTestMessage(json)
         behovløser.packet shouldBe null
-        behovløser.problems shouldBe null
+        behovløser.problems shouldNotBe null
     }
 
     @Test
@@ -180,7 +181,7 @@ class FaktaMapperTest {
             inntekt.inntektsListe.size shouldBe 2
         }
 
-        assertThrows<IllegalArgumentException> {
+        assertThrows<KotlinInvalidNullException> {
             testRapid.sendTestMessage("""{"$BEHOV_ID":"behovId","$BEREGNINGSDATO": "${LocalDate.MAX}", "$INNTEKT": {"hubba": "bubba"} }""")
             mapToFaktaFrom(behovløser.packet!!)
         }
@@ -287,5 +288,13 @@ private class OnPacketTestListener(
         metadata: MessageMetadata,
     ) {
         this.problems = problems
+    }
+
+    override fun onPreconditionError(
+        error: MessageProblems,
+        context: MessageContext,
+        metadata: MessageMetadata,
+    ) {
+        this.problems = error
     }
 }

@@ -57,7 +57,7 @@ class GrunnlagsberegningBehovløserTest {
         val resultat = testRapid.inspektør.message(0)
 
         resultat.hasNonNull(GRUNNLAG_RESULTAT) shouldBe true
-        resultat[GRUNNLAG_RESULTAT]["beregningsregel"].asText() shouldBe "ArbeidsinntektSiste36(2021)"
+        resultat[GRUNNLAG_RESULTAT]["beregningsregel"].asString() shouldBe "ArbeidsinntektSiste36(2021)"
         resultat[GRUNNLAG_RESULTAT]["avkortet"].asInt() < 0
     }
 
@@ -81,7 +81,7 @@ class GrunnlagsberegningBehovløserTest {
         val resultat = testRapid.inspektør.message(0)
 
         resultat.hasNonNull(GRUNNLAG_RESULTAT) shouldBe true
-        resultat[GRUNNLAG_RESULTAT]["beregningsregel"].asText() shouldBe "ArbeidsinntektSiste12(2021)"
+        resultat[GRUNNLAG_RESULTAT]["beregningsregel"].asString() shouldBe "ArbeidsinntektSiste12(2021)"
         resultat[GRUNNLAG_RESULTAT]["avkortet"].asInt() shouldBe 0
     }
 
@@ -106,7 +106,7 @@ class GrunnlagsberegningBehovløserTest {
         val resultat = testRapid.inspektør.message(0)
 
         resultat.hasNonNull(GRUNNLAG_RESULTAT) shouldBe true
-        resultat[GRUNNLAG_RESULTAT]["beregningsregel"].asText() shouldBe "ArbeidsinntektSiste12(2021)"
+        resultat[GRUNNLAG_RESULTAT]["beregningsregel"].asString() shouldBe "ArbeidsinntektSiste12(2021)"
         resultat[GRUNNLAG_RESULTAT]["avkortet"].asInt() shouldBe 3035
         resultat[GRUNNLAG_RESULTAT]["uavkortet"].asInt() shouldBe 3035
         resultat[GRUNNLAG_RESULTAT]["harAvkortet"].asBoolean() shouldBe false
@@ -135,7 +135,7 @@ class GrunnlagsberegningBehovløserTest {
         val treGangerGrunnbeløpFastsattI2020 = (Grunnbeløp.FastsattI2020.verdi * BigDecimal(3)).toInt()
         resultat[GRUNNLAG_RESULTAT]["avkortet"].asInt() shouldBe treGangerGrunnbeløpFastsattI2020
         resultat[GRUNNLAG_RESULTAT]["uavkortet"].asInt() shouldBe treGangerGrunnbeløpFastsattI2020
-        resultat[GRUNNLAG_RESULTAT]["beregningsregel"].asText() shouldBe "Verneplikt"
+        resultat[GRUNNLAG_RESULTAT]["beregningsregel"].asString() shouldBe "Verneplikt"
         resultat[GRUNNLAG_RESULTAT]["harAvkortet"].asBoolean() shouldBe false
     }
 
@@ -160,7 +160,7 @@ class GrunnlagsberegningBehovløserTest {
         resultat.hasNonNull(GRUNNLAG_RESULTAT) shouldBe true
         resultat[GRUNNLAG_RESULTAT]["avkortet"].asInt() shouldBe forrigeGrunnlag
         resultat[GRUNNLAG_RESULTAT]["uavkortet"].asInt() shouldBe forrigeGrunnlag
-        resultat[GRUNNLAG_RESULTAT]["beregningsregel"].asText() shouldBe "ForrigeGrunnlag"
+        resultat[GRUNNLAG_RESULTAT]["beregningsregel"].asString() shouldBe "ForrigeGrunnlag"
         resultat[GRUNNLAG_RESULTAT]["harAvkortet"].asBoolean() shouldBe false
     }
 
@@ -186,7 +186,7 @@ class GrunnlagsberegningBehovløserTest {
 
         resultat.hasNonNull(GRUNNLAG_RESULTAT) shouldBe true
         resultat[GRUNNLAG_RESULTAT]["avkortet"].asInt() shouldBe resultat[GRUNNLAG_RESULTAT]["uavkortet"].asInt()
-        resultat[GRUNNLAG_RESULTAT]["beregningsregel"].asText() shouldBe "LærlingArbeidsinntekt1x12"
+        resultat[GRUNNLAG_RESULTAT]["beregningsregel"].asString() shouldBe "LærlingArbeidsinntekt1x12"
         resultat[GRUNNLAG_RESULTAT]["harAvkortet"].asBoolean() shouldBe false
     }
 
@@ -209,7 +209,7 @@ class GrunnlagsberegningBehovløserTest {
         val resultat = testRapid.inspektør.message(0)
 
         resultat.hasNonNull(GRUNNLAG_RESULTAT) shouldBe true
-        resultat[GRUNNLAG_RESULTAT]["beregningsregel"].asText() shouldBe "ForrigeGrunnlag"
+        resultat[GRUNNLAG_RESULTAT]["beregningsregel"].asString() shouldBe "ForrigeGrunnlag"
         resultat[GRUNNLAG_RESULTAT]["harAvkortet"].asBoolean() shouldBe false
         resultat[GRUNNLAG_RESULTAT]["avkortet"].asInt() shouldBe forrigeGrunnlag
     }
@@ -232,7 +232,7 @@ class GrunnlagsberegningBehovløserTest {
         val resultat = testRapid.inspektør.message(0)
 
         resultat.hasNonNull(GRUNNLAG_RESULTAT) shouldBe true
-        resultat[GRUNNLAG_RESULTAT]["beregningsregel"].asText() shouldBe "Manuell"
+        resultat[GRUNNLAG_RESULTAT]["beregningsregel"].asString() shouldBe "Manuell"
         resultat[GRUNNLAG_RESULTAT]["harAvkortet"].asBoolean() shouldBe false
         resultat[GRUNNLAG_RESULTAT]["avkortet"].asInt() shouldBe manueltGrunnlag
     }
@@ -255,7 +255,7 @@ class GrunnlagsberegningBehovløserTest {
         val resultat = testRapid.inspektør.message(0)
 
         resultat.hasNonNull(GRUNNLAG_RESULTAT) shouldBe true
-        resultat[GRUNNLAG_RESULTAT]["beregningsregel"].asText() shouldBe "Manuell"
+        resultat[GRUNNLAG_RESULTAT]["beregningsregel"].asString() shouldBe "Manuell"
         resultat[GRUNNLAG_RESULTAT]["harAvkortet"].asBoolean() shouldBe true
         resultat[GRUNNLAG_RESULTAT]["uavkortet"].asInt() shouldBe manueltGrunnlag
         resultat[GRUNNLAG_RESULTAT]["avkortet"].asInt() shouldBeLessThan manueltGrunnlag

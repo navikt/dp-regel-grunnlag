@@ -1,6 +1,5 @@
 package no.nav.dagpenger.regel.grunnlag
 
-import com.fasterxml.jackson.databind.JsonNode
 import com.github.navikt.tbd_libs.rapids_and_rivers.JsonMessage
 import com.github.navikt.tbd_libs.rapids_and_rivers.asLocalDate
 import com.github.navikt.tbd_libs.rapids_and_rivers.isMissingOrNull
@@ -14,6 +13,7 @@ import no.nav.dagpenger.regel.grunnlag.GrunnlagsberegningBehovløser.Companion.I
 import no.nav.dagpenger.regel.grunnlag.GrunnlagsberegningBehovløser.Companion.LÆRLING
 import no.nav.dagpenger.regel.grunnlag.GrunnlagsberegningBehovløser.Companion.MANUELT_GRUNNLAG
 import no.nav.dagpenger.regel.grunnlag.GrunnlagsberegningBehovløser.Companion.REGELVERKSDATO
+import tools.jackson.databind.JsonNode
 import java.time.LocalDate
 
 private val sikkerLogg = KotlinLogging.logger("tjenestekall")
