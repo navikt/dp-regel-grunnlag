@@ -257,17 +257,24 @@ internal class CreateInntektPerioderTest {
         assertEquals(senesteMåned.minusYears(3).plusMonths(1), tredjePeriode.inntektsPeriode.førsteMåned)
     }
 
-    private val inntektsklasser = no.nav.dagpenger.regel.grunnlag.beregning.inntektsklasser.toList()
+    private val inntektsklasser =
+        no.nav.dagpenger.regel.grunnlag.beregning.inntektsklasser
+            .toList()
     private val inntektsklasserFangstOgFiske =
-        inntektsklasserMedFangstOgFiske.toList()
-            .filterNot { no.nav.dagpenger.regel.grunnlag.beregning.inntektsklasser.toList().contains(it) }
+        inntektsklasserMedFangstOgFiske
+            .toList()
+            .filterNot {
+                no.nav.dagpenger.regel.grunnlag.beregning.inntektsklasser
+                    .toList()
+                    .contains(it)
+            }
 
     fun generateArbeidsinntekt(
         numberOfMonths: Int,
         beløpPerMnd: BigDecimal,
         senesteMåned: YearMonth = YearMonth.of(2019, 1),
-    ): List<KlassifisertInntektMåned> {
-        return (0 until numberOfMonths).toList().map {
+    ): List<KlassifisertInntektMåned> =
+        (0 until numberOfMonths).toList().map {
             KlassifisertInntektMåned(
                 senesteMåned.minusMonths(it.toLong()),
                 listOf(
@@ -278,15 +285,14 @@ internal class CreateInntektPerioderTest {
                 ),
             )
         }
-    }
 
     fun generateInntektMed(
         inntektKlasse: InntektKlasse,
         numberOfMonths: Int,
         beløpPerMnd: BigDecimal,
         senesteMåned: YearMonth = YearMonth.of(2019, 1),
-    ): List<KlassifisertInntektMåned> {
-        return (0 until numberOfMonths).toList().map {
+    ): List<KlassifisertInntektMåned> =
+        (0 until numberOfMonths).toList().map {
             KlassifisertInntektMåned(
                 senesteMåned.minusMonths(it.toLong()),
                 listOf(
@@ -297,10 +303,9 @@ internal class CreateInntektPerioderTest {
                 ),
             )
         }
-    }
 
-    fun getMinusInntekt(): List<KlassifisertInntekt> {
-        return listOf(
+    fun getMinusInntekt(): List<KlassifisertInntekt> =
+        listOf(
             KlassifisertInntekt(
                 beløp = BigDecimal(100),
                 inntektKlasse = InntektKlasse.ARBEIDSINNTEKT,
@@ -310,14 +315,13 @@ internal class CreateInntektPerioderTest {
                 inntektKlasse = InntektKlasse.ARBEIDSINNTEKT,
             ),
         )
-    }
 
     fun generateFangstOgFiskInntekt(
         numberOfMonths: Int,
         beløpPerMnd: BigDecimal,
         senesteMåned: YearMonth = YearMonth.of(2019, 1),
-    ): List<KlassifisertInntektMåned> {
-        return (0 until numberOfMonths).toList().map {
+    ): List<KlassifisertInntektMåned> =
+        (0 until numberOfMonths).toList().map {
             KlassifisertInntektMåned(
                 senesteMåned.minusMonths(it.toLong()),
                 listOf(
@@ -328,15 +332,14 @@ internal class CreateInntektPerioderTest {
                 ),
             )
         }
-    }
 
     fun generateArbeidsOgFangstOgFiskInntekt(
         numberOfMonths: Int,
         arbeidsInntektBeløpPerMnd: BigDecimal,
         fangstOgFiskeBeløpPerMnd: BigDecimal,
         senesteMåned: YearMonth = YearMonth.of(2019, 1),
-    ): List<KlassifisertInntektMåned> {
-        return (0 until numberOfMonths).toList().map {
+    ): List<KlassifisertInntektMåned> =
+        (0 until numberOfMonths).toList().map {
             KlassifisertInntektMåned(
                 senesteMåned.minusMonths(it.toLong()),
                 listOf(
@@ -345,5 +348,4 @@ internal class CreateInntektPerioderTest {
                 ),
             )
         }
-    }
 }

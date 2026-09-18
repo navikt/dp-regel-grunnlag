@@ -15,64 +15,65 @@ import java.time.YearMonth
 
 private val koronatid = DateIterator(startDate = LocalDate.of(2020, 3, 20), endDateInclusive = LocalDate.of(2020, 12, 31))
 
-internal class HovedBeregningTest : FreeSpec({
+internal class HovedBeregningTest :
+    FreeSpec({
 
-    "skal velge lærling ved lærling parameter satt og covid-19 forskrift er ikraftsatt " {
+        "skal velge lærling ved lærling parameter satt og covid-19 forskrift er ikraftsatt " {
 
-        koronatid.forEach { beregningsDato ->
-            val sisteAvsluttendeKalenderMåned = YearMonth.of(2020, 3)
-            val inntekt = generateArbeidsinntekt(12, 2000.toBigDecimal(), sisteAvsluttendeKalenderMåned)
-            val fakta =
-                Fakta(
-                    inntekt =
-                        Inntekt(
-                            "id",
-                            inntekt,
-                            sisteAvsluttendeKalenderMåned = sisteAvsluttendeKalenderMåned,
-                        ),
-                    verneplikt = false,
-                    fangstOgFiske = false,
-                    lærling = true,
-                    beregningsdato = beregningsDato,
-                )
+            koronatid.forEach { beregningsDato ->
+                val sisteAvsluttendeKalenderMåned = YearMonth.of(2020, 3)
+                val inntekt = generateArbeidsinntekt(12, 2000.toBigDecimal(), sisteAvsluttendeKalenderMåned)
+                val fakta =
+                    Fakta(
+                        inntekt =
+                            Inntekt(
+                                "id",
+                                inntekt,
+                                sisteAvsluttendeKalenderMåned = sisteAvsluttendeKalenderMåned,
+                            ),
+                        verneplikt = false,
+                        fangstOgFiske = false,
+                        lærling = true,
+                        beregningsdato = beregningsDato,
+                    )
 
-            val beregningsResultat = HovedBeregning().calculate(fakta)
-            beregningsResultat.shouldBeInstanceOf<BeregningsResultat>()
-            beregningsResultat.beregningsregel.shouldStartWith("Lærling")
+                val beregningsResultat = HovedBeregning().calculate(fakta)
+                beregningsResultat.shouldBeInstanceOf<BeregningsResultat>()
+                beregningsResultat.beregningsregel.shouldStartWith("Lærling")
+            }
         }
-    }
 
-    " skal ikke velge lærling ved lærling parameter satt og covid-19 forskrift er ikraftsatt " {
-        koronatid.forEach { beregningsDato ->
-            val sisteAvsluttendeKalenderMåned = YearMonth.of(2020, 3)
-            val inntekt = generateArbeidsinntekt(12, 2000.toBigDecimal(), sisteAvsluttendeKalenderMåned)
-            val fakta =
-                Fakta(
-                    inntekt =
-                        Inntekt(
-                            "id",
-                            inntekt,
-                            sisteAvsluttendeKalenderMåned = sisteAvsluttendeKalenderMåned,
-                        ),
-                    verneplikt = false,
-                    fangstOgFiske = false,
-                    lærling = true,
-                    beregningsdato = beregningsDato,
-                )
+        " skal ikke velge lærling ved lærling parameter satt og covid-19 forskrift er ikraftsatt " {
+            koronatid.forEach { beregningsDato ->
+                val sisteAvsluttendeKalenderMåned = YearMonth.of(2020, 3)
+                val inntekt = generateArbeidsinntekt(12, 2000.toBigDecimal(), sisteAvsluttendeKalenderMåned)
+                val fakta =
+                    Fakta(
+                        inntekt =
+                            Inntekt(
+                                "id",
+                                inntekt,
+                                sisteAvsluttendeKalenderMåned = sisteAvsluttendeKalenderMåned,
+                            ),
+                        verneplikt = false,
+                        fangstOgFiske = false,
+                        lærling = true,
+                        beregningsdato = beregningsDato,
+                    )
 
-            val beregningsResultat = HovedBeregning().calculate(fakta)
-            beregningsResultat.shouldBeInstanceOf<BeregningsResultat>()
-            beregningsResultat.beregningsregel.shouldNotStartWith("Lærling")
+                val beregningsResultat = HovedBeregning().calculate(fakta)
+                beregningsResultat.shouldBeInstanceOf<BeregningsResultat>()
+                beregningsResultat.beregningsregel.shouldNotStartWith("Lærling")
+            }
         }
-    }
-})
+    })
 
 internal fun generateArbeidsinntekt(
     numberOfMonths: Int,
     beløpPerMnd: BigDecimal,
     senesteMåned: YearMonth = YearMonth.of(2019, 1),
-): List<KlassifisertInntektMåned> {
-    return (0 until numberOfMonths).toList().map {
+): List<KlassifisertInntektMåned> =
+    (0 until numberOfMonths).toList().map {
         KlassifisertInntektMåned(
             senesteMåned.minusMonths(it.toLong()),
             listOf(
@@ -83,7 +84,6 @@ internal fun generateArbeidsinntekt(
             ),
         )
     }
-}
 
 internal class DateIterator(
     startDate: LocalDate,
