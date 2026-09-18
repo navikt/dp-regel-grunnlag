@@ -291,8 +291,8 @@ internal fun generateFiskOgFangst(
     numberOfMonths: Int,
     beløpPerMnd: BigDecimal,
     senesteMåned: YearMonth = YearMonth.of(2019, 1),
-): List<KlassifisertInntektMåned> {
-    return (0 until numberOfMonths).toList().map {
+): List<KlassifisertInntektMåned> =
+    (0 until numberOfMonths).toList().map {
         KlassifisertInntektMåned(
             senesteMåned.minusMonths(it.toLong()),
             listOf(
@@ -303,4 +303,3 @@ internal fun generateFiskOgFangst(
             ),
         )
     }
-}

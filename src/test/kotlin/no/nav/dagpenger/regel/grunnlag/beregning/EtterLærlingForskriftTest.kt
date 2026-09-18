@@ -17,7 +17,7 @@ import java.time.LocalDate
 import java.time.YearMonth
 import kotlin.test.assertFalse
 
-internal class EtterLærlingForskriftTest() {
+internal class EtterLærlingForskriftTest {
     val beregning =
         object : GrunnlagEtterLærlingForskrift(
             regelIdentifikator = "test",

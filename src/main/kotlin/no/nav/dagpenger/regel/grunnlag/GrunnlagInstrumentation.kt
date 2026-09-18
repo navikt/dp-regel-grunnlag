@@ -5,7 +5,8 @@ import java.math.BigDecimal
 
 class GrunnlagInstrumentation {
     private val regelBrukt =
-        Counter.build()
+        Counter
+            .build()
             .namespace("dagpenger")
             .name("grunnlag_regel_brukt")
             .help("Antall ganger regel")
@@ -13,11 +14,11 @@ class GrunnlagInstrumentation {
                 "regelIdentifikator",
                 "beregningsregel",
                 "harAvkortet",
-            )
-            .register()
+            ).register()
 
     private val fastsattArbeidstid =
-        Counter.build()
+        Counter
+            .build()
             .namespace("dagpenger")
             .name("fastsatt_arbeidstid")
             .help("Grupper arbeidstid")
@@ -26,8 +27,7 @@ class GrunnlagInstrumentation {
                 "beregningsregel",
                 "harAvkortet",
                 "arbeidstid",
-            )
-            .register()
+            ).register()
 
     fun grunnlagBeregnet(
         regelIdentifikator: String,
@@ -72,11 +72,12 @@ class GrunnlagInstrumentation {
         beregningsregel: String,
         harAvkortet: Boolean,
     ) {
-        regelBrukt.labels(
-            regelIdentifikator,
-            beregningsregel,
-            harAvkortet.toString(),
-        ).inc()
+        regelBrukt
+            .labels(
+                regelIdentifikator,
+                beregningsregel,
+                harAvkortet.toString(),
+            ).inc()
     }
 
     private fun beregnNormaltFastsattArbeidstid(
@@ -85,12 +86,13 @@ class GrunnlagInstrumentation {
         harAvkortet: Boolean,
         klassifisering: String,
     ) {
-        fastsattArbeidstid.labels(
-            regelIdentifikator,
-            beregningsregel,
-            harAvkortet.toString(),
-            klassifisering,
-        ).inc()
+        fastsattArbeidstid
+            .labels(
+                regelIdentifikator,
+                beregningsregel,
+                harAvkortet.toString(),
+                klassifisering,
+            ).inc()
     }
 
     private fun fastsettArbeidstid(

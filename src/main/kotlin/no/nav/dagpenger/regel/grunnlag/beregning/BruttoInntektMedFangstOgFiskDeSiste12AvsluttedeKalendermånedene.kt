@@ -3,10 +3,11 @@ package no.nav.dagpenger.regel.grunnlag.beregning
 import no.nav.dagpenger.regel.grunnlag.Fakta
 import java.time.LocalDate
 
-class BruttoInntektMedFangstOgFiskDeSiste12AvsluttedeKalendermånedene : TolvMånedersBeregning(
-    inntektsklasserMedFangstOgFiske,
-    "FangstOgFiskSiste12(2021)",
-) {
+class BruttoInntektMedFangstOgFiskDeSiste12AvsluttedeKalendermånedene :
+    TolvMånedersBeregning(
+        inntektsklasserMedFangstOgFiske,
+        "FangstOgFiskSiste12(2021)",
+    ) {
     private val avviklingsDato = LocalDate.of(2022, 1, 1)
 
     private fun skalInkludereFangstOgFisk(fakta: Fakta) = fakta.fangstOgFiske && fakta.regelverksdato < avviklingsDato
