@@ -28,7 +28,7 @@ dependencies {
 
     implementation(libs.konfig)
 
-    implementation("io.getunleash:unleash-client-java:12.3.1")
+    implementation("io.getunleash:unleash-client-java:12.3.2")
 
     implementation(libs.kotlin.logging)
 
